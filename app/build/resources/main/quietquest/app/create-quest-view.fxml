@@ -20,13 +20,13 @@
             <Font size="40.0" />
          </font>
       </Text>
-      <TextField fx:id="taskDescriptionField" layoutX="350.0" layoutY="427.0" prefHeight="30.0" prefWidth="566.0" promptText="add task (optional)" />
-      <Text fill="#22577a" layoutX="350.0" layoutY="210.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Montserrat;" text="Quest Details" wrappingWidth="334.9270782470703">
+      <TextField fx:id="taskDescriptionField" layoutX="350.0" layoutY="472.0" prefHeight="30.0" prefWidth="566.0" promptText="add task (optional)" visible="false" />
+      <Text fill="#22577a" layoutX="350.0" layoutY="210.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Montserrat; -fx-font-weight: 400;" text="Quest Details" wrappingWidth="334.9270782470703">
          <font>
             <Font size="30.0" />
          </font>
       </Text>
-      <TextArea fx:id="descriptionField" layoutX="350.0" layoutY="222.0" prefHeight="200.0" prefWidth="566.0" promptText="Add a quest description (optional)" />
+      <TextArea fx:id="descriptionField" layoutX="350.0" layoutY="225.0" prefHeight="118.0" prefWidth="644.0" promptText="Add a quest description (optional)" />
       <Text fill="RED" layoutX="732.0" layoutY="120.0" strokeType="OUTSIDE" strokeWidth="0.0" text="*" wrappingWidth="45.98307228088379">
          <font>
             <Font size="21.0" />
@@ -34,14 +34,47 @@
       </Text>
       <Line endX="-100.0" endY="746.0" layoutX="425.0" layoutY="6.0" startX="-100.0" startY="8.399999618530273" stroke="#38a3a5" AnchorPane.bottomAnchor="13.800024414062477" AnchorPane.topAnchor="13.8" />
       <Line endX="-100.0" endY="746.0" layoutX="1119.0" layoutY="35.0" startX="-100.0" startY="8.399999618530273" stroke="#38a3a5" AnchorPane.bottomAnchor="13.800000000000024" AnchorPane.topAnchor="13.8" />
-      <Button fx:id="saveQuestButton" layoutX="437.0" layoutY="643.0" mnemonicParsing="false" onAction="#createQuest" prefHeight="83.0" prefWidth="146.0" style="-fx-background-color: #57CC99; -fx-font-size: 20; -fx-font-family: Monsterrat;" text="SAVE QUEST">
+      <Button fx:id="saveQuestButton" layoutX="437.0" layoutY="643.0" mnemonicParsing="false" onAction="#createQuest" prefHeight="83.0" prefWidth="146.0" style="-fx-background-color: #57CC99; -fx-font-size: 20; -fx-font-family: Monsterrat; -fx-background-radius: 15; -fx-text-fill: #22577A;" text="SAVE QUEST">
          <font>
             <Font size="33.0" />
          </font>
       </Button>
-      <Button fx:id="cancelButton" layoutX="704.0" layoutY="643.0" mnemonicParsing="false" onAction="#cancelQuestCreation" prefHeight="83.0" prefWidth="146.0" style="-fx-background-color: #38A3A5; -fx-font-size: 20; -fx-font-family: Monsterrat;" text="CANCEL">
+      <Button fx:id="cancelButton" layoutX="704.0" layoutY="643.0" mnemonicParsing="false" onAction="#cancelQuestCreation" prefHeight="83.0" prefWidth="146.0" style="-fx-background-color: #ADB5BD; -fx-font-size: 20; -fx-font-family: Monsterrat; -fx-background-radius: 15; -fx-text-fill: #22577A;" text="CANCEL">
          <font>
             <Font size="33.0" />
+         </font>
+      </Button>
+      <Button fx:id="addNewTaskButton" layoutX="862.0" layoutY="472.0" minWidth="38.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="38.0" style="-fx-background-color: #38A3A5; -fx-background-radius: 12;" text="+" visible="false">
+         <font>
+            <Font size="9.0" />
+         </font>
+      </Button>
+      <Text fill="#22577a" layoutX="350.0" layoutY="409.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Montserrat;" text="Add sub-quests (maximum 3)" wrappingWidth="404.7999633789061">
+         <font>
+            <Font size="30.0" />
+         </font>
+      </Text>
+      <TextField fx:id="taskFieldOne" layoutX="350.0" layoutY="425.0" prefHeight="30.0" prefWidth="494.0" promptText="add task (optional)" />
+      <Button fx:id="addNewTaskButton" alignment="CENTER" layoutX="762.0" layoutY="376.0" minWidth="38.0" mnemonicParsing="false" onAction="#addNewTask" prefHeight="45.0" prefWidth="62.0" style="-fx-background-color: #38A3A5; -fx-background-radius: 8; -fx-font-size: 20; -fx-text-fill: #22577A;" text="+">
+         <font>
+            <Font size="9.0" />
+         </font>
+      </Button>
+      <TextField fx:id="taskFieldTwo" layoutX="350.0" layoutY="472.0" prefHeight="30.0" prefWidth="494.0" promptText="add task (optional)" visible="false" />
+      <TextField fx:id="taskFieldThree" layoutX="350.0" layoutY="523.0" prefHeight="30.0" prefWidth="494.0" promptText="add task (optional)" visible="false" />
+      <Button fx:id="deleteTaskButton1" alignment="CENTER" layoutX="847.0" layoutY="426.0" minWidth="38.0" mnemonicParsing="false" onAction="#deleteFirstTask" prefHeight="28.0" prefWidth="70.0" style="-fx-background-color: #38A3A5; -fx-background-radius: 8; -fx-font-size: 14; -fx-text-fill: #22577A;" text="delete">
+         <font>
+            <Font size="9.0" />
+         </font>
+      </Button>
+      <Button fx:id="deleteTaskButton2" alignment="CENTER" layoutX="847.0" layoutY="473.0" minWidth="38.0" mnemonicParsing="false" onAction="#deleteSecondTask" prefHeight="28.0" prefWidth="70.0" style="-fx-background-color: #38A3A5; -fx-background-radius: 8; -fx-font-size: 14; -fx-text-fill: #22577A;" text="delete" visible="false">
+         <font>
+            <Font size="9.0" />
+         </font>
+      </Button>
+      <Button fx:id="deleteTaskButton3" alignment="CENTER" layoutX="847.0" layoutY="523.0" minWidth="38.0" mnemonicParsing="false" onAction="#deleteThirdTask" prefHeight="28.0" prefWidth="70.0" style="-fx-background-color: #38A3A5; -fx-background-radius: 8; -fx-font-size: 14; -fx-text-fill: #22577A;" text="delete" visible="false">
+         <font>
+            <Font size="9.0" />
          </font>
       </Button>
    </children>

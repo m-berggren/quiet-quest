@@ -9,7 +9,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -24,19 +23,76 @@ public class CreateQuestController {
     @FXML
     private TextArea descriptionField;
     @FXML
-    private TextField taskDescriptionField;
+    private TextField taskFieldOne;
+    @FXML
+    private TextField taskFieldTwo;
+    @FXML
+    private TextField taskFieldThree;
+    @FXML
+    private Button deleteTaskButton1;
+    @FXML
+    private Button deleteTaskButton2;
+    @FXML
+    private Button deleteTaskButton3;
+
     private Parent root;
     private Stage stage;
     private Scene scene;
     private HashMap<String, Quest> quests;
 
 
+    // add new tasks to quest (up to 3):
+    public void addNewTask() {
+        if (!taskFieldOne.getText().isEmpty()) {
+            taskFieldTwo.setVisible(true);
+            deleteTaskButton2.setVisible(true);
+        }
+        if (!taskFieldTwo.getText().isEmpty()) {
+            taskFieldThree.setVisible(true);
+            deleteTaskButton3.setVisible(true);
+        }
+    }
+
+    // delete first task from quest:
+    public void deleteFirstTask() {
+        if (!taskFieldOne.getText().isEmpty()) {
+
+            if (!taskFieldTwo.getText().isEmpty()) { // if there is a second task already
+                taskFieldOne.setText(taskFieldTwo.getText()); // move second task desc up
+            } else { // if there is no second task
+                taskFieldOne.setText("");
+            }
+            deleteSecondTask(); // clear second task and make invisible
+        }
+    }
+
+    // delete second task from quest:
+    public void deleteSecondTask() {
+        if (!taskFieldThree.getText().isEmpty()) { // if there is a third task already
+            taskFieldTwo.setText(taskFieldThree.getText()); // move third task up
+        } else { // if there is no third task
+            taskFieldTwo.setText("");
+            taskFieldTwo.setVisible(false);
+            deleteTaskButton2.setVisible(false);
+        }
+        deleteThirdTask(); // clear third task and make invisible
+    }
+
+    // delete third task from quest:
+    public void deleteThirdTask() {
+        taskFieldThree.setText("");
+        taskFieldThree.setVisible(false);
+        deleteTaskButton3.setVisible(false);
+    }
+
     // create a quest by clicking "Save Quest" button:
     public void createQuest() {
         String title = titleField.getText();
         String description = descriptionField.getText();
         ArrayList<String> tasks = new ArrayList<>();
-        tasks.add(taskDescriptionField.getText());
+        tasks.add(taskFieldOne.getText());
+        tasks.add(taskFieldTwo.getText());
+        tasks.add(taskFieldThree.getText());
 
         Quest quest = new Quest(title, description, tasks);
         quests.put(title, quest);
@@ -44,7 +100,7 @@ public class CreateQuestController {
 
     // cancel quest creation by clicking "Cancel" button:
     @FXML
-    protected void cancelQuestCreation (ActionEvent event) throws IOException {
+    public void cancelQuestCreation (ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(QuietQuestMain.class.getResource("/quietquest/app/hello-view.fxml"));
         root = loader.load();
 

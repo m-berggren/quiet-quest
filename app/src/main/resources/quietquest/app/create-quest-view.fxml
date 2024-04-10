@@ -39,7 +39,7 @@
             <Font size="33.0" />
          </font>
       </Button>
-      <Button layoutX="704.0" layoutY="643.0" mnemonicParsing="false" prefHeight="83.0" prefWidth="146.0" style="-fx-background-color: #38A3A5; -fx-font-size: 20; -fx-font-family: Monsterrat;" text="CANCEL">
+      <Button fx:id="cancelButton" layoutX="704.0" layoutY="643.0" mnemonicParsing="false" onAction="#cancelQuestCreation" prefHeight="83.0" prefWidth="146.0" style="-fx-background-color: #38A3A5; -fx-font-size: 20; -fx-font-family: Monsterrat;" text="CANCEL">
          <font>
             <Font size="33.0" />
          </font>

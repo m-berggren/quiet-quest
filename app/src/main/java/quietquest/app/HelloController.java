@@ -20,8 +20,7 @@ public class HelloController {
 
     @FXML
     protected void onHelloButtonClick(ActionEvent event) throws IOException {
-        welcomeText.setText("Welcome to JavaFX Application!");
-        FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("/quietquest/app/create-quest-view.fxml"));
+        FXMLLoader loader = new FXMLLoader(QuietQuestMain.class.getResource("/quietquest/app/create-quest-view.fxml"));
         root = loader.load();
 
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();

@@ -22,5 +22,18 @@ public class Quest {
         return this.title;
     }
 
+    public String getDescription() {
+        return this.description;
+    }
+
+    public ArrayList<String> getTasks() {
+        return this.tasks;
+    }
+
+    // setters
+    public void setTitle(String title) {}
+    public void setDescription(String description){}
+    public void setTasks(ArrayList<String> tasks){}
+
 
 }

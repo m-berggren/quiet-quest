@@ -19,6 +19,8 @@ public class CreateQuestController {
     @FXML
     private Button saveQuestButton;
     @FXML
+    private Button goToQuestsButton;
+    @FXML
     private TextField titleField;
     @FXML
     private TextArea descriptionField;
@@ -38,7 +40,13 @@ public class CreateQuestController {
     private Parent root;
     private Stage stage;
     private Scene scene;
-    private HashMap<String, Quest> quests;
+    //private HashMap<String, Quest> quests;
+
+    public static QuestManager questManager = QuietQuestMain.questManager;
+
+    private FXMLLoader loader;
+
+
 
 
     // add new tasks to quest (up to 3):
@@ -95,15 +103,29 @@ public class CreateQuestController {
         tasks.add(taskFieldThree.getText());
 
         Quest quest = new Quest(title, description, tasks);
-        quests.put(title, quest);
+        //quests.put(title, quest);
+        questManager.addQuest(quest);
     }
 
     // cancel quest creation by clicking "Cancel" button:
     @FXML
     public void cancelQuestCreation (ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(QuietQuestMain.class.getResource("/quietquest/app/hello-view.fxml"));
+        loader = new FXMLLoader(QuietQuestMain.class.getResource("/quietquest/app/hello-view.fxml"));
         root = loader.load();
 
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void onGoToQuests(ActionEvent event) throws IOException {
+        loader = new FXMLLoader(QuietQuestMain.class.getResource("/quietquest/app/quest-list-view.fxml"));
+        loadLoader(loader, event);
+    }
+
+    public void loadLoader(FXMLLoader loader, ActionEvent event) throws IOException {
+        root = loader.load();
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);

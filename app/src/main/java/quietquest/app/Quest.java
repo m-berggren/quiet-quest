@@ -35,5 +35,7 @@ public class Quest {
     public void setDescription(String description){}
     public void setTasks(ArrayList<String> tasks){}
 
-
+    public String toString(){
+        return title;
+    }
 }

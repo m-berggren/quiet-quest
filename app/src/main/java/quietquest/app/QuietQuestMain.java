@@ -16,7 +16,7 @@ public class QuietQuestMain extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         questManager = new QuestManager();
-        FXMLLoader fxmlLoader = new FXMLLoader(QuietQuestMain.class.getResource("hello-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(QuietQuestMain.class.getResource("start-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 1510, 760);
         stage.setTitle("Hello!");
         stage.setScene(scene);

@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class HelloController implements Initializable, UIUpdater {
+public class StartController implements Initializable, UIUpdater {
     private Parent root;
     private Stage stage;
     private Scene scene;

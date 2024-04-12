@@ -13,7 +13,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class CreateQuestController {
     @FXML
@@ -105,7 +104,7 @@ public class CreateQuestController {
     // cancel quest creation by clicking "Cancel" button:
     @FXML
     public void cancelQuestCreation (ActionEvent event) throws IOException {
-        loader = new FXMLLoader(QuietQuestMain.class.getResource("/quietquest/app/hello-view.fxml"));
+        loader = new FXMLLoader(QuietQuestMain.class.getResource("/quietquest/app/start-view.fxml"));
         loadLoader(loader, event);
     }
 

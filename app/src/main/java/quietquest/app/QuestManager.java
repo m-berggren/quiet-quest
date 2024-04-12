@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 public class QuestManager {
     private HashMap<String, Quest> quests;
+    private Quest questSelection;
 
     public QuestManager(){
         quests = new HashMap<String, Quest>();
@@ -18,12 +19,21 @@ public class QuestManager {
         return quests;
     }
 
-    public boolean deleteQuest(String title){
-        if(quests.containsKey(title)){
-            quests.remove(title);
-            return true;
-        }
+    public void deleteQuest(String title){
+        quests.remove(title);
+    }
 
-        return false;
+    public void setQuestSelection(Quest quest){
+        questSelection = quest;
+        System.out.println("Selected: " + quest);
+    }
+
+    public Quest getQuestSelection(){
+        return questSelection;
+    }
+
+    public void resetQuestSelection(){
+        questSelection = null;
+        System.out.println("Quest Selection is set to null.");
     }
 }

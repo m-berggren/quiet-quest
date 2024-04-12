@@ -40,14 +40,9 @@ public class CreateQuestController {
     private Parent root;
     private Stage stage;
     private Scene scene;
-    //private HashMap<String, Quest> quests;
-
-    public static QuestManager questManager = QuietQuestMain.questManager;
-
     private FXMLLoader loader;
 
-
-
+    public static QuestManager questManager = QuietQuestMain.questManager;
 
     // add new tasks to quest (up to 3):
     public void addNewTask() {
@@ -111,12 +106,7 @@ public class CreateQuestController {
     @FXML
     public void cancelQuestCreation (ActionEvent event) throws IOException {
         loader = new FXMLLoader(QuietQuestMain.class.getResource("/quietquest/app/hello-view.fxml"));
-        root = loader.load();
-
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+        loadLoader(loader, event);
     }
 
     public void onGoToQuests(ActionEvent event) throws IOException {

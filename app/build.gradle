@@ -17,8 +17,10 @@ ext {
   junitVersion = '5.10.0'
 }
 
-sourceCompatibility = '20'
-targetCompatibility = '20'
+/*java {
+  sourceCompatibility = JavaVersion.VERSION_20
+  targetCompatibility = JavaVersion.VERSION_20
+}*/
 
 tasks.withType(JavaCompile) {
   options.encoding = 'UTF-8'
@@ -26,7 +28,7 @@ tasks.withType(JavaCompile) {
 
 application {
   mainModule = 'quietquest.app'
-  mainClass = 'quietquest.app.HelloApplication'
+  mainClass = 'quietquest.app.QuietQuestMain'
 }
 
 javafx {
@@ -35,6 +37,7 @@ javafx {
 }
 
 dependencies {
+  implementation 'com.hivemq:hivemq-mqtt-client:1.2.1'
 
   testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")

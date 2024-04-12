@@ -6,6 +6,18 @@ plugins {
   id 'org.beryx.jlink' version '2.25.0'
 }
 
+jar {
+  manifest {
+    attributes 'Main-Class': 'QuietQuestMain'
+  }
+}
+
+java {
+  toolchain{
+    languageVersion.set(JavaLanguageVersion.of(20))
+  }
+}
+
 group 'quiet-quest'
 version '1.0-SNAPSHOT'
 
@@ -17,18 +29,13 @@ ext {
   junitVersion = '5.10.0'
 }
 
-/*java {
-  sourceCompatibility = JavaVersion.VERSION_20
-  targetCompatibility = JavaVersion.VERSION_20
-}*/
-
 tasks.withType(JavaCompile) {
   options.encoding = 'UTF-8'
 }
 
 application {
   mainModule = 'quietquest.app'
-  mainClass = 'quietquest.app.QuietQuestMain'
+  mainClass = 'quietquest.app.HelloApplication'
 }
 
 javafx {
@@ -37,7 +44,6 @@ javafx {
 }
 
 dependencies {
-  implementation 'com.hivemq:hivemq-mqtt-client:1.2.1'
 
   testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")

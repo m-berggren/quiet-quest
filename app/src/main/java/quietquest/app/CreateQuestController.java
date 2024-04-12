@@ -9,6 +9,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.shape.Shape;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -36,6 +40,16 @@ public class CreateQuestController {
     private Button deleteTaskButton2;
     @FXML
     private Button deleteTaskButton3;
+    @FXML
+    private ImageView createQuestImageView;
+    @FXML
+    private Shape errorTextbox;
+    @FXML
+    private Button okayButton;
+    @FXML
+    private Text errorText;
+    @FXML
+    private Text errorSmallText;
 
     private Parent root;
     private Stage stage;
@@ -89,17 +103,51 @@ public class CreateQuestController {
     }
 
     // create a quest by clicking "Save Quest" button:
-    public void createQuest() {
-        String title = titleField.getText();
-        String description = descriptionField.getText();
-        ArrayList<String> tasks = new ArrayList<>();
-        tasks.add(taskFieldOne.getText());
-        tasks.add(taskFieldTwo.getText());
-        tasks.add(taskFieldThree.getText());
+    public void createQuest() throws Exception {
+        try {
+            //----------------------if quest title field is left empty------------------------
+            if (titleField.getText().isEmpty()) {
+                showError("Don't forget to name your quest!",
+                        "Quests must have a title. Do not leave this field empty.");
+                //----------------------if quest title is already taken---------------------------
+            } else if (questManager.getQuests().containsKey(titleField.getText())) {
+                showError("Give your quest a unique title",
+                        "Each quest must have a unique title.");
+                //----------------------if everything good with title, create quest---------------
+            } else {
+                String title = titleField.getText();
+                String description = descriptionField.getText();
+                ArrayList<String> tasks = new ArrayList<>();
+                tasks.add(taskFieldOne.getText());
+                tasks.add(taskFieldTwo.getText());
+                tasks.add(taskFieldThree.getText());
 
-        Quest quest = new Quest(title, description, tasks);
-        //quests.put(title, quest);
-        questManager.addQuest(quest);
+                Quest quest = new Quest(title, description, tasks);
+                //quests.put(title, quest);
+                questManager.addQuest(quest);
+            }
+        }
+        catch (Exception e) {
+            showError("Oops, something went wrong...", "Try creating your quest again");
+        }
+    }
+
+    // error message pop-up:
+    public void showError(String message, String smallMessage){
+        errorTextbox.setVisible(true);
+        okayButton.setVisible(true);
+        errorText.setVisible(true);
+        errorText.setText(message);
+        errorSmallText.setVisible(true);
+        errorSmallText.setText(smallMessage);
+    }
+
+    // exit error message pop-up by clicking "Okay" button:
+    public void onOkayButtonClick () throws IOException {
+        errorTextbox.setVisible(false); // error message pop-up appears
+        errorText.setVisible(false);
+        errorSmallText.setVisible(false);
+        okayButton.setVisible(false);
     }
 
     // cancel quest creation by clicking "Cancel" button:
@@ -109,6 +157,7 @@ public class CreateQuestController {
         loadLoader(loader, event);
     }
 
+    // go to "Quest List" by clicking "See quests" button:
     public void onGoToQuests(ActionEvent event) throws IOException {
         loader = new FXMLLoader(QuietQuestMain.class.getResource("/quietquest/app/quest-list-view.fxml"));
         loadLoader(loader, event);

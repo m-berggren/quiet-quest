@@ -39,6 +39,7 @@ public class QuestListController implements Initializable {
         questManager = QuietQuestMain.questManager;
         quests = questManager.getQuests();
         displayQuests();
+        setSelectedQuest();
     }
     public void displayQuests(){
         questListView.getItems().addAll(quests.keySet());

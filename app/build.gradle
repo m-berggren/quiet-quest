@@ -6,6 +6,18 @@ plugins {
   id 'org.beryx.jlink' version '2.25.0'
 }
 
+jar {
+  manifest {
+    attributes 'Main-Class': 'QuietQuestMain'
+  }
+}
+
+java {
+  toolchain{
+    languageVersion.set(JavaLanguageVersion.of(20))
+  }
+}
+
 group 'quiet-quest'
 version '1.0-SNAPSHOT'
 
@@ -35,7 +47,6 @@ javafx {
 }
 
 dependencies {
-
   testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
 }

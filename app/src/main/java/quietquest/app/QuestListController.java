@@ -35,7 +35,7 @@ public class QuestListController implements Initializable, UIUpdater {
     private Scene scene;
     private QuestManager questManager;
     private HashMap<String, Quest> quests;
-    public MQTTHandler mqttClient;
+    private MQTTHandler mqttClient;
 
 
     public void initialize(URL arg0, ResourceBundle arg1) {
@@ -70,6 +70,10 @@ public class QuestListController implements Initializable, UIUpdater {
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+    }
+
+    public void disconnectMqtt() {
+        mqttClient.disconnect();
     }
 
     @FXML

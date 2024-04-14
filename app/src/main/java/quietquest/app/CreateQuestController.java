@@ -167,6 +167,8 @@ public class CreateQuestController {
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
+        // Set a style
+        scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
         stage.show();
     }
 

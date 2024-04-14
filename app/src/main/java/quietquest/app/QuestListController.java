@@ -44,7 +44,6 @@ public class QuestListController implements Initializable, UIUpdater {
         mqttClient = new MQTTHandler(this);
         displayQuests();
         setSelectedQuest();
-        //scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
     }
     public void displayQuests(){
         questListView.getItems().addAll(quests.keySet());

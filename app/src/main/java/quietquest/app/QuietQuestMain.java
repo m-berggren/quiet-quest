@@ -22,9 +22,6 @@ public class QuietQuestMain extends Application {
         stage.setTitle("Quiet Quest");
         stage.setScene(scene);
         stage.show();
-
-        // Set a style
-        scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
     }
 
     public static void main(String[] args) {

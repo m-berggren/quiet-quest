@@ -12,12 +12,7 @@ public class MQTTHandler {
 
   private final String HOST = "broker.hivemq.com";
   private final String SUB_TOPICS = "/quietquest/sensor/#";
-
-
-  private final String TOPIC_MOTION = "sensor/motion";
-  private final String TOPIC_ULTRASONIC = "sensor/distance";
-  private final String TOPIC_QUIETQUEST = "QuietQuest";
-
+  private final String PUB_TOPICS = "/quietquest/application/#";
 
   private final UIUpdater uiUpdater;
   private final Mqtt5AsyncClient client;
@@ -47,15 +42,6 @@ public class MQTTHandler {
             .callback(this::handleMessage)// Method reference
             // Can use lambda as well, like so: m -> this.handleMessage(m)
             .send();
-    client.toAsync().subscribeWith()
-            .topicFilter(TOPIC_ULTRASONIC)
-            .callback(this::handleMessage)
-            .send();
-    client.toAsync().subscribeWith()
-            .topicFilter(TOPIC_QUIETQUEST)
-            .callback(this::handleMessage)
-            .send();
-
   }
 
   private void handleMessage(Mqtt5Publish publish) {

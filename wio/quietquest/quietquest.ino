@@ -17,62 +17,19 @@ const char *password = "12345678";    //wifi network password
 
 
 //MQTT server
-const char *mqtt_server = "ee9e926915b64224a7bc895977db4ae9.s2.eu.hivemq.cloud";
-const char *mqtt_username = "QuietQuest";
-const char *mqtt_password = "Quietquest1";
-const int mqtt_port = 8883;
+const char *mqtt_server = "broker.hivemq.com";
 
-WiFiClientSecure wifiClient;
+WiFiClient wifiClient;
 PubSubClient client(wifiClient);
 
 
 //Topics
 const char *TOPIC = "QuietQuest";
-const char *TOPIC_PUB_MOTION = "sensor/motion";
-const char *TOPIC_PUB_DISTANCE  = "sensor/distance";
-const char *TOPIC_SUB_QUEST = "terminal/quest";
+const char *TOPIC_PUB_MOTION = "/quietquest/sensor/motion";
+const char *TOPIC_PUB_DISTANCE  = "/quietquest/sensor/distance";
+const char *TOPIC_SUB_QUEST = "/quietquest/application/start";
+const char *TOPIC_PUB_QUEST = "/quietquest/sensor/connect";
 
-
-
-unsigned long lastMsg = 0;
-#define MSG_BUFFER_SIZE 50
-char msg[MSG_BUFFER_SIZE];
-
-/****** root certificate *********/
-
-static const char *root_ca PROGMEM = R"EOF(
------BEGIN CERTIFICATE-----
-MIIFazCCA1OgAwIBAgIRAIIQz7DSQONZRGPgu2OCiwAwDQYJKoZIhvcNAQELBQAw
-TzELMAkGA1UEBhMCVVMxKTAnBgNVBAoTIEludGVybmV0IFNlY3VyaXR5IFJlc2Vh
-cmNoIEdyb3VwMRUwEwYDVQQDEwxJU1JHIFJvb3QgWDEwHhcNMTUwNjA0MTEwNDM4
-WhcNMzUwNjA0MTEwNDM4WjBPMQswCQYDVQQGEwJVUzEpMCcGA1UEChMgSW50ZXJu
-ZXQgU2VjdXJpdHkgUmVzZWFyY2ggR3JvdXAxFTATBgNVBAMTDElTUkcgUm9vdCBY
-MTCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBAK3oJHP0FDfzm54rVygc
-h77ct984kIxuPOZXoHj3dcKi/vVqbvYATyjb3miGbESTtrFj/RQSa78f0uoxmyF+
-0TM8ukj13Xnfs7j/EvEhmkvBioZxaUpmZmyPfjxwv60pIgbz5MDmgK7iS4+3mX6U
-A5/TR5d8mUgjU+g4rk8Kb4Mu0UlXjIB0ttov0DiNewNwIRt18jA8+o+u3dpjq+sW
-T8KOEUt+zwvo/7V3LvSye0rgTBIlDHCNAymg4VMk7BPZ7hm/ELNKjD+Jo2FR3qyH
-B5T0Y3HsLuJvW5iB4YlcNHlsdu87kGJ55tukmi8mxdAQ4Q7e2RCOFvu396j3x+UC
-B5iPNgiV5+I3lg02dZ77DnKxHZu8A/lJBdiB3QW0KtZB6awBdpUKD9jf1b0SHzUv
-KBds0pjBqAlkd25HN7rOrFleaJ1/ctaJxQZBKT5ZPt0m9STJEadao0xAH0ahmbWn
-OlFuhjuefXKnEgV4We0+UXgVCwOPjdAvBbI+e0ocS3MFEvzG6uBQE3xDk3SzynTn
-jh8BCNAw1FtxNrQHusEwMFxIt4I7mKZ9YIqioymCzLq9gwQbooMDQaHWBfEbwrbw
-qHyGO0aoSCqI3Haadr8faqU9GY/rOPNk3sgrDQoo//fb4hVC1CLQJ13hef4Y53CI
-rU7m2Ys6xt0nUW7/vGT1M0NPAgMBAAGjQjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNV
-HRMBAf8EBTADAQH/MB0GA1UdDgQWBBR5tFnme7bl5AFzgAiIyBpY9umbbjANBgkq
-hkiG9w0BAQsFAAOCAgEAVR9YqbyyqFDQDLHYGmkgJykIrGF1XIpu+ILlaS/V9lZL
-ubhzEFnTIZd+50xx+7LSYK05qAvqFyFWhfFQDlnrzuBZ6brJFe+GnY+EgPbk6ZGQ
-3BebYhtF8GaV0nxvwuo77x/Py9auJ/GpsMiu/X1+mvoiBOv/2X/qkSsisRcOj/KK
-NFtY2PwByVS5uCbMiogziUwthDyC3+6WVwW6LLv3xLfHTjuCvjHIInNzktHCgKQ5
-ORAzI4JMPJ+GslWYHb4phowim57iaztXOoJwTdwJx4nLCgdNbOhdjsnvzqvHu7Ur
-TkXWStAmzOVyyghqpZXjFaH3pO3JLF+l+/+sKAIuvtd7u+Nxe5AW0wdeRlN8NwdC
-jNPElpzVmbUq4JUagEiuTDkHzsxHpFKVK7q4+63SM1N95R1NbdWhscdCb+ZAJzVc
-oyi3B43njTOQ5yOf+1CceWxG1bQVs5ZufpsMljq4Ui0/1lvh+wjChP4kqKOJ2qxq
-4RgqsahDYVvTH9w7jXbyLeiNdd8XM2w9U/t7y0Ff/9yi0GE44Za4rF2LN9d11TPA
-mRGunUHBcnWEvgJBQl9nJEiU0Zsnvgc/ubhPgXRR4Xq37Z0j4r7g1SgEEzwxA57d
-emyPxgcYxn/eR44/KJ4EBs+lVDR3veyJm+kXQ99b21/+jh5Xos1AnX5iItreGCc=
------END CERTIFICATE-----
-)EOF";
 
 void callback(char *topic, byte *payload, unsigned int length) {
   Serial.print("Message arrived [");
@@ -102,14 +59,14 @@ void reconnect() {
     String clientID = "ESP8266Client-";
     clientID += String(random(0xffff), HEX);
     //try to connect
-    if (client.connect(clientID.c_str(), mqtt_username, mqtt_password)) {
+    if (client.connect(clientID.c_str())) {
       Serial.println("connected");
-      client.publish(TOPIC, "{\"message\": \"Wio Terminal is connected\"}");
-      Serial.println("Published connection message successfully!");
 
+      tft.setCursor(20,150);
+      tft.print("Terminal is connected to App");
+      Serial.println("Published connection message successfully!");
       Serial.print("Subscribed to: ");
       Serial.println(TOPIC_SUB_QUEST);
-
       client.subscribe(TOPIC_SUB_QUEST);
 
 
@@ -129,7 +86,7 @@ void clear(uint32_t color) {
 
 void show(char *text) {
   tft.setTextSize(2);
-  tft.drawString(text, 30, 30);
+  tft.drawString(text, 20, 20);
 }
 
 void setup() {
@@ -150,24 +107,19 @@ void setup() {
   clear(TFT_BLUE);
 
   while (WiFi.status() != WL_CONNECTED) {
-    Serial.print("Connecting to WiFi...");
+    delay(500);
+    Serial.print(".");
     show("Not connected to WiFi");
     WiFi.begin(ssid, password);
-    delay(1000);
   }
   clear(TFT_PURPLE);
-  randomSeed(micros());
-  Serial.print("Connected to ");
-  Serial.println(ssid);
+  Serial.print("WiFi connected with IP address: ");
+  Serial.println(WiFi.localIP());
   show("Connected to WiFi");
   delay(500);
 
-
-  wifiClient.setCACert(root_ca);
-
-  client.setServer(mqtt_server, mqtt_port);
+  client.setServer(mqtt_server, 1883);
   client.setCallback(callback);
-
 
 }
 
@@ -177,25 +129,28 @@ void loop() {
   } else {
   client.loop();
 
+  clear(TFT_PURPLE);
   long RangeInCentimeters = ultrasonic.MeasureInCentimeters();
   char msgBuffer[50];
-  sprintf(msgBuffer, "%ld", RangeInCentimeters);
+  sprintf(msgBuffer, "The distance to the phone is %ld cm", RangeInCentimeters);
   client.publish(TOPIC_PUB_DISTANCE, msgBuffer);
-
-
+  tft.setCursor(20,60);
+  tft.print(msgBuffer);
 
   Serial.printf("The distance to obstacles in front is: %ld cm\n", RangeInCentimeters);
 
   if (digitalRead(PIR_MOTION_SENSOR)) {
-
     client.publish(TOPIC_PUB_MOTION,"Hi people are coming");
+    tft.setCursor(20,100);
+    tft.print("Hi people are coming");
     Serial.println("Hi people are coming");
   } else {
-
+    tft.setCursor(20,100);
+    tft.print("Sensor is watching now");
     client.publish(TOPIC_PUB_MOTION,"Sensor is watching");
     Serial.println("PIR Motion Sensor: Seonsor is watching");
   }
-
+  client.publish(TOPIC_PUB_QUEST, "Wio Terminal is connected");
 
   delay(1000);
  }

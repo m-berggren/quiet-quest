@@ -12,8 +12,8 @@ Ultrasonic ultrasonic(0);
 TFT_eSPI tft;
 
 //Update these values corresponding to your network
-const char *ssid = "lianiphone";      //wifi network name
-const char *password = "12345678";    //wifi network password
+const char *ssid = "lianiphone";    //wifi network name
+const char *password = "12345678";  //wifi network password
 
 
 //MQTT server
@@ -26,7 +26,7 @@ PubSubClient client(wifiClient);
 //Topics
 const char *TOPIC = "QuietQuest";
 const char *TOPIC_PUB_MOTION = "/quietquest/sensor/motion";
-const char *TOPIC_PUB_DISTANCE  = "/quietquest/sensor/distance";
+const char *TOPIC_PUB_DISTANCE = "/quietquest/sensor/distance";
 const char *TOPIC_SUB_QUEST = "/quietquest/application/start";
 const char *TOPIC_PUB_QUEST = "/quietquest/sensor/connect";
 
@@ -36,24 +36,22 @@ void callback(char *topic, byte *payload, unsigned int length) {
   Serial.print(topic);
   Serial.print("] ");
 
-  char *txt = (char *) malloc(length + 1);
+  char *txt = (char *)malloc(length + 1);
   memcpy(txt, payload, length);
   txt[length] = '\0';
 
-  if (strcmp(topic, TOPIC_SUB_QUEST) == 0){
-    clear(TFT_RED);
+  if (strcmp(topic, TOPIC_SUB_QUEST) == 0) {
+    show(txt);
+    delay(2000);
   }
-  else {
-    clear(TFT_PURPLE);
-  }
-  show(txt);
-  free(txt);
 
+  free(txt);
   Serial.println();
 }
 
 void reconnect() {
   while (!client.connected()) {
+    WiFi.begin(ssid, password);
     Serial.print("Attempting MQTT connection...");
     //Create a random client ID
     String clientID = "ESP8266Client-";
@@ -62,7 +60,7 @@ void reconnect() {
     if (client.connect(clientID.c_str())) {
       Serial.println("connected");
 
-      tft.setCursor(20,150);
+      tft.setCursor(20, 150);
       tft.print("Terminal is connected to App");
       Serial.println("Published connection message successfully!");
       Serial.print("Subscribed to: ");
@@ -120,38 +118,55 @@ void setup() {
 
   client.setServer(mqtt_server, 1883);
   client.setCallback(callback);
-
 }
 
 void loop() {
   if (!client.connected()) {
     reconnect();
   } else {
-  client.loop();
+    client.loop();
 
-  clear(TFT_PURPLE);
-  long RangeInCentimeters = ultrasonic.MeasureInCentimeters();
-  char msgBuffer[50];
-  sprintf(msgBuffer, "The distance to the phone is %ld cm", RangeInCentimeters);
-  client.publish(TOPIC_PUB_DISTANCE, msgBuffer);
-  tft.setCursor(20,60);
-  tft.print(msgBuffer);
+    clear(TFT_PURPLE);
+    long RangeInCentimeters = ultrasonic.MeasureInCentimeters();
+    char msgBuffer[50];
+    sprintf(msgBuffer, "The distance to the phone is %ld cm", RangeInCentimeters);
+    client.publish(TOPIC_PUB_DISTANCE, msgBuffer);
+    tft.setCursor(20, 60);
+    tft.print(msgBuffer);
 
-  Serial.printf("The distance to obstacles in front is: %ld cm\n", RangeInCentimeters);
+    Serial.printf("The distance to obstacles in front is: %ld cm\n", RangeInCentimeters);
 
-  if (digitalRead(PIR_MOTION_SENSOR)) {
-    client.publish(TOPIC_PUB_MOTION,"Hi people are coming");
-    tft.setCursor(20,100);
-    tft.print("Hi people are coming");
-    Serial.println("Hi people are coming");
-  } else {
-    tft.setCursor(20,100);
-    tft.print("Sensor is watching now");
-    client.publish(TOPIC_PUB_MOTION,"Sensor is watching");
-    Serial.println("PIR Motion Sensor: Seonsor is watching");
+    if (digitalRead(PIR_MOTION_SENSOR)) {
+      client.publish(TOPIC_PUB_MOTION, "Hi people are coming");
+      tft.setCursor(20, 100);
+      tft.print("Hi people are coming");
+      Serial.println("Hi people are coming");
+    } else {
+      tft.setCursor(20, 100);
+      tft.print("Sensor is watching now");
+      client.publish(TOPIC_PUB_MOTION, "Sensor is watching");
+      Serial.println("PIR Motion Sensor: Seonsor is watching");
+    }
+
+
+    if (client.connected()) {
+      tft.setCursor(20, 150);
+      client.publish(TOPIC_PUB_QUEST, "Wio Terminal is connected");
+      tft.print("Broker is connected");
+    } else {
+      tft.setCursor(20, 150);
+      tft.print("Broker connection is lost");
+    }
+
+    if (WiFi.status() != WL_CONNECTED) {
+      tft.setCursor(20, 180);
+      tft.print("Wifi connection is lost");
+
+    } else {
+      tft.setCursor(20, 180);
+      tft.print("Wifi is connected");
+    }
+
+    delay(1000);
   }
-  client.publish(TOPIC_PUB_QUEST, "Wio Terminal is connected");
-
-  delay(1000);
- }
 }

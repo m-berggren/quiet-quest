@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class StartController implements Initializable, UIUpdater {
+public class StartController implements Initializable {
     private Parent root;
     private Stage stage;
     private Scene scene;
@@ -35,9 +35,6 @@ public class StartController implements Initializable, UIUpdater {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Pass the controller instance to the MQTT subscriber
-        mqttClient = new MQTTHandler(this);
-        mqttClient.start(); // Start listening for MQTT messages*/
 
     }
 
@@ -52,39 +49,5 @@ public class StartController implements Initializable, UIUpdater {
         stage.show();
     }
 
-    @FXML
-    private void handlePublishAction() {
-        String message = "Hello from JavaFX";
-        mqttClient.publishMessage("sensor/motion", message);
-    }
 
-    @Override
-    public void updateUI(String message) {
-        Platform.runLater(() -> {
-            if ("Hello from JavaFX".equals(message)) {
-                mqttMessage.setText("Works!");
-                mqttMessage.getStyleClass().clear();
-                mqttMessage.getStyleClass().add("label-all-green");
-
-            } else if ("Hi people are coming".equals(message)) {
-                mqttMessage.setText(message);
-                mqttMessage.getStyleClass().clear();
-                mqttMessage.getStyleClass().add("label-all-green");
-
-            } else if ("LIAN ADD HERE".equals(message)) {
-                mqttDistanceMessage.setText("");
-                mqttDistanceMessage.getStyleClass().clear();
-                mqttDistanceMessage.getStyleClass().add("label-all-green");
-
-            } else if("Sensor is watching".equals(message)) {
-                mqttMessage.setText(message);
-                mqttMessage.getStyleClass().clear();
-                mqttMessage.getStyleClass().add("label-all-red");
-
-            } else {
-                mqttMessage.getStyleClass().clear();
-                mqttMessage.setText(message);
-            }
-        });
-    }
 }

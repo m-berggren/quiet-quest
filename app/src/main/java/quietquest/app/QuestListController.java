@@ -87,6 +87,12 @@ public class QuestListController implements Initializable, UIUpdater {
             mqttClient.disconnect();
             mqttConnectionMessage.getStyleClass().clear();
             mqttConnectionMessage.setText("");
+
+            mqttDistanceMessage.getStyleClass().clear();
+            mqttDistanceMessage.setText("");
+
+            mqttMotionMessage.getStyleClass().clear();
+            mqttMotionMessage.setText("");
         }
     }
 

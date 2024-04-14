@@ -19,7 +19,7 @@ public class QuietQuestMain extends Application {
         questManager = new QuestManager();
         FXMLLoader fxmlLoader = new FXMLLoader(QuietQuestMain.class.getResource("start-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 1510, 760);
-        stage.setTitle("Hello!");
+        stage.setTitle("Quiet Quest");
         stage.setScene(scene);
         stage.show();
 

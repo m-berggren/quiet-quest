@@ -3,7 +3,6 @@ This file defines global css styles for the application.
 */
 
 .label-all-green {
-    /* sets button as green to show all OK */
     -fx-border-color: darkgreen;
     -fx-border-width: 3;
 
@@ -11,9 +10,33 @@ This file defines global css styles for the application.
 }
 
 .label-all-red {
-    /* sets button as green to show all OK */
     -fx-border-color: darkred;
     -fx-border-width: 3;
 
     -fx-background-color: #e68281;
+}
+
+.button-all-green {
+    -fx-border-color: darkgreen;
+    -fx-border-width: 3;
+
+    -fx-background-color: #c8f59a;
+}
+
+.toggle-button {
+    -fx-background-color: lightcoral;
+    -fx-background-radius: 4;
+
+    -fx-border-color: gray;
+    -fx-border-radius: 5;
+    -fx-border-width: 1;
+}
+
+.toggle-button:selected {
+    -fx-background-color: lightgreen;
+    -fx-background-radius: 4;
+
+    -fx-border-color: gray;
+    -fx-border-radius: 5;
+    -fx-border-width: 1;
 }

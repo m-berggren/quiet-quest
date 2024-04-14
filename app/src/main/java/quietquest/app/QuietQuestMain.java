@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Objects;
 
 public class QuietQuestMain extends Application {
     public static QuestManager questManager;
@@ -21,6 +22,9 @@ public class QuietQuestMain extends Application {
         stage.setTitle("Quiet Quest");
         stage.setScene(scene);
         stage.show();
+
+        // Set a style
+        scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
     }
 
     public static void main(String[] args) {

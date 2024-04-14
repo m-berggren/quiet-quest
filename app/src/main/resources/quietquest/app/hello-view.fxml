@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.VBox?>
 
 <VBox alignment="CENTER" prefHeight="179.0" prefWidth="155.0" spacing="20.0" stylesheets="/style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="quietquest.app.HelloController">
@@ -11,7 +12,8 @@
   </padding>
    <Label fx:id="mqttDistanceMessage" />
    <Label fx:id="mqttMessage" />
-   <Button mnemonicParsing="false" onAction="#handlePublishAction" text="Manual Publish" />
+   <Button mnemonicParsing="false" onAction="#onManualPublishClick" text="Manual Publish" />
+   <ToggleButton fx:id="subscribeButton" mnemonicParsing="false" onAction="#onSubscribeButtonClick" text="Subscribe" />
 
   <Label fx:id="welcomeText" />
   <Button fx:id="helloButton" onAction="#onHelloButtonClick" text="Hello!" />

@@ -10,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ToggleButton;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -26,6 +27,8 @@ public class HelloController implements Initializable, UIUpdater {
     @FXML
     private Button helloButton;
     @FXML
+    private ToggleButton subscribeButton;
+    @FXML
     private Label mqttMessage;
 
     @FXML
@@ -35,10 +38,7 @@ public class HelloController implements Initializable, UIUpdater {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Pass the controller instance to the MQTT subscriber
         mqttClient = new MQTTHandler(this);
-        mqttClient.start(); // Start listening for MQTT messages*/
-
     }
 
     @FXML
@@ -53,9 +53,22 @@ public class HelloController implements Initializable, UIUpdater {
     }
 
     @FXML
-    private void handlePublishAction() {
+    private void onSubscribeButtonClick() {
+        if (subscribeButton.isSelected()) {
+            mqttClient.connect(); // Connect to MQTT broker
+            mqttClient.subscribe();
+
+        } else {
+            mqttClient.disconnect();
+
+            mqttMessage.getStyleClass().clear();
+            mqttMessage.setText("");
+        }
+    }
+    @FXML
+    private void onManualPublishClick() {
         String message = "Hello from JavaFX";
-        mqttClient.publishMessage("sensor/motion", message);
+        mqttClient.publishMessage("/quietquest/sensor/motion", message);
     }
 
     @Override

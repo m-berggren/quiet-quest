@@ -10,11 +10,9 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
-import java.time.LocalDate;
 import java.util.*;
 
 public class QuestListController implements Initializable, UIUpdater {
@@ -25,9 +23,12 @@ public class QuestListController implements Initializable, UIUpdater {
     @FXML
     private ToggleButton subscribeButton;
     @FXML
-    private Label mqttMessage;
+    private Label mqttMotionMessage;
     @FXML
     private Label mqttDistanceMessage;
+    @FXML
+    private Label mqttConnectionMessage;
+
 
     private FXMLLoader loader;
     private Parent root;
@@ -35,7 +36,7 @@ public class QuestListController implements Initializable, UIUpdater {
     private Scene scene;
     private QuestManager questManager;
     private HashMap<String, Quest> quests;
-    public MQTTHandler mqttClient;
+    private MQTTHandler mqttClient;
 
 
     public void initialize(URL arg0, ResourceBundle arg1) {
@@ -45,6 +46,7 @@ public class QuestListController implements Initializable, UIUpdater {
         displayQuests();
         setSelectedQuest();
     }
+
     public void displayQuests(){
         questListView.getItems().addAll(quests.keySet());
     }
@@ -72,51 +74,60 @@ public class QuestListController implements Initializable, UIUpdater {
         stage.show();
     }
 
+    public void disconnectMqtt() {
+        mqttClient.disconnect();
+    }
+
     @FXML
     private void onSubscribeButtonClick() {
         if (subscribeButton.isSelected()) {
             mqttClient.connect(); // Connect to MQTT broker
-            mqttClient.subscribe();
-
+            mqttClient.subscribe(); // Subscribe
         } else {
             mqttClient.disconnect();
+            mqttConnectionMessage.getStyleClass().clear();
+            mqttConnectionMessage.setText("");
 
-            mqttMessage.getStyleClass().clear();
-            mqttMessage.setText("");
+            mqttDistanceMessage.getStyleClass().clear();
+            mqttDistanceMessage.setText("");
+
+            mqttMotionMessage.getStyleClass().clear();
+            mqttMotionMessage.setText("");
         }
     }
+
     @FXML
     private void onManualPublishClick() {
-        String message = "Hello from JavaFX";
-        mqttClient.publishMessage("/quietquest/sensor/motion", message);
+        String message = "Your quest has started";
+        mqttClient.publishMessage("/quietquest/application/start", message);
     }
 
     @Override
     public void updateUI(String message) {
         Platform.runLater(() -> {
-            if ("Hello from JavaFX".equals(message)) {
-                mqttMessage.setText("Works!");
-                mqttMessage.getStyleClass().clear();
-                mqttMessage.getStyleClass().add("label-all-green");
+            if (message.contains("Wio")) {
+                mqttConnectionMessage.setText(message);
+                mqttConnectionMessage.getStyleClass().clear();
+                mqttConnectionMessage.getStyleClass().add("label-all-green");
 
             } else if ("Hi people are coming".equals(message)) {
-                mqttMessage.setText(message);
-                mqttMessage.getStyleClass().clear();
-                mqttMessage.getStyleClass().add("label-all-green");
+                mqttMotionMessage.setText(message);
+                mqttMotionMessage.getStyleClass().clear();
+                mqttMotionMessage.getStyleClass().add("label-all-green");
 
-            } else if ("LIAN ADD HERE".equals(message)) {
-                mqttDistanceMessage.setText("");
+            } else if("Sensor is watching".equals(message)) {
+                mqttMotionMessage.setText(message);
+                mqttMotionMessage.getStyleClass().clear();
+                mqttMotionMessage.getStyleClass().add("label-all-red");
+
+            } else if (message.contains("distance")) {
+                mqttDistanceMessage.setText(message);
                 mqttDistanceMessage.getStyleClass().clear();
                 mqttDistanceMessage.getStyleClass().add("label-all-green");
 
-            } else if("Sensor is watching".equals(message)) {
-                mqttMessage.setText(message);
-                mqttMessage.getStyleClass().clear();
-                mqttMessage.getStyleClass().add("label-all-red");
-
             } else {
-                mqttMessage.getStyleClass().clear();
-                mqttMessage.setText(message);
+                mqttMotionMessage.getStyleClass().clear();
+                mqttMotionMessage.setText(message);
             }
         });
     }

@@ -4,12 +4,8 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Objects;
+
 
 public class QuietQuestMain extends Application {
     public static QuestManager questManager;
@@ -22,6 +18,11 @@ public class QuietQuestMain extends Application {
         stage.setTitle("Quiet Quest");
         stage.setScene(scene);
         stage.show();
+
+        stage.setOnCloseRequest(event -> {
+            QuestListController questListController = fxmlLoader.getController();
+            questListController.disconnectMqtt();
+        });
     }
 
     public static void main(String[] args) {

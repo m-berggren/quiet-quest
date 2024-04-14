@@ -160,6 +160,11 @@ public class CreateQuestController {
     public void onGoToQuests(ActionEvent event) throws IOException {
         loader = new FXMLLoader(QuietQuestMain.class.getResource("/quietquest/app/quest-list-view.fxml"));
         loadLoader(loader, event);
+
+        stage.setOnCloseRequest(action -> {
+            QuestListController questListController = loader.getController();
+            questListController.disconnectMqtt();
+        });
     }
 
     public void loadLoader(FXMLLoader loader, ActionEvent event) throws IOException {

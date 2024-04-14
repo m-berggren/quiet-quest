@@ -42,7 +42,7 @@ public class StartController implements Initializable, UIUpdater {
     }
 
     @FXML
-    protected void onHelloButtonClick(ActionEvent event) throws IOException {
+    protected void onNewQuestButtonClick(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(QuietQuestMain.class.getResource("/quietquest/app/create-quest-view.fxml"));
         root = loader.load();
 

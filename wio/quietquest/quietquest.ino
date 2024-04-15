@@ -137,15 +137,15 @@ void loop() {
     Serial.printf("The distance to obstacles in front is: %ld cm\n", RangeInCentimeters);
 
     if (digitalRead(PIR_MOTION_SENSOR)) {
-      client.publish(TOPIC_PUB_MOTION, "Hi people are coming");
+      client.publish(TOPIC_PUB_MOTION, "Motion is detected. Someone is nearby.");
       tft.setCursor(20, 100);
-      tft.print("Hi people are coming");
-      Serial.println("Hi people are coming");
+      tft.print("Motion is detected.");
+      Serial.println("Motion is detected.");
     } else {
       tft.setCursor(20, 100);
-      tft.print("Sensor is watching now");
-      client.publish(TOPIC_PUB_MOTION, "Sensor is watching");
-      Serial.println("PIR Motion Sensor: Seonsor is watching");
+      tft.print("Searching for motion");
+      client.publish(TOPIC_PUB_MOTION, "Searching for motion");
+      Serial.println("PIR Motion Sensor: Searching for motion");
     }
 
 
@@ -161,7 +161,7 @@ void loop() {
     if (WiFi.status() != WL_CONNECTED) {
       tft.setCursor(20, 180);
       tft.print("Wifi connection is lost");
-
+ 
     } else {
       tft.setCursor(20, 180);
       tft.print("Wifi is connected");

@@ -88,11 +88,6 @@ public class QuestListController implements Initializable, UIUpdater {
             mqttConnectionMessage.getStyleClass().clear();
             mqttConnectionMessage.setText("");
 
-            mqttDistanceMessage.getStyleClass().clear();
-            mqttDistanceMessage.setText("");
-
-            mqttMotionMessage.getStyleClass().clear();
-            mqttMotionMessage.setText("");
         }
     }
 
@@ -110,12 +105,12 @@ public class QuestListController implements Initializable, UIUpdater {
                 mqttConnectionMessage.getStyleClass().clear();
                 mqttConnectionMessage.getStyleClass().add("label-all-green");
 
-            } else if ("Hi people are coming".equals(message)) {
+            } else if ("Motion is detected. Someone is nearby.".equals(message)) {
                 mqttMotionMessage.setText(message);
                 mqttMotionMessage.getStyleClass().clear();
                 mqttMotionMessage.getStyleClass().add("label-all-green");
 
-            } else if("Sensor is watching".equals(message)) {
+            } else if("Searching for motion".equals(message)) {
                 mqttMotionMessage.setText(message);
                 mqttMotionMessage.getStyleClass().clear();
                 mqttMotionMessage.getStyleClass().add("label-all-red");

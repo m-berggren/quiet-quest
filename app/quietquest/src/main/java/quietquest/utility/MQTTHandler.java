@@ -19,7 +19,7 @@ public class MQTTHandler {
   private final Mqtt5AsyncClient client;
 
   // Information used from this website:
-  // https://console.hivemq.cloud/clients/java-hivemq?uuid=ee9e926915b64224a7bc895977db4ae9
+  // https://console.hivemq.cloud/clients/java-hivemq?uuid=ee9e926915b642241a7bc895977db4ae9
   // For testing and building we are using a public MQTT broker by HiveMQ
 
   public MQTTHandler(UIUpdater uiUpdater) {

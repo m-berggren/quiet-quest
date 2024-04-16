@@ -15,12 +15,13 @@ import quietquest.QuietQuestMain;
 import quietquest.model.Quest;
 import quietquest.model.QuestManager;
 import quietquest.utility.MQTTHandler;
+import quietquest.utility.FxmlFile;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
-public class QuestListController implements Initializable, UIUpdater {
+public class QuestListController extends BaseController implements Initializable, UIUpdater {
     @FXML
     private Button deleteButton;
     @FXML
@@ -35,6 +36,7 @@ public class QuestListController implements Initializable, UIUpdater {
     private Label mqttConnectionMessage;
 
 
+    private FxmlFile view;
     private FXMLLoader loader;
     private Parent root;
     private Stage stage;
@@ -67,8 +69,9 @@ public class QuestListController implements Initializable, UIUpdater {
     }
 
     public void onDeleteQuest(ActionEvent event) throws IOException {
-        loader = new FXMLLoader(QuietQuestMain.class.getResource("/quietquest/delete-quest-view.fxml"));
-        loadLoader(loader, event);
+        // loader = getFxmlLoader(FxmlFile.DELETE_QUEST);
+        // loadLoader(loader, event);
+        loadLoader(FxmlFile.DELETE_QUEST, event);
     }
 
     public void loadLoader(FXMLLoader loader, ActionEvent event) throws IOException {

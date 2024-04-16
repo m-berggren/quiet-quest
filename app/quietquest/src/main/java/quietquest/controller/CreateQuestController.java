@@ -16,11 +16,12 @@ import javafx.stage.Stage;
 import quietquest.QuietQuestMain;
 import quietquest.model.Quest;
 import quietquest.model.QuestManager;
+import quietquest.utility.FxmlFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class CreateQuestController {
+public class CreateQuestController extends BaseController {
     @FXML
     private Button saveQuestButton;
     @FXML
@@ -154,19 +155,21 @@ public class CreateQuestController {
     // cancel quest creation by clicking "Cancel" button:
     @FXML
     public void cancelQuestCreation (ActionEvent event) throws IOException {
-        loader = new FXMLLoader(QuietQuestMain.class.getResource("/quietquest/start-view.fxml"));
-        loadLoader(loader, event);
+        // loader = getFxmlLoader(FxmlFile.START);
+        // loadLoader(loader, event);
+        loadLoader(FxmlFile.START, event);
     }
 
     // go to "Quest List" by clicking "See quests" button:
     public void onGoToQuests(ActionEvent event) throws IOException {
-        loader = new FXMLLoader(QuietQuestMain.class.getResource("/quietquest/quest-list-view.fxml"));
-        loadLoader(loader, event);
+        // loader = getFxmlLoader(FxmlFile.QUEST_LIST);
+        // loadLoader(loader, event);
+        loadLoader(FxmlFile.QUEST_LIST, event);
 
-        stage.setOnCloseRequest(action -> {
-            QuestListController questListController = loader.getController();
-            questListController.disconnectMqtt();
-        });
+        // stage.setOnCloseRequest(action -> {
+        //    QuestListController questListController = loader.getController();
+        //    questListController.disconnectMqtt();
+        // });
     }
 
     public void loadLoader(FXMLLoader loader, ActionEvent event) throws IOException {

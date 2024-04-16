@@ -9,14 +9,15 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
-import quietquest.QuietQuestMain;
+import quietquest.utility.FxmlFile;
 
 import java.io.IOException;
 
-public class StartController {
+public class StartController extends BaseController {
     private Parent root;
     private Stage stage;
     private Scene scene;
+
     @FXML
     private Label welcomeText;
 
@@ -25,7 +26,7 @@ public class StartController {
 
     @FXML
     protected void onNewQuestButtonClick(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(QuietQuestMain.class.getResource("/quietquest/create-quest-view.fxml"));
+        FXMLLoader loader = getFxmlLoader(FxmlFile.CREATE_QUEST);
         root = loader.load();
 
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

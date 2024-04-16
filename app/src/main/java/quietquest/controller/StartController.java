@@ -1,20 +1,17 @@
-package quietquest.app;
+package quietquest.controller;
 
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
+import quietquest.QuietQuestMain;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
 
 public class StartController {
     private Parent root;
@@ -28,7 +25,7 @@ public class StartController {
 
     @FXML
     protected void onNewQuestButtonClick(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(QuietQuestMain.class.getResource("/quietquest/app/create-quest-view.fxml"));
+        FXMLLoader loader = new FXMLLoader(QuietQuestMain.class.getResource("/quietquest/create-quest-view.fxml"));
         root = loader.load();
 
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

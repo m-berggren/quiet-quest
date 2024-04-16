@@ -1,4 +1,4 @@
-package quietquest.app;
+package quietquest.controller;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -11,6 +11,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import quietquest.QuietQuestMain;
+import quietquest.model.Quest;
+import quietquest.model.QuestManager;
+import quietquest.utility.MQTTHandler;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
@@ -62,7 +67,7 @@ public class QuestListController implements Initializable, UIUpdater {
     }
 
     public void onDeleteQuest(ActionEvent event) throws IOException {
-        loader = new FXMLLoader(QuietQuestMain.class.getResource("/quietquest/app/delete-quest-view.fxml"));
+        loader = new FXMLLoader(QuietQuestMain.class.getResource("/quietquest/delete-quest-view.fxml"));
         loadLoader(loader, event);
     }
 

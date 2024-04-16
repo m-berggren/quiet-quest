@@ -1,4 +1,4 @@
-package quietquest.app;
+package quietquest.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -9,6 +9,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
+import quietquest.QuietQuestMain;
+import quietquest.model.Quest;
+import quietquest.model.QuestManager;
 
 import java.io.IOException;
 import java.net.URL;
@@ -31,7 +34,7 @@ public class DeleteQuestController implements Initializable{
     }
 
     public void onCancel(ActionEvent event) throws IOException {
-        loader = new FXMLLoader(QuietQuestMain.class.getResource("/quietquest/app/quest-list-view.fxml"));
+        loader = new FXMLLoader(QuietQuestMain.class.getResource("/quietquest/quest-list-view.fxml"));
         loadLoader(loader, event);
     }
 
@@ -39,7 +42,7 @@ public class DeleteQuestController implements Initializable{
         questManager.deleteQuest(quest.getTitle());
         questManager.resetQuestSelection();
 
-        loader = new FXMLLoader(QuietQuestMain.class.getResource("/quietquest/app/quest-list-view.fxml"));
+        loader = new FXMLLoader(QuietQuestMain.class.getResource("/quietquest/quest-list-view.fxml"));
         loadLoader(loader, event);
     }
 

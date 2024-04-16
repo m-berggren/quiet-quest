@@ -1,4 +1,4 @@
-package quietquest.app;
+package quietquest.model;
 
 import java.util.ArrayList;
 
@@ -10,7 +10,7 @@ public class Quest {
     private ArrayList<String> tasks;
 
     // constructors
-    public Quest(){}
+    public Quest() { }
     public Quest(String title, String description, ArrayList<String> tasks){
         this.title = title;
         this.description = description;

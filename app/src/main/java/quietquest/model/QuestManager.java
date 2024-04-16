@@ -1,4 +1,4 @@
-package quietquest.app;
+package quietquest.model;
 
 import java.util.HashMap;
 

@@ -1,8 +1,9 @@
-package quietquest.app;
+package quietquest.utility;
 
 import com.hivemq.client.mqtt.mqtt5.Mqtt5AsyncClient;
 import com.hivemq.client.mqtt.mqtt5.Mqtt5Client;
 import com.hivemq.client.mqtt.mqtt5.message.publish.Mqtt5Publish;
+import quietquest.controller.UIUpdater;
 
 import java.nio.ByteBuffer;
 

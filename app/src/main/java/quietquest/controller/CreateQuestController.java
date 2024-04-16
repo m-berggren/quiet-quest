@@ -1,4 +1,4 @@
-package quietquest.app;
+package quietquest.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -9,11 +9,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import quietquest.QuietQuestMain;
+import quietquest.model.Quest;
+import quietquest.model.QuestManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -152,13 +154,13 @@ public class CreateQuestController {
     // cancel quest creation by clicking "Cancel" button:
     @FXML
     public void cancelQuestCreation (ActionEvent event) throws IOException {
-        loader = new FXMLLoader(QuietQuestMain.class.getResource("/quietquest/app/start-view.fxml"));
+        loader = new FXMLLoader(QuietQuestMain.class.getResource("/quietquest/start-view.fxml"));
         loadLoader(loader, event);
     }
 
     // go to "Quest List" by clicking "See quests" button:
     public void onGoToQuests(ActionEvent event) throws IOException {
-        loader = new FXMLLoader(QuietQuestMain.class.getResource("/quietquest/app/quest-list-view.fxml"));
+        loader = new FXMLLoader(QuietQuestMain.class.getResource("/quietquest/quest-list-view.fxml"));
         loadLoader(loader, event);
 
         stage.setOnCloseRequest(action -> {

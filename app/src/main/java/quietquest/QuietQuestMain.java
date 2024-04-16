@@ -1,9 +1,12 @@
-package quietquest.app;
+package quietquest;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import quietquest.controller.QuestListController;
+import quietquest.model.QuestManager;
+
 import java.io.IOException;
 
 

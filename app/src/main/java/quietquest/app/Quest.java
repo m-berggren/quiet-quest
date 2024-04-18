@@ -2,7 +2,7 @@ package quietquest.app;
 
 import java.util.ArrayList;
 
-public class Quest {
+public class Quest extends Task {
 
     // attributes of Quest
     private String title;
@@ -31,8 +31,8 @@ public class Quest {
     }
 
     // setters
-    public void setTitle(String title) {}
-    public void setDescription(String description){}
+    public static void setTitle(String title) {}
+    public static void setDescription(String description){}
     public void setTasks(ArrayList<String> tasks){}
 
     @Override

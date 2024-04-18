@@ -10,6 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
@@ -28,8 +29,26 @@ public class QuestListController implements Initializable, UIUpdater {
     private Label mqttDistanceMessage;
     @FXML
     private Label mqttConnectionMessage;
-
-
+    @FXML
+    private TextField titleField;
+    @FXML
+    private Text descriptionHeader;
+    @FXML
+    private TextArea descriptionField;
+    @FXML
+    private Text tasksHeader;
+    @FXML
+    private TextField taskFieldOne;
+    @FXML
+    private TextField taskFieldTwo;
+    @FXML
+    private TextField taskFieldThree;
+    @FXML
+    private Button startButton;
+    @FXML
+    private Button editButton;
+    @FXML
+    private Button completeButton;
     private FXMLLoader loader;
     private Parent root;
     private Stage stage;
@@ -65,6 +84,56 @@ public class QuestListController implements Initializable, UIUpdater {
         loader = new FXMLLoader(QuietQuestMain.class.getResource("/quietquest/app/delete-quest-view.fxml"));
         loadLoader(loader, event);
     }
+
+    //
+    public void showSelected() {
+        // show quest/task details on the right side:
+        titleField.setVisible(true);
+        descriptionHeader.setVisible(true);
+        descriptionField.setVisible(true);
+
+        Quest selectedItem = QuestManager.getQuestSelection();
+        if (selectedItem instanceof Quest) { // if we selected a Quest, it should have its Tasks listed too
+            tasksHeader.setVisible(true);
+            taskFieldOne.setVisible(true);
+            taskFieldTwo.setVisible(true);
+            taskFieldThree.setVisible(true);
+
+            Quest currentQuest = (Quest) selectedItem;
+            titleField.setText(currentQuest.getTitle());
+            descriptionField.setText(currentQuest.getDescription());
+            // set text for task fields too
+        /*
+        } else {  // if we selected a Task, no task list should show up
+            Task currentTask = selectedItem;
+            titleField.setText(selectedItem.getTitle());
+            descriptionField.setText(selectedItem.getDescription());
+        */
+        }
+    }
+
+    // edit selected quest by clicking "Edit" button:
+    public void setEditable(){
+        titleField.setEditable(true);
+        descriptionField.setEditable(true);
+    }
+
+    // save quest/task details by clicking "Save" button:
+    public void onSaveButtonClick() {
+        // save title and make non-editable:
+        String newTitle = titleField.getText();
+        titleField.setText(newTitle);
+        Quest.setTitle(newTitle);
+        titleField.setEditable(false);
+
+        // save description and make non-editable:
+        String newDescription = descriptionField.getText();
+        descriptionField.setText(newDescription);
+        Quest.setDescription(newDescription);
+        descriptionField.setEditable(false);
+        //taskField.setEditable(false);
+    }
+
 
     public void loadLoader(FXMLLoader loader, ActionEvent event) throws IOException {
         root = loader.load();

@@ -3,7 +3,6 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleButton?>
@@ -27,36 +26,40 @@
     <Button layoutX="260.0" layoutY="175.0" mnemonicParsing="false" text="Start" />
    <AnchorPane fx:id="viewInfoAnchorPane" layoutX="888.0" layoutY="96.0" prefHeight="568.0" prefWidth="566.0">
       <children>
-         <ScrollPane fx:id="taskListScrollPane" layoutX="14.0" layoutY="127.0" prefHeight="350.0" prefWidth="537.0">
-            <content>
-               <TextArea fx:id="descriptionField" prefHeight="134.0" prefWidth="536.0" promptText="Add description (optional)" />
-            </content>
-         </ScrollPane>
-         <Text fx:id="titleText1" fill="#22577a" layoutX="14.0" layoutY="118.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Montserrat;" text="Description" wrappingWidth="334.9270782470703">
+         <TextArea fx:id="descriptionField" layoutX="15.0" layoutY="134.0" prefHeight="134.0" prefWidth="536.0" promptText="Add description (optional)" visible="false" />
+         <Text fx:id="descriptionHeader" fill="#22577a" layoutX="14.0" layoutY="118.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Montserrat;" text="Description" visible="false" wrappingWidth="334.9270782470703">
             <font>
                <Font size="30.0" />
             </font>
          </Text>
-         <TextField fx:id="titleField" editable="false" layoutX="14.0" layoutY="14.0" prefHeight="70.0" prefWidth="538.0" promptText="Set a title">
+         <TextField fx:id="titleField" editable="false" layoutX="14.0" layoutY="14.0" prefHeight="70.0" prefWidth="538.0" promptText="Set a title" visible="false">
             <font>
                <Font size="30.0" />
             </font>
          </TextField>
-         <Button fx:id="startButton" layoutX="43.0" layoutY="492.0" mnemonicParsing="false" prefHeight="83.0" prefWidth="146.0" style="-fx-background-color: #38A3A5; -fx-font-size: 20; -fx-font-family: Monsterrat; -fx-background-radius: 15; -fx-text-fill: #22577A;" text="START">
+         <Button fx:id="startButton" layoutX="210.0" layoutY="492.0" mnemonicParsing="false" prefHeight="83.0" prefWidth="146.0" style="-fx-background-color: #57CC99; -fx-font-size: 20; -fx-font-family: Monsterrat; -fx-background-radius: 15; -fx-text-fill: #22577A;" text="START" visible="false">
             <font>
                <Font size="33.0" />
             </font>
          </Button>
-         <Button fx:id="editButton" layoutX="210.0" layoutY="492.0" mnemonicParsing="false" prefHeight="83.0" prefWidth="146.0" style="-fx-background-color: #57CC99; -fx-font-size: 20; -fx-font-family: Monsterrat; -fx-background-radius: 15; -fx-text-fill: #22577A;" text="EDIT">
+         <Button fx:id="editButton" layoutX="42.0" layoutY="492.0" mnemonicParsing="false" onAction="#setEditable" prefHeight="83.0" prefWidth="146.0" style="-fx-background-color: #38A3A599; -fx-font-size: 20; -fx-font-family: Monsterrat; -fx-background-radius: 15; -fx-text-fill: #22577A;" text="EDIT" visible="false">
             <font>
                <Font size="33.0" />
             </font>
          </Button>
-         <Button fx:id="completeButton" layoutX="376.0" layoutY="492.0" mnemonicParsing="false" prefHeight="83.0" prefWidth="146.0" style="-fx-background-color: #80ED99; -fx-font-size: 20; -fx-font-family: Monsterrat; -fx-background-radius: 15; -fx-text-fill: #22577A;" text="COMPLETED">
+         <Button fx:id="completeButton" layoutX="376.0" layoutY="492.0" mnemonicParsing="false" prefHeight="83.0" prefWidth="146.0" style="-fx-background-color: #80ED99; -fx-font-size: 20; -fx-font-family: Monsterrat; -fx-background-radius: 15; -fx-text-fill: #22577A;" text="COMPLETED" visible="false">
             <font>
                <Font size="33.0" />
             </font>
          </Button>
+         <TextField fx:id="taskFieldOne" layoutX="15.0" layoutY="338.0" prefHeight="30.0" prefWidth="494.0" promptText="add task (optional)" visible="false" />
+         <Text fx:id="tasksHeader" fill="#22577a" layoutX="14.0" layoutY="320.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Montserrat;" text="Tasks" visible="false" wrappingWidth="334.9270782470703">
+            <font>
+               <Font size="30.0" />
+            </font>
+         </Text>
+         <TextField fx:id="taskFieldTwo" layoutX="15.0" layoutY="384.0" prefHeight="30.0" prefWidth="494.0" promptText="add task (optional)" visible="false" />
+         <TextField fx:id="taskFieldThree" layoutX="15.0" layoutY="431.0" prefHeight="30.0" prefWidth="494.0" promptText="add task (optional)" visible="false" />
       </children>
    </AnchorPane>
 </AnchorPane>

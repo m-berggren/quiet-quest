@@ -13,6 +13,7 @@ import javafx.scene.control.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.net.URL;
 import java.util.*;
 
@@ -44,7 +45,7 @@ public class QuestListController implements Initializable, UIUpdater {
     @FXML
     private TextField taskFieldThree;
     @FXML
-    private Button startButton;
+    private Button saveButton;
     @FXML
     private Button editButton;
     @FXML
@@ -90,28 +91,28 @@ public class QuestListController implements Initializable, UIUpdater {
 
     //
     public void showSelected() {
-        // show quest/task details on the right side:
+        // show quest details on the right side:
+        currentQuest = questManager.getQuestSelection();
+
         titleField.setVisible(true);
         descriptionHeader.setVisible(true);
         descriptionField.setVisible(true);
+        tasksHeader.setVisible(true);
+        taskFieldOne.setVisible(true);
+        taskFieldTwo.setVisible(true);
+        taskFieldThree.setVisible(true);
 
-        currentQuest = questManager.getQuestSelection();
-        // if (selectedItem instanceof Quest) { // if we selected a Quest, it should have its Tasks listed too
-            tasksHeader.setVisible(true);
-            taskFieldOne.setVisible(true);
-            taskFieldTwo.setVisible(true);
-            taskFieldThree.setVisible(true);
+        saveButton.setVisible(true);
+        editButton.setVisible(true);
+        completeButton.setVisible(true);
 
-            titleField.setText(currentQuest.getTitle());
-            descriptionField.setText(currentQuest.getDescription());
-            // set text for task fields too
-        /*
-        } else {  // if we selected a Task, no task list should show up
-            Task currentTask = selectedItem;
-            titleField.setText(selectedItem.getTitle());
-            descriptionField.setText(selectedItem.getDescription());
-        */
-        }
+        // pre-fill quest details:
+        titleField.setText(currentQuest.getTitle());
+        descriptionField.setText(currentQuest.getDescription());
+        taskFieldOne.setText(currentQuest.getTask(0));
+        taskFieldTwo.setText(currentQuest.getTask(1));
+        taskFieldThree.setText(currentQuest.getTask(2));
+    }
 
 
     // edit selected quest by clicking "Edit" button:
@@ -125,15 +126,31 @@ public class QuestListController implements Initializable, UIUpdater {
         // save title and make non-editable:
         String newTitle = titleField.getText();
         titleField.setText(newTitle);
-        Quest.setTitle(newTitle);
+        currentQuest.setTitle(newTitle);
         titleField.setEditable(false);
 
         // save description and make non-editable:
         String newDescription = descriptionField.getText();
         descriptionField.setText(newDescription);
-        Quest.setDescription(newDescription);
+        currentQuest.setDescription(newDescription);
         descriptionField.setEditable(false);
-        //taskField.setEditable(false);
+
+        // save tasks and make non-editable:
+        String newTaskOne = taskFieldOne.getText();
+        taskFieldOne.setText(newTaskOne);
+        currentQuest.setTask(0, newTaskOne);
+        taskFieldOne.setEditable(false);
+
+        String newTaskTwo = taskFieldTwo.getText();
+        taskFieldTwo.setText(newTaskTwo);
+        currentQuest.setTask(1, newTaskTwo);
+        taskFieldTwo.setEditable(false);
+
+        String newTaskThree = taskFieldThree.getText();
+        taskFieldThree.setText(newTaskThree);
+        currentQuest.setTask(2, newTaskThree);
+        taskFieldThree.setEditable(false);
+
     }
 
 

@@ -36,8 +36,7 @@
                <Font size="30.0" />
             </font>
          </Text>
-         <TextArea fx:id="descriptionField" layoutX="15.0" layoutY="134.0" prefHeight="134.0" prefWidth="536.0" promptText="Add description (optional)" visible="false" />
-         <Button fx:id="startButton" layoutX="210.0" layoutY="492.0" mnemonicParsing="false" prefHeight="83.0" prefWidth="146.0" style="-fx-background-color: #57CC99; -fx-font-size: 20; -fx-font-family: Monsterrat; -fx-background-radius: 15; -fx-text-fill: #22577A;" text="START" visible="false">
+         <Button fx:id="saveButton" layoutX="210.0" layoutY="492.0" mnemonicParsing="false" onAction="#onSaveButtonClick" prefHeight="83.0" prefWidth="146.0" style="-fx-background-color: #57CC99; -fx-font-size: 20; -fx-font-family: Monsterrat; -fx-background-radius: 15; -fx-text-fill: #22577A;" text="SAVE" visible="false">
             <font>
                <Font size="33.0" />
             </font>
@@ -60,6 +59,7 @@
          </Text>
          <TextField fx:id="taskFieldTwo" layoutX="15.0" layoutY="384.0" prefHeight="30.0" prefWidth="494.0" promptText="add task (optional)" visible="false" />
          <TextField fx:id="taskFieldThree" layoutX="15.0" layoutY="431.0" prefHeight="30.0" prefWidth="494.0" promptText="add task (optional)" visible="false" />
+         <TextArea fx:id="descriptionField" layoutX="15.0" layoutY="134.0" prefHeight="134.0" prefWidth="536.0" promptText="Add description (optional)" visible="false" />
       </children>
    </AnchorPane>
 </AnchorPane>

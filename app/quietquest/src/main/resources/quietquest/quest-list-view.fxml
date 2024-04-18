@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="quietquest.controller.QuestListController">
+    <ListView fx:id="questListView" layoutX="40.0" layoutY="125.0" prefHeight="200.0" prefWidth="200.0" />
+    <Label layoutX="40.0" layoutY="57.0" text="Quests">
+        <font>
+            <Font size="37.0" />
+        </font>
+    </Label>
+    <Label fx:id="mqttConnectionMessage" layoutX="435.0" layoutY="150.0" prefHeight="17.0" prefWidth="242.0" text="..." />
+    <Label fx:id="mqttDistanceMessage" layoutX="435.0" layoutY="180.0" prefHeight="17.0" prefWidth="242.0" text="..." />
+    <Label fx:id="mqttMotionMessage" layoutX="435.0" layoutY="212.0" prefHeight="17.0" prefWidth= "242.0" text="..." />
+    <Button layoutX="435.0" layoutY="243.0" mnemonicParsing="false" onAction="#onManualPublishClick" text="Manual Publish" />
+    <ToggleButton fx:id="subscribeButton" layoutX="435.0" layoutY="279.0" mnemonicParsing="false" onAction="#onSubscribeButtonClick" text="Subscribe" />
+    <Button fx:id="deleteButton" layoutX="261.0" layoutY="125.0" mnemonicParsing="false" onAction="#onDeleteQuest" text="Delete" />
+    <Button layoutX="260.0" layoutY="175.0" mnemonicParsing="false" text="Start" />
+</AnchorPane>

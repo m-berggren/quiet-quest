@@ -10,6 +10,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.Pane;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import java.io.IOException;
@@ -50,6 +52,19 @@ public class QuestListController implements Initializable, UIUpdater {
     private Button editButton;
     @FXML
     private Button completeButton;
+    @FXML
+    private Pane warningPane;
+    @FXML
+    private Rectangle warningTextbox;
+    @FXML
+    private Button okayButton;
+    @FXML
+    private Button keepEditingButton;
+    @FXML
+    private Text warningText;
+    @FXML
+    private Text warningSmallText;
+    @FXML
     private FXMLLoader loader;
     private Parent root;
     private Stage stage;
@@ -91,9 +106,9 @@ public class QuestListController implements Initializable, UIUpdater {
 
     //
     public void showSelected() {
-        // show quest details on the right side:
         currentQuest = questManager.getQuestSelection();
 
+        // show quest details on the right side:
         titleField.setVisible(true);
         descriptionHeader.setVisible(true);
         descriptionField.setVisible(true);
@@ -101,56 +116,108 @@ public class QuestListController implements Initializable, UIUpdater {
         taskFieldOne.setVisible(true);
         taskFieldTwo.setVisible(true);
         taskFieldThree.setVisible(true);
-
         saveButton.setVisible(true);
         editButton.setVisible(true);
         completeButton.setVisible(true);
 
-        // pre-fill quest details:
-        titleField.setText(currentQuest.getTitle());
-        descriptionField.setText(currentQuest.getDescription());
-        taskFieldOne.setText(currentQuest.getTask(0));
-        taskFieldTwo.setText(currentQuest.getTask(1));
-        taskFieldThree.setText(currentQuest.getTask(2));
+        // if fields are actively being edited, warning pop-up appears:
+        if (titleField.isEditable()) {
+            showWarning("Your changes will not be saved", "Are you sure you want to proceed?");
+            setSelectedUneditable();
+        } else {
+            setSelectedUneditable();
+            doNotShowWarning();
+            // pre-fill quest details:
+            titleField.setText(currentQuest.getTitle());
+            descriptionField.setText(currentQuest.getDescription());
+            taskFieldOne.setText(currentQuest.getTask(0));
+            taskFieldTwo.setText(currentQuest.getTask(1));
+            taskFieldThree.setText(currentQuest.getTask(2));
+        }
     }
 
+    // warning message pop-up:
+    public void showWarning(String message, String smallMessage){
+        warningPane.setDisable(false);
+        warningTextbox.setVisible(true);
+        okayButton.setVisible(true);
+        keepEditingButton.setVisible(true);
+        warningText.setVisible(true);
+        warningText.setText(message);
+        warningSmallText.setVisible(true);
+        warningSmallText.setText(smallMessage);
+        // if warning/error pop-up message is on screen, other quests become non-clickable:
+        questListView.setDisable(true);
+    }
 
-    // edit selected quest by clicking "Edit" button:
+    // discard edits and show new quest selection when by clicking okayButton:
+    public void onOkayButtonClick() {
+        doNotShowWarning();
+        showSelected();
+    }
+
+    // stay on same quest in editing mode by clicking keepEditingButton:
+    public void onKeepEditingClick() {
+        doNotShowWarning();
+        setEditable();
+    }
+
+    public void doNotShowWarning() {
+        warningPane.setDisable(true);
+        warningTextbox.setVisible(false);
+        okayButton.setVisible(false);
+        keepEditingButton.setVisible(false);
+        warningText.setVisible(false);
+        warningSmallText.setVisible(false);
+        // quest list is clickable:
+        questListView.setDisable(false);
+    }
+
+    // edit selected quest by clicking editButton:
     public void setEditable(){
         titleField.setEditable(true);
         descriptionField.setEditable(true);
+        taskFieldOne.setEditable(true);
+        taskFieldTwo.setEditable(true);
+        taskFieldThree.setEditable(true);
     }
 
-    // save quest/task details by clicking "Save" button:
+    // quest fields are non-editable if editButton is not explicitly clicked:
+    public void setSelectedUneditable() {
+        titleField.setEditable(false);
+        descriptionField.setEditable(false);
+        taskFieldOne.setEditable(false);
+        taskFieldTwo.setEditable(false);
+        taskFieldThree.setEditable(false);
+    }
+
+    // save quest/task details by clicking saveButton:
     public void onSaveButtonClick() {
-        // save title and make non-editable:
+        // save title:
         String newTitle = titleField.getText();
         titleField.setText(newTitle);
         currentQuest.setTitle(newTitle);
-        titleField.setEditable(false);
 
-        // save description and make non-editable:
+        // save description:
         String newDescription = descriptionField.getText();
         descriptionField.setText(newDescription);
         currentQuest.setDescription(newDescription);
-        descriptionField.setEditable(false);
 
-        // save tasks and make non-editable:
+        // save tasks:
         String newTaskOne = taskFieldOne.getText();
         taskFieldOne.setText(newTaskOne);
         currentQuest.setTask(0, newTaskOne);
-        taskFieldOne.setEditable(false);
 
         String newTaskTwo = taskFieldTwo.getText();
         taskFieldTwo.setText(newTaskTwo);
         currentQuest.setTask(1, newTaskTwo);
-        taskFieldTwo.setEditable(false);
 
         String newTaskThree = taskFieldThree.getText();
         taskFieldThree.setText(newTaskThree);
         currentQuest.setTask(2, newTaskThree);
-        taskFieldThree.setEditable(false);
 
+        // make fields non-editable:
+        setSelectedUneditable();
     }
 
 

@@ -35,14 +35,14 @@
 # When using Gradle or Maven with auto-import, you should exclude module files,
 # since they will be recreated, and may cause churn.  Uncomment if using
 # auto-import.
-# .idea/artifacts
-# .idea/compiler.xml
-# .idea/jarRepositories.xml
-# .idea/modules.xml
-# .idea/*.iml
-# .idea/modules
-# *.iml
-# *.ipr
+ .idea/artifacts
+ .idea/compiler.xml
+ .idea/jarRepositories.xml
+ .idea/modules.xml
+ .idea/*.iml
+ .idea/modules
+ *.iml
+ *.ipr
 
 # CMake
 cmake-build-*/
@@ -141,8 +141,8 @@ hs_err_pid*
 replay_pid*
 
 ### Gradle ###
-.gradle
-**/build/
+app/quietquest/.gradle
+app/quietquest/build/
 !src/**/build/
 
 # Ignore Gradle GUI config
@@ -168,10 +168,8 @@ gradle-app.setting
 *.hprof
 
 # Exclude C++ files
-.dll
-.exe
-.o
-.so
+wio/.dll
+wio/quietquest/credentials.h
 
 # Exclude credentials/env variables
 . env

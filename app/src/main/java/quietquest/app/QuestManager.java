@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 public class QuestManager {
     private HashMap<String, Quest> quests;
-    private static Quest questSelection;
+    private Quest questSelection;
 
     public QuestManager(){
         quests = new HashMap<String, Quest>();
@@ -28,7 +28,7 @@ public class QuestManager {
         System.out.println("Selected: " + quest);
     }
 
-    public static Quest getQuestSelection(){
+    public Quest getQuestSelection(){
         return questSelection;
     }
 

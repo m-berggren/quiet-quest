@@ -56,6 +56,7 @@ public class QuestListController implements Initializable, UIUpdater {
     private QuestManager questManager;
     private HashMap<String, Quest> quests;
     private MQTTHandler mqttClient;
+    private Quest currentQuest;
 
 
     public void initialize(URL arg0, ResourceBundle arg1) {
@@ -64,6 +65,7 @@ public class QuestListController implements Initializable, UIUpdater {
         mqttClient = new MQTTHandler(this);
         displayQuests();
         setSelectedQuest();
+        currentQuest = null; // set to null to avoid another quest's details being shown
     }
 
     public void displayQuests(){
@@ -76,6 +78,7 @@ public class QuestListController implements Initializable, UIUpdater {
             public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
                 String selectedKey = questListView.getSelectionModel().getSelectedItem();
                 questManager.setQuestSelection(quests.get(selectedKey));
+                showSelected();
             }
         });
     }
@@ -92,14 +95,13 @@ public class QuestListController implements Initializable, UIUpdater {
         descriptionHeader.setVisible(true);
         descriptionField.setVisible(true);
 
-        Quest selectedItem = QuestManager.getQuestSelection();
-        if (selectedItem instanceof Quest) { // if we selected a Quest, it should have its Tasks listed too
+        currentQuest = questManager.getQuestSelection();
+        // if (selectedItem instanceof Quest) { // if we selected a Quest, it should have its Tasks listed too
             tasksHeader.setVisible(true);
             taskFieldOne.setVisible(true);
             taskFieldTwo.setVisible(true);
             taskFieldThree.setVisible(true);
 
-            Quest currentQuest = (Quest) selectedItem;
             titleField.setText(currentQuest.getTitle());
             descriptionField.setText(currentQuest.getDescription());
             // set text for task fields too
@@ -110,7 +112,7 @@ public class QuestListController implements Initializable, UIUpdater {
             descriptionField.setText(selectedItem.getDescription());
         */
         }
-    }
+
 
     // edit selected quest by clicking "Edit" button:
     public void setEditable(){

@@ -2,7 +2,7 @@ package quietquest.app;
 
 import java.util.ArrayList;
 
-public class Quest extends Task {
+public class Quest {
 
     // attributes of Quest
     private String title;

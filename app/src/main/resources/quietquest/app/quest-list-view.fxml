@@ -11,7 +11,7 @@
 <?import javafx.scene.text.Text?>
 
 <AnchorPane prefHeight="760.0" prefWidth="1510.0" style="-fx-background-color: #C7F9CC;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="quietquest.app.QuestListController">
-    <ListView fx:id="questListView" layoutX="40.0" layoutY="125.0" prefHeight="200.0" prefWidth="200.0" />
+    <ListView fx:id="questListView" layoutX="40.0" layoutY="125.0" onEditStart="#showSelected" prefHeight="200.0" prefWidth="200.0" />
     <Label layoutX="40.0" layoutY="57.0" text="Quests">
         <font>
             <Font size="37.0" />
@@ -26,17 +26,17 @@
     <Button layoutX="260.0" layoutY="175.0" mnemonicParsing="false" text="Start" />
    <AnchorPane fx:id="viewInfoAnchorPane" layoutX="888.0" layoutY="96.0" prefHeight="568.0" prefWidth="566.0">
       <children>
-         <TextArea fx:id="descriptionField" layoutX="15.0" layoutY="134.0" prefHeight="134.0" prefWidth="536.0" promptText="Add description (optional)" visible="false" />
-         <Text fx:id="descriptionHeader" fill="#22577a" layoutX="14.0" layoutY="118.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Montserrat;" text="Description" visible="false" wrappingWidth="334.9270782470703">
-            <font>
-               <Font size="30.0" />
-            </font>
-         </Text>
          <TextField fx:id="titleField" editable="false" layoutX="14.0" layoutY="14.0" prefHeight="70.0" prefWidth="538.0" promptText="Set a title" visible="false">
             <font>
                <Font size="30.0" />
             </font>
          </TextField>
+         <Text fx:id="descriptionHeader" fill="#22577a" layoutX="14.0" layoutY="118.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Montserrat;" text="Description" visible="false" wrappingWidth="334.9270782470703">
+            <font>
+               <Font size="30.0" />
+            </font>
+         </Text>
+         <TextArea fx:id="descriptionField" layoutX="15.0" layoutY="134.0" prefHeight="134.0" prefWidth="536.0" promptText="Add description (optional)" visible="false" />
          <Button fx:id="startButton" layoutX="210.0" layoutY="492.0" mnemonicParsing="false" prefHeight="83.0" prefWidth="146.0" style="-fx-background-color: #57CC99; -fx-font-size: 20; -fx-font-family: Monsterrat; -fx-background-radius: 15; -fx-text-fill: #22577A;" text="START" visible="false">
             <font>
                <Font size="33.0" />

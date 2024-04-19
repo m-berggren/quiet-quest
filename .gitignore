@@ -26,4 +26,7 @@ app/build/
 
 # Gradle files
 app/.gradle/
-
+app/gradlew
+app/gradlew.bat
+app/settings.gradle
+app/build.gradle

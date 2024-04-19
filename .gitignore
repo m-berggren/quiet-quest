@@ -31,3 +31,5 @@ app/gradlew.bat
 app/settings.gradle
 app/build.gradle
 app/quietquest/gradle
+/app/quietquest/gradlew
+/app/quietquest/gradlew.bat

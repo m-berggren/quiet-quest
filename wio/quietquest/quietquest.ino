@@ -5,15 +5,12 @@
 #include <WiFiClientSecure.h>
 #include "Ultrasonic.h"
 #include <string.h>
+#include "credentials.h" // include header where SSID and PASSWORD are defined
 
-#define PIR_MOTION_SENSOR D0
-Ultrasonic ultrasonic(0);
+#define PIR_MOTION_SENSOR PIN_WIRE_SCL
+Ultrasonic ultrasonic(PIN_WIRE_SCL);
 
 TFT_eSPI tft;
-
-//Update these values corresponding to your network
-const char *ssid = "lianiphone";    //wifi network name
-const char *password = "12345678";  //wifi network password
 
 
 //MQTT server
@@ -29,6 +26,7 @@ const char *TOPIC_PUB_MOTION = "/quietquest/sensor/motion";
 const char *TOPIC_PUB_DISTANCE = "/quietquest/sensor/distance";
 const char *TOPIC_SUB_QUEST = "/quietquest/application/start";
 const char *TOPIC_PUB_QUEST = "/quietquest/sensor/connect";
+const char *TOPIC_PUB_LIGHT = "/quietquest/sensor/light";
 
 
 void callback(char *topic, byte *payload, unsigned int length) {
@@ -51,7 +49,7 @@ void callback(char *topic, byte *payload, unsigned int length) {
 
 void reconnect() {
   while (!client.connected()) {
-    WiFi.begin(ssid, password);
+    WiFi.begin(SSID, PASSWORD);
     Serial.print("Attempting MQTT connection...");
     //Create a random client ID
     String clientID = "ESP8266Client-";
@@ -88,27 +86,29 @@ void show(char *text) {
 }
 
 void setup() {
+  pinMode(D0, INPUT);
+  pinMode(PIN_WIRE_SCL, INPUT);
 
   // initiate tft screen
   tft.begin();
-  tft.setRotation(3);
+  tft.setRotation(1);
 
   pinMode(PIR_MOTION_SENSOR, INPUT);
   Serial.begin(9600);
 
   //Serial.begin(115200);
   Serial.print("Attempting to connect to SSID:");
-  Serial.println(ssid);
+  Serial.println(SSID);
   WiFi.mode(WIFI_STA);
   delay(1000);
-  WiFi.begin(ssid, password);
+  WiFi.begin(SSID, PASSWORD);
   clear(TFT_BLUE);
 
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
     show("Not connected to WiFi");
-    WiFi.begin(ssid, password);
+    WiFi.begin(SSID, PASSWORD);
   }
   clear(TFT_PURPLE);
   Serial.print("WiFi connected with IP address: ");
@@ -127,33 +127,45 @@ void loop() {
     client.loop();
 
     clear(TFT_PURPLE);
+
+    // Ultrasonic Ranger sensor
     long RangeInCentimeters = ultrasonic.MeasureInCentimeters();
     char msgBuffer[50];
-    sprintf(msgBuffer, "The distance to the phone is %ld cm", RangeInCentimeters);
+    snprintf(msgBuffer, sizeof(msgBuffer), "%ld", RangeInCentimeters);
     client.publish(TOPIC_PUB_DISTANCE, msgBuffer);
     tft.setCursor(20, 60);
     tft.print(msgBuffer);
 
-    Serial.printf("The distance to obstacles in front is: %ld cm\n", RangeInCentimeters);
+    Serial.printf("The distance to obstacle in front is: %ld cm\n", RangeInCentimeters);
 
-    if (digitalRead(PIR_MOTION_SENSOR)) {
-      client.publish(TOPIC_PUB_MOTION, "Motion is detected. Someone is nearby.");
+    // Mini PIR Motion sensor
+    if (digitalRead(PIR_MOTION_SENSOR) == HIGH) {
+      client.publish(TOPIC_PUB_MOTION, "1");
       tft.setCursor(20, 100);
       tft.print("Motion is detected.");
       Serial.println("Motion is detected.");
     } else {
       tft.setCursor(20, 100);
       tft.print("Searching for motion");
-      client.publish(TOPIC_PUB_MOTION, "Searching for motion");
-      Serial.println("PIR Motion Sensor: Searching for motion");
+      client.publish(TOPIC_PUB_MOTION, "0");
+      Serial.println("Searching for motion");
     }
 
+    // Light sensor
+    int raw_light = analogRead(D0); // read the raw value from light_sensor
+    int light = map(raw_light, 0, 1023, 0, 100); // map values so they stay between 0-100
+    snprintf(msgBuffer, sizeof(msgBuffer), "%d", light);
+ 
+    Serial.printf("Light level: %d\n", light);
+    client.publish(TOPIC_PUB_LIGHT, msgBuffer);
 
+    // Connection check
     if (client.connected()) {
       tft.setCursor(20, 150);
-      client.publish(TOPIC_PUB_QUEST, "Wio Terminal is connected");
+      client.publish(TOPIC_PUB_QUEST, "1");
       tft.print("Broker is connected");
     } else {
+      client.publish(TOPIC_PUB_QUEST, "0");
       tft.setCursor(20, 150);
       tft.print("Broker connection is lost");
     }

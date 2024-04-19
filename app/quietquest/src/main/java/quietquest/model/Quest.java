@@ -31,12 +31,25 @@ public class Quest {
     }
 
     // setters
-    public void setTitle(String title) {}
-    public void setDescription(String description){}
-    public void setTasks(ArrayList<String> tasks){}
+    public void setTitle(String title) {
+        this.title = title;
+    }
+    public void setDescription(String description){
+        this.description = description;
+    }
+    public void setTasks(ArrayList<String> tasks){
+        this.tasks = tasks;
+    }
+    public void setTask(int index, String task) {
+        this.tasks.set(index, task);
+    }
 
     @Override
     public String toString(){
         return title;
+    }
+
+    public String getTask(int index) {
+        return tasks.get(index);
     }
 }

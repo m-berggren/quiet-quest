@@ -3,6 +3,7 @@ package quietquest.utility;
 import com.hivemq.client.mqtt.mqtt5.Mqtt5AsyncClient;
 import com.hivemq.client.mqtt.mqtt5.Mqtt5Client;
 import com.hivemq.client.mqtt.mqtt5.message.publish.Mqtt5Publish;
+import javafx.application.Platform;
 import quietquest.controller.UIUpdater;
 
 import java.nio.ByteBuffer;
@@ -48,8 +49,43 @@ public class MQTTHandler {
   private void handleMessage(Mqtt5Publish publish) {
     ByteBuffer buffer = publish.getPayload().orElse(ByteBuffer.allocate(0));
     String messageContent = UTF_8.decode(buffer).toString();
+    String topic = publish.getTopic().toString();
+
     System.out.println("Received message on topic " + publish.getTopic() + ": " + messageContent);
-    uiUpdater.updateUI(messageContent);
+
+    String[] topicParts = topic.split("/");
+    if (topicParts.length > 3) { // making sure to only handle topics with 3 parts (first '/' creates empty segment)
+      String sensorType = topicParts[3]; // assume sensor type is the 4th element
+
+      Platform.runLater(() -> {
+        switch (sensorType) {
+          case "connect" -> handleConnectionStatusData(messageContent);
+          case "light" -> handleLightSensorData(messageContent);
+          case "motion" -> handleMotionSensorData(messageContent);
+          case "distance" -> handleUltrasonicSensorData(messageContent);
+          default -> System.out.println("Unknown sensor type: " + sensorType);
+        }
+      });
+    } else {
+      System.out.println("Invalid topic structure: " + topic);
+    }
+  }
+
+  private void handleConnectionStatusData(String data) {
+    boolean connectionStatus = Integer.parseInt(data) == 1;
+    uiUpdater.updateConnectionStatusUI(connectionStatus);
+  }
+  private void handleLightSensorData(String data) {
+    int lightValue = Integer.parseInt(data);
+    uiUpdater.updateLightSensorUI(lightValue);
+  }
+  private void handleMotionSensorData(String data) {
+    boolean motionDetected = Integer.parseInt(data) == 1;
+    uiUpdater.updateMotionSensorUI(motionDetected);
+  }
+  private void handleUltrasonicSensorData(String data) {
+    int ultrasonicValue = Integer.parseInt(data);
+    uiUpdater.updateUltrasonicSensorUI(ultrasonicValue);
   }
 
   public void publishMessage(String topic, String message) {

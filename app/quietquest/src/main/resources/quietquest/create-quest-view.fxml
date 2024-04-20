@@ -50,7 +50,7 @@
             <Font size="33.0" />
          </font>
       </Button>
-      <Text fill="#22577a" layoutX="350.0" layoutY="409.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Montserrat;" text="Add sub-quests (maximum 3)" wrappingWidth="404.7999633789061">
+      <Text fill="#22577a" layoutX="350.0" layoutY="409.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Montserrat;" text="Add tasks (maximum 3)" wrappingWidth="404.7999633789061">
          <font>
             <Font size="30.0" />
          </font>

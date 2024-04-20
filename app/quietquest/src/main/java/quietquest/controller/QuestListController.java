@@ -41,6 +41,10 @@ public class QuestListController extends BaseController implements Initializable
     @FXML
     private Label mqttConnectionMessage;
     @FXML
+    private Label mqttLightMessage;
+
+
+    @FXML
     private TextField titleField;
     @FXML
     private Text descriptionHeader;
@@ -267,32 +271,56 @@ public class QuestListController extends BaseController implements Initializable
     }
 
     @Override
-    public void updateUI(String message) {
-        Platform.runLater(() -> {
-            if (message.contains("Wio")) {
-                mqttConnectionMessage.setText(message);
-                mqttConnectionMessage.getStyleClass().clear();
-                mqttConnectionMessage.getStyleClass().add("label-all-green");
-
-            } else if ("Motion is detected. Someone is nearby.".equals(message)) {
-                mqttMotionMessage.setText(message);
-                mqttMotionMessage.getStyleClass().clear();
-                mqttMotionMessage.getStyleClass().add("label-all-green");
-
-            } else if("Searching for motion".equals(message)) {
-                mqttMotionMessage.setText(message);
-                mqttMotionMessage.getStyleClass().clear();
-                mqttMotionMessage.getStyleClass().add("label-all-red");
-
-            } else if (message.contains("distance")) {
-                mqttDistanceMessage.setText(message);
-                mqttDistanceMessage.getStyleClass().clear();
-                mqttDistanceMessage.getStyleClass().add("label-all-green");
-
-            } else {
-                mqttMotionMessage.getStyleClass().clear();
-                mqttMotionMessage.setText(message);
-            }
-        });
+    public void updateConnectionStatusUI(boolean connectionStatus) {
+        if (connectionStatus) {
+            mqttConnectionMessage.setText("Connected.");
+            mqttConnectionMessage.getStyleClass().clear();
+            mqttConnectionMessage.getStyleClass().add("label-all-green");
+        } else {
+            mqttConnectionMessage.setText("Not connected.");
+            mqttConnectionMessage.getStyleClass().clear();
+            mqttConnectionMessage.getStyleClass().add("label-all-red");
+        }
     }
+    @Override
+    public void updateLightSensorUI(int lightValue) {
+        mqttLightMessage.setText("Light value: " + lightValue);
+        mqttLightMessage.getStyleClass().clear();
+
+        if (lightValue > 50) {
+            mqttLightMessage.getStyleClass().add("label-all-red");
+        } else if (lightValue > 30) {
+            mqttLightMessage.getStyleClass().add("label-all-yellow");
+        } else {
+            mqttLightMessage.getStyleClass().add("label-all-green");
+        }
+    }
+
+    @Override
+    public void updateMotionSensorUI(boolean motionDetected) {
+        if (motionDetected) {
+            mqttMotionMessage.setText("Motion detected.");
+            mqttMotionMessage.getStyleClass().clear();
+            mqttMotionMessage.getStyleClass().add("label-all-red");
+        } else {
+            mqttMotionMessage.setText("Motion not detected.");
+            mqttMotionMessage.getStyleClass().clear();
+            mqttMotionMessage.getStyleClass().add("label-all-green");
+        }
+    }
+
+    @Override
+    public void updateUltrasonicSensorUI(int distanceValue) {
+        mqttDistanceMessage.setText("Distance to obstacle: " + distanceValue + " cm.");
+        mqttDistanceMessage.getStyleClass().clear();
+
+        if (distanceValue > 100) {
+            mqttDistanceMessage.getStyleClass().add("label-all-green");
+        } else if (distanceValue > 50) {
+            mqttDistanceMessage.getStyleClass().add("label-all-yellow");
+        } else {
+            mqttDistanceMessage.getStyleClass().add("label-all-red");
+        }
+    }
+
 }

@@ -16,6 +16,13 @@ This file defines global css styles for the application.
     -fx-background-color: #e68281;
 }
 
+.label-all-yellow {
+    -fx-border-color: goldenrod;
+    -fx-border-width: 3;
+
+    -fx-background-color: gold;
+}
+
 .button-all-green {
     -fx-border-color: darkgreen;
     -fx-border-width: 3;

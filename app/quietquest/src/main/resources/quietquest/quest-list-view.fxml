@@ -19,7 +19,7 @@
             <Font size="37.0" />
         </font>
     </Label>
-    <Label fx:id="mqttConnectionMessage" layoutX="435.0" layoutY="150.0" prefHeight="17.0" prefWidth="242.0" text="..." />
+    <Label fx:id="mqttConnectionMessage" layoutX="435.0" layoutY="116.0" prefHeight="17.0" prefWidth="242.0" text="..." />
     <Label fx:id="mqttDistanceMessage" layoutX="435.0" layoutY="180.0" prefHeight="17.0" prefWidth="242.0" text="..." />
     <Label fx:id="mqttMotionMessage" layoutX="435.0" layoutY="212.0" prefHeight="17.0" prefWidth="242.0" text="..." />
     <Button layoutX="435.0" layoutY="243.0" mnemonicParsing="false" onAction="#onManualPublishClick" text="Manual Publish" />
@@ -89,4 +89,5 @@
          </Button>
       </children>
    </Pane>
+   <Label fx:id="mqttLightMessage" layoutX="435.0" layoutY="151.0" text="..." />
 </AnchorPane>

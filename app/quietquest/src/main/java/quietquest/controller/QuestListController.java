@@ -29,6 +29,8 @@ public class QuestListController extends BaseController implements Initializable
     @FXML
     private Button deleteButton;
     @FXML
+    private Button goToQuestButton;
+    @FXML
     private ListView<String> questListView;
     @FXML
     private ToggleButton subscribeButton;
@@ -105,6 +107,10 @@ public class QuestListController extends BaseController implements Initializable
             }
         });
     }
+
+   public void onGoToQuestClick(ActionEvent event) throws IOException {
+        loadLoader(FxmlFile.VIEW_QUEST, event);
+   }
 
     public void onDeleteQuest(ActionEvent event) throws IOException {
         // loader = getFxmlLoader(FxmlFile.DELETE_QUEST);

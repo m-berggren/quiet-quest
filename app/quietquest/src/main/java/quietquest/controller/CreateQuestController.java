@@ -25,6 +25,8 @@ public class CreateQuestController extends BaseController {
     @FXML
     private Button saveQuestButton;
     @FXML
+    private Button clearButton;
+    @FXML
     private Button goToQuestsButton;
     @FXML
     private TextField titleField;
@@ -152,12 +154,14 @@ public class CreateQuestController extends BaseController {
         okayButton.setVisible(false);
     }
 
-    // cancel quest creation by clicking "Cancel" button:
+    // clear all fields by clicking "Clear" button:
     @FXML
-    public void cancelQuestCreation (ActionEvent event) throws IOException {
-        // loader = getFxmlLoader(FxmlFile.START);
-        // loadLoader(loader, event);
-        loadLoader(FxmlFile.START, event);
+    public void clearAllFields () throws IOException {
+        titleField.setText("");
+        descriptionField.setText("");
+        deleteThirdTask();
+        deleteSecondTask();
+        deleteFirstTask();
     }
 
     // go to "Quest List" by clicking "See quests" button:

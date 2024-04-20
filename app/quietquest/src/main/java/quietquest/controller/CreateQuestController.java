@@ -1,14 +1,15 @@
 package quietquest.controller;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
@@ -17,17 +18,14 @@ import quietquest.QuietQuestMain;
 import quietquest.model.Quest;
 import quietquest.model.QuestManager;
 import quietquest.utility.FxmlFile;
+import quietquest.utility.MQTTHandler;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 
-public class CreateQuestController extends BaseController {
-    @FXML
-    private Button saveQuestButton;
-    @FXML
-    private Button clearButton;
-    @FXML
-    private Button goToQuestsButton;
+public class CreateQuestController extends BaseController implements Initializable {
     @FXML
     private TextField titleField;
     @FXML
@@ -35,17 +33,7 @@ public class CreateQuestController extends BaseController {
     @FXML
     private TextField taskFieldOne;
     @FXML
-    private TextField taskFieldTwo;
-    @FXML
-    private TextField taskFieldThree;
-    @FXML
     private Button deleteTaskButton1;
-    @FXML
-    private Button deleteTaskButton2;
-    @FXML
-    private Button deleteTaskButton3;
-    @FXML
-    private ImageView createQuestImageView;
     @FXML
     private Shape popupTextbox;
     @FXML
@@ -54,83 +42,88 @@ public class CreateQuestController extends BaseController {
     private Text popupText;
     @FXML
     private Text popupSmallText;
+    @FXML
+    private ListView<String> taskListView;
+    @FXML
+    private Text allTasksText;
 
     private Parent root;
     private Stage stage;
     private Scene scene;
     private FXMLLoader loader;
 
-    public static QuestManager questManager = QuietQuestMain.questManager;
+    public QuestManager questManager = QuietQuestMain.questManager;
+    private ArrayList<String> tasks;
 
-    // add new tasks to quest (up to 3):
-    public void addNewTask() {
-        if (!taskFieldOne.getText().isEmpty()) {
-            taskFieldTwo.setVisible(true);
-            deleteTaskButton2.setVisible(true);
-        }
-        if (!taskFieldTwo.getText().isEmpty()) {
-            taskFieldThree.setVisible(true);
-            deleteTaskButton3.setVisible(true);
-        }
+    @Override
+    public void initialize(URL arg0, ResourceBundle arg1) {
+        tasks = new ArrayList<>();
+        showTaskList();
     }
 
-    // delete first task from quest:
-    public void deleteFirstTask() {
-        if (!taskFieldOne.getText().isEmpty()) {
-
-            if (!taskFieldTwo.getText().isEmpty()) { // if there is a second task already
-                taskFieldOne.setText(taskFieldTwo.getText()); // move second task desc up
-            } else { // if there is no second task
-                taskFieldOne.setText("");
+    // show task list if not empty:
+    public void showTaskList() {
+        taskListView.getItems().clear();
+        taskListView.getItems().addAll(tasks);
+        taskListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE); // can only select 1 task at a time
+        taskListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
             }
-            deleteSecondTask(); // clear second task and make invisible
+        });
+        if (!tasks.isEmpty()) {
+            // if there are tasks in the list, make task list elements visible:
+            allTasksText.setVisible(true);
+            taskListView.setVisible(true);
+            deleteTaskButton1.setVisible(true);
+        }
+        else {
+            // if no tasks in the list, make task list elements invisible:
+            allTasksText.setVisible(false);
+            taskListView.setVisible(false);
+            deleteTaskButton1.setVisible(false);
         }
     }
 
-    // delete second task from quest:
-    public void deleteSecondTask() {
-        if (!taskFieldThree.getText().isEmpty()) { // if there is a third task already
-            taskFieldTwo.setText(taskFieldThree.getText()); // move third task up
-        } else { // if there is no third task
-            taskFieldTwo.setText("");
-            taskFieldTwo.setVisible(false);
-            deleteTaskButton2.setVisible(false);
+    // add task to task list:
+    public void addNewTask() {
+        String newTask = taskFieldOne.getText(); // update current task to what is in the field
+        if (!newTask.isEmpty()) {
+            tasks.add(newTask); // add current task to task list
+            showTaskList(); // reload task list view so that it displays updated information
+            taskFieldOne.clear(); // clear text field after adding task to task list
         }
-        deleteThirdTask(); // clear third task and make invisible
     }
 
-    // delete third task from quest:
-    public void deleteThirdTask() {
-        taskFieldThree.setText("");
-        taskFieldThree.setVisible(false);
-        deleteTaskButton3.setVisible(false);
+    // delete selected task from task list:
+    public void deleteFirstTask() {
+        tasks.remove(taskListView.getSelectionModel().getSelectedIndex());
+        showTaskList(); // reload task list view so that it displays updated information
     }
 
     // create a quest by clicking "Save Quest" button:
     public void createQuest() throws Exception {
         try {
-            //----------------------if quest title field is left empty------------------------
+            //if quest title field is left empty:
             if (titleField.getText().isEmpty()) {
                 showMessage("Don't forget to name your quest!",
                         "Quests must have a title. Do not leave this field empty.");
-                //----------------------if quest title is already taken---------------------------
+                //if quest title is already taken:
             } else if (questManager.getQuests().containsKey(titleField.getText())) {
                 showMessage("Give your quest a unique title",
                         "Each quest must have a unique title.");
-                //----------------------if everything good with title, create quest---------------
+                //if everything good with title, create quest:
             } else {
                 String title = titleField.getText();
                 String description = descriptionField.getText();
-                ArrayList<String> tasks = new ArrayList<>();
-                tasks.add(taskFieldOne.getText());
-                tasks.add(taskFieldTwo.getText());
-                tasks.add(taskFieldThree.getText());
-
                 Quest quest = new Quest(title, description, tasks);
+                // add quest to quest list:
                 questManager.addQuest(quest);
-
                 // display popup message for successful quest creation:
                 showMessage("Quest saved successfully!", "Create a new quest now or check all your quests on the Quest List page.");
+                clearAllFields();
+                // clear task list before creating a new quest:
+                tasks.clear();
             }
         }
         catch (Exception e) {
@@ -138,7 +131,7 @@ public class CreateQuestController extends BaseController {
         }
     }
 
-    // error message pop-up:
+    // error/success message pop-up:
     public void showMessage(String message, String smallMessage){
         popupTextbox.setVisible(true);
         okayButton.setVisible(true);
@@ -148,7 +141,7 @@ public class CreateQuestController extends BaseController {
         popupSmallText.setText(smallMessage);
     }
 
-    // exit error message pop-up by clicking "Okay" button:
+    // exit error/success message pop-up by clicking "Okay" button:
     public void onOkayButtonClick () throws IOException {
         popupTextbox.setVisible(false); // error message pop-up appears
         popupText.setVisible(false);
@@ -161,9 +154,7 @@ public class CreateQuestController extends BaseController {
     public void clearAllFields () throws IOException {
         titleField.setText("");
         descriptionField.setText("");
-        deleteThirdTask();
-        deleteSecondTask();
-        deleteFirstTask();
+        taskFieldOne.setText("");
     }
 
     // go to "Quest List" by clicking "See quests" button:

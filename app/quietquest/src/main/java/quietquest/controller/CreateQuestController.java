@@ -47,13 +47,13 @@ public class CreateQuestController extends BaseController {
     @FXML
     private ImageView createQuestImageView;
     @FXML
-    private Shape errorTextbox;
+    private Shape popupTextbox;
     @FXML
     private Button okayButton;
     @FXML
-    private Text errorText;
+    private Text popupText;
     @FXML
-    private Text errorSmallText;
+    private Text popupSmallText;
 
     private Parent root;
     private Stage stage;
@@ -111,11 +111,11 @@ public class CreateQuestController extends BaseController {
         try {
             //----------------------if quest title field is left empty------------------------
             if (titleField.getText().isEmpty()) {
-                showError("Don't forget to name your quest!",
+                showMessage("Don't forget to name your quest!",
                         "Quests must have a title. Do not leave this field empty.");
                 //----------------------if quest title is already taken---------------------------
             } else if (questManager.getQuests().containsKey(titleField.getText())) {
-                showError("Give your quest a unique title",
+                showMessage("Give your quest a unique title",
                         "Each quest must have a unique title.");
                 //----------------------if everything good with title, create quest---------------
             } else {
@@ -127,30 +127,32 @@ public class CreateQuestController extends BaseController {
                 tasks.add(taskFieldThree.getText());
 
                 Quest quest = new Quest(title, description, tasks);
-                //quests.put(title, quest);
                 questManager.addQuest(quest);
+
+                // display popup message for successful quest creation:
+                showMessage("Quest saved successfully!", "Create a new quest now or check all your quests on the Quest List page.");
             }
         }
         catch (Exception e) {
-            showError("Oops, something went wrong...", "Try creating your quest again");
+            showMessage("Oops, something went wrong...", "Try creating your quest again");
         }
     }
 
     // error message pop-up:
-    public void showError(String message, String smallMessage){
-        errorTextbox.setVisible(true);
+    public void showMessage(String message, String smallMessage){
+        popupTextbox.setVisible(true);
         okayButton.setVisible(true);
-        errorText.setVisible(true);
-        errorText.setText(message);
-        errorSmallText.setVisible(true);
-        errorSmallText.setText(smallMessage);
+        popupText.setVisible(true);
+        popupText.setText(message);
+        popupSmallText.setVisible(true);
+        popupSmallText.setText(smallMessage);
     }
 
     // exit error message pop-up by clicking "Okay" button:
     public void onOkayButtonClick () throws IOException {
-        errorTextbox.setVisible(false); // error message pop-up appears
-        errorText.setVisible(false);
-        errorSmallText.setVisible(false);
+        popupTextbox.setVisible(false); // error message pop-up appears
+        popupText.setVisible(false);
+        popupSmallText.setVisible(false);
         okayButton.setVisible(false);
     }
 

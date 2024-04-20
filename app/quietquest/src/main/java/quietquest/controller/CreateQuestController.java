@@ -23,6 +23,8 @@ import java.util.ArrayList;
 
 public class CreateQuestController extends BaseController {
     @FXML
+    private TextField taskDescriptionField;
+    @FXML
     private Button saveQuestButton;
     @FXML
     private Button clearButton;
@@ -55,91 +57,91 @@ public class CreateQuestController extends BaseController {
     @FXML
     private Text popupSmallText;
 
-    private Parent root;
-    private Stage stage;
-    private Scene scene;
-    private FXMLLoader loader;
-
-    public static QuestManager questManager = QuietQuestMain.questManager;
-
-    // add new tasks to quest (up to 3):
-    public void addNewTask() {
-        if (!taskFieldOne.getText().isEmpty()) {
-            taskFieldTwo.setVisible(true);
-            deleteTaskButton2.setVisible(true);
-        }
-        if (!taskFieldTwo.getText().isEmpty()) {
-            taskFieldThree.setVisible(true);
-            deleteTaskButton3.setVisible(true);
-        }
+  /**
+   * Add up to 3 tasks to the quest.
+   */
+  public void addNewTask() {
+    if (!taskFieldOne.getText().isEmpty()) {
+      taskFieldTwo.setVisible(true);
+      deleteTaskButton2.setVisible(true);
     }
-
-    // delete first task from quest:
-    public void deleteFirstTask() {
-        if (!taskFieldOne.getText().isEmpty()) {
-
-            if (!taskFieldTwo.getText().isEmpty()) { // if there is a second task already
-                taskFieldOne.setText(taskFieldTwo.getText()); // move second task desc up
-            } else { // if there is no second task
-                taskFieldOne.setText("");
-            }
-            deleteSecondTask(); // clear second task and make invisible
-        }
+    if (!taskFieldTwo.getText().isEmpty()) {
+      taskFieldThree.setVisible(true);
+      deleteTaskButton3.setVisible(true);
     }
+  }
 
-    // delete second task from quest:
-    public void deleteSecondTask() {
-        if (!taskFieldThree.getText().isEmpty()) { // if there is a third task already
-            taskFieldTwo.setText(taskFieldThree.getText()); // move third task up
-        } else { // if there is no third task
-            taskFieldTwo.setText("");
-            taskFieldTwo.setVisible(false);
-            deleteTaskButton2.setVisible(false);
-        }
-        deleteThirdTask(); // clear third task and make invisible
+  /**
+   * Delete first task from quest.
+   */
+  public void deleteFirstTask() {
+    if (!taskFieldOne.getText().isEmpty()) {
+      if (!taskFieldTwo.getText().isEmpty()) { // if there is a second task already
+        taskFieldOne.setText(taskFieldTwo.getText()); // move second task desc up
+      } else { // if there is no second task
+        taskFieldOne.setText("");
+      }
+      deleteSecondTask(); // clear second task and make invisible
     }
+  }
 
-    // delete third task from quest:
-    public void deleteThirdTask() {
-        taskFieldThree.setText("");
-        taskFieldThree.setVisible(false);
-        deleteTaskButton3.setVisible(false);
+  /**
+   * Delete second task from quest.
+   */
+  public void deleteSecondTask() {
+    if (!taskFieldThree.getText().isEmpty()) { // if there is a third task already
+      taskFieldTwo.setText(taskFieldThree.getText()); // move third task up
+    } else { // if there is no third task
+      taskFieldTwo.setText("");
+      taskFieldTwo.setVisible(false);
+      deleteTaskButton2.setVisible(false);
     }
+    deleteThirdTask(); // clear third task and make invisible
+  }
+
+  /**
+   * Delete third task from quest.
+   */
+  public void deleteThirdTask() {
+    taskFieldThree.setText("");
+    taskFieldThree.setVisible(false);
+    deleteTaskButton3.setVisible(false);
+  }
+
 
     // create a quest by clicking "Save Quest" button:
     public void createQuest() throws Exception {
-        try {
-            //----------------------if quest title field is left empty------------------------
-            if (titleField.getText().isEmpty()) {
-                showMessage("Don't forget to name your quest!",
-                        "Quests must have a title. Do not leave this field empty.");
-                //----------------------if quest title is already taken---------------------------
-            } else if (questManager.getQuests().containsKey(titleField.getText())) {
-                showMessage("Give your quest a unique title",
-                        "Each quest must have a unique title.");
-                //----------------------if everything good with title, create quest---------------
-            } else {
-                String title = titleField.getText();
-                String description = descriptionField.getText();
-                ArrayList<String> tasks = new ArrayList<>();
-                tasks.add(taskFieldOne.getText());
-                tasks.add(taskFieldTwo.getText());
-                tasks.add(taskFieldThree.getText());
+      try {
+        //----------------------if quest title field is left empty------------------------
+        if (titleField.getText().isEmpty()) {
+          showMessage("Don't forget to name your quest!",
+                  "Quests must have a title. Do not leave this field empty.");
+          //----------------------if quest title is already taken---------------------------
+        } else if (questManager.getQuests().containsKey(titleField.getText())) {
+          showMessage("Give your quest a unique title",
+                  "Each quest must have a unique title.");
+          //----------------------if everything good with title, create quest---------------
+        } else {
+          String title = titleField.getText();
+          String description = descriptionField.getText();
+          ArrayList<String> tasks = new ArrayList<>();
+          tasks.add(taskFieldOne.getText());
+          tasks.add(taskFieldTwo.getText());
+          tasks.add(taskFieldThree.getText());
 
-                Quest quest = new Quest(title, description, tasks);
-                questManager.addQuest(quest);
+          Quest quest = new Quest(title, description, tasks);
+          questManager.addQuest(quest);
 
-                // display popup message for successful quest creation:
-                showMessage("Quest saved successfully!", "Create a new quest now or check all your quests on the Quest List page.");
-            }
+          // display popup message for successful quest creation:
+          showMessage("Quest saved successfully!", "Create a new quest now or check all your quests on the Quest List page.");
         }
-        catch (Exception e) {
-            showMessage("Oops, something went wrong...", "Try creating your quest again");
-        }
+      } catch (Exception e) {
+        showMessage("Oops, something went wrong...", "Try creating your quest again");
+      }
     }
 
     // error message pop-up:
-    public void showMessage(String message, String smallMessage){
+    public void showMessage(String message, String smallMessage) {
         popupTextbox.setVisible(true);
         okayButton.setVisible(true);
         popupText.setVisible(true);
@@ -166,26 +168,19 @@ public class CreateQuestController extends BaseController {
         deleteFirstTask();
     }
 
-    // go to "Quest List" by clicking "See quests" button:
-    public void onGoToQuests(ActionEvent event) throws IOException {
-        // loader = getFxmlLoader(FxmlFile.QUEST_LIST);
-        // loadLoader(loader, event);
-        loadLoader(FxmlFile.QUEST_LIST, event);
 
-        // stage.setOnCloseRequest(action -> {
-        //    QuestListController questListController = loader.getController();
-        //    questListController.disconnectMqtt();
-        // });
-    }
+  /**
+   * Cancel quest creation by clicking "Cancel" button.
+   */
+  public void cancelQuestCreation(ActionEvent event) {
+    showStart();
+  }
 
-    public void loadLoader(FXMLLoader loader, ActionEvent event) throws IOException {
-        root = loader.load();
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        // Set a style
-        scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
-        stage.show();
-    }
 
+  /**
+   * Go to "Quest List" by clicking "See quests" button.
+   */
+  public void onGoToQuests(ActionEvent event) {
+    showQuestList();
+  }
 }

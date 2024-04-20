@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
+import quietquest.QuietQuestMain;
 import quietquest.utility.FxmlFile;
 
 import java.io.IOException;
@@ -21,8 +22,8 @@ public class StartController extends BaseController {
     @FXML
     private Label welcomeText;
 
-    @FXML
-    private Button helloButton;
+  @FXML
+  private Button helloButton;
 
 
 

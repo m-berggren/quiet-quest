@@ -2,21 +2,13 @@ package quietquest.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
-import quietquest.QuietQuestMain;
 import quietquest.model.Quest;
-import quietquest.model.QuestManager;
-import quietquest.utility.FxmlFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -117,7 +109,7 @@ public class CreateQuestController extends BaseController {
           showMessage("Don't forget to name your quest!",
                   "Quests must have a title. Do not leave this field empty.");
           //----------------------if quest title is already taken---------------------------
-        } else if (questManager.getQuests().containsKey(titleField.getText())) {
+        } else if (quietQuestFacade.getQuests().containsKey(titleField.getText())) {
           showMessage("Give your quest a unique title",
                   "Each quest must have a unique title.");
           //----------------------if everything good with title, create quest---------------
@@ -130,7 +122,7 @@ public class CreateQuestController extends BaseController {
           tasks.add(taskFieldThree.getText());
 
           Quest quest = new Quest(title, description, tasks);
-          questManager.addQuest(quest);
+          quietQuestFacade.addQuest(quest);
 
           // display popup message for successful quest creation:
           showMessage("Quest saved successfully!", "Create a new quest now or check all your quests on the Quest List page.");

@@ -14,8 +14,6 @@ public abstract class BaseController {
   protected void afterMainController() {
   }
 
-  ;
-
   public void setMainController(MainController mainController) {
     this.mainController = mainController;
     this.quietQuestFacade = mainController.getQuietQuestFacade();

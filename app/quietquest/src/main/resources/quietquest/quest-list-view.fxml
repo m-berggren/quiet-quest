@@ -28,40 +28,49 @@
     <Button layoutX="260.0" layoutY="175.0" mnemonicParsing="false" text="Start" />
    <AnchorPane fx:id="viewInfoAnchorPane" layoutX="888.0" layoutY="96.0" prefHeight="568.0" prefWidth="566.0">
       <children>
-         <TextField fx:id="titleField" editable="false" layoutX="14.0" layoutY="14.0" prefHeight="70.0" prefWidth="538.0" promptText="Set a title" visible="false">
+         <TextField fx:id="titleField" editable="false" layoutX="17.0" layoutY="14.0" prefHeight="70.0" prefWidth="536.0" promptText="Set a title">
             <font>
                <Font size="30.0" />
             </font>
          </TextField>
-         <Text fx:id="descriptionHeader" fill="#22577a" layoutX="14.0" layoutY="118.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Montserrat;" text="Description" visible="false" wrappingWidth="334.9270782470703">
+         <Text fx:id="descriptionHeader" fill="#22577a" layoutX="16.0" layoutY="118.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Montserrat;" text="Description" wrappingWidth="334.9270782470703">
             <font>
                <Font size="30.0" />
             </font>
          </Text>
-         <Button fx:id="saveButton" layoutX="210.0" layoutY="492.0" mnemonicParsing="false" onAction="#onSaveButtonClick" prefHeight="83.0" prefWidth="146.0" style="-fx-background-color: #57CC99; -fx-font-size: 20; -fx-font-family: Monsterrat; -fx-background-radius: 15; -fx-text-fill: #22577A;" text="SAVE" visible="false">
+         <TextArea fx:id="descriptionField" layoutX="15.0" layoutY="134.0" prefHeight="134.0" prefWidth="536.0" promptText="Add description (optional)" />
+         <Button fx:id="saveButton" layoutX="210.0" layoutY="492.0" mnemonicParsing="false" onAction="#onSaveButtonClick" prefHeight="83.0" prefWidth="146.0" style="-fx-background-color: #57CC99; -fx-font-size: 20; -fx-font-family: Monsterrat; -fx-background-radius: 15; -fx-text-fill: #22577A;" text="SAVE">
             <font>
                <Font size="33.0" />
             </font>
          </Button>
-         <Button fx:id="editButton" layoutX="42.0" layoutY="492.0" mnemonicParsing="false" onAction="#setEditable" prefHeight="83.0" prefWidth="146.0" style="-fx-background-color: #38A3A599; -fx-font-size: 20; -fx-font-family: Monsterrat; -fx-background-radius: 15; -fx-text-fill: #22577A;" text="EDIT" visible="false">
+         <Button fx:id="editButton" layoutX="42.0" layoutY="492.0" mnemonicParsing="false" onAction="#setEditable" prefHeight="83.0" prefWidth="146.0" style="-fx-background-color: #38A3A599; -fx-font-size: 20; -fx-font-family: Monsterrat; -fx-background-radius: 15; -fx-text-fill: #22577A;" text="EDIT">
             <font>
                <Font size="33.0" />
             </font>
          </Button>
-         <Button fx:id="completeButton" layoutX="376.0" layoutY="492.0" mnemonicParsing="false" prefHeight="83.0" prefWidth="146.0" style="-fx-background-color: #80ED99; -fx-font-size: 20; -fx-font-family: Monsterrat; -fx-background-radius: 15; -fx-text-fill: #22577A;" text="COMPLETED" visible="false">
+         <Button fx:id="completeButton" layoutX="376.0" layoutY="492.0" mnemonicParsing="false" prefHeight="83.0" prefWidth="146.0" style="-fx-background-color: #80ED99; -fx-font-size: 20; -fx-font-family: Monsterrat; -fx-background-radius: 15; -fx-text-fill: #22577A;" text="COMPLETED">
             <font>
                <Font size="33.0" />
             </font>
          </Button>
-         <TextField fx:id="taskFieldOne" layoutX="15.0" layoutY="338.0" prefHeight="30.0" prefWidth="494.0" promptText="add task (optional)" visible="false" />
-         <Text fx:id="tasksHeader" fill="#22577a" layoutX="14.0" layoutY="320.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Montserrat;" text="Tasks" visible="false" wrappingWidth="334.9270782470703">
+         <Text fx:id="tasksHeader" fill="#22577a" layoutX="16.0" layoutY="304.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Montserrat;" text="Tasks" wrappingWidth="86.26045227050781">
             <font>
                <Font size="30.0" />
             </font>
          </Text>
-         <TextField fx:id="taskFieldTwo" layoutX="15.0" layoutY="384.0" prefHeight="30.0" prefWidth="494.0" promptText="add task (optional)" visible="false" />
-         <TextField fx:id="taskFieldThree" layoutX="15.0" layoutY="431.0" prefHeight="30.0" prefWidth="494.0" promptText="add task (optional)" visible="false" />
-         <TextArea fx:id="descriptionField" layoutX="15.0" layoutY="134.0" prefHeight="134.0" prefWidth="536.0" promptText="Add description (optional)" visible="false" />
+         <ListView fx:id="taskListView" layoutX="15.0" layoutY="314.0" onEditStart="#showTaskList" prefHeight="171.0" prefWidth="463.0" />
+         <Button fx:id="addNewTaskButton" alignment="CENTER" layoutX="487.0" layoutY="276.0" minWidth="38.0" mnemonicParsing="false" onAction="#addNewTask" prefHeight="21.0" prefWidth="70.0" style="-fx-background-color: #38A3A5; -fx-background-radius: 8; -fx-font-size: 15; -fx-text-fill: #22577A;" text="+">
+            <font>
+               <Font size="6.0" />
+            </font>
+         </Button>
+         <Button fx:id="deleteTaskButton" alignment="CENTER" layoutX="488.0" layoutY="314.0" minWidth="38.0" mnemonicParsing="false" onAction="#deleteFirstTask" prefHeight="32.0" prefWidth="67.0" style="-fx-background-color: #38A3A5; -fx-background-radius: 8; -fx-font-size: 14; -fx-text-fill: #22577A;" text="delete" wrapText="true">
+            <font>
+               <Font size="9.0" />
+            </font>
+         </Button>
+         <TextField fx:id="taskField" layoutX="102.0" layoutY="277.0" prefHeight="30.0" prefWidth="378.0" promptText="add a new task (optional)" />
       </children>
    </AnchorPane>
    <Pane fx:id="warningPane" disable="true" layoutX="421.0" layoutY="284.0" prefHeight="200.0" prefWidth="512.0">

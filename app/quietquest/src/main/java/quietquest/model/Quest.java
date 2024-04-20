@@ -43,6 +43,12 @@ public class Quest {
     public void setTask(int index, String task) {
         this.tasks.set(index, task);
     }
+    public void addTask(String task) {
+        this.tasks.add(task);
+    }
+    public void removeTask(int index) {
+        this.tasks.remove(index);
+    }
 
     @Override
     public String toString(){

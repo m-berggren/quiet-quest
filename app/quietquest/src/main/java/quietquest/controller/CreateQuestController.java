@@ -91,7 +91,6 @@ public class CreateQuestController extends BaseController implements Initializab
         if (!newTask.isEmpty()) {
             tasks.add(newTask); // add current task to task list
             showTaskList(); // reload task list view so that it displays updated information
-            taskFieldOne.clear(); // clear text field after adding task to task list
         }
     }
 
@@ -102,8 +101,8 @@ public class CreateQuestController extends BaseController implements Initializab
     }
 
     // create a quest by clicking "Save Quest" button:
-    public void createQuest() throws Exception {
-        try {
+    public void createQuest(ActionEvent event) throws Exception {
+
             //if quest title field is left empty:
             if (titleField.getText().isEmpty()) {
                 showMessage("Don't forget to name your quest!",
@@ -116,19 +115,16 @@ public class CreateQuestController extends BaseController implements Initializab
             } else {
                 String title = titleField.getText();
                 String description = descriptionField.getText();
-                Quest quest = new Quest(title, description, tasks);
+                Quest quest = new Quest();
+                quest.setTitle(title);
+                quest.setDescription(description);
+                quest.setTasks(tasks);
                 // add quest to quest list:
                 questManager.addQuest(quest);
                 // display popup message for successful quest creation:
                 showMessage("Quest saved successfully!", "Create a new quest now or check all your quests on the Quest List page.");
-                clearAllFields();
-                // clear task list before creating a new quest:
-                tasks.clear();
+                loadLoader(FxmlFile.CREATE_QUEST, event);
             }
-        }
-        catch (Exception e) {
-            showMessage("Oops, something went wrong...", "Try creating your quest again");
-        }
     }
 
     // error/success message pop-up:
@@ -142,7 +138,7 @@ public class CreateQuestController extends BaseController implements Initializab
     }
 
     // exit error/success message pop-up by clicking "Okay" button:
-    public void onOkayButtonClick () throws IOException {
+    public void onOkayButtonClick (ActionEvent event) throws IOException {
         popupTextbox.setVisible(false); // error message pop-up appears
         popupText.setVisible(false);
         popupSmallText.setVisible(false);
@@ -152,9 +148,10 @@ public class CreateQuestController extends BaseController implements Initializab
     // clear all fields by clicking "Clear" button:
     @FXML
     public void clearAllFields () throws IOException {
-        titleField.setText("");
-        descriptionField.setText("");
-        taskFieldOne.setText("");
+        titleField.clear();
+        descriptionField.clear();
+        taskFieldOne.clear();
+        taskListView.getItems().clear();
     }
 
     // go to "Quest List" by clicking "See quests" button:

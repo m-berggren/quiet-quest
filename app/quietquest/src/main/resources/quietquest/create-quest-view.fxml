@@ -62,19 +62,7 @@
             <Font size="6.0" />
          </font>
       </Button>
-      <TextField fx:id="taskFieldTwo" layoutX="350.0" layoutY="472.0" prefHeight="30.0" prefWidth="494.0" promptText="add task (optional)" visible="false" />
-      <TextField fx:id="taskFieldThree" layoutX="350.0" layoutY="523.0" prefHeight="30.0" prefWidth="494.0" promptText="add task (optional)" visible="false" />
       <Button fx:id="deleteTaskButton1" alignment="CENTER" layoutX="1302.0" layoutY="204.0" minWidth="38.0" mnemonicParsing="false" onAction="#deleteFirstTask" prefHeight="28.0" prefWidth="70.0" style="-fx-background-color: #38A3A5; -fx-background-radius: 8; -fx-font-size: 14; -fx-text-fill: #22577A;" text="delete" visible="false" wrapText="true">
-         <font>
-            <Font size="9.0" />
-         </font>
-      </Button>
-      <Button fx:id="deleteTaskButton2" alignment="CENTER" layoutX="847.0" layoutY="473.0" minWidth="38.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="70.0" style="-fx-background-color: #38A3A5; -fx-background-radius: 8; -fx-font-size: 14; -fx-text-fill: #22577A;" text="delete" visible="false">
-         <font>
-            <Font size="9.0" />
-         </font>
-      </Button>
-      <Button fx:id="deleteTaskButton3" alignment="CENTER" layoutX="847.0" layoutY="523.0" minWidth="38.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="70.0" style="-fx-background-color: #38A3A5; -fx-background-radius: 8; -fx-font-size: 14; -fx-text-fill: #22577A;" text="delete" visible="false">
          <font>
             <Font size="9.0" />
          </font>

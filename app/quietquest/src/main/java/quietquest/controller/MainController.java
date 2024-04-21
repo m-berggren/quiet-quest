@@ -16,7 +16,9 @@ public class MainController extends BaseController {
   private VBox sideMenu;
   @FXML
   private Button homeButton;
+  @FXML
   private Button createQuestButton;
+  @FXML
   private Button questListButton;
 
   @FXML
@@ -25,8 +27,8 @@ public class MainController extends BaseController {
   private VBox menuVBox;
 
   public MainController() {
-    setMainController(this);
     this.quietQuestFacade = new QuietQuestFacade();
+    setMainController(this);
   }
 
   public void onHomeButtonClick() {

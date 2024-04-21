@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
@@ -17,6 +18,8 @@ import java.util.HashMap;
 import java.util.ResourceBundle;
 
 public class QuestListController extends BaseController implements Initializable, UIUpdater {
+  @FXML
+  public AnchorPane viewInfoAnchorPane;
   @FXML
   private Button deleteButton;
   @FXML
@@ -75,17 +78,6 @@ public class QuestListController extends BaseController implements Initializable
     mqttClient = new MQTTHandler(this);
     currentQuest = null; // set to null to avoid another quest's details being shown
   }
-
-  public void onGoToQuestClick(ActionEvent event) throws IOException {
-   showQuest(currentQuest);
-  }
-
-  // discard edits and show new quest selection when by clicking okayButton:
-  public void onOkayButtonClick() {
-    doNotShowWarning();
-    showSelected();
-  }
-
   @Override
   public void afterMainController() {
     quests = quietQuestFacade.getQuests();
@@ -93,6 +85,12 @@ public class QuestListController extends BaseController implements Initializable
     setSelectedQuest();
     currentQuest = null; // set to null to avoid another quest's details being shown
   }
+
+  public void onGoToQuestClick(ActionEvent event) throws IOException {
+   showQuest(currentQuest);
+  }
+
+
 
   public void displayQuests() {
     questListView.getItems().addAll(quests.keySet());
@@ -195,6 +193,13 @@ public class QuestListController extends BaseController implements Initializable
     doNotShowWarning();
     setEditable();
   }
+
+  // discard edits and show new quest selection when by clicking okayButton:
+  public void onOkayButtonClick() {
+    doNotShowWarning();
+    showSelected();
+  }
+
 
   public void doNotShowWarning() {
     warningPane.setDisable(true);

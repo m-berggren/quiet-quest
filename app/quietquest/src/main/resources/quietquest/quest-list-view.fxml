@@ -14,11 +14,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="760.0" prefWidth="1510.0" style="-fx-background-color: #C7F9CC;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="quietquest.controller.QuestListController">
-   <ImageView fitHeight="760.0" fitWidth="1510.0" pickOnBounds="true" preserveRatio="true">
-      <image>
-         <Image url="@../images/create_page_background.png" />
-      </image>
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="760.0" prefWidth="1210.0" style="-fx-background-color: #C7F9CC;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="quietquest.controller.QuestListController">
+   <ImageView fitHeight="760.0" fitWidth="1210.0" pickOnBounds="true">
+      <Image url="@../images/create_page_background.png" />
    </ImageView>
     <ListView fx:id="questListView" layoutX="40.0" layoutY="125.0" onEditStart="#showSelected" prefHeight="200.0" prefWidth="200.0" />
     <Label layoutX="40.0" layoutY="57.0" text="Quests">
@@ -34,86 +32,61 @@
     <Button fx:id="deleteButton" layoutX="261.0" layoutY="125.0" mnemonicParsing="false" onAction="#onDeleteQuest" text="Delete" />
     <Button fx:id="goToQuestButton" layoutX="260.0" layoutY="175.0" mnemonicParsing="false" onAction="#onGoToQuestClick" text="Go to Quest" />
    <AnchorPane fx:id="viewInfoAnchorPane" layoutX="888.0" layoutY="96.0" prefHeight="568.0" prefWidth="566.0">
-      <TextField fx:id="titleField" editable="false" layoutX="14.0" layoutY="14.0" prefHeight="70.0" prefWidth="538.0"
-                 promptText="Set a title" visible="false">
+      <TextField fx:id="titleField" editable="false" layoutX="14.0" layoutY="14.0" prefHeight="70.0" prefWidth="538.0" promptText="Set a title" visible="false">
          <font>
-            <Font size="30.0"/>
+            <Font size="30.0" />
          </font>
       </TextField>
-      <Text fx:id="descriptionHeader" fill="#22577a" layoutX="14.0" layoutY="118.0" strokeType="OUTSIDE"
-            strokeWidth="0.0" style="-fx-font-family: Montserrat;" text="Description" visible="false"
-            wrappingWidth="334.9270782470703">
+      <Text fx:id="descriptionHeader" fill="#22577a" layoutX="14.0" layoutY="118.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Montserrat;" text="Description" visible="false" wrappingWidth="334.9270782470703">
          <font>
-            <Font size="30.0"/>
+            <Font size="30.0" />
          </font>
       </Text>
-      <Button fx:id="saveButton" layoutX="210.0" layoutY="492.0" mnemonicParsing="false" onAction="#onSaveButtonClick"
-              prefHeight="83.0" prefWidth="146.0"
-              style="-fx-background-color: #57CC99; -fx-font-size: 20; -fx-font-family: Monsterrat; -fx-background-radius: 15; -fx-text-fill: #22577A;"
-              text="SAVE" visible="false">
+      <Button fx:id="saveButton" layoutX="210.0" layoutY="492.0" mnemonicParsing="false" onAction="#onSaveButtonClick" prefHeight="83.0" prefWidth="146.0" style="-fx-background-color: #57CC99; -fx-font-size: 20; -fx-font-family: Monsterrat; -fx-background-radius: 15; -fx-text-fill: #22577A;" text="SAVE" visible="false">
          <font>
-            <Font size="33.0"/>
+            <Font size="33.0" />
          </font>
       </Button>
-      <Button fx:id="editButton" layoutX="42.0" layoutY="492.0" mnemonicParsing="false" onAction="#setEditable"
-              prefHeight="83.0" prefWidth="146.0"
-              style="-fx-background-color: #38A3A599; -fx-font-size: 20; -fx-font-family: Monsterrat; -fx-background-radius: 15; -fx-text-fill: #22577A;"
-              text="EDIT" visible="false">
+      <Button fx:id="editButton" layoutX="42.0" layoutY="492.0" mnemonicParsing="false" onAction="#setEditable" prefHeight="83.0" prefWidth="146.0" style="-fx-background-color: #38A3A599; -fx-font-size: 20; -fx-font-family: Monsterrat; -fx-background-radius: 15; -fx-text-fill: #22577A;" text="EDIT" visible="false">
          <font>
-            <Font size="33.0"/>
+            <Font size="33.0" />
          </font>
       </Button>
-      <Button fx:id="completeButton" layoutX="376.0" layoutY="492.0" mnemonicParsing="false" prefHeight="83.0"
-              prefWidth="146.0"
-              style="-fx-background-color: #80ED99; -fx-font-size: 20; -fx-font-family: Monsterrat; -fx-background-radius: 15; -fx-text-fill: #22577A;"
-              text="COMPLETED" visible="false">
+      <Button fx:id="completeButton" layoutX="376.0" layoutY="492.0" mnemonicParsing="false" prefHeight="83.0" prefWidth="146.0" style="-fx-background-color: #80ED99; -fx-font-size: 20; -fx-font-family: Monsterrat; -fx-background-radius: 15; -fx-text-fill: #22577A;" text="COMPLETED" visible="false">
          <font>
-            <Font size="33.0"/>
+            <Font size="33.0" />
          </font>
       </Button>
-      <TextField fx:id="taskFieldOne" layoutX="15.0" layoutY="338.0" prefHeight="30.0" prefWidth="494.0"
-                 promptText="add task (optional)" visible="false"/>
-      <Text fx:id="tasksHeader" fill="#22577a" layoutX="14.0" layoutY="320.0" strokeType="OUTSIDE" strokeWidth="0.0"
-            style="-fx-font-family: Montserrat;" text="Tasks" visible="false" wrappingWidth="334.9270782470703">
+      <TextField fx:id="taskFieldOne" layoutX="15.0" layoutY="338.0" prefHeight="30.0" prefWidth="494.0" promptText="add task (optional)" visible="false" />
+      <Text fx:id="tasksHeader" fill="#22577a" layoutX="14.0" layoutY="320.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Montserrat;" text="Tasks" visible="false" wrappingWidth="334.9270782470703">
          <font>
-            <Font size="30.0"/>
+            <Font size="30.0" />
          </font>
       </Text>
-      <TextField fx:id="taskFieldTwo" layoutX="15.0" layoutY="384.0" prefHeight="30.0" prefWidth="494.0"
-                 promptText="add task (optional)" visible="false"/>
-      <TextField fx:id="taskFieldThree" layoutX="15.0" layoutY="431.0" prefHeight="30.0" prefWidth="494.0"
-                 promptText="add task (optional)" visible="false"/>
-      <TextArea fx:id="descriptionField" layoutX="15.0" layoutY="134.0" prefHeight="134.0" prefWidth="536.0"
-                promptText="Add description (optional)" visible="false"/>
+      <TextField fx:id="taskFieldTwo" layoutX="15.0" layoutY="384.0" prefHeight="30.0" prefWidth="494.0" promptText="add task (optional)" visible="false" />
+      <TextField fx:id="taskFieldThree" layoutX="15.0" layoutY="431.0" prefHeight="30.0" prefWidth="494.0" promptText="add task (optional)" visible="false" />
+      <TextArea fx:id="descriptionField" layoutX="15.0" layoutY="134.0" prefHeight="134.0" prefWidth="536.0" promptText="Add description (optional)" visible="false" />
    </AnchorPane>
    <Pane fx:id="warningPane" disable="true" layoutX="421.0" layoutY="284.0" prefHeight="200.0" prefWidth="512.0">
-      <Rectangle fx:id="warningTextbox" arcHeight="5.0" arcWidth="5.0" fill="#57cc99" height="200.0" stroke="#22577a"
-                 strokeType="INSIDE" style="-fx-arc-width: 15; -fx-arc-height: 15;" visible="false" width="512.0"/>
-      <Text fx:id="warningText" fill="#22577a" layoutX="32.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0"
-            textAlignment="CENTER" visible="false" wrappingWidth="448.5535888671875">
+      <Rectangle fx:id="warningTextbox" arcHeight="5.0" arcWidth="5.0" fill="#57cc99" height="200.0" stroke="#22577a" strokeType="INSIDE" style="-fx-arc-width: 15; -fx-arc-height: 15;" visible="false" width="512.0" />
+      <Text fx:id="warningText" fill="#22577a" layoutX="32.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" visible="false" wrappingWidth="448.5535888671875">
          <font>
-            <Font size="31.0"/>
+            <Font size="31.0" />
          </font>
       </Text>
-      <Text fx:id="warningSmallText" fill="#22577a" layoutX="67.0" layoutY="106.0" strokeType="OUTSIDE"
-            strokeWidth="0.0" textAlignment="CENTER" visible="false" wrappingWidth="377.60003662109375">
+      <Text fx:id="warningSmallText" fill="#22577a" layoutX="67.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" visible="false" wrappingWidth="377.60003662109375">
          <font>
-            <Font size="16.0"/>
+            <Font size="16.0" />
          </font>
       </Text>
-      <Button fx:id="okayButton" layoutX="21.0" layoutY="134.0" mnemonicParsing="false" onAction="#onOkayButtonClick"
-              style="-fx-font-family: Montserrat; -fx-font-size: 20; -fx-text-fill: #22577A; -fx-background-color: #38A3A5;"
-              text="Yes, proceed anyway" visible="false">
+      <Button fx:id="okayButton" layoutX="21.0" layoutY="134.0" mnemonicParsing="false" onAction="#onOkayButtonClick" style="-fx-font-family: Montserrat; -fx-font-size: 20; -fx-text-fill: #22577A; -fx-background-color: #38A3A5;" text="Yes, proceed anyway" visible="false">
          <font>
-            <Font size="16.0"/>
+            <Font size="16.0" />
          </font>
       </Button>
-      <Button fx:id="keepEditingButton" layoutX="281.0" layoutY="134.0" mnemonicParsing="false"
-              onAction="#onKeepEditingClick" prefHeight="43.0" prefWidth="210.0"
-              style="-fx-font-family: Montserrat; -fx-font-size: 20; -fx-text-fill: #22577A; -fx-background-color: #38A3A5;"
-              text="No, keep editing" visible="false">
+      <Button fx:id="keepEditingButton" layoutX="281.0" layoutY="134.0" mnemonicParsing="false" onAction="#onKeepEditingClick" prefHeight="43.0" prefWidth="210.0" style="-fx-font-family: Montserrat; -fx-font-size: 20; -fx-text-fill: #22577A; -fx-background-color: #38A3A5;" text="No, keep editing" visible="false">
          <font>
-            <Font size="16.0"/>
+            <Font size="16.0" />
          </font>
       </Button>
    </Pane>

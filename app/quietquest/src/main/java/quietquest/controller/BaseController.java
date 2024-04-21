@@ -5,19 +5,20 @@ import quietquest.model.QuietQuestFacade;
 import quietquest.utility.FxmlFile;
 
 public abstract class BaseController {
-  private MainController mainController = null;
-  protected QuietQuestFacade quietQuestFacade = null;
+  private MainController mainController;
+  protected QuietQuestFacade quietQuestFacade;
 
-  /**
-   * Hook that runs after setting main controller. Default is no action.
-   */
-  protected void afterMainController() {
-  }
 
   public void setMainController(MainController mainController) {
     this.mainController = mainController;
     this.quietQuestFacade = mainController.getQuietQuestFacade();
     afterMainController();
+  }
+
+  /**
+   * Hook that runs after setting main controller. Default is no action.
+   */
+  protected void afterMainController() {
   }
 
   public void showStart() {

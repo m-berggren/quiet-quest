@@ -274,10 +274,20 @@ public class QuestListController extends BaseController implements Initializable
     if (subscribeButton.isSelected()) {
       mqttClient.connect(); // Connect to MQTT broker
       mqttClient.subscribe(); // Subscribe
+
+      mqttConnectionMessage.setVisible(true);
+      mqttMotionMessage.setVisible(true);
+      mqttLightMessage.setVisible(true);
+      mqttDistanceMessage.setVisible(true);
+
+
     } else {
       mqttClient.disconnect();
-      mqttConnectionMessage.getStyleClass().clear();
-      mqttConnectionMessage.setText("");
+
+      mqttConnectionMessage.setVisible(false);
+      mqttMotionMessage.setVisible(false);
+      mqttLightMessage.setVisible(false);
+      mqttDistanceMessage.setVisible(false);
     }
   }
 

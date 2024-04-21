@@ -123,6 +123,8 @@ public class CreateQuestController extends BaseController implements Initializab
                 questManager.addQuest(quest);
                 // display popup message for successful quest creation:
                 showMessage("Quest saved successfully!", "Create a new quest now or check all your quests on the Quest List page.");
+                System.out.println("quest: " + quest.getTitle());
+                System.out.println("tasks: " + quest.getTasks());
                 loadLoader(FxmlFile.CREATE_QUEST, event);
             }
     }

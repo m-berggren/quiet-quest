@@ -104,17 +104,26 @@ public class QuestListController extends BaseController implements Initializable
         questListView.getItems().addAll(quests.keySet());
     }
 
-    private void setSelectedQuest(){
+    private void setSelectedQuest() {
         questListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
                 String selectedKey = questListView.getSelectionModel().getSelectedItem();
                 questManager.setQuestSelection(quests.get(selectedKey));
-                tasks = questManager.getQuestSelection().getTasks();
                 showSelected();
             }
         });
     }
+   /* public void setSelectedTask() {
+        taskListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
+                int selectedIndex = taskListView.getSelectionModel().getSelectedIndex();
+                questManager.setTaskSelection(tasks.get(selectedIndex));
+                showSelected();
+            }
+        });
+    } */
 
     public void onDeleteQuest(ActionEvent event) throws IOException {
         // loader = getFxmlLoader(FxmlFile.DELETE_QUEST);
@@ -163,7 +172,9 @@ public class QuestListController extends BaseController implements Initializable
         currentQuest = questManager.getQuestSelection();
         tasks = currentQuest.getTasks();
 
-        taskListView.getItems().addAll(tasks);
+        taskListView.getItems().clear();
+        taskListView.getItems().addAll(questManager.getQuestSelection().getTasks());
+
         taskListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE); // can select multiple tasks at a time
     }
 

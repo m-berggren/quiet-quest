@@ -20,18 +20,23 @@ import quietquest.model.QuestManager;
 import quietquest.utility.MQTTHandler;
 import quietquest.utility.FxmlFile;
 
+
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.net.URL;
 import java.util.*;
 
+
 public class QuestListController extends BaseController implements Initializable, UIUpdater {
     @FXML
     private Button deleteButton;
     @FXML
+    private Button goToQuestButton;
+    @FXML
     private ListView<String> questListView;
     @FXML
     private ToggleButton subscribeButton;
+
     @FXML
     private Label mqttMotionMessage;
     @FXML
@@ -40,7 +45,6 @@ public class QuestListController extends BaseController implements Initializable
     private Label mqttConnectionMessage;
     @FXML
     private Label mqttLightMessage;
-
 
     @FXML
     private TextField titleField;
@@ -76,14 +80,12 @@ public class QuestListController extends BaseController implements Initializable
     private Text warningSmallText;
     @FXML
     private FxmlFile view;
-    private FXMLLoader loader;
-    private Parent root;
-    private Stage stage;
-    private Scene scene;
     private QuestManager questManager;
     private HashMap<String, Quest> quests;
     private MQTTHandler mqttClient;
     private Quest currentQuest;
+
+
 
 
     public void initialize(URL arg0, ResourceBundle arg1) {
@@ -95,9 +97,11 @@ public class QuestListController extends BaseController implements Initializable
         currentQuest = null; // set to null to avoid another quest's details being shown
     }
 
+
     public void displayQuests(){
         questListView.getItems().addAll(quests.keySet());
     }
+
 
     private void setSelectedQuest(){
         questListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
@@ -110,15 +114,23 @@ public class QuestListController extends BaseController implements Initializable
         });
     }
 
+
+    public void onGoToQuestClick(ActionEvent event) throws IOException {
+        loadLoader(FxmlFile.VIEW_QUEST, event);
+    }
+
+
     public void onDeleteQuest(ActionEvent event) throws IOException {
         // loader = getFxmlLoader(FxmlFile.DELETE_QUEST);
         // loadLoader(loader, event);
         loadLoader(FxmlFile.DELETE_QUEST, event);
     }
 
+
     //
     public void showSelected() {
         currentQuest = questManager.getQuestSelection();
+
 
         // show quest details on the right side:
         titleField.setVisible(true);
@@ -131,6 +143,7 @@ public class QuestListController extends BaseController implements Initializable
         saveButton.setVisible(true);
         editButton.setVisible(true);
         completeButton.setVisible(true);
+
 
         // if fields are actively being edited, warning pop-up appears:
         if (titleField.isEditable()) {
@@ -148,6 +161,7 @@ public class QuestListController extends BaseController implements Initializable
         }
     }
 
+
     // warning message pop-up:
     public void showWarning(String message, String smallMessage){
         warningPane.setDisable(false);
@@ -162,17 +176,20 @@ public class QuestListController extends BaseController implements Initializable
         questListView.setDisable(true);
     }
 
+
     // discard edits and show new quest selection when by clicking okayButton:
     public void onOkayButtonClick() {
         doNotShowWarning();
         showSelected();
     }
 
+
     // stay on same quest in editing mode by clicking keepEditingButton:
     public void onKeepEditingClick() {
         doNotShowWarning();
         setEditable();
     }
+
 
     public void doNotShowWarning() {
         warningPane.setDisable(true);
@@ -185,6 +202,7 @@ public class QuestListController extends BaseController implements Initializable
         questListView.setDisable(false);
     }
 
+
     // edit selected quest by clicking editButton:
     public void setEditable(){
         titleField.setEditable(true);
@@ -193,6 +211,7 @@ public class QuestListController extends BaseController implements Initializable
         taskFieldTwo.setEditable(true);
         taskFieldThree.setEditable(true);
     }
+
 
     // quest fields are non-editable if editButton is not explicitly clicked:
     public void setSelectedUneditable() {
@@ -203,6 +222,7 @@ public class QuestListController extends BaseController implements Initializable
         taskFieldThree.setEditable(false);
     }
 
+
     // save quest/task details by clicking saveButton:
     public void onSaveButtonClick() {
         // save title:
@@ -210,40 +230,40 @@ public class QuestListController extends BaseController implements Initializable
         titleField.setText(newTitle);
         currentQuest.setTitle(newTitle);
 
+
         // save description:
         String newDescription = descriptionField.getText();
         descriptionField.setText(newDescription);
         currentQuest.setDescription(newDescription);
+
 
         // save tasks:
         String newTaskOne = taskFieldOne.getText();
         taskFieldOne.setText(newTaskOne);
         currentQuest.setTask(0, newTaskOne);
 
+
         String newTaskTwo = taskFieldTwo.getText();
         taskFieldTwo.setText(newTaskTwo);
         currentQuest.setTask(1, newTaskTwo);
 
+
         String newTaskThree = taskFieldThree.getText();
         taskFieldThree.setText(newTaskThree);
         currentQuest.setTask(2, newTaskThree);
+
 
         // make fields non-editable:
         setSelectedUneditable();
     }
 
 
-    public void loadLoader(FXMLLoader loader, ActionEvent event) throws IOException {
-        root = loader.load();
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-    }
+
 
     public void disconnectMqtt() {
         mqttClient.disconnect();
     }
+
 
     @FXML
     private void onSubscribeButtonClick() {
@@ -255,14 +275,17 @@ public class QuestListController extends BaseController implements Initializable
             mqttConnectionMessage.getStyleClass().clear();
             mqttConnectionMessage.setText("");
 
+
         }
     }
+
 
     @FXML
     private void onManualPublishClick() {
         String message = "Your quest has started";
         mqttClient.publishMessage("/quietquest/application/start", message);
     }
+
 
     @Override
     public void updateConnectionStatusUI(boolean connectionStatus) {
@@ -281,6 +304,7 @@ public class QuestListController extends BaseController implements Initializable
         mqttLightMessage.setText("Light value: " + lightValue);
         mqttLightMessage.getStyleClass().clear();
 
+
         if (lightValue > 50) {
             mqttLightMessage.getStyleClass().add("label-all-red");
         } else if (lightValue > 30) {
@@ -289,6 +313,7 @@ public class QuestListController extends BaseController implements Initializable
             mqttLightMessage.getStyleClass().add("label-all-green");
         }
     }
+
 
     @Override
     public void updateMotionSensorUI(boolean motionDetected) {
@@ -303,10 +328,12 @@ public class QuestListController extends BaseController implements Initializable
         }
     }
 
+
     @Override
     public void updateUltrasonicSensorUI(int distanceValue) {
         mqttDistanceMessage.setText("Distance to obstacle: " + distanceValue + " cm.");
         mqttDistanceMessage.getStyleClass().clear();
+
 
         if (distanceValue > 100) {
             mqttDistanceMessage.getStyleClass().add("label-all-green");
@@ -316,5 +343,4 @@ public class QuestListController extends BaseController implements Initializable
             mqttDistanceMessage.getStyleClass().add("label-all-red");
         }
     }
-
 }

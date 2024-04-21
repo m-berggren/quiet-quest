@@ -19,7 +19,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 
-public class QuestController implements Initializable {
+public class QuestController extends BaseController implements Initializable {
     @FXML
     private Button startQuestButton;
     @FXML
@@ -31,27 +31,21 @@ public class QuestController implements Initializable {
     @FXML
     private Label descLabel;
 
-
-    private QuestManager questManager;
-    private Quest quest;
     private String selectedTask;
 
-
     public void initialize(URL arg0, ResourceBundle arg1) {
-        questManager = QuietQuestMain.questManager;
-        quest = questManager.getQuestSelection();
         //mqttClient = new MQTTHandler(this);
-        displayQuest();
     }
 
 
-    public void displayQuest(){
+    @Override
+    protected void afterMainController() {
+        Quest quest = quietQuestFacade.getQuestManager().getQuestSelection();
         titleLabel.setText(quest.getTitle());
         descLabel.setText(quest.getDescription());
         tasksListView.getItems().addAll(quest.getTasks());
         setSelectedTask();
     }
-
 
     private void setSelectedTask(){
         tasksListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {

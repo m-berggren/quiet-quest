@@ -11,12 +11,11 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="760.0" prefWidth="1510.0" style="-fx-background-color: #C7F9CC;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="quietquest.controller.CreateQuestController">
+<AnchorPane prefHeight="760.0" prefWidth="1210.0" style="-fx-background-color: #C7F9CC;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="quietquest.controller.CreateQuestController">
    <children>
-      <ImageView fitHeight="760.0" fitWidth="1510.0" layoutX="12.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../create_page_background.png" />
-         </image>
+      <ImageView fitHeight="760.0" fitWidth="1210.0" layoutX="12.0" layoutY="3.0" pickOnBounds="true"
+                 preserveRatio="true">
+         <Image url="@../create_page_background.png"/>
       </ImageView>
       <TextField fx:id="titleField" layoutX="350.4" layoutY="108.0" prefHeight="30.0" prefWidth="382.0" promptText="Set your quest title" AnchorPane.leftAnchor="350.4">
          <font>
@@ -104,4 +103,5 @@
          </children>
       </Pane>
    </children>
+
 </AnchorPane>

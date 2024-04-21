@@ -4,52 +4,57 @@ import java.util.ArrayList;
 
 public class Quest {
 
-    // attributes of Quest
-    private String title;
-    private String description;
-    private ArrayList<String> tasks;
+  // attributes of Quest
+  private String title;
+  private String description;
+  private ArrayList<String> tasks;
 
-    // constructors
-    public Quest() { }
-    public Quest(String title, String description, ArrayList<String> tasks){
-        this.title = title;
-        this.description = description;
-        this.tasks = tasks;
-    }
+  // constructors
+  public Quest() {
+  }
 
-    // getters
-    public String getTitle() {
-        return this.title;
-    }
+  public Quest(String title, String description, ArrayList<String> tasks) {
+    this.title = title;
+    this.description = description;
+    this.tasks = tasks;
+  }
 
-    public String getDescription() {
-        return this.description;
-    }
+  // getters
+  public String getTitle() {
+    return this.title;
+  }
 
-    public ArrayList<String> getTasks() {
-        return this.tasks;
-    }
+  public String getDescription() {
+    return this.description;
+  }
 
-    // setters
-    public void setTitle(String title) {
-        this.title = title;
-    }
-    public void setDescription(String description){
-        this.description = description;
-    }
-    public void setTasks(ArrayList<String> tasks){
-        this.tasks = tasks;
-    }
-    public void setTask(int index, String task) {
-        this.tasks.set(index, task);
-    }
+  public ArrayList<String> getTasks() {
+    return this.tasks;
+  }
 
-    @Override
-    public String toString(){
-        return title;
-    }
+  // setters
+  public void setTitle(String title) {
+    this.title = title;
+  }
 
-    public String getTask(int index) {
-        return tasks.get(index);
-    }
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public void setTasks(ArrayList<String> tasks) {
+    this.tasks = tasks;
+  }
+
+  public void setTask(int index, String task) {
+    this.tasks.set(index, task);
+  }
+
+  @Override
+  public String toString() {
+    return title;
+  }
+
+  public String getTask(int index) {
+    return tasks.get(index);
+  }
 }

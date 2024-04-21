@@ -114,16 +114,6 @@ public class QuestListController extends BaseController implements Initializable
             }
         });
     }
-   /* public void setSelectedTask() {
-        taskListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
-                int selectedIndex = taskListView.getSelectionModel().getSelectedIndex();
-                questManager.setTaskSelection(tasks.get(selectedIndex));
-                showSelected();
-            }
-        });
-    } */
 
     public void onDeleteQuest(ActionEvent event) throws IOException {
         // loader = getFxmlLoader(FxmlFile.DELETE_QUEST);
@@ -133,11 +123,12 @@ public class QuestListController extends BaseController implements Initializable
 
     //
     public void showSelected() {
+        if (titleField.isEditable()) {
+            System.out.println("test point");
+            showWarning("Your changes will not be saved", "Are you sure you want to proceed?");
+        } else {
         currentQuest = questManager.getQuestSelection();
         tasks = currentQuest.getTasks();
-
-        System.out.println("quest title:" + currentQuest.getTitle());
-        System.out.println("tasks: " + tasks);
 
         // show quest details on the right side:
         // title details:
@@ -156,9 +147,7 @@ public class QuestListController extends BaseController implements Initializable
         // set fields uneditable:
         setSelectedUneditable();
         // if fields are actively being edited, warning pop-up appears:
-        if (titleField.isEditable()) {
-            showWarning("Your changes will not be saved", "Are you sure you want to proceed?");
-        } else {
+
             doNotShowWarning();
             // pre-fill quest details:
             titleField.setText(currentQuest.getTitle());
@@ -171,10 +160,8 @@ public class QuestListController extends BaseController implements Initializable
     public void showTaskList() {
         currentQuest = questManager.getQuestSelection();
         tasks = currentQuest.getTasks();
-
         taskListView.getItems().clear();
         taskListView.getItems().addAll(questManager.getQuestSelection().getTasks());
-
         taskListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE); // can select multiple tasks at a time
     }
 
@@ -188,8 +175,13 @@ public class QuestListController extends BaseController implements Initializable
         warningText.setText(message);
         warningSmallText.setVisible(true);
         warningSmallText.setText(smallMessage);
-        // if warning pop-up message is on screen, other quests become non-clickable:
+        // if warning pop-up message is on screen, other quests, tasks, and buttons become non-clickable:
         questListView.setDisable(true);
+        questListView.setEditable(false);
+        taskListView.setDisable(true);
+        editButton.setDisable(true);
+        saveButton.setDisable(true);
+        completeButton.setDisable(true);
     }
 
     // discard edits and show new quest selection when by clicking okayButton:
@@ -229,6 +221,8 @@ public class QuestListController extends BaseController implements Initializable
         descriptionField.setEditable(false);
         taskListView.setEditable(false);
         taskField.setEditable(false);
+        deleteTaskButton.setDisable(true);
+        addNewTaskButton.setDisable(true);
     }
 
     // add task to task list:

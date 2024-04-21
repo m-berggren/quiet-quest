@@ -9,6 +9,7 @@ public class Quest {
     private String description;
     private ArrayList<String> tasks;
 
+
     // constructors
     public Quest() { }
     public Quest(String title, String description, ArrayList<String> tasks){
@@ -29,6 +30,7 @@ public class Quest {
     public ArrayList<String> getTasks() {
         return this.tasks;
     }
+
 
     // setters
     public void setTitle(String title) {

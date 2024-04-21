@@ -15,7 +15,10 @@
             <Image url="@../images/QuestBackground.jpg" />
         </image>
     </ImageView>
-   <Label fx:id="MotivationalMessage" layoutX="1126.0" layoutY="40.0" prefHeight="120.0" prefWidth="305.0" text="Message" />
+   <Label fx:id="MotivationMessage" layoutX="1126.0" layoutY="40.0" prefHeight="120.0" prefWidth="305.0" text="Message" visible="false">
+      <font>
+         <Font name="System Bold" size="48.0" />
+      </font></Label>
    <AnchorPane layoutX="102.0" layoutY="58.0" prefHeight="200.0" prefWidth="200.0">
       <children>
          <ImageView fitHeight="923.0" fitWidth="836.0" layoutX="-125.0" layoutY="-4.0" pickOnBounds="true">
@@ -33,7 +36,7 @@
                <Font name="American Typewriter" size="21.0" />
             </font>
          </Label>
-         <ListView fx:id="tasksListView" layoutX="179.0" layoutY="104.0" opacity="0.0" prefHeight="335.0" prefWidth="328.0" AnchorPane.bottomAnchor="480.0" AnchorPane.leftAnchor="179.0" AnchorPane.rightAnchor="204.0" AnchorPane.topAnchor="104.0" />
+         <ListView fx:id="tasksListView" layoutX="179.0" layoutY="104.0" onEditStart="#tasksList" opacity="0.0" prefHeight="335.0" prefWidth="328.0" AnchorPane.bottomAnchor="480.0" AnchorPane.leftAnchor="179.0" AnchorPane.rightAnchor="204.0" AnchorPane.topAnchor="104.0" />
          <CheckBox fx:id="TaskCheckBox" layoutX="198.0" layoutY="122.0" mnemonicParsing="false" onAction="#message" text="Done" />
       </children>
    </AnchorPane>

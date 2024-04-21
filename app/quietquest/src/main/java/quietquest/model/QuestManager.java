@@ -36,4 +36,5 @@ public class QuestManager {
         questSelection = null;
         System.out.println("Quest Selection is set to null.");
     }
+
 }

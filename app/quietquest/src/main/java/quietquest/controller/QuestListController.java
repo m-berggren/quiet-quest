@@ -78,10 +78,6 @@ public class QuestListController extends BaseController implements Initializable
     private Text warningSmallText;
     @FXML
     private FxmlFile view;
-    private FXMLLoader loader;
-    private Parent root;
-    private Stage stage;
-    private Scene scene;
     private QuestManager questManager;
     private HashMap<String, Quest> quests;
     private MQTTHandler mqttClient;
@@ -238,14 +234,6 @@ public class QuestListController extends BaseController implements Initializable
         setSelectedUneditable();
     }
 
-
-    public void loadLoader(FXMLLoader loader, ActionEvent event) throws IOException {
-        root = loader.load();
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-    }
 
     public void disconnectMqtt() {
         mqttClient.disconnect();

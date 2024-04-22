@@ -16,11 +16,10 @@ List specific installation steps that would be sufficient guidance for a novice 
 1. Digital port, used as D0 by the [Grove - Light Sensor v1.2](https://wiki.seeedstudio.com/Grove-Light_Sensor/)
 2. I2C port, used by [Grove - I2C Hub](https://wiki.seeedstudio.com/Grove-I2C_Hub/)
     - [Grove - Mini PIR Motion Sensor](https://www.seeedstudio.com/Grove-mini-PIR-motion-sensor-p-2930.html)
-    - [Grove - Ultrasonic Ranger](https://wiki.seeedstudio.com/Grove-Ultrasonic_Ranger/)
-3. [Grove - Chainable RGB Led v2.0](https://wiki.seeedstudio.com/Grove-Chainable_RGB_LED/)
+    - [Grove - Ultrasonic Ranger](https://wiki.seeedstudio.com/Grove-Ultrasonic_Ranger/)\
+3. & 4. [Grove - Chainable RGB Led v2.0](https://wiki.seeedstudio.com/Grove-Chainable_RGB_LED/)
     - Black cable into pin 6, GND
     - Red cable into pin 4, 5V
-4. [Grove - Chainable RGB Led v2.0](https://wiki.seeedstudio.com/Grove-Chainable_RGB_LED/)
     - Yellow cable into pin 16, D2
     - White cable into pin 18, D3
 

@@ -1,7 +1,7 @@
 # Quiet Quest
 
 ## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+Quiet Quest is a system that supports intentional breaks from the phone. The system is made up of two main parts: a desktop application and a box device. The application lets the user enter and keep track of tasks, set pomodoro style intervals, and provides usage statistics. The box device is where the phone is stored. If a task or timer is active when the box is approached, it will emit audio and visual signals to deter the user from collecting their phone.
 
 ## Visuals
 Possibly include screenshots and other visuals to demonstrate QuietQuest.

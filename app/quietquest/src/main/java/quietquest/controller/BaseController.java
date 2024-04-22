@@ -1,26 +1,62 @@
 package quietquest.controller;
 
-import javafx.event.ActionEvent;
-import javafx.fxml.FXMLLoader;
-import javafx.stage.Stage;
-import javafx.scene.Node;
-import javafx.scene.Scene;
-import quietquest.QuietQuestMain;
-import javafx.scene.Parent;
-
-import java.io.IOException;
+import quietquest.model.Quest;
+import quietquest.model.QuietQuestFacade;
+import quietquest.utility.FxmlFile;
 
 public abstract class BaseController {
-  public static FXMLLoader getFxmlLoader(String fxmlFile) {
-    return new FXMLLoader(QuietQuestMain.class.getResource(fxmlFile));
+  private MainController mainController;
+  protected QuietQuestFacade quietQuestFacade;
+
+
+  public void setMainController(MainController mainController) {
+    this.mainController = mainController;
+    this.quietQuestFacade = mainController.getQuietQuestFacade();
+    afterMainController();
   }
 
-  public void loadLoader(String fxmlFile, ActionEvent event) throws IOException {
-    Parent root = getFxmlLoader(fxmlFile).load();
-    Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-    Scene scene = new Scene(root);
-    scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
-    stage.setScene(scene);
-    stage.show();
+  /**
+   * Hook that runs after setting main controller. Default is no action.
+   */
+  protected void afterMainController() {
+  }
+
+  public void showStart() {
+    mainController.loadView(FxmlFile.START);
+  }
+
+  public void showHome() {
+    mainController.loadView(FxmlFile.HOME);
+  }
+
+  public void showCreateQuest() {
+    mainController.loadView(FxmlFile.CREATE_QUEST);
+  }
+
+  public void showQuestList() {
+    mainController.loadView(FxmlFile.QUEST_LIST);
+  }
+
+  public void showQuest(Quest quest) {
+    mainController.loadView(FxmlFile.SHOW_QUEST);
+  }
+
+  public void showStatistics() {
+    mainController.loadView(FxmlFile.STATISTICS);
+  }
+
+  public void showSettings() {
+    mainController.loadView(FxmlFile.SETTINGS);
+  }
+
+  public void showHelp() {
+    mainController.loadView(FxmlFile.HELP);
+  }
+
+  public void logout() {
+  }
+
+  public QuietQuestFacade getQuietQuestFacade() {
+    return this.quietQuestFacade;
   }
 }

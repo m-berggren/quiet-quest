@@ -5,22 +5,30 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="760.0" prefWidth="1510.0" style="-fx-background-color: #C7F9CC;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="quietquest.controller.StartController">
-   <children>
-      <Label layoutX="596.0" layoutY="26.0" text="Quiet Quest" textAlignment="CENTER">
-         <font>
-            <Font size="60.0" />
-         </font>
-      </Label>
-      <Button fx:id="CreateNewQuestButton" layoutX="614.0" layoutY="336.0" mnemonicParsing="false" onAction="#onNewQuestButtonClick" text="Create new quest">
-         <font>
-            <Font size="30.0" />
-         </font>
-      </Button>
-      <Button layoutX="639.0" layoutY="415.0" mnemonicParsing="false" text="Quest archive" textAlignment="CENTER" visible="false">
-         <font>
-            <Font size="30.0" />
-         </font>
-      </Button>
-   </children>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="760.0"
+            prefWidth="1510.0" style="-fx-background-color: #C7F9CC;" xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="quietquest.controller.StartController">
+   <Label layoutX="596.0" layoutY="26.0" text="Quiet Quest" textAlignment="CENTER">
+      <font>
+         <Font size="60.0"/>
+      </font>
+   </Label>
+   <Button fx:id="CreateNewQuestButton" layoutX="614.0" layoutY="336.0" mnemonicParsing="false"
+           onAction="#onNewQuestButtonClick" text="Create new quest">
+      <font>
+         <Font size="30.0"/>
+      </font>
+   </Button>
+   <Button layoutX="639.0" layoutY="415.0" mnemonicParsing="false" text="Quest archive" textAlignment="CENTER"
+           visible="false">
+      <font>
+         <Font size="30.0"/>
+      </font>
+   </Button>
+   <Button fx:id="QuestListButton" layoutX="611.0" layoutY="449.0" mnemonicParsing="false"
+           onAction="#onQuestListButtonClick" prefHeight="58.0" prefWidth="269.0" text="Quest List">
+      <font>
+         <Font size="28.0"/>
+      </font>
+   </Button>
 </AnchorPane>

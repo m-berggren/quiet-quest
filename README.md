@@ -9,11 +9,10 @@ Possibly include screenshots and other visuals to demonstrate QuietQuest.
 ## Installation
 List specific installation steps that would be sufficient guidance for a novice to be able to use the project. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
 ### Wio Terminal
-
+#### Pinout Diagrams
 ![Wio Terminal Pinout Diagrams](https://git.chalmers.se/courses/dit113/2024/group-12/quiet-quest/-/raw/main/docs/wio_terminal_pinout.png)
 
-
-#### Sensor guidance
+#### Connecting the sensors
 1. Digital port, used as D0 by the [Grove - Light Sensor v1.2](https://wiki.seeedstudio.com/Grove-Light_Sensor/)
 2. I2C port, used by [Grove - I2C Hub](https://wiki.seeedstudio.com/Grove-I2C_Hub/)
     - [Grove - Mini PIR Motion Sensor](https://www.seeedstudio.com/Grove-mini-PIR-motion-sensor-p-2930.html)

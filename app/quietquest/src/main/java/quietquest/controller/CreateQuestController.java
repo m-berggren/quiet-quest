@@ -63,8 +63,6 @@ public class CreateQuestController extends BaseController implements Initializab
     private Stage stage;
     private Scene scene;
     private FXMLLoader loader;
-
-    public QuestManager questManager = QuietQuestMain.questManager;
     private ArrayList<String> tasks;
 
     @Override
@@ -121,7 +119,7 @@ public class CreateQuestController extends BaseController implements Initializab
                 showMessage("Don't forget to name your quest!",
                         "Quests must have a title. Do not leave this field empty.");
                 //if quest title is already taken:
-            } else if (questManager.getQuests().containsKey(titleField.getText())) {
+            } else if (quietQuestFacade.getQuests().containsKey(titleField.getText())) {
                 showMessage("Give your quest a unique title",
                         "Each quest must have a unique title.");
                 //if everything good with title, create quest:
@@ -130,7 +128,7 @@ public class CreateQuestController extends BaseController implements Initializab
                 String description = descriptionField.getText();
                 Quest quest = new Quest(title, description, tasks);
                 // add quest to quest list:
-                questManager.addQuest(quest);
+                quietQuestFacade.addQuest(quest);
                 // display popup message for successful quest creation:
                 showMessage("Quest saved successfully!", "Create a new quest now or check all your quests on the Quest List page.");
                 System.out.println("quest: " + quest.getTitle());

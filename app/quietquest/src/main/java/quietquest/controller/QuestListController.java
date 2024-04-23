@@ -123,8 +123,8 @@ public class QuestListController extends BaseController implements Initializable
 
     //
     public void showSelected() {
+        // if fields are actively being edited, warning pop-up appears:
         if (titleField.isEditable()) {
-            System.out.println("test point");
             showWarning("Your changes will not be saved", "Are you sure you want to proceed?");
         } else {
         currentQuest = questManager.getQuestSelection();
@@ -146,13 +146,11 @@ public class QuestListController extends BaseController implements Initializable
         completeButton.setVisible(true);
         // set fields uneditable:
         setSelectedUneditable();
-        // if fields are actively being edited, warning pop-up appears:
-
-            doNotShowWarning();
-            // pre-fill quest details:
-            titleField.setText(currentQuest.getTitle());
-            descriptionField.setText(currentQuest.getDescription());
-            showTaskList();
+        doNotShowWarning();
+        // pre-fill quest details:
+        titleField.setText(currentQuest.getTitle());
+        descriptionField.setText(currentQuest.getDescription());
+        showTaskList();
         }
     }
 
@@ -170,7 +168,9 @@ public class QuestListController extends BaseController implements Initializable
         warningPane.setDisable(false);
         warningTextbox.setVisible(true);
         okayButton.setVisible(true);
+        okayButton.setDisable(false);
         keepEditingButton.setVisible(true);
+        keepEditingButton.setDisable(false);
         warningText.setVisible(true);
         warningText.setText(message);
         warningSmallText.setVisible(true);
@@ -187,6 +187,7 @@ public class QuestListController extends BaseController implements Initializable
     // discard edits and show new quest selection when by clicking okayButton:
     public void onOkayButtonClick() {
         doNotShowWarning();
+        setSelectedUneditable();
         showSelected();
     }
 
@@ -194,35 +195,48 @@ public class QuestListController extends BaseController implements Initializable
     public void onKeepEditingClick() {
         doNotShowWarning();
         setEditable();
+        taskListView.setDisable(false);
+       // showSelected();
     }
 
     public void doNotShowWarning() {
-        warningPane.setDisable(true);
+    //    warningPane.setDisable(true);
         warningTextbox.setVisible(false);
         okayButton.setVisible(false);
         keepEditingButton.setVisible(false);
         warningText.setVisible(false);
         warningSmallText.setVisible(false);
-        // quest list is clickable:
+        // quest list and task list are clickable:
         questListView.setDisable(false);
+        taskListView.setDisable(false);
     }
 
     // edit selected quest by clicking editButton:
     public void setEditable(){
+        // set all quest details editable and enable related buttons:
         titleField.setEditable(true);
         descriptionField.setEditable(true);
+        taskListView.setDisable(false);
         taskListView.setEditable(true);
         taskField.setEditable(true);
+        addNewTaskButton.setDisable(false);
+        deleteTaskButton.setDisable(false);
+        saveButton.setDisable(false);
+        editButton.setDisable(false);
+        completeButton.setDisable(false);
+        // set quest list view disabled so that other quest cannot be selected:
+        questListView.setDisable(true);
     }
 
-    // quest fields are non-editable if editButton is not explicitly clicked:
+    // quest detail fields are non-editable if editButton is not explicitly clicked:
     public void setSelectedUneditable() {
-        titleField.setEditable(false);
-        descriptionField.setEditable(false);
-        taskListView.setEditable(false);
-        taskField.setEditable(false);
-        deleteTaskButton.setDisable(true);
-        addNewTaskButton.setDisable(true);
+        titleField.setEditable(false); // title field uneditable
+        descriptionField.setEditable(false); // description field uneditable
+        taskListView.setDisable(true); // task list view is un-clickable
+        taskField.setEditable(false); // new task field uneditable
+        deleteTaskButton.setDisable(true); // delete task button disabled
+        addNewTaskButton.setDisable(true); // add task button disabled
+        questListView.setDisable(false); // quest list view is clickable
     }
 
     // add task to task list:
@@ -233,6 +247,7 @@ public class QuestListController extends BaseController implements Initializable
             showTaskList(); // reload task list view so that it displays updated information
             taskField.clear(); // clear text field after adding task to task list
         }
+        System.out.println("tasks now: " + currentQuest.getTasks());
     }
 
     // delete selected task from task list:

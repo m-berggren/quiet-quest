@@ -9,29 +9,38 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
+import quietquest.QuietQuestMain;
 import quietquest.utility.FxmlFile;
 
 import java.io.IOException;
 
-public class StartController extends BaseController {
-    private Parent root;
-    private Stage stage;
-    private Scene scene;
+public class StartController {
+  @FXML
+  private Label welcomeText;
 
-    @FXML
-    private Label welcomeText;
+  @FXML
+  private Button helloButton;
 
-    @FXML
-    private Button helloButton;
+  @FXML
+  protected void onNewQuestButtonClick(ActionEvent event) throws IOException {
+    loadFxml(FxmlFile.CREATE_QUEST, event);
+  }
 
-    @FXML
-    protected void onNewQuestButtonClick(ActionEvent event) throws IOException {
-        FXMLLoader loader = getFxmlLoader(FxmlFile.CREATE_QUEST);
-        root = loader.load();
+  @FXML
+  protected void onQuestListButtonClick(ActionEvent event) throws IOException {
+    loadFxml(FxmlFile.QUEST_LIST, event);
+  }
 
-        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-    }
+  private void loadFxml(String fxmlFile, ActionEvent event) throws IOException {
+    FXMLLoader loader = new FXMLLoader(QuietQuestMain.class.getResource(FxmlFile.MAIN));
+    Parent root = loader.load();
+    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    Scene scene = new Scene(root);
+    scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm()); // adding CSS styling option
+    stage.setScene(scene);
+    stage.show();
+
+    MainController controller = loader.getController();
+    controller.loadView(fxmlFile);
+  }
 }

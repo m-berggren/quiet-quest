@@ -10,10 +10,14 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import quietquest.QuietQuestMain;
 import quietquest.QuietQuestMain;
 import quietquest.model.Quest;
 import quietquest.model.QuestManager;
@@ -26,6 +30,14 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class CreateQuestController extends BaseController implements Initializable {
+    @FXML
+    private TextField taskDescriptionField;
+    @FXML
+    private Button saveQuestButton;
+    @FXML
+    private Button clearButton;
+    @FXML
+    private Button goToQuestsButton;
     @FXML
     private TextField titleField;
     @FXML
@@ -100,6 +112,7 @@ public class CreateQuestController extends BaseController implements Initializab
         showTaskList(); // reload task list view so that it displays updated information
     }
 
+
     // create a quest by clicking "Save Quest" button:
     public void createQuest(ActionEvent event) throws Exception {
 
@@ -115,17 +128,14 @@ public class CreateQuestController extends BaseController implements Initializab
             } else {
                 String title = titleField.getText();
                 String description = descriptionField.getText();
-                Quest quest = new Quest();
-                quest.setTitle(title);
-                quest.setDescription(description);
-                quest.setTasks(tasks);
+                Quest quest = new Quest(title, description, tasks);
                 // add quest to quest list:
                 questManager.addQuest(quest);
                 // display popup message for successful quest creation:
                 showMessage("Quest saved successfully!", "Create a new quest now or check all your quests on the Quest List page.");
                 System.out.println("quest: " + quest.getTitle());
                 System.out.println("tasks: " + quest.getTasks());
-                loadLoader(FxmlFile.CREATE_QUEST, event);
+                showCreateQuest();
             }
     }
 
@@ -156,26 +166,19 @@ public class CreateQuestController extends BaseController implements Initializab
         taskListView.getItems().clear();
     }
 
-    // go to "Quest List" by clicking "See quests" button:
-    public void onGoToQuests(ActionEvent event) throws IOException {
-        // loader = getFxmlLoader(FxmlFile.QUEST_LIST);
-        // loadLoader(loader, event);
-        loadLoader(FxmlFile.QUEST_LIST, event);
 
-        // stage.setOnCloseRequest(action -> {
-        //    QuestListController questListController = loader.getController();
-        //    questListController.disconnectMqtt();
-        // });
-    }
+  /**
+   * Cancel quest creation by clicking "Cancel" button.
+   */
+  public void cancelQuestCreation(ActionEvent event) {
+    showStart();
+  }
 
-    public void loadLoader(FXMLLoader loader, ActionEvent event) throws IOException {
-        root = loader.load();
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        // Set a style
-        scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
-        stage.show();
-    }
 
+  /**
+   * Go to "Quest List" by clicking "See quests" button.
+   */
+  public void onGoToQuests(ActionEvent event) {
+    showQuestList();
+  }
 }

@@ -6,6 +6,8 @@
 #include "Ultrasonic.h"
 #include <string.h>
 #include "credentials.h" // include header where SSID and PASSWORD are defined
+#include "utils.h"
+#include "mqtt_config.h"
 
 #define PIR_MOTION_SENSOR PIN_WIRE_SCL
 Ultrasonic ultrasonic(PIN_WIRE_SCL);
@@ -19,71 +21,10 @@ const char *mqtt_server = "broker.hivemq.com";
 WiFiClient wifiClient;
 PubSubClient client(wifiClient);
 
-
-//Topics
-const char *TOPIC = "QuietQuest";
-const char *TOPIC_PUB_MOTION = "/quietquest/sensor/motion";
-const char *TOPIC_PUB_DISTANCE = "/quietquest/sensor/distance";
-const char *TOPIC_SUB_QUEST = "/quietquest/application/start";
-const char *TOPIC_PUB_QUEST = "/quietquest/sensor/connect";
-const char *TOPIC_PUB_LIGHT = "/quietquest/sensor/light";
+// Initializing
 
 
-void callback(char *topic, byte *payload, unsigned int length) {
-  Serial.print("Message arrived [");
-  Serial.print(topic);
-  Serial.print("] ");
 
-  char *txt = (char *)malloc(length + 1);
-  memcpy(txt, payload, length);
-  txt[length] = '\0';
-
-  if (strcmp(topic, TOPIC_SUB_QUEST) == 0) {
-    show(txt);
-    delay(2000);
-  }
-
-  free(txt);
-  Serial.println();
-}
-
-void reconnect() {
-  while (!client.connected()) {
-    WiFi.begin(SSID, PASSWORD);
-    Serial.print("Attempting MQTT connection...");
-    //Create a random client ID
-    String clientID = "ESP8266Client-";
-    clientID += String(random(0xffff), HEX);
-    //try to connect
-    if (client.connect(clientID.c_str())) {
-      Serial.println("connected");
-
-      tft.setCursor(20, 150);
-      tft.print("Terminal is connected to App");
-      Serial.println("Published connection message successfully!");
-      Serial.print("Subscribed to: ");
-      Serial.println(TOPIC_SUB_QUEST);
-      client.subscribe(TOPIC_SUB_QUEST);
-
-
-    } else {
-      Serial.print("failed, rc=");
-      Serial.print(client.state());
-      Serial.println(" try again in 5 seconds");
-      delay(5000);
-    }
-  }
-}
-
-void clear(uint32_t color) {
-  tft.fillScreen(color);
-  tft.setTextColor(TFT_BLACK);
-}
-
-void show(char *text) {
-  tft.setTextSize(2);
-  tft.drawString(text, 20, 20);
-}
 
 void setup() {
   pinMode(D0, INPUT);
@@ -126,58 +67,37 @@ void loop() {
   } else {
     client.loop();
 
-    clear(TFT_PURPLE);
+  bool isWifiConnected = wifiConnected();
+  bool isMqttConnected = mqttConnected(); 
 
-    // Ultrasonic Ranger sensor
-    long RangeInCentimeters = ultrasonic.MeasureInCentimeters();
-    char msgBuffer[50];
-    snprintf(msgBuffer, sizeof(msgBuffer), "%ld", RangeInCentimeters);
-    client.publish(TOPIC_PUB_DISTANCE, msgBuffer);
-    tft.setCursor(20, 60);
-    tft.print(msgBuffer);
+  // Reading
+  int motionReading = digitalRead(PIR_MOTION_SENSOR);
+  int lightReading = analogRead(D0); // read the raw value from light_sensor
 
-    Serial.printf("The distance to obstacle in front is: %ld cm\n", RangeInCentimeters);
+  // Parsing
+  char* wifiStatus = parseDigitalValue(isWifiConnected);
+  char* mqttStatus = parseDigitalValue(isMqttConnected);
+  char* motionResult = parseDigitalValue(motionReading);
+  long distanceResult = ultrasonic.MeasureInCentimeters();
+  int lightResult = mapToPercentage(lightReading);
 
-    // Mini PIR Motion sensor
-    if (digitalRead(PIR_MOTION_SENSOR) == HIGH) {
-      client.publish(TOPIC_PUB_MOTION, "1");
-      tft.setCursor(20, 100);
-      tft.print("Motion is detected.");
-      Serial.println("Motion is detected.");
-    } else {
-      tft.setCursor(20, 100);
-      tft.print("Searching for motion");
-      client.publish(TOPIC_PUB_MOTION, "0");
-      Serial.println("Searching for motion");
-    }
+  // Printing to serial monitor
+  Serial.printf("    Wifi connected: %s\n", wifiStatus);
+  Serial.printf("    MQTT connected: %s\n", mqttStatus);
+  Serial.printf("   Motion detected: %s\n", motionResult);
+  Serial.printf("    Light measured: %i\n", lightResult);
+  Serial.printf("Distance to object: %ld\n", distanceResult);
 
-    // Light sensor
-    int raw_light = analogRead(D0); // read the raw value from light_sensor
-    int light = map(raw_light, 0, 1023, 0, 100); // map values so they stay between 0-100
-    snprintf(msgBuffer, sizeof(msgBuffer), "%d", light);
- 
-    Serial.printf("Light level: %d\n", light);
-    client.publish(TOPIC_PUB_LIGHT, msgBuffer);
+  // Publishing
+  client.publish(TOPIC_PUB_QUEST, mqttStatus)
+  client.publish(TOPIC_PUB_MOTION, motionResult);
+  client.publish(TOPIC_PUB_LIGHT, toString(lightResult));
+  client.publish(TOPIC_PUB_DISTANCE, toString(distanceResult));
+  
+  // Drawing on LCD screen
 
-    // Connection check
-    if (client.connected()) {
-      tft.setCursor(20, 150);
-      client.publish(TOPIC_PUB_QUEST, "1");
-      tft.print("Broker is connected");
-    } else {
-      client.publish(TOPIC_PUB_QUEST, "0");
-      tft.setCursor(20, 150);
-      tft.print("Broker connection is lost");
-    }
 
-    if (WiFi.status() != WL_CONNECTED) {
-      tft.setCursor(20, 180);
-      tft.print("Wifi connection is lost");
- 
-    } else {
-      tft.setCursor(20, 180);
-      tft.print("Wifi is connected");
-    }
+
 
     delay(1000);
   }

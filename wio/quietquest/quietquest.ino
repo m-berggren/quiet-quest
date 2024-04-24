@@ -1,104 +1,63 @@
-#include <WiFi.h>
-#include "rpcWiFi.h"
 #include "TFT_eSPI.h"
-#include <PubSubClient.h>
-#include <WiFiClientSecure.h>
 #include "Ultrasonic.h"
 #include <string.h>
-#include "credentials.h" // include header where SSID and PASSWORD are defined
 #include "utils.h"
 #include "mqtt_config.h"
+#include "pins.h"
 
+// Initializations
 #define PIR_MOTION_SENSOR PIN_WIRE_SCL
 Ultrasonic ultrasonic(PIN_WIRE_SCL);
 
 TFT_eSPI tft;
 
-
-//MQTT server
-const char *mqtt_server = "broker.hivemq.com";
-
-WiFiClient wifiClient;
-PubSubClient client(wifiClient);
-
-// Initializing
-
-
-
-
 void setup() {
-  pinMode(D0, INPUT);
-  pinMode(PIN_WIRE_SCL, INPUT);
+  pinMode(LIGHT_PIN, INPUT);
+  pinMode(MOTION_PIN, INPUT);
+  pinMode(DISTANCE_PIN, INPUT);
+
+  Serial.begin(BAUD_RATE);
 
   // initiate tft screen
   tft.begin();
-  tft.setRotation(1);
+  tft.setRotation(1);                         // Screen turns upside-down, 3 is standard rotation
 
-  pinMode(PIR_MOTION_SENSOR, INPUT);
-  Serial.begin(9600);
-
-  //Serial.begin(115200);
-  Serial.print("Attempting to connect to SSID:");
-  Serial.println(SSID);
-  WiFi.mode(WIFI_STA);
-  delay(1000);
-  WiFi.begin(SSID, PASSWORD);
-  clear(TFT_BLUE);
-
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
-    show("Not connected to WiFi");
-    WiFi.begin(SSID, PASSWORD);
-  }
-  clear(TFT_PURPLE);
-  Serial.print("WiFi connected with IP address: ");
-  Serial.println(WiFi.localIP());
-  show("Connected to WiFi");
-  delay(500);
-
-  client.setServer(mqtt_server, 1883);
-  client.setCallback(callback);
+  client.setServer(SERVER, PORT);             //
+  client.setCallback(callback);               //
 }
 
 void loop() {
-  if (!client.connected()) {
-    reconnect();
-  } else {
-    client.loop();
 
-  bool isWifiConnected = wifiConnected();
-  bool isMqttConnected = mqttConnected(); 
+  // Reading and interpreting sensor data
+  int motionReading = digitalRead(MOTION_PIN);                                     // Motion sensor gives 0 or 1
+  int lightReading = mapToPercentage(analogRead(LIGHT_PIN));                       //
+  long distanceReading = ultrasonic.MeasureInCentimeters();                        //
+  // TODO: Add Chainable RGB Led and sound
 
-  // Reading
-  int motionReading = digitalRead(PIR_MOTION_SENSOR);
-  int lightReading = analogRead(D0); // read the raw value from light_sensor
-
-  // Parsing
-  char* wifiStatus = parseDigitalValue(isWifiConnected);
-  char* mqttStatus = parseDigitalValue(isMqttConnected);
-  char* motionResult = parseDigitalValue(motionReading);
-  long distanceResult = ultrasonic.MeasureInCentimeters();
-  int lightResult = mapToPercentage(lightReading);
-
-  // Printing to serial monitor
-  Serial.printf("    Wifi connected: %s\n", wifiStatus);
-  Serial.printf("    MQTT connected: %s\n", mqttStatus);
-  Serial.printf("   Motion detected: %s\n", motionResult);
-  Serial.printf("    Light measured: %i\n", lightResult);
-  Serial.printf("Distance to object: %ld\n", distanceResult);
-
-  // Publishing
-  client.publish(TOPIC_PUB_QUEST, mqttStatus)
-  client.publish(TOPIC_PUB_MOTION, motionResult);
-  client.publish(TOPIC_PUB_LIGHT, toString(lightResult));
-  client.publish(TOPIC_PUB_DISTANCE, toString(distanceResult));
-  
-  // Drawing on LCD screen
+  // Logic for led light & sound
+  // TODO
 
 
-
-
-    delay(1000);
+  // Prints to serial monitor if interval has passed
+  if (isTimeToUpdate()) {
+    Serial.printf("    Wifi connected: %s\n", wifiConnected() ? "Yes" : "No");    //
+    Serial.printf("    MQTT connected: %s\n", mqttConnected() ? "Yes" : "No");    //
+    Serial.printf("   Motion detected: %s\n", motionReading ? "Yes" : "No");      //
+    Serial.printf("    Light measured: %d\n", lightReading);                      //
+    Serial.printf("Distance to object: %ld\n", distanceReading);                  //
   }
+
+  // Updates LCD screen if interval has passed"
+  // TODO
+
+  // Publishes if connection to broker exists
+  if (mqttConnected()) {
+    client.publish(TOPIC_PUB_QUEST, "Broker connected");
+    client.publish(TOPIC_PUB_MOTION, motionReading ? "true" : "false");
+    client.publish(TOPIC_PUB_LIGHT, toString(lightReading));
+    client.publish(TOPIC_PUB_DISTANCE, toString(distanceReading));
+  }
+
+  // Check connections
+  checkMqttAndWifiConnections();                                                  // 
 }

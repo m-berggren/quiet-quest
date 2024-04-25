@@ -7,6 +7,7 @@
 #include <string.h>
 #include "credentials.h" // include header where SSID and PASSWORD are defined
 #include <ChainableLED.h>
+#include "Tune.h"
 
 #define PIR_MOTION_SENSOR PIN_WIRE_SCL
 Ultrasonic ultrasonic(PIN_WIRE_SCL);
@@ -98,7 +99,7 @@ void setup() {
   pinMode(D0, INPUT);
   pinMode(PIN_WIRE_SCL, INPUT);
 
-  //initialize LED light
+  // initialize LED
   led.init();
 
   // initiate tft screen
@@ -150,6 +151,18 @@ void loop() {
 
     Serial.printf("The distance to obstacle in front is: %ld cm\n", RangeInCentimeters);
 
+    // Buzzer: Audio alert depending on proximity
+    if (RangeInCentimeters < 16){
+        int beats[] = {1, 1};
+        shortRange.playTune(2, "X ", beats, 100);
+    } else if (RangeInCentimeters < 31) {
+        int beats[] = {1, 4};
+        midRange.playTune(2, "a ", beats, 100);
+    } else if (RangeInCentimeters < 51) {
+        int beats[] = {2, 20};
+        longRange.playTune(2, "a ", beats, 100);
+    }
+
     // Mini PIR Motion sensor
     if (digitalRead(PIR_MOTION_SENSOR) == HIGH) {
       client.publish(TOPIC_PUB_MOTION, "1");
@@ -172,7 +185,7 @@ void loop() {
     client.publish(TOPIC_PUB_LIGHT, msgBuffer);
 
     // LED light
-    if (light > 1) {
+    if (light > 15) {
     led.setColorHSL(0, 1, 0.95, 0.1); //(red) box opened
     } else {
     led.setColorHSL(0, 0.37, 1, 0.01); //(blue-green) box unopened

@@ -6,12 +6,12 @@
 #include "Ultrasonic.h"
 #include <string.h>
 #include "credentials.h" // include header where SSID and PASSWORD are defined
+#include "Tune.h"
 
 #define PIR_MOTION_SENSOR PIN_WIRE_SCL
 Ultrasonic ultrasonic(PIN_WIRE_SCL);
 
 TFT_eSPI tft;
-
 
 //MQTT server
 const char *mqtt_server = "broker.hivemq.com";
@@ -88,6 +88,7 @@ void show(char *text) {
 void setup() {
   pinMode(D0, INPUT);
   pinMode(PIN_WIRE_SCL, INPUT);
+  pinMode(WIO_BUZZER, OUTPUT);
 
   // initiate tft screen
   tft.begin();
@@ -137,6 +138,18 @@ void loop() {
     tft.print(msgBuffer);
 
     Serial.printf("The distance to obstacle in front is: %ld cm\n", RangeInCentimeters);
+
+    // Buzzer: Audio alert depending on proximity
+    if (RangeInCentimeters < 16){
+        int beats[] = {1, 1};
+        shortRange.playTune(2, "X ", beats, 100);
+    } else if (RangeInCentimeters < 31) {
+        int beats[] = {1, 4};
+        midRange.playTune(2, "a ", beats, 100);
+    } else if (RangeInCentimeters < 51) {
+        int beats[] = {2, 20};
+        longRange.playTune(2, "a ", beats, 100);
+    }
 
     // Mini PIR Motion sensor
     if (digitalRead(PIR_MOTION_SENSOR) == HIGH) {

@@ -6,12 +6,22 @@
 #include "Ultrasonic.h"
 #include <string.h>
 #include "credentials.h" // include header where SSID and PASSWORD are defined
+#include <ChainableLED.h>
 #include "Tune.h"
 
 #define PIR_MOTION_SENSOR PIN_WIRE_SCL
 Ultrasonic ultrasonic(PIN_WIRE_SCL);
 
 TFT_eSPI tft;
+
+//LED light
+#define NUM_LEDS  1
+ChainableLED led(2, 3, NUM_LEDS);
+
+//outer threshold distance: 50 cm
+const double OUTER_DISTANCE_THRESHOLD = 50.0;
+//inner threshold distance: 15 cm
+const double INNER_DISTANCE_THRESHOLD = 15.0;
 
 //MQTT server
 const char *mqtt_server = "broker.hivemq.com";
@@ -88,7 +98,9 @@ void show(char *text) {
 void setup() {
   pinMode(D0, INPUT);
   pinMode(PIN_WIRE_SCL, INPUT);
-  pinMode(WIO_BUZZER, OUTPUT);
+
+  // initialize LED
+  led.init();
 
   // initiate tft screen
   tft.begin();
@@ -171,6 +183,13 @@ void loop() {
  
     Serial.printf("Light level: %d\n", light);
     client.publish(TOPIC_PUB_LIGHT, msgBuffer);
+
+    // LED light
+    if (light > 15) {
+    led.setColorHSL(0, 1, 0.95, 0.1); //(red) box opened
+    } else {
+    led.setColorHSL(0, 0.37, 1, 0.01); //(blue-green) box unopened
+    }
 
     // Connection check
     if (client.connected()) {

@@ -52,10 +52,10 @@ void loop() {
 
   // Publishes if connection to broker exists
   if (mqttConnected()) {
-    client.publish(TOPIC_PUB_QUEST, "Broker connected");
-    client.publish(TOPIC_PUB_MOTION, motionReading ? "true" : "false");
-    client.publish(TOPIC_PUB_LIGHT, toString(lightReading));
-    client.publish(TOPIC_PUB_DISTANCE, toString(distanceReading));
+    client.publish(TOPIC_PUB_QUEST, "1");                                         // Publishes '1' if mqttConnected
+    client.publish(TOPIC_PUB_MOTION, toString(motionReading));                    // Publishes '1' or '0'
+    client.publish(TOPIC_PUB_LIGHT, toString(lightReading));                      // Publishes int value as String
+    client.publish(TOPIC_PUB_DISTANCE, toString(distanceReading));                // Publishes int value as String
   }
 
   // Check connections

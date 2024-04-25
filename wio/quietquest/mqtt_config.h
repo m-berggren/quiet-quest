@@ -23,6 +23,7 @@ extern const char *TOPIC_SUB_QUEST;
 extern void checkMqttAndWifiConnections();
 void setupWifi();
 void setupClient();
+void subscribeToTopics();
 extern bool wifiConnected();
 extern bool mqttConnected();
 extern void callback(char *topic, byte *payload, unsigned int length);

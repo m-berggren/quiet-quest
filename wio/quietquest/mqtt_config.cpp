@@ -31,6 +31,17 @@ void checkMqttAndWifiConnections() {
 /**
  * TODO
 */
+void subscribeToTopics() {
+  // Start subscribing
+  Serial.println(String("Subscribed to: ") + TOPIC_SUB_QUEST);
+  client.subscribe(TOPIC_SUB_QUEST);
+  
+
+}
+
+/**
+ * TODO
+*/
 void setupClient() {
   Serial.print("Attempting MQTT connection...");
 
@@ -40,17 +51,14 @@ void setupClient() {
 
   while (!client.connected()) {
     //try to connect
-    Serial.println("Failed, returned: " + client.state());
+    Serial.println(String("Failed, returned: ") + client.state());
     Serial.println("Trying again ...");
     client.connect(clientID.c_str());                                    // Attempts to connect client to MQTT broker
-    }
-     
-    Serial.println("Connected to broker.");
-
-    // Start subscribing
-    Serial.println(String("Subscribed to: ") + TOPIC_SUB_QUEST);
-    client.subscribe(TOPIC_SUB_QUEST);
   }
+     
+  Serial.println("Connected to broker.");
+  subscribeToTopics();                                                   // Starts subscribing to topics
+}
 
 /**
  * TODO

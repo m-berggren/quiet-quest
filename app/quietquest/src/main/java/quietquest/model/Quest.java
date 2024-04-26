@@ -1,6 +1,14 @@
 package quietquest.model;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableValue;
+
 import java.util.ArrayList;
+
+import static javafx.application.Application.launch;
 
 public class Quest {
 
@@ -8,7 +16,6 @@ public class Quest {
   private String title;
   private String description;
   private ArrayList<String> tasks;
-
 
   // constructors
   public Quest() {
@@ -60,3 +67,8 @@ public class Quest {
     return tasks.get(index);
   }
 }
+
+
+
+
+

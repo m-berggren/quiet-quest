@@ -1,7 +1,12 @@
 package quietquest.controller;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -9,12 +14,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.cell.CheckBoxListCell;
+import javafx.util.Callback;
 import quietquest.model.Quest;
 import quietquest.model.QuestManager;
 
 import java.net.URL;
 import java.util.HashMap;
 import java.util.ResourceBundle;
+
 
 
 public class QuestController extends BaseController implements Initializable {
@@ -37,18 +45,10 @@ public class QuestController extends BaseController implements Initializable {
     private QuestManager questManager;
     private HashMap<String, Quest> quests;
 
-    /*public void tasksList(){
-
-        ListView<Quest> listView = new ListView<>();
-        Quest quest= quietQuestFacade.getQuestSelection();
-        listView.getQuest().add(quest) = (false);
-        Quest.onProperty().addListener();
-
-    }*/
 
 
 
-   public void message(ActionEvent event){
+    public void message(ActionEvent event){
        String [] TaskMotivation = {"Good Job!", "One step closer to a nap", "You can do it!", "Awesome job!"};
        String QuestMotivation = "";
       if(TaskCheckBox.isSelected()) {
@@ -77,13 +77,54 @@ public class QuestController extends BaseController implements Initializable {
     }
 
     private void setSelectedTask(){
-        tasksListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
-                selectedTask = (String)tasksListView.getSelectionModel().getSelectedItem();
-            }
-        });
+        tasksListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>()).setCellFactory(CheckBoxListCell.forListView(Callback<onCheckbox, ObservableValue<Boolean>>());
+            property = new CallBack<String, ObservableValue<Boolean>>();
+            ObservableValue<Boolean> call; {
+                return onProperty.on();
+            } }
     }
+
+public static class onCheckbox {
+    private final BooleanProperty on = new SimpleBooleanProperty();
+    private final StringProperty name = new SimpleStringProperty();
+
+    public onCheckbox(String name, boolean on){
+        setName(name);
+        setOn(on);
+    }
+    public final StringProperty nameProperty () {
+        return name;
+    }
+
+    public final String getName () {
+        return this.nameProperty().get();
+    }
+
+    public final void setName ( final String name){
+        this.nameProperty().set(name);
+    }
+    public final BooleanProperty onProperty () {
+        return this.on;
+    }
+
+    public final boolean isOn () {
+        return this.onProperty().get();
+    }
+
+    public final void setOn ( final boolean on){
+        this.onProperty().set(on);
+    }
+    @Override
+    public String toString() {
+        return getName();
+    }
+    public void launch(String[] args) {
+        launch(args);
+    }
+}
+
+
+
 
 
 

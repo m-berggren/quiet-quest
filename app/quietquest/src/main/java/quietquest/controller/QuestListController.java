@@ -24,6 +24,7 @@ import java.util.*;
 public class QuestListController extends BaseController implements Initializable {
     @FXML
     private ListView<String> questListView;
+    private List
 
 
 
@@ -288,7 +289,7 @@ public class QuestListController extends BaseController implements Initializable
         currentQuest.setDescription(newDescription);
 
         // save tasks:
-        currentQuest.setTasks(tasks);
+        currentTask.setTasks(tasks);
 
         // make fields non-editable:
         setSelectedUneditable();

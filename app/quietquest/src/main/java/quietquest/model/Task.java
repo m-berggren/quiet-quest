@@ -20,7 +20,7 @@ public class Task implements Activity{
     }
     /*public void setTask(int index, String task) {
         this.tasks.set(index, task);
-    }
+    }*/
     public void addTask(String task) {
         this.tasks.add(task);
     }
@@ -29,7 +29,7 @@ public class Task implements Activity{
     }
     public String getTask(int index) {
         return tasks.get(index);
-    }*/
+    }
 
     public void completeTask() {
 

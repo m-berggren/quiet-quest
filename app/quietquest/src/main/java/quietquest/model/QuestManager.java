@@ -16,13 +16,21 @@ public class QuestManager {
     quests.put(quest.getTitle(), quest);
     System.out.println("Added: " + quest.getTitle()); //for us to get confirmation when a quest is saved
   }
-
+  public void addTask(Task task){
+    tasks.put(tasks.getTasks(), task);
+  }
   public HashMap<String, Quest> getQuests() {
     return quests;
+  }
+  public HashMap<String,Task> getTasks(){
+    return tasks;
   }
 
   public void deleteQuest(String title) {
     quests.remove(title);
+  }
+  public void deleteTask(String task){
+    tasks.remove(task);
   }
 
   public void setQuestSelection(Quest quest) {

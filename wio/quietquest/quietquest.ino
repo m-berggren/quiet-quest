@@ -49,9 +49,21 @@ void callback(char *topic, byte *payload, unsigned int length) {
   txt[length] = '\0';
 
   if (strcmp(topic, TOPIC_SUB_QUEST) == 0) {
-    show(txt);
-    delay(2000);
+    if(strcmp(txt, "Your quest has started") == 0) {
+        show(txt);
+        int beats[] = { 1, 1, 1, 4, 10 };
+        questStart.playTune(5, "cegC ", beats, 100);
+    } else if (strcmp(txt, "You have completed your quest!") == 0) {
+        show(txt);
+        int beats[] = { 3, 3, 3, 7, 10 };
+        questStop.playTune(5, "bgec ", beats, 100);
+    } else if (strcmp(txt, "You have completed a task!") == 0) {
+        show(txt);
+        int beats[] = { 1, 8, 10 };
+        taskStop.playTune(3, "cc ", beats, 100);
+    }
   }
+
 
   free(txt);
   Serial.println();
@@ -98,6 +110,7 @@ void show(char *text) {
 void setup() {
   pinMode(D0, INPUT);
   pinMode(PIN_WIRE_SCL, INPUT);
+  pinMode(WIO_BUZZER, OUTPUT);
 
   // initialize LED
   led.init();

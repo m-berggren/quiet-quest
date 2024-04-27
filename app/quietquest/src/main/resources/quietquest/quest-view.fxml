@@ -46,7 +46,11 @@
    <Label fx:id="mqttConnectionMessage" layoutX="671.0" layoutY="126.0" prefHeight="17.0" prefWidth="242.0" text="..." />
    <Label fx:id="mqttDistanceMessage" layoutX="671.0" layoutY="190.0" prefHeight="17.0" prefWidth="242.0" text="..." />
    <Label fx:id="mqttMotionMessage" layoutX="671.0" layoutY="222.0" prefHeight="17.0" prefWidth="242.0" text="..." />
-   <Button layoutX="671.0" layoutY="253.0" mnemonicParsing="false" onAction="#onManualPublishClick" text="Manual Publish" />
    <ToggleButton fx:id="subscribeButton" layoutX="671.0" layoutY="289.0" mnemonicParsing="false" onAction="#onSubscribeButtonClick" text="Subscribe" />
    <Label fx:id="mqttLightMessage" layoutX="672.0" layoutY="164.0" text="..." />
+   <Button fx:id="completeQuestButton" layoutX="785.0" layoutY="680.0" mnemonicParsing="false" onAction="#onCompleteQuestClick" text="Complete Quest">
+      <font>
+         <Font size="23.0" />
+      </font>
+   </Button>
 </AnchorPane>

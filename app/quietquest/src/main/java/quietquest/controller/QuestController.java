@@ -26,6 +26,8 @@ public class QuestController extends BaseController implements Initializable, UI
     @FXML
     private Button tickTaskButton;
     @FXML
+    private Button  completeQuestButton;
+    @FXML
     private ListView tasksListView;
     @FXML
     private Label titleLabel;
@@ -72,12 +74,19 @@ public class QuestController extends BaseController implements Initializable, UI
 
 
     public void onTickTaskClick(ActionEvent event) {
-        //Tanya: Audio alert
+        String message = "You have completed a task!";
+        mqttClient.publishMessage("/quietquest/application/start", message);
     }
 
 
     public void onStartQuestClick(ActionEvent event) {
-        //Tanya: Audio alert
+        String message = "Your quest has started";
+        mqttClient.publishMessage("/quietquest/application/start", message);
+    }
+
+    public void onCompleteQuestClick(ActionEvent event) {
+        String message = "You have completed your quest!";
+        mqttClient.publishMessage("/quietquest/application/start", message);
     }
 
     public void disconnectMqtt() {
@@ -98,11 +107,6 @@ public class QuestController extends BaseController implements Initializable, UI
         }
     }
 
-    @FXML
-    private void onManualPublishClick() {
-        String message = "Your quest has started";
-        mqttClient.publishMessage("/quietquest/application/start", message);
-    }
 
     @Override
     public void updateConnectionStatusUI(boolean connectionStatus) {
@@ -156,5 +160,4 @@ public class QuestController extends BaseController implements Initializable, UI
             mqttDistanceMessage.getStyleClass().add("label-all-red");
         }
     }
-
 }

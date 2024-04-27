@@ -8,4 +8,7 @@ class Tune {
 extern Tune longRange;
 extern Tune midRange;
 extern Tune shortRange;
+extern Tune questStart;
+extern Tune questStop;
+extern Tune taskStop;
 

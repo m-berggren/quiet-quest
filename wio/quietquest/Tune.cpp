@@ -6,6 +6,9 @@
 Tune longRange;
 Tune midRange;
 Tune shortRange;
+Tune questStart;
+Tune questStop;
+Tune taskStop;
 
 void Tune::playTune(int length, char notes[], int beats[], int tempo){
     for(int i = 0; i < length; i++) {

@@ -13,6 +13,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import quietquest.model.Quest;
+import quietquest.model.Task;
 import quietquest.utility.MQTTHandler;
 import quietquest.utility.FxmlFile;
 
@@ -65,13 +66,16 @@ public class QuestListController extends BaseController implements Initializable
     private HashMap<String, Quest> quests;
 
     private Quest currentQuest;
-    private ArrayList<String> tasks;
+    private HashMap<String, Task> tasks;
+
+    private Task currentTask;
 
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
 
         currentQuest = null;
+        currentTask = null;
     }
 
     @Override
@@ -80,6 +84,7 @@ public class QuestListController extends BaseController implements Initializable
         displayQuests();
         setSelectedQuest();
         currentQuest = null; // set to null to avoid another quest's details being shown
+        tasks = quietQuestFacade.getTasks();
     }
 
     public void onGoToQuestClick(ActionEvent event) throws IOException {

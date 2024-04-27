@@ -63,11 +63,11 @@ public class CreateQuestController extends BaseController implements Initializab
     private Stage stage;
     private Scene scene;
     private FXMLLoader loader;
-    private ArrayList<String> tasks;
+    private String tasks;
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
-        tasks = new ArrayList<>();
+        String tasks;
         showTaskList();
     }
 
@@ -99,7 +99,7 @@ public class CreateQuestController extends BaseController implements Initializab
     public void addNewTask() {
         String newTask = taskFieldOne.getText(); // update current task to what is in the field
         if (!newTask.isEmpty()) {
-            tasks.add(newTask); // add current task to task list
+            tasks(newTask); // add current task to task list
             showTaskList(); // reload task list view so that it displays updated information
         }
     }
@@ -126,13 +126,13 @@ public class CreateQuestController extends BaseController implements Initializab
             } else {
                 String title = titleField.getText();
                 String description = descriptionField.getText();
-                Quest quest = new Quest(title, description, tasks);
+                Quest quest = new Quest(title, description);
                 // add quest to quest list:
                 quietQuestFacade.addQuest(quest);
                 // display popup message for successful quest creation:
                 showMessage("Quest saved successfully!", "Create a new quest now or check all your quests on the Quest List page.");
                 System.out.println("quest: " + quest.getTitle());
-                System.out.println("tasks: " + quest.getTasks());
+                System.out.println("tasks: " + Task.getTasks());
                 showCreateQuest();
             }
     }

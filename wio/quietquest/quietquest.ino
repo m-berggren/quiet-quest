@@ -51,6 +51,8 @@ void callback(char *topic, byte *payload, unsigned int length) {
   if (strcmp(topic, TOPIC_SUB_QUEST) == 0) {
     show(txt);
     delay(2000);
+    int beats[] = { 1, 1, 1, 4, 10 };
+    questStart.playTune(5, "cegC ", beats, 100);
   }
 
   free(txt);
@@ -98,6 +100,7 @@ void show(char *text) {
 void setup() {
   pinMode(D0, INPUT);
   pinMode(PIN_WIRE_SCL, INPUT);
+  pinMode(WIO_BUZZER, OUTPUT);
 
   // initialize LED
   led.init();

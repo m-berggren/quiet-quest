@@ -1,31 +1,26 @@
 package quietquest.controller;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.cell.CheckBoxListCell;
-import javafx.util.Callback;
+import javafx.scene.control.ToggleButton;
+import quietquest.QuietQuestMain;
 import quietquest.model.Quest;
 import quietquest.model.QuestManager;
+import quietquest.utility.MQTTHandler;
+
 
 import java.net.URL;
-import java.util.HashMap;
 import java.util.ResourceBundle;
 
 
-
-public class QuestController extends BaseController implements Initializable {
+public class QuestController extends BaseController implements Initializable, UIUpdater {
     @FXML
     private Button startQuestButton;
     @FXML
@@ -36,34 +31,24 @@ public class QuestController extends BaseController implements Initializable {
     private Label titleLabel;
     @FXML
     private Label descLabel;
-    @FXML
-    private CheckBox TaskCheckBox;
 
     @FXML
-    private Label MotivationMessage;
+    private ToggleButton subscribeButton;
+    @FXML
+    private Label mqttMotionMessage;
+    @FXML
+    private Label mqttDistanceMessage;
+    @FXML
+    private Label mqttConnectionMessage;
+    @FXML
+    private Label mqttLightMessage;
 
-    private QuestManager questManager;
-    private HashMap<String, Quest> quests;
-
-
-
-
-    public void message(ActionEvent event){
-       String [] TaskMotivation = {"Good Job!", "One step closer to a nap", "You can do it!", "Awesome job!"};
-       String QuestMotivation = "";
-      if(TaskCheckBox.isSelected()) {
-          for(int i = 0; i < TaskMotivation.length; i++){
-          QuestMotivation = TaskMotivation[i];
-      }
-          MotivationMessage.setVisible(true);
-          MotivationMessage.setText(QuestMotivation);
-      }
-   }
+    private MQTTHandler mqttClient;
 
     private String selectedTask;
 
     public void initialize(URL arg0, ResourceBundle arg1) {
-        //mqttClient = new MQTTHandler(this);
+        mqttClient = new MQTTHandler(this);
     }
 
 
@@ -77,55 +62,13 @@ public class QuestController extends BaseController implements Initializable {
     }
 
     private void setSelectedTask(){
-        tasksListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>()).setCellFactory(CheckBoxListCell.forListView(Callback<onCheckbox, ObservableValue<Boolean>>());
-            property = new CallBack<String, ObservableValue<Boolean>>();
-            ObservableValue<Boolean> call; {
-                return onProperty.on();
-            } }
+        tasksListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
+                selectedTask = (String)tasksListView.getSelectionModel().getSelectedItem();
+            }
+        });
     }
-
-public static class onCheckbox {
-    private final BooleanProperty on = new SimpleBooleanProperty();
-    private final StringProperty name = new SimpleStringProperty();
-
-    public onCheckbox(String name, boolean on){
-        setName(name);
-        setOn(on);
-    }
-    public final StringProperty nameProperty () {
-        return name;
-    }
-
-    public final String getName () {
-        return this.nameProperty().get();
-    }
-
-    public final void setName ( final String name){
-        this.nameProperty().set(name);
-    }
-    public final BooleanProperty onProperty () {
-        return this.on;
-    }
-
-    public final boolean isOn () {
-        return this.onProperty().get();
-    }
-
-    public final void setOn ( final boolean on){
-        this.onProperty().set(on);
-    }
-    @Override
-    public String toString() {
-        return getName();
-    }
-    public void launch(String[] args) {
-        launch(args);
-    }
-}
-
-
-
-
 
 
     public void onTickTaskClick(ActionEvent event) {
@@ -135,6 +78,83 @@ public static class onCheckbox {
 
     public void onStartQuestClick(ActionEvent event) {
         //Tanya: Audio alert
+    }
+
+    public void disconnectMqtt() {
+        mqttClient.disconnect();
+    }
+
+
+    @FXML
+    private void onSubscribeButtonClick() {
+        if (subscribeButton.isSelected()) {
+            mqttClient.connect(); // Connect to MQTT broker
+            mqttClient.subscribe(); // Subscribe
+        } else {
+            mqttClient.disconnect();
+            mqttConnectionMessage.getStyleClass().clear();
+            mqttConnectionMessage.setText("");
+
+        }
+    }
+
+    @FXML
+    private void onManualPublishClick() {
+        String message = "Your quest has started";
+        mqttClient.publishMessage("/quietquest/application/start", message);
+    }
+
+    @Override
+    public void updateConnectionStatusUI(boolean connectionStatus) {
+        if (connectionStatus) {
+            mqttConnectionMessage.setText("Connected.");
+            mqttConnectionMessage.getStyleClass().clear();
+            mqttConnectionMessage.getStyleClass().add("label-all-green");
+        } else {
+            mqttConnectionMessage.setText("Not connected.");
+            mqttConnectionMessage.getStyleClass().clear();
+            mqttConnectionMessage.getStyleClass().add("label-all-red");
+        }
+    }
+    @Override
+    public void updateLightSensorUI(int lightValue) {
+        mqttLightMessage.setText("Light value: " + lightValue);
+        mqttLightMessage.getStyleClass().clear();
+
+        if (lightValue > 50) {
+            mqttLightMessage.getStyleClass().add("label-all-red");
+        } else if (lightValue > 30) {
+            mqttLightMessage.getStyleClass().add("label-all-yellow");
+        } else {
+            mqttLightMessage.getStyleClass().add("label-all-green");
+        }
+    }
+
+    @Override
+    public void updateMotionSensorUI(boolean motionDetected) {
+        if (motionDetected) {
+            mqttMotionMessage.setText("Motion detected.");
+            mqttMotionMessage.getStyleClass().clear();
+            mqttMotionMessage.getStyleClass().add("label-all-red");
+        } else {
+            mqttMotionMessage.setText("Motion not detected.");
+            mqttMotionMessage.getStyleClass().clear();
+            mqttMotionMessage.getStyleClass().add("label-all-green");
+        }
+    }
+
+    @Override
+    public void updateUltrasonicSensorUI(int distanceValue) {
+        mqttDistanceMessage.setText("Distance to obstacle: " + distanceValue + " cm.");
+        mqttDistanceMessage.getStyleClass().clear();
+
+        if (distanceValue > 100) {
+            mqttDistanceMessage.getStyleClass().add("label-all-green");
+        } else if (distanceValue > 50) {
+            mqttDistanceMessage.getStyleClass().add("label-all-yellow");
+        } else {
+            mqttDistanceMessage.getStyleClass().add("label-all-red");
+        }
     }
 
 }

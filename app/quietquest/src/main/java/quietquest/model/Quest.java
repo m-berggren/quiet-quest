@@ -41,22 +41,25 @@ public class Quest {
     return this.tasks;
   }
 
-  // setters
-  public void setTitle(String title) {
-    this.title = title;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  public void setTasks(ArrayList<String> tasks) {
-    this.tasks = tasks;
-  }
-
-  public void setTask(int index, String task) {
-    this.tasks.set(index, task);
-  }
+    // setters
+    public void setTitle(String title) {
+        this.title = title;
+    }
+    public void setDescription(String description){
+        this.description = description;
+    }
+    public void setTasks(ArrayList<String> tasks){
+        this.tasks = tasks;
+    }
+    public void setTask(int index, String task) {
+        this.tasks.set(index, task);
+    }
+    public void addTask(String task) {
+        this.tasks.add(task);
+    }
+    public void removeTask(int index) {
+        this.tasks.remove(index);
+    }
 
   @Override
   public String toString() {

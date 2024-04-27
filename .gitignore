@@ -13,6 +13,7 @@
 *.exe
 *.o
 *.so
+wio/quietquest/credentials.cpp
 wio/quietquest/credentials.h
 
 # Log files
@@ -23,14 +24,8 @@ wio/quietquest/credentials.h
 .env.local
 
 # Build files
-app/build/
+build/
 
 # Gradle files
-app/.gradle/
-app/gradlew
-app/gradlew.bat
-app/settings.gradle
-app/build.gradle
-app/quietquest/gradle
-/app/quietquest/gradlew
-/app/quietquest/gradlew.bat
+.gradle/
+gradle

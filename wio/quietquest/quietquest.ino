@@ -6,12 +6,22 @@
 #include "Ultrasonic.h"
 #include <string.h>
 #include "credentials.h" // include header where SSID and PASSWORD are defined
+#include <ChainableLED.h>
+#include "Tune.h"
 
 #define PIR_MOTION_SENSOR PIN_WIRE_SCL
 Ultrasonic ultrasonic(PIN_WIRE_SCL);
 
 TFT_eSPI tft;
 
+//LED light
+#define NUM_LEDS  1
+ChainableLED led(2, 3, NUM_LEDS);
+
+//outer threshold distance: 50 cm
+const double OUTER_DISTANCE_THRESHOLD = 50.0;
+//inner threshold distance: 15 cm
+const double INNER_DISTANCE_THRESHOLD = 15.0;
 
 //MQTT server
 const char *mqtt_server = "broker.hivemq.com";
@@ -89,6 +99,9 @@ void setup() {
   pinMode(D0, INPUT);
   pinMode(PIN_WIRE_SCL, INPUT);
 
+  // initialize LED
+  led.init();
+
   // initiate tft screen
   tft.begin();
   tft.setRotation(1);
@@ -138,6 +151,18 @@ void loop() {
 
     Serial.printf("The distance to obstacle in front is: %ld cm\n", RangeInCentimeters);
 
+    // Buzzer: Audio alert depending on proximity
+    if (RangeInCentimeters < 16){
+        int beats[] = {1, 1};
+        shortRange.playTune(2, "X ", beats, 100);
+    } else if (RangeInCentimeters < 31) {
+        int beats[] = {1, 4};
+        midRange.playTune(2, "a ", beats, 100);
+    } else if (RangeInCentimeters < 51) {
+        int beats[] = {2, 20};
+        longRange.playTune(2, "a ", beats, 100);
+    }
+
     // Mini PIR Motion sensor
     if (digitalRead(PIR_MOTION_SENSOR) == HIGH) {
       client.publish(TOPIC_PUB_MOTION, "1");
@@ -158,6 +183,13 @@ void loop() {
  
     Serial.printf("Light level: %d\n", light);
     client.publish(TOPIC_PUB_LIGHT, msgBuffer);
+
+    // LED light
+    if (light > 15) {
+    led.setColorHSL(0, 1, 0.95, 0.1); //(red) box opened
+    } else {
+    led.setColorHSL(0, 0.37, 1, 0.01); //(blue-green) box unopened
+    }
 
     // Connection check
     if (client.connected()) {

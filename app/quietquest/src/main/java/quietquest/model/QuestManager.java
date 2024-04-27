@@ -6,6 +6,8 @@ public class QuestManager {
   private HashMap<String, Quest> quests;
   private Quest questSelection;
 
+  private HashMap<String, Task> tasks;
+
   public QuestManager() {
     quests = new HashMap<>();
   }

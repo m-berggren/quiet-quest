@@ -20,19 +20,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
-public class QuestListController extends BaseController implements Initializable, UIUpdater {
+public class QuestListController extends BaseController implements Initializable {
     @FXML
     private ListView<String> questListView;
-    @FXML
-    private ToggleButton subscribeButton;
-    @FXML
-    private Label mqttMotionMessage;
-    @FXML
-    private Label mqttDistanceMessage;
-    @FXML
-    private Label mqttConnectionMessage;
-    @FXML
-    private Label mqttLightMessage;
+
 
 
     @FXML
@@ -71,19 +62,15 @@ public class QuestListController extends BaseController implements Initializable
     private Button addNewTaskButton;
     @FXML
     private Button deleteTaskButton;
-    private FXMLLoader loader;
-    private Parent root;
-    private Stage stage;
-    private Scene scene;
     private HashMap<String, Quest> quests;
-    private MQTTHandler mqttClient;
+
     private Quest currentQuest;
     private ArrayList<String> tasks;
 
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
-        mqttClient = new MQTTHandler(this);
+
         currentQuest = null;
     }
 
@@ -302,81 +289,6 @@ public class QuestListController extends BaseController implements Initializable
         setSelectedUneditable();
     }
 
-    public void disconnectMqtt() {
-        mqttClient.disconnect();
-    }
 
-
-    @FXML
-    private void onSubscribeButtonClick() {
-        if (subscribeButton.isSelected()) {
-            mqttClient.connect(); // Connect to MQTT broker
-            mqttClient.subscribe(); // Subscribe
-        } else {
-            mqttClient.disconnect();
-            mqttConnectionMessage.getStyleClass().clear();
-            mqttConnectionMessage.setText("");
-
-        }
-    }
-
-    @FXML
-    private void onManualPublishClick() {
-        String message = "Your quest has started";
-        mqttClient.publishMessage("/quietquest/application/start", message);
-    }
-
-    @Override
-    public void updateConnectionStatusUI(boolean connectionStatus) {
-        if (connectionStatus) {
-            mqttConnectionMessage.setText("Connected.");
-            mqttConnectionMessage.getStyleClass().clear();
-            mqttConnectionMessage.getStyleClass().add("label-all-green");
-        } else {
-            mqttConnectionMessage.setText("Not connected.");
-            mqttConnectionMessage.getStyleClass().clear();
-            mqttConnectionMessage.getStyleClass().add("label-all-red");
-        }
-    }
-    @Override
-    public void updateLightSensorUI(int lightValue) {
-        mqttLightMessage.setText("Light value: " + lightValue);
-        mqttLightMessage.getStyleClass().clear();
-
-        if (lightValue > 50) {
-            mqttLightMessage.getStyleClass().add("label-all-red");
-        } else if (lightValue > 30) {
-            mqttLightMessage.getStyleClass().add("label-all-yellow");
-        } else {
-            mqttLightMessage.getStyleClass().add("label-all-green");
-        }
-    }
-
-    @Override
-    public void updateMotionSensorUI(boolean motionDetected) {
-        if (motionDetected) {
-            mqttMotionMessage.setText("Motion detected.");
-            mqttMotionMessage.getStyleClass().clear();
-            mqttMotionMessage.getStyleClass().add("label-all-red");
-        } else {
-            mqttMotionMessage.setText("Motion not detected.");
-            mqttMotionMessage.getStyleClass().clear();
-            mqttMotionMessage.getStyleClass().add("label-all-green");
-        }
-    }
-
-    @Override
-    public void updateUltrasonicSensorUI(int distanceValue) {
-        mqttDistanceMessage.setText("Distance to obstacle: " + distanceValue + " cm.");
-        mqttDistanceMessage.getStyleClass().clear();
-
-        if (distanceValue > 100) {
-            mqttDistanceMessage.getStyleClass().add("label-all-green");
-        } else if (distanceValue > 50) {
-            mqttDistanceMessage.getStyleClass().add("label-all-yellow");
-        } else {
-            mqttDistanceMessage.getStyleClass().add("label-all-red");
-        }
-    }
 
 }

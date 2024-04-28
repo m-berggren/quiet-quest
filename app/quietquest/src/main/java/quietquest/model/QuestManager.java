@@ -8,8 +8,11 @@ public class QuestManager {
 
   private HashMap<String, Task> tasks;
 
+  private Task taskSelection;
+
   public QuestManager() {
     quests = new HashMap<>();
+    tasks = new HashMap<>();
   }
 
   public void addQuest(Quest quest) {
@@ -17,7 +20,7 @@ public class QuestManager {
     System.out.println("Added: " + quest.getTitle()); //for us to get confirmation when a quest is saved
   }
   public void addTask(Task task){
-    tasks.put(tasks.getTasks(), task);
+    tasks.put(task.getTasks(), task);
   }
   public HashMap<String, Quest> getQuests() {
     return quests;
@@ -38,13 +41,22 @@ public class QuestManager {
     System.out.println("Selected: " + quest);
   }
 
+  public void setTaskSelection(Task tasks){
+    taskSelection = tasks;
+  }
+
   public Quest getQuestSelection() {
     return questSelection;
   }
+
+  public Task getTaskSelection(){return taskSelection;}
 
 
   public void resetQuestSelection() {
     questSelection = null;
     System.out.println("Quest Selection is set to null.");
+  }
+  public void resetTaskSelection(){
+    taskSelection = null;
   }
 }

@@ -21,6 +21,7 @@ import quietquest.QuietQuestMain;
 import quietquest.QuietQuestMain;
 import quietquest.model.Quest;
 import quietquest.model.QuestManager;
+import quietquest.model.Task;
 import quietquest.utility.FxmlFile;
 import quietquest.utility.MQTTHandler;
 
@@ -129,10 +130,11 @@ public class CreateQuestController extends BaseController implements Initializab
                 Quest quest = new Quest(title, description);
                 // add quest to quest list:
                 quietQuestFacade.addQuest(quest);
+                quietQuestFacade.addTasks(tasks);
                 // display popup message for successful quest creation:
                 showMessage("Quest saved successfully!", "Create a new quest now or check all your quests on the Quest List page.");
                 System.out.println("quest: " + quest.getTitle());
-                System.out.println("tasks: " + Task.getTasks());
+                System.out.println("tasks: " + tasks.getTasks());
                 showCreateQuest();
             }
     }

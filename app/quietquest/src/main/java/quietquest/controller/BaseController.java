@@ -2,6 +2,7 @@ package quietquest.controller;
 
 import quietquest.model.Quest;
 import quietquest.model.QuietQuestFacade;
+import quietquest.model.Task;
 import quietquest.utility.FxmlFile;
 
 public abstract class BaseController {

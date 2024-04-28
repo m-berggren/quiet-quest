@@ -1,34 +1,33 @@
 package quietquest.controller;
 
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.ToggleButton;
-import quietquest.QuietQuestMain;
+import javafx.scene.control.*;
+import javafx.util.Callback;
 import quietquest.model.Quest;
-import quietquest.model.QuestManager;
+import quietquest.model.Task;
 import quietquest.utility.MQTTHandler;
-
+import javafx.scene.control.ListView;
+import javafx.scene.control.cell.CheckBoxListCell;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+
 
 
 public class QuestController extends BaseController implements Initializable, UIUpdater {
     @FXML
     private Button startQuestButton;
     @FXML
-    private Button tickTaskButton;
+    private Button completeQuestButton;
     @FXML
-    private Button  completeQuestButton;
-    @FXML
-    private ListView tasksListView;
+    private ListView<String> tasksListView;
     @FXML
     private Label titleLabel;
     @FXML
@@ -49,6 +48,8 @@ public class QuestController extends BaseController implements Initializable, UI
 
     private String selectedTask;
 
+
+
     public void initialize(URL arg0, ResourceBundle arg1) {
         mqttClient = new MQTTHandler(this);
     }
@@ -57,19 +58,38 @@ public class QuestController extends BaseController implements Initializable, UI
     @Override
     protected void afterMainController() {
         Quest quest = quietQuestFacade.getQuestManager().getQuestSelection();
+        Task tasks = quietQuestFacade.getQuestManager().getTaskSelection();
         titleLabel.setText(quest.getTitle());
         descLabel.setText(quest.getDescription());
-        tasksListView.getItems().addAll(quest.getTasks());
+        tasksListView.getItems().addAll(tasks.getTasks());
         setSelectedTask();
+        setCheckBoxListCell();
     }
 
-    private void setSelectedTask(){
+
+    private void setSelectedTask() {
         tasksListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
-                selectedTask = (String)tasksListView.getSelectionModel().getSelectedItem();
+                selectedTask = tasksListView.getSelectionModel().getSelectedItem();
             }
         });
+    }
+
+    private void setCheckBoxListCell(){
+        tasksListView.setCellFactory(CheckBoxListCell.forListView(new Callback<String, ObservableValue<Boolean>>() {
+            @Override
+            public ObservableValue<Boolean> call(String selectedTask) {
+                BooleanProperty observable = new SimpleBooleanProperty();
+                observable.addListener((obs, wasSelected, isNowSelected) ->
+                        System.out.println("Check box for "+selectedTask+" changed from "+wasSelected+" to "+isNowSelected)
+                );
+                return observable ;
+            }
+        }));
+
+
+
     }
 
 
@@ -120,6 +140,7 @@ public class QuestController extends BaseController implements Initializable, UI
             mqttConnectionMessage.getStyleClass().add("label-all-red");
         }
     }
+
     @Override
     public void updateLightSensorUI(int lightValue) {
         mqttLightMessage.setText("Light value: " + lightValue);
@@ -160,4 +181,5 @@ public class QuestController extends BaseController implements Initializable, UI
             mqttDistanceMessage.getStyleClass().add("label-all-red");
         }
     }
+
 }

@@ -7,21 +7,23 @@ import javafx.beans.property.StringProperty;
 import javafx.scene.control.MultipleSelectionModel;
 
 public class Task implements Activity{
-    private String tasks;
+    private String task;
+    public Task(){
 
+    }
     public Task(String tasks) {
-        this.tasks = tasks;
+        this.task = tasks;
 
 
     }
     //getter
     public String getTasks() {
-        return this.tasks;
+        return this.task;
     }
 
     //Setter
     public void setTasks(String tasks){
-        this.tasks = tasks;
+        this.task = tasks;
     }
     /*public void setTask(int index, String task) {
         this.tasks.set(index, task);
@@ -37,6 +39,14 @@ public class Task implements Activity{
     }*/
 
     public String toString() {
-        return tasks;
+        return task;
     }
+
+
+
+    @Override
+    public void completeTask() {
+
+    }
+
 }

@@ -272,10 +272,11 @@ public class QuestListController extends BaseController implements Initializable
 
     // add task to task list:
     public void addNewTask() {
-        String newTask = taskField.getText(); // update current task to what is in the field
-        if (!newTask.isEmpty()) {
-            quietQuestFacade.getTaskSelection().addTask(newTask); // add current task to task list
-            showTaskList(); // reload task list view so that it displays updated information
+        String newTaskTitle = taskField.getText();// update current task to what is in the field
+        if (!newTaskTitle.isEmpty()) {
+            Task newTask = new Task(newTaskTitle);
+            quietQuestFacade.addTasks(newTask); // add current task to task list
+            showTaskList();
             taskField.clear(); // clear text field after adding task to task list
         }
         System.out.println("tasks now: " + currentTask.getTasks());
@@ -283,7 +284,7 @@ public class QuestListController extends BaseController implements Initializable
 
     // delete selected task from task list:
     public void deleteFirstTask() {
-        quietQuestFacade.getTaskSelection().removeTask(taskListView.getSelectionModel());
+        quietQuestFacade.deleteTask(taskListView.getSelectionModel().getSelectedItem());
         showTaskList(); // reload task list information so that it displays updated information
     }
 

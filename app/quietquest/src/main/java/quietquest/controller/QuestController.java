@@ -93,6 +93,7 @@ public class QuestController extends BaseController implements Initializable, UI
     }
 
 
+
     public void onTickTaskClick(ActionEvent event) {
         String message = "You have completed a task!";
         mqttClient.publishMessage("/quietquest/application/start", message);

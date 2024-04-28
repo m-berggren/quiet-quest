@@ -98,18 +98,23 @@ public class CreateQuestController extends BaseController implements Initializab
 
     // add task to task list:
     public void addNewTask() {
-        String newTask = taskFieldOne.getText(); // update current task to what is in the field
-        if (!newTask.isEmpty()) {
-            tasks(newTask); // add current task to task list
+        String newTaskTitle = taskFieldOne.getText();// update current task to what is in the field
+        if (!newTaskTitle.isEmpty()) {
+            Task newTask = new Task(newTaskTitle);
+            quietQuestFacade.addTasks(newTask); // add current task to task list
             showTaskList(); // reload task list view so that it displays updated information
         }
     }
 
+
+
     // delete selected task from task list:
     public void deleteFirstTask() {
-        tasks.remove(taskListView.getSelectionModel().getSelectedIndex());
-        showTaskList(); // reload task list view so that it displays updated information
+        quietQuestFacade.deleteTask(String.valueOf(taskListView.getItems().remove(tasks)));
+        quietQuestFacade.resetQuestSelection();
+        showTaskList();
     }
+
 
 
     // create a quest by clicking "Save Quest" button:
@@ -128,13 +133,14 @@ public class CreateQuestController extends BaseController implements Initializab
                 String title = titleField.getText();
                 String description = descriptionField.getText();
                 Quest quest = new Quest(title, description);
+                Task task = new Task(tasks);
                 // add quest to quest list:
                 quietQuestFacade.addQuest(quest);
-                quietQuestFacade.addTasks(tasks);
+                quietQuestFacade.addTasks(task);
                 // display popup message for successful quest creation:
                 showMessage("Quest saved successfully!", "Create a new quest now or check all your quests on the Quest List page.");
                 System.out.println("quest: " + quest.getTitle());
-                System.out.println("tasks: " + tasks.getTasks());
+                System.out.println("tasks: " + task.getTasks());
                 showCreateQuest();
             }
     }

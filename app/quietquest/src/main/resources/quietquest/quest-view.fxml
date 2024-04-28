@@ -30,7 +30,7 @@
                <Font name="American Typewriter" size="21.0" />
             </font>
          </Label>
-         <ListView fx:id="tasksListView" layoutX="179.0" layoutY="104.0" onEditStart="#tasksList" opacity="0.0" prefHeight="335.0" prefWidth="328.0" AnchorPane.bottomAnchor="480.0" AnchorPane.leftAnchor="179.0" AnchorPane.rightAnchor="204.0" AnchorPane.topAnchor="104.0" />
+         <ListView fx:id="tasksListView" layoutX="179.0" layoutY="104.0" opacity="0.0" prefHeight="335.0" prefWidth="328.0" AnchorPane.bottomAnchor="480.0" AnchorPane.leftAnchor="179.0" AnchorPane.rightAnchor="204.0" AnchorPane.topAnchor="104.0" />
       </children>
    </AnchorPane>
    <Button fx:id="startQuestButton" layoutX="355.0" layoutY="680.0" mnemonicParsing="false" onAction="#onStartQuestClick" text="Start Quest" AnchorPane.leftAnchor="355.0" AnchorPane.topAnchor="680.0">

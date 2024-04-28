@@ -63,7 +63,7 @@ public class QuestListController extends BaseController implements Initializable
     private HashMap<String, Quest> quests;
 
     private Quest currentQuest;
-    private HashMap<String, Task> tasks;
+    private ArrayList< Task> tasks;
 
     private Task currentTask;
 
@@ -84,7 +84,7 @@ public class QuestListController extends BaseController implements Initializable
         currentQuest = null; // set to null to avoid another quest's details being shown
         tasks = quietQuestFacade.getTasks();
         displayTasks();
-        setSelectedTasks();
+        //setSelectedTasks();
         currentTask = null;
     }
 
@@ -96,7 +96,7 @@ public class QuestListController extends BaseController implements Initializable
         questListView.getItems().addAll(quests.keySet());
     }
 
-    public void displayTasks(){taskListView.getItems().addAll(tasks.keySet());}
+    public void displayTasks(){taskListView.getItems().addAll();}
 
     private void setSelectedQuest() {
         questListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
@@ -108,7 +108,7 @@ public class QuestListController extends BaseController implements Initializable
             }
         });
     }
-    private void setSelectedTasks(){
+   /* private void setSelectedTasks(){
         taskListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
@@ -117,7 +117,7 @@ public class QuestListController extends BaseController implements Initializable
                 showSelected();
             }
         });
-    }
+    }*/
 
     public void onDeleteQuest(ActionEvent event) {
         if (currentQuest != null) {
@@ -302,9 +302,8 @@ public class QuestListController extends BaseController implements Initializable
 
         // save tasks:
 
-        String newTask = taskField.getText();
-        taskField.setText(newTask);
-        currentTask.setTasks(newTask);
+
+        currentQuest.setTasks(tasks);
 
         // make fields non-editable:
         setSelectedUneditable();

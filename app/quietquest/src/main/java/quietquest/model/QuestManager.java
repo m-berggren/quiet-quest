@@ -1,18 +1,19 @@
 package quietquest.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class QuestManager {
   private HashMap<String, Quest> quests;
   private Quest questSelection;
 
-  private HashMap<String, Task> tasks;
+  private ArrayList<Task> tasks;
 
   private Task taskSelection;
 
   public QuestManager() {
     quests = new HashMap<>();
-    tasks = new HashMap<>();
+    tasks = new ArrayList<>();
   }
 
   public void addQuest(Quest quest) {
@@ -20,12 +21,12 @@ public class QuestManager {
     System.out.println("Added: " + quest.getTitle()); //for us to get confirmation when a quest is saved
   }
   public void addTask(Task task){
-    tasks.put(task.getTasks(), task);
+    tasks.add(task);
   }
   public HashMap<String, Quest> getQuests() {
     return quests;
   }
-  public HashMap<String,Task> getTasks(){
+  public ArrayList<Task> getTasks(){
     return tasks;
   }
 

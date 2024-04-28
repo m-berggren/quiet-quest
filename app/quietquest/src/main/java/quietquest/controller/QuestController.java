@@ -58,12 +58,13 @@ public class QuestController extends BaseController implements Initializable, UI
     @Override
     protected void afterMainController() {
         Quest quest = quietQuestFacade.getQuestManager().getQuestSelection();
-        Task tasks = quietQuestFacade.getQuestManager().getTaskSelection();
+        //Task tasks = quietQuestFacade.getQuestManager().getTaskSelection();
         titleLabel.setText(quest.getTitle());
-        descLabel.setText(quest.getDescription());
-        tasksListView.getItems().addAll(tasks.getTasks());
+        //descLabel.setText(quest.getDescription());
+        //tasksListView.getItems().addAll(quest.getTasks());
         setSelectedTask();
         setCheckBoxListCell();
+
     }
 
 

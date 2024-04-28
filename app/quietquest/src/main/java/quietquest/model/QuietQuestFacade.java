@@ -1,5 +1,6 @@
 package quietquest.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class QuietQuestFacade {
@@ -12,7 +13,7 @@ public class QuietQuestFacade {
     return questManager.getQuests();
   }
 
-  public HashMap<String, Task> getTasks(){return questManager.getTasks();}
+  public ArrayList<Task> getTasks(){return questManager.getTasks();}
 
   public void addQuest(Quest quest) {
     questManager.addQuest(quest);

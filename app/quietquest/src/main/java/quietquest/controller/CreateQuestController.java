@@ -64,18 +64,19 @@ public class CreateQuestController extends BaseController implements Initializab
     private Stage stage;
     private Scene scene;
     private FXMLLoader loader;
-    private String tasks;
+
+    private ArrayList <Task> tasks;
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
-        String tasks;
+        tasks = new ArrayList<>();
         showTaskList();
     }
 
     // show task list if not empty:
     public void showTaskList() {
         taskListView.getItems().clear();
-        taskListView.getItems().addAll(tasks);
+        taskListView.getItems().addAll(String.valueOf(tasks));
         taskListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE); // can only select 1 task at a time
         taskListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -101,7 +102,8 @@ public class CreateQuestController extends BaseController implements Initializab
         String newTaskTitle = taskFieldOne.getText();// update current task to what is in the field
         if (!newTaskTitle.isEmpty()) {
             Task newTask = new Task(newTaskTitle);
-            quietQuestFacade.addTasks(newTask); // add current task to task list
+            tasks.add(newTask);
+            //quietQuestFacade.addTasks(newTask); // add current task to task list
             showTaskList(); // reload task list view so that it displays updated information
         }
     }
@@ -132,15 +134,13 @@ public class CreateQuestController extends BaseController implements Initializab
             } else {
                 String title = titleField.getText();
                 String description = descriptionField.getText();
-                Quest quest = new Quest(title, description);
-                Task task = new Task(tasks);
+                Quest quest = new Quest(title, description, tasks);
                 // add quest to quest list:
                 quietQuestFacade.addQuest(quest);
-                quietQuestFacade.addTasks(task);
                 // display popup message for successful quest creation:
                 showMessage("Quest saved successfully!", "Create a new quest now or check all your quests on the Quest List page.");
                 System.out.println("quest: " + quest.getTitle());
-                System.out.println("tasks: " + task.getTasks());
+                System.out.println("tasks: " + quest.getTasks());
                 showCreateQuest();
             }
     }

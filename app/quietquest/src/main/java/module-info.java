@@ -2,6 +2,8 @@ module quietquest {
   requires javafx.controls;
   requires javafx.fxml;
   requires com.hivemq.client.mqtt;
+  requires jdk.jdi;
+  requires java.sql;
 
   opens quietquest to javafx.fxml;
   exports quietquest;

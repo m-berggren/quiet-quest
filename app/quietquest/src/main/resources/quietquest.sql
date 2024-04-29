@@ -1,4 +1,4 @@
-CREATE TABLE "user"
+CREATE TABLE IF NOT EXISTS "user"
 (
     "id"           integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL,
     "username"     varchar NOT NULL,
@@ -9,7 +9,7 @@ CREATE TABLE "user"
     "desk_mode"    bool
 );
 
-CREATE TABLE "quest"
+CREATE TABLE IF NOT EXISTS "quest"
 (
     "id"               integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL,
     "user_id"          integer NOT NULL,
@@ -22,7 +22,7 @@ CREATE TABLE "quest"
     "box_open_times"   int
 );
 
-CREATE TABLE "task"
+CREATE TABLE IF NOT EXISTS "task"
 (
     "id"               integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL,
     "quest_id"         integer NOT NULL,
@@ -32,7 +32,7 @@ CREATE TABLE "task"
     "completion_state" bool
 );
 
-CREATE TABLE "box_open_record"
+CREATE TABLE IF NOT EXISTS "box_open_record"
 (
     "user_id"  integer NOT NULL,
     "quest_id" integer NOT NULL,
@@ -40,7 +40,7 @@ CREATE TABLE "box_open_record"
     PRIMARY KEY ("user_id", "quest_id", "time")
 );
 
-CREATE TABLE "pomodoro_quest"
+CREATE TABLE IF NOT EXISTS "pomodoro_quest"
 (
     "quest_id"   integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL,
     "focus_time" integer NOT NULL,

@@ -35,9 +35,7 @@ public class Database {
       throw new SQLException("Failed to initialize database connection or execute SQL file.", e);
     }
   }
-
-
-  public void AddUserToDatabase {
-    try
-  }
+    public void disconnect() throws SQLException {
+      connection.close();
+    }
 }

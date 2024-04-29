@@ -1,4 +1,4 @@
-CREATE TABLE "user"
+CREATE TABLE IF NOT EXISTS "user"
 (
     "id"           integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL,
     "username"     varchar NOT NULL,

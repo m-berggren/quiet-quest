@@ -53,8 +53,13 @@ public abstract class BaseController {
     mainController.loadView(FxmlFile.HELP);
   }
 
-  public void logout() {
+  public void showCreateUser() {
+    mainController.loadView(FxmlFile.CREATE_USER);
   }
+  public void showLogIn() {
+    mainController.loadView(FxmlFile.LOG_IN);
+  }
+
 
   public QuietQuestFacade getQuietQuestFacade() {
     return this.quietQuestFacade;

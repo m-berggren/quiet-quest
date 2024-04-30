@@ -1,13 +1,23 @@
 package quietquest.controller;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
+import quietquest.QuietQuestMain;
+import quietquest.utility.FxmlFile;
 
-public class LogInController extends BaseController {
+import java.io.IOException;
+
+public class LogInController {
     @FXML
     private TextField usernameField;
     @FXML
@@ -35,12 +45,24 @@ public class LogInController extends BaseController {
     public void onLogInClick() {
 
     }
-    public void onSignUpClick() {
-        // direct to sign-up page through facade
+    public void onSignUpClick(ActionEvent event) throws IOException {
+        loadFxml("create-user-view.fxml", event);
     }
     public void onTryAgainClick() {
 
     }
 
+    private void loadFxml(String fxmlFile, ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(QuietQuestMain.class.getResource(FxmlFile.MAIN));
+        Parent root = loader.load();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm()); // adding CSS styling option
+        stage.setScene(scene);
+        stage.show();
+
+        MainController controller = loader.getController();
+        controller.loadView(fxmlFile);
+    }
 
 }

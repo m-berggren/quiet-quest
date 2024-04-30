@@ -13,31 +13,6 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="760.0" prefWidth="1510.0" style="-fx-background-color: #C7F9CC;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="quietquest.controller.LogInController">
    <ImageView fitHeight="766.0" fitWidth="1516.0" layoutX="-2.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true" />
-   <Pane fx:id="popupPane" disable="true" layoutX="500.0" layoutY="200.0" prefHeight="200.0" prefWidth="512.0">
-      <children>
-         <Rectangle fx:id="popupTextbox" arcHeight="5.0" arcWidth="5.0" fill="#57cc99" height="200.0" stroke="#22577a" strokeType="INSIDE" style="-fx-arc-width: 15; -fx-arc-height: 15;" visible="false" width="512.0" />
-         <Text fx:id="popupText" fill="#22577a" layoutX="23.0" layoutY="61.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Account not found" textAlignment="CENTER" visible="false" wrappingWidth="466.782958984375">
-            <font>
-               <Font size="31.0" />
-            </font>
-         </Text>
-         <Text fx:id="popupSmallText" fill="#22577a" layoutX="19.0" layoutY="108.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Try again, or sign up if you don't have an account yet" textAlignment="CENTER" visible="false" wrappingWidth="474.00000000000006">
-            <font>
-               <Font size="19.0" />
-            </font>
-         </Text>
-         <Button fx:id="tryAgainButton" layoutX="70.0" layoutY="130.0" mnemonicParsing="false" onAction="#onTryAgainClick" prefHeight="43.0" prefWidth="146.0" style="-fx-font-family: Montserrat; -fx-font-size: 20; -fx-text-fill: #22577A; -fx-background-color: #38A3A5;" text="Try Again" textFill="#22577a" visible="false">
-            <font>
-               <Font size="16.0" />
-            </font>
-         </Button>
-         <Button fx:id="popupSignUpButton" layoutX="284.0" layoutY="130.0" mnemonicParsing="false" onAction="#onSignUpClick" prefHeight="43.0" prefWidth="146.0" style="-fx-font-family: Montserrat; -fx-font-size: 20; -fx-text-fill: #22577A; -fx-background-color: #38A3A5;" text="Sign Up" textFill="#22577a" visible="false">
-            <font>
-               <Font size="16.0" />
-            </font>
-         </Button>
-      </children>
-   </Pane>
     <Label layoutX="596.0" layoutY="81.0" text="Quiet Quest" textAlignment="CENTER" textFill="#22577a">
         <font>
             <Font size="60.0" />
@@ -79,4 +54,29 @@
       </font>
    </Text>
    <PasswordField fx:id="passwordField" layoutX="614.0" layoutY="293.0" prefHeight="40.0" prefWidth="270.0" />
+   <Pane fx:id="popupPane" disable="true" layoutX="500.0" layoutY="200.0" prefHeight="200.0" prefWidth="512.0" visible="false">
+      <children>
+         <Rectangle fx:id="popupTextbox" arcHeight="5.0" arcWidth="5.0" fill="#57cc99" height="200.0" stroke="#22577a" strokeType="INSIDE" style="-fx-arc-width: 15; -fx-arc-height: 15;" visible="false" width="512.0" />
+         <Text fx:id="popupText" fill="#22577a" layoutX="23.0" layoutY="61.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Account not found" textAlignment="CENTER" visible="false" wrappingWidth="466.782958984375">
+            <font>
+               <Font size="31.0" />
+            </font>
+         </Text>
+         <Text fx:id="popupSmallText" fill="#22577a" layoutX="19.0" layoutY="108.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Try again, or sign up if you don't have an account yet" textAlignment="CENTER" visible="false" wrappingWidth="474.00000000000006">
+            <font>
+               <Font size="19.0" />
+            </font>
+         </Text>
+         <Button fx:id="tryAgainButton" layoutX="70.0" layoutY="130.0" mnemonicParsing="false" onAction="#onTryAgainClick" prefHeight="43.0" prefWidth="146.0" style="-fx-font-family: Montserrat; -fx-font-size: 20; -fx-text-fill: #22577A; -fx-background-color: #38A3A5;" text="Try Again" textFill="#22577a" visible="false">
+            <font>
+               <Font size="16.0" />
+            </font>
+         </Button>
+         <Button fx:id="popupSignUpButton" layoutX="284.0" layoutY="130.0" mnemonicParsing="false" onAction="#onSignUpClick" prefHeight="43.0" prefWidth="146.0" style="-fx-font-family: Montserrat; -fx-font-size: 20; -fx-text-fill: #22577A; -fx-background-color: #38A3A5;" text="Sign Up" textFill="#22577a" visible="false">
+            <font>
+               <Font size="16.0" />
+            </font>
+         </Button>
+      </children>
+   </Pane>
 </AnchorPane>

@@ -7,7 +7,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import org.w3c.dom.Text;
 
-public class CreateUserController {
+public class CreateUserController extends BaseController{
     @FXML
     private TextField usernameTextField;
     @FXML

@@ -10,4 +10,5 @@ public class FxmlFile {
   public static final String STATISTICS = "statistics-view.fxml";
   public static final String SETTINGS = "settings-view.fxml";
   public static final String HELP = "help-view.fxml";
+  public static final String CREATE_USER = "create-user.fxml";
 }

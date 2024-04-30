@@ -53,6 +53,10 @@ public abstract class BaseController {
     mainController.loadView(FxmlFile.HELP);
   }
 
+  public void showCreateUser() {
+    mainController.loadView(FxmlFile.CREATE_USER);
+  }
+
   public void logout() {
   }
 

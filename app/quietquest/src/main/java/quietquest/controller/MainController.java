@@ -1,5 +1,6 @@
 package quietquest.controller;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -20,6 +21,8 @@ public class MainController extends BaseController {
   private Button createQuestButton;
   @FXML
   private Button questListButton;
+  @FXML
+  private Button createUserButton;
 
   @FXML
   private BorderPane mainPane;
@@ -43,6 +46,10 @@ public class MainController extends BaseController {
     showQuestList();
   }
 
+  public void onCreateUserClick() {
+    showCreateUser();
+  }
+
   public void loadView(String view) {
     try {
       FXMLLoader fxmlLoader = new FXMLLoader(QuietQuestMain.class.getResource(view));
@@ -54,4 +61,5 @@ public class MainController extends BaseController {
       throw new RuntimeException(e);
     }
   }
+
 }

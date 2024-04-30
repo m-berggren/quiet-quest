@@ -7,50 +7,54 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <BorderPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="760.0" prefWidth="1510.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="quietquest.controller.MainController">
    <left>
-      <VBox fx:id="sideMenu" prefHeight="760.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <Button fx:id="homeButton" mnemonicParsing="false" onAction="#onHomeButtonClick" prefHeight="60.0"
-                 prefWidth="200.0" text="Home">
+      <VBox fx:id="sideMenu" prefHeight="760.0" prefWidth="200.0" style="-fx-background-color: #C7F9CC;" BorderPane.alignment="CENTER">
+         <Button fx:id="homeButton" mnemonicParsing="false" onAction="#onHomeButtonClick" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: #C7F9CC; -fx-background-radius: 8; -fx-border-color: #57CC99; -fx-border-radius: 8;" text="Home">
             <VBox.margin>
-               <Insets top="150.0"/>
+               <Insets top="150.0" />
             </VBox.margin>
             <font>
-               <Font size="18.0"/>
+               <Font name="American Typewriter" size="18.0" />
             </font>
          </Button>
-         <Button fx:id="createQuestButton" mnemonicParsing="false" onAction="#onCreateQuestButtonClick"
-                 prefHeight="60.0" prefWidth="200.0" text="Create Quest">
+         <Button fx:id="createQuestButton" mnemonicParsing="false" onAction="#onCreateQuestButtonClick" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: #C7F9CC; -fx-background-radius: 8; -fx-border-color: #57CC99; -fx-border-radius: 8;" text="Create Quest">
             <font>
-               <Font size="18.0"/>
+               <Font name="American Typewriter" size="18.0" />
             </font>
          </Button>
-         <Button fx:id="questListButton" mnemonicParsing="false" onAction="#onQuestListButtonClick" prefHeight="60.0"
-                 prefWidth="200.0" text="Quest List">
+         <Button fx:id="questListButton" mnemonicParsing="false" onAction="#onQuestListButtonClick" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: #C7F9CC; -fx-background-radius: 8; -fx-border-color: #57CC99; -fx-border-radius: 8;" text="Quest List">
             <font>
-               <Font size="18.0"/>
+               <Font name="American Typewriter" size="18.0" />
             </font>
          </Button>
-         <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="200.0" text="Statistics">
+         <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: #C7F9CC; -fx-background-radius: 8; -fx-border-color: #57CC99; -fx-border-radius: 8;" text="Statistics">
             <font>
-               <Font size="18.0"/>
+               <Font name="American Typewriter" size="18.0" />
             </font>
          </Button>
-         <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="200.0" text="Settings">
+         <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: #C7F9CC; -fx-background-radius: 8; -fx-border-color: #57CC99; -fx-border-radius: 8;" text="Settings">
             <font>
-               <Font size="18.0"/>
+               <Font name="American Typewriter" size="18.0" />
             </font>
          </Button>
-         <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="200.0" text="Help">
+         <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: #C7F9CC; -fx-background-radius: 8; -fx-border-color: #57CC99; -fx-border-radius: 8;" text="Help">
             <font>
-               <Font size="18.0"/>
+               <Font name="American Typewriter" size="18.0" />
             </font>
          </Button>
-         <Label alignment="CENTER" prefHeight="50.0" prefWidth="200.0" text="Logout" textAlignment="RIGHT">
+         <Button fx:id="createUserButton" mnemonicParsing="false" onAction="#onCreateUserClick" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: #C7F9CC; -fx-background-radius: 8; -fx-border-color: #57CC99; -fx-border-radius: 8;" text="Create User">
+            <font>
+               <Font name="American Typewriter" size="18.0" />
+            </font>
+         </Button>
+         <Label alignment="CENTER" prefHeight="50.0" prefWidth="200.0" style="-fx-border-color: #57CC99; -fx-border-radius: 10;" text="Logout" textAlignment="RIGHT">
             <VBox.margin>
-               <Insets top="100.0"/>
+               <Insets top="100.0" />
             </VBox.margin>
+            <font>
+               <Font name="American Typewriter" size="18.0" />
+            </font>
          </Label>
       </VBox>
    </left>

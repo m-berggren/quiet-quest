@@ -56,6 +56,10 @@ public abstract class BaseController {
   public void showCreateUser() {
     mainController.loadView(FxmlFile.CREATE_USER);
   }
+
+  public void showLogOut() {
+
+  }
   public void showLogIn() {
     mainController.loadView(FxmlFile.LOG_IN);
   }

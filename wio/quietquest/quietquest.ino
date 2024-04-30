@@ -4,26 +4,26 @@
 #include "utils.h"
 #include "mqtt_config.h"
 #include "pins.h"
+#include "display_config.h"
 
 // Initializations
-#define PIR_MOTION_SENSOR PIN_WIRE_SCL
 Ultrasonic ultrasonic(PIN_WIRE_SCL);
 
-TFT_eSPI tft;
-
 void setup() {
-  pinMode(LIGHT_PIN, INPUT);
-  pinMode(MOTION_PIN, INPUT);
-  pinMode(DISTANCE_PIN, INPUT);
+  pinMode(LIGHT_PIN, INPUT);                        //
+  pinMode(MOTION_PIN, INPUT);                       //
+  pinMode(DISTANCE_PIN, INPUT);                     //
 
-  Serial.begin(BAUD_RATE);
+  Serial.begin(BAUD_RATE);                          //
 
   // initiate tft screen
   tft.begin();
-  tft.setRotation(1);                         // Screen turns upside-down, 3 is standard rotation
-
-  client.setServer(SERVER, PORT);             //
-  client.setCallback(callback);               //
+  tft.setRotation(1);                               // Screen turns upside-down, 3 is standard rotation
+  
+  client.setServer(SERVER, PORT);
+  client.setCallback(callback);                     // Callback method used in cpp file for MQTT setup
+  setupNetwork();                                   // Setup wifi and MQTT broker connection
+  
 }
 
 void loop() {
@@ -36,7 +36,6 @@ void loop() {
 
   // Logic for led light & sound
   // TODO
-
 
   // Prints to serial monitor if interval has passed
   if (isTimeToUpdate()) {
@@ -58,6 +57,6 @@ void loop() {
     client.publish(TOPIC_PUB_DISTANCE, toString(distanceReading));                // Publishes int value as String
   }
 
-  // Check connections
-  checkMqttAndWifiConnections();                                                  // 
+  // Check wifi and MQTT connections
+  checkConnections();                                                             // 
 }

@@ -1,71 +1,41 @@
 #include "mqtt_config.h"                                            // Linked header file
 
-WiFiClient wifiClient;                                               // Initializes Wifi client
-PubSubClient client(wifiClient);                                     // Used to subscribe and loop connection
-
-// Topics for publishing payload data
-const char* TOPIC_PUB_MOTION    = "/quietquest/sensor/motion";
-const char* TOPIC_PUB_DISTANCE  = "/quietquest/sensor/distance";
-const char* TOPIC_PUB_QUEST     = "/quietquest/sensor/connect";
-const char* TOPIC_PUB_LIGHT     = "/quietquest/sensor/light";
-
-// Topics for subscribing to data
-const char* TOPIC_SUB_QUEST     = "/quietquest/application/start";
+WiFiClient wifiClient; 
+PubSubClient client(wifiClient);
 
 /**
  * TODO
 */
-void checkMqttAndWifiConnections() {
-  if (!wifiConnected) {
-    setupWifi();
+void callback(char* topic, byte* payload, unsigned int length) {
+  Serial.print(String("Message arrived [") + topic + "]:"); // Combining topic of type char* and the string of const char[] with aid of String()
+
+  char *txt = (char *)malloc(length + 1);
+  memcpy(txt, payload, length);
+  txt[length] = '\0';
+
+  Serial.println(txt);
+  free(txt);
+
+  if (strcmp(topic, TOPIC_SUB_QUEST) == 0) {
+    // TODO
   }
-
-  if (!mqttConnected()) {
-    setupClient();
-  }
-
-  client.loop();
-
 }
 
 /**
  * TODO
 */
-void subscribeToTopics() {
-  // Start subscribing
-  Serial.println(String("Subscribed to: ") + TOPIC_SUB_QUEST);
-  client.subscribe(TOPIC_SUB_QUEST);
-  
-
+void setupNetwork() {
+  setupWifi(); // Uses Wifi.begin 
+  setupMqtt(); // 
 }
 
-/**
- * TODO
-*/
-void setupClient() {
-  Serial.print("Attempting MQTT connection...");
 
-  //Create a random client ID
-  String clientID = "QuietQuest-terminal-";
-  clientID += String(random(0xffff), HEX);
-
-  while (!client.connected()) {
-    //try to connect
-    Serial.println(String("Failed, returned: ") + client.state());
-    Serial.println("Trying again ...");
-    client.connect(clientID.c_str());                                    // Attempts to connect client to MQTT broker
-  }
-     
-  Serial.println("Connected to broker.");
-  subscribeToTopics();                                                   // Starts subscribing to topics
-}
-
+// Network-related
 /**
  * TODO
 */
 void setupWifi() {
   Serial.println(String("Attempting to connect to SSID: ") + SSID); // Combining SSID of type char* and the string of const char[] with aid of String()
-
 
   while (!wifiConnected()) {
     delay(500);
@@ -76,6 +46,32 @@ void setupWifi() {
   Serial.print("WiFi connected with IP address: ");
   Serial.println(WiFi.localIP());
 }
+
+// MQTT-related
+
+/**
+ * TODO
+*/
+void setupMqtt() {
+  Serial.print("Attempting MQTT connection...");
+
+  //Create a random client ID
+  String clientID = "QuietQuest-terminal-";
+  clientID += String(random(0xffff), HEX);
+  int iter_count = 0;
+
+  while (!client.connected() && iter_count <= LOOP_LIMIT) { // Restrict maximum amount of retries
+    //try to connect
+    Serial.println(String("Failed, returned: ") + client.state());
+    Serial.println("Trying again ...");
+    client.connect(clientID.c_str());                                    // Attempts to connect client to MQTT broker
+    delay(3000);
+  }
+     
+  Serial.println("Connected to broker.");                                // Starts subscribing to topics
+}
+
+// Checks
 
 /**
  * TODO
@@ -97,18 +93,15 @@ bool mqttConnected() {
 /**
  * TODO
 */
-void callback(char *topic, byte *payload, unsigned int length) {
-  Serial.print(String("Message arrived [") + topic + "]:"); // Combining topic of type char* and the string of const char[] with aid of String()
-
-  char *txt = (char *)malloc(length + 1);
-  memcpy(txt, payload, length);
-  txt[length] = '\0';
-
-  if (strcmp(topic, TOPIC_SUB_QUEST) == 0) {
-    //show(txt);
-    delay(2000);
+void checkConnections() {
+  if (!wifiConnected()) {
+    setupWifi();
   }
 
-  //free(txt);
-  Serial.println();
+  if (!mqttConnected()) {
+    setupMqtt();
+  }
+
+  client.loop();
+
 }

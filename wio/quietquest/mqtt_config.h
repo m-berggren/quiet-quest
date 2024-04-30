@@ -1,31 +1,20 @@
-#ifndef MQTT_CONFIG_H  // Makes sure mgtt.h it only runs once
+#ifndef MQTT_CONFIG_H           // Makes sure header file only runs once
 #define MQTT_CONFIG_H
 
 #include <WiFi.h>               // Wifi library
-#include <rpcWiFi.h>            // Wifi library
-#include <PubSubClient.h>       //
+#include <PubSubClient.h>       // Library used for connectiong to MQTT
 #include "credentials.h"        // SSID and PASSWORD information
+#include "utils.h"              // Stored global variables
 
+extern WiFiClient wifiClient; 
+extern PubSubClient client;     // Extern tells the compiler these variables will be defined in cpp file
 
-extern WiFiClient wifiClient;           // Wifi client
-extern PubSubClient client;             // Used to subscribe and loop connection, extern made available elsewhere
-
-// Topics for publishing payload data
-extern const char* TOPIC;
-extern const char* TOPIC_PUB_MOTION;
-extern const char* TOPIC_PUB_DISTANCE;
-extern const char* TOPIC_PUB_QUEST;
-extern const char* TOPIC_PUB_LIGHT;
-
-// Topics for subscribing to data
-extern const char *TOPIC_SUB_QUEST;
-
-extern void checkMqttAndWifiConnections();
+extern void setupNetwork();
 void setupWifi();
-void setupClient();
-void subscribeToTopics();
+void setupMqtt();
 extern bool wifiConnected();
 extern bool mqttConnected();
-extern void callback(char *topic, byte *payload, unsigned int length);
+extern void checkConnections();
+extern void callback(char* topic, byte* payload, unsigned int length);
 
-#endif          // Ends the check
+#endif                          // MQTT_CONTROLLER_H

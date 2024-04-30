@@ -1,17 +1,25 @@
-#include "TFT_eSPI.h"
+#include <TFT_eSPI.h>
 #include "Ultrasonic.h"
 #include <string.h>
+#include "ChainableLED.h"
 #include "utils.h"
 #include "mqtt_config.h"
 #include "pins.h"
 #include "display_config.h"
-#include <ChainableLED.h>
 #include "Tune.h"
 
 // Initializations
 Ultrasonic ultrasonic(PIN_WIRE_SCL);
 ChainableLED led(LED_CLK_PIN, LED_DATA_PIN, NUM_LEDS);
+
+
 bool isBoxClosed;
+String wifiStatus;
+String mqttStatus;
+String motionStatus;
+int lightValue;
+long distanceValue;
+String boxStatus;
 
 void setup() {
   pinMode(LIGHT_PIN, INPUT);                        //
@@ -25,7 +33,7 @@ void setup() {
   led.init();
 
   // initiate tft screen
-  displaySetup();                                   // Uses tft library and sets up display rotation 1
+  displaySetup();                                  
   
   client.setServer(SERVER, PORT);
   client.setCallback(callback);                     // Callback method used in cpp file for MQTT setup
@@ -65,26 +73,33 @@ void loop() {
     }
 
 
-  // Prints to serial monitor if interval has passed
+  // Prints to serial monitor and LCD screen if interval has passed
   if (isTimeToUpdate()) {
-    Serial.printf("    Wifi connected: %s\n", wifiConnected() ? "Yes" : "No");    //
-    Serial.printf("    MQTT connected: %s\n", mqttConnected() ? "Yes" : "No");    //
-    Serial.printf("   Motion detected: %s\n", motionReading ? "Yes" : "No");      //
-    Serial.printf("    Light measured: %d\n", lightReading);                      //
-    Serial.printf("Distance to object: %ld\n", distanceReading);                  //
-    Serial.printf("     Is box closed: %s\n", isBoxClosed ? "Yes" : "No");        //
-    Serial.println();
-  }
+    wifiStatus = wifiConnected() ? "Yes" : "No";
+    mqttStatus = mqttConnected() ? "Yes" : "No";
+    motionStatus = motionReading ? "Yes" : "No";
+    lightValue = lightReading;
+    distanceValue = distanceReading;
+    boxStatus = isBoxClosed ? "Yes" : "No";
 
-  // Updates LCD screen if interval has passed"
-  // TODO
 
-  // Publishes if connection to broker exists
-  if (mqttConnected()) {
-    client.publish(TOPIC_PUB_QUEST, "1");                                         // Publishes '1' if mqttConnected
-    client.publish(TOPIC_PUB_MOTION, toString(motionReading));                    // Publishes '1' or '0'
-    client.publish(TOPIC_PUB_LIGHT, toString(lightReading));                      // Publishes int value as String
-    client.publish(TOPIC_PUB_DISTANCE, toString(distanceReading));                // Publishes int value as String
+    Serial.printf("    Wifi connected: %s\n", wifiStatus.c_str());    //
+    Serial.printf("    MQTT connected: %s\n", mqttStatus.c_str());   //
+    Serial.printf("   Motion detected: %s\n", motionStatus.c_str()); //
+    Serial.printf("    Light measured: %d\n", lightValue);           //
+    Serial.printf("Distance to object: %ld\n", distanceValue);       //
+    Serial.printf("     Is box closed: %s\n", boxStatus.c_str());    //
+    Serial.println("================================");
+  
+    drawOnScreen(wifiStatus, mqttStatus, motionStatus, lightValue, distanceValue, boxStatus);
+
+    // Publishes if connection to broker exists
+    if (mqttConnected()) {
+      client.publish(TOPIC_PUB_QUEST, "1");                                         // Publishes '1' if mqttConnected
+      client.publish(TOPIC_PUB_MOTION, toString(motionReading));                    // Publishes '1' or '0'
+      client.publish(TOPIC_PUB_LIGHT, toString(lightReading));                      // Publishes int value as String
+      client.publish(TOPIC_PUB_DISTANCE, toString(distanceReading));                // Publishes int value as String
+    }
   }
 
   // Check wifi and MQTT connections

@@ -36,17 +36,9 @@ public class Database {
     } catch (Exception e) {
       throw new SQLException("Failed to initialize database connection or execute SQL file.", e);
     }
-
-    // method calls below
-    insertData();
   }
-    public void disconnect() throws SQLException {
-      connection.close();
-    }
-
-  public void insertData() throws SQLException {
-    String userData = "INSERT INTO \"user\" (username, password, created_at, app_sound, sensor_sound, desk_mode)"
-            + " VALUES ('julia', 'taylorswift', current_date, true, true, true)";
+  public void disconnect() throws SQLException {
+    connection.close();
   }
 
   /**
@@ -55,6 +47,7 @@ public class Database {
    * @return
    * @throws SQLException
    */
+
   public boolean checkIfUsernameExists(String username) throws SQLException {
     String sql = "SELECT * FROM \"user\" WHERE username = ?";
     PreparedStatement pstmt = null;
@@ -102,5 +95,4 @@ public class Database {
 
     return correctPassword;
   }
-
 }

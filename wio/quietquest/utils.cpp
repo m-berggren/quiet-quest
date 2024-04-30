@@ -1,9 +1,12 @@
 #include "utils.h"     // Include header file
 
+// ==========================* SENSOR METHODS *======================
+
 /**
  * Aimed to reduce side effects delay() function has that it stops most activity on the terminal.
- * Ideas adapted from below site. Millis() returns millisecons passed since wio terminal ran the program
+ * Ideas adapted from below site. Millis() returns milliseconds passed since wio terminal ran the program
  * https://forum.arduino.cc/t/using-millis-for-timing-a-beginners-guide/483573
+ * @return
 */
 bool isTimeToUpdate() {
     static unsigned long startMillis = millis();          // Initialize once and remember across calls
@@ -25,8 +28,14 @@ int mapToPercentage(int lightValue) {
     return map(lightValue, MIN_READING, MAX_READING, 0, 100);
 }
 
+/**
+ * TODO
+ * @param value
+ * @return
+ */
 char* toString(int value) {
-    static char strValue[4];        // Static for retaining data between calls. Memory is allocated once and the pointer can point to valid memory slot
+    // Static for retaining data between calls. Memory is allocated once and the pointer can point to valid memory slot
+    static char strValue[4];
     sprintf(strValue, "%d", value);
     return strValue;
 }

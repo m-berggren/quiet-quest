@@ -1,63 +1,79 @@
 #include "display_config.h"
 
-TFT_eSPI tft = TFT_eSPI();                      // Create instance for the display
-//TFT_eSPI tft;                      // Create instance for the display
+TFT_eSPI tft = TFT_eSPI();                              // Create instance for the display
 
-//uint16_t displayBuffer[WIDTH * HEIGHT];
+// ==========================* SETUP SCREEN *========================
 
+/**
+ * TODO
+ */
 void displaySetup() {
     tft.begin();
-    tft.setRotation(1);                               // Screen turns upside-down, 3 is standard rotation
+    tft.setRotation(1);                                 // Screen turns upside-down, 3 is standard rotation
     drawStaticElements();
 }
 
-void drawOnScreen(String wifi, String mqtt, String motion, int light, long distance, String box) {
-    tft.fillRect(250, 50, 320, 240, TFT_BLACK); // Clear previous values
+// ==========================* DRAW ON SCREEN *======================
 
-    drawValue(wifi.c_str(), 50);
-    drawValue(mqtt.c_str(), 80);
-    drawValue(motion.c_str(), 110);
-    drawValue(String(light).c_str(), 140);
-    drawValue(String(distance).c_str(), 170);
-    drawValue(box.c_str(), 200);
+/**
+ * TODO
+ * @param wifi
+ * @param mqtt
+ * @param motion
+ * @param light
+ * @param distance
+ * @param box
+ */
+void drawOnScreen(String wifi, String mqtt, String motion, int light, long distance, String box) {
+    tft.fillRect(250, 50, 320, 240, TFT_BLACK);         // Clear previous values
+
+    drawValue(wifi.c_str(), WIFI_Y);
+    drawValue(mqtt.c_str(), MQTT_Y);
+    drawValue(motion.c_str(), MOTION_Y);
+    drawValue(String(light).c_str(), LIGHT_Y);
+    drawValue(String(distance).c_str(), DISTANCE_Y);
+    drawValue(box.c_str(), BOX_Y);
 }
 
 /**
- * Initializes buffer, sets background and calls on s
-*/
-void initializeBuffer() {
-    /*
-    for (size_t i = 0; i < WIDTH * HEIGHT; i++) {
-    displayBuffer[i] = TFT_BLACK; // Sets all pixels with default background color
-    }
-    */
-    drawStaticElements();
-}
-
+ * TODO
+ */
 void drawStaticElements() {
     tft.fillScreen(TFT_BLACK);  // Clear the screen
-    tft.setTextSize(3);
-    tft.setTextColor(0x97d0);
+    tft.setTextSize(HEADER_FONT_SIZE);
+    tft.setTextColor(QUIET_GREEN);
 
     tft.drawString("Quiet Quest", 50 , 10);
     tft.drawLine(0, 40, 320, 40, TFT_WHITE); // Horizontal line under title
-    drawLabel("    Wifi connected:", 50);
-    drawLabel("    MQTT connected:", 80);
-    drawLabel("   Motion detected: ", 110);
-    drawLabel("    Light measured: ", 140);
-    drawLabel("Distance to object: ", 170);
-    drawLabel("     Is box closed: ", 200);
+    drawLabel("    Wifi connected:", WIFI_Y);
+    drawLabel("    MQTT connected:", MQTT_Y);
+    drawLabel("   Motion detected: ", MOTION_Y);
+    drawLabel("    Light measured: ", LIGHT_Y);
+    drawLabel("Distance to object: ", DISTANCE_Y);
+    drawLabel("     Is box closed: ", BOX_Y);
 }
 
+// ==========================* HELPER METHODS *======================
+
+/**
+ * TODO
+ * @param label
+ * @param yPosition
+ */
 void drawLabel(const char* label, int yPosition) {
-    //tft.setTextColor(TFT_WHITE, TFT_BLACK); // Sets text color with the background
-    tft.setTextColor(0x97d0);
-    tft.setTextSize(2); // Textsize
-    tft.drawString(label, 10, yPosition); // Draws string at specific position
+    
+    tft.setTextColor(QUIET_GREEN);
+    tft.setTextSize(NORMAL_FONT_SIZE);
+    tft.drawString(label, NORMAL_INDENTATION, yPosition); // Draws string at specific position
 }
 
+/**
+ * TODO
+ * @param value
+ * @param yPosition
+ */
 void drawValue(const char* value, int yPosition) {
     tft.setTextColor(TFT_WHITE, TFT_BLACK);
-    tft.setTextSize(2); // Textsize
-    tft.drawString(value, 250, yPosition); // Draws string at specific position
+    tft.setTextSize(NORMAL_FONT_SIZE);
+    tft.drawString(value, VALUE_INDENTATION, yPosition); // Draws string at specific position
 }

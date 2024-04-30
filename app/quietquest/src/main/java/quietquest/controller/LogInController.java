@@ -7,6 +7,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
@@ -14,14 +15,17 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import quietquest.QuietQuestMain;
 import quietquest.utility.FxmlFile;
+import quietquest.model.Database;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 public class LogInController {
     @FXML
     private TextField usernameField;
     @FXML
-    private TextField passwordField;
+    private PasswordField passwordField;
     @FXML
     private Button logInButton;
     @FXML
@@ -43,19 +47,19 @@ public class LogInController {
     private String password;
 
     /**
-     * Load start page upon clicking "Log In" if user credentials match what is in the database
+     * Load start page upon clicking "Log In" if user credentials match what is in the database.
+     * If inputted credentials are incorrect, show a popup message.
      */
-    public void onLogInClick(ActionEvent event) throws IOException {
+    public void onLogInClick (ActionEvent event) throws IOException, SQLException {
         username = usernameField.getText();
         password = passwordField.getText();
-
-        /*if (username && password match database) {
-            loadFxml("start-view.fxml", event);
-        } else {
+        Database database = new Database();
+        if (database.checkIfUsernameExists(username) && database.checkIfPasswordCorrect(username, password)) {
+            loadFxml("create-quest-view.fxml", event);
+        } else { // username does not exist OR wrong password
             showPopup();
         }
-
-         */
+        database.disconnect();
     }
 
     /**
@@ -64,11 +68,12 @@ public class LogInController {
      * @throws IOException
      */
     public void onSignUpClick(ActionEvent event) throws IOException {
-        loadFxml("create-user-view.fxml", event);
+        loadFxml("create-user.fxml", event);
     }
 
     /**
-     * Clear username and password fields upon clicking "Try Again" button. Does not show popup message
+     * Clear username and password fields upon clicking "Try Again" button
+     * Allow user to try again (popup message disappears)
      */
     public void onTryAgainClick() {
         usernameField.clear();
@@ -77,7 +82,8 @@ public class LogInController {
     }
 
     /**
-     * Show popup message and disable all other buttons and text fields
+     * Show popup message
+     * Disable all other buttons and text fields
      */
     public void showPopup() {
         // show popup elements
@@ -134,5 +140,4 @@ public class LogInController {
         MainController controller = loader.getController();
         controller.loadView(fxmlFile);
     }
-
 }

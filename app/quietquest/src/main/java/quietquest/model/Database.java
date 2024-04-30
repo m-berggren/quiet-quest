@@ -10,6 +10,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 import java.util.stream.Collectors;
+import java.sql.PreparedStatement;
+import java.sql.*;
 
 public class Database {
   private Connection connection;
@@ -34,8 +36,71 @@ public class Database {
     } catch (Exception e) {
       throw new SQLException("Failed to initialize database connection or execute SQL file.", e);
     }
+
+    // method calls below
+    insertData();
   }
     public void disconnect() throws SQLException {
       connection.close();
     }
+
+  public void insertData() throws SQLException {
+    String userData = "INSERT INTO \"user\" (username, password, created_at, app_sound, sensor_sound, desk_mode)"
+            + " VALUES ('julia', 'taylorswift', current_date, true, true, true)";
+  }
+
+  /**
+   * Check if the provided username exists in the database
+   * @param username
+   * @return
+   * @throws SQLException
+   */
+  public boolean checkIfUsernameExists(String username) throws SQLException {
+    String sql = "SELECT * FROM \"user\" WHERE username = ?";
+    PreparedStatement pstmt = null;
+    ResultSet rs = null;
+    boolean usernameExists = false;
+
+    pstmt = connection.prepareStatement(sql);
+    pstmt.setString(1, username);
+    rs = pstmt.executeQuery();
+
+    if (rs.next()) {
+      int count = rs.getInt(1);
+      usernameExists = count > 0;
+    }
+    rs.close();
+    pstmt.close();
+
+    return usernameExists;
+  }
+
+  /**
+   * Check if the provided password matches the provided username
+   * @param username
+   * @param password
+   * @return
+   * @throws SQLException
+   */
+  public boolean checkIfPasswordCorrect(String username, String password) throws SQLException {
+    String sql = "SELECT * FROM \"user\" WHERE username = ? AND password = ?";
+    PreparedStatement pstmt = null;
+    ResultSet rs = null;
+    boolean correctPassword = false;
+
+    pstmt = connection.prepareStatement(sql);
+    pstmt.setString(1, username);
+    pstmt.setString(2, password);
+    rs = pstmt.executeQuery();
+
+    if (rs.next()) {
+      int count = rs.getInt(1);
+      correctPassword = count > 0;
+    }
+      rs.close();
+      pstmt.close();
+
+    return correctPassword;
+  }
+
 }

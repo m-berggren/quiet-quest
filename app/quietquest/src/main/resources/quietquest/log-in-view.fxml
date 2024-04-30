@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -62,12 +63,12 @@
          <Font size="18.0" />
       </font>
    </Text>
-   <TextField fx:id="usernameField" layoutX="614.0" layoutY="218.0" prefHeight="26.0" prefWidth="270.0">
+   <Text fill="#22577a" layoutX="614.0" layoutY="207.0" strokeType="OUTSIDE" strokeWidth="0.0" text="USERNAME" wrappingWidth="270.4">
       <font>
          <Font size="18.0" />
       </font>
-   </TextField>
-   <TextField fx:id="passwordField" layoutX="613.0" layoutY="293.0" prefHeight="26.0" prefWidth="270.0">
+   </Text>
+   <TextField fx:id="usernameField" layoutX="614.0" layoutY="218.0" prefHeight="26.0" prefWidth="270.0">
       <font>
          <Font size="18.0" />
       </font>
@@ -77,9 +78,5 @@
          <Font size="18.0" />
       </font>
    </Text>
-   <Text fill="#22577a" layoutX="614.0" layoutY="207.0" strokeType="OUTSIDE" strokeWidth="0.0" text="USERNAME" wrappingWidth="270.4">
-      <font>
-         <Font size="18.0" />
-      </font>
-   </Text>
+   <PasswordField fx:id="passwordField" layoutX="614.0" layoutY="293.0" prefHeight="40.0" prefWidth="270.0" />
 </AnchorPane>

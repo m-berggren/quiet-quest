@@ -21,7 +21,7 @@ bool isTimeToUpdate() {
  * @param lightValue - signal coming from light sensor
  * @return int - mapped value
 */
-int mapToPercentage(int lightValue) { // map not functioning 
+int mapToPercentage(int lightValue) {
     return map(lightValue, MIN_READING, MAX_READING, 0, 100);
 }
 

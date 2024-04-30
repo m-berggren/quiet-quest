@@ -17,7 +17,19 @@ void callback(char* topic, byte* payload, unsigned int length) {
   free(txt);
 
   if (strcmp(topic, TOPIC_SUB_QUEST) == 0) {
-    // TODO
+    if(strcmp(txt, "Your quest has started") == 0) {
+        // TODO: implement to show text on terminal
+        int beats[] = { 1, 1, 1, 4, 10 };
+        questStart.playTune(5, "cegC ", beats, 100);
+    } else if (strcmp(txt, "You have completed your quest!") == 0) {
+        // TODO: implement to show text on terminal
+        int beats[] = { 3, 3, 3, 7, 10 };
+        questStop.playTune(5, "bgec ", beats, 100);
+    } else if (strcmp(txt, "You have completed a task!") == 0) {
+        // TODO: implement to show text on terminal
+        int beats[] = { 1, 8, 10 };
+        taskStop.playTune(3, "cc ", beats, 100);
+    }
   }
 }
 

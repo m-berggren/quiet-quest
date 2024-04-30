@@ -45,6 +45,7 @@ javafx {
 
 dependencies {
   implementation 'com.hivemq:hivemq-mqtt-client:1.2.1'
+  implementation group: 'org.postgresql', name: 'postgresql', version: '42.7.3'
 
   testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")

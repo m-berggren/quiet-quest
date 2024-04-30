@@ -5,6 +5,7 @@
 #include <PubSubClient.h>       // Library used for connectiong to MQTT
 #include "credentials.h"        // SSID and PASSWORD information
 #include "utils.h"              // Stored global variables
+#include "Tune.h"               // Using questStart from Tune class
 
 extern WiFiClient wifiClient; 
 extern PubSubClient client;     // Extern tells the compiler these variables will be defined in cpp file

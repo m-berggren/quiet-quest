@@ -5,6 +5,8 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -17,6 +19,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.cell.CheckBoxListCell;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 
@@ -27,7 +30,7 @@ public class QuestController extends BaseController implements Initializable, UI
     @FXML
     private Button completeQuestButton;
     @FXML
-    private ListView<String> tasksListView;
+    private ListView<Task> tasksListView;
     @FXML
     private Label titleLabel;
     @FXML
@@ -46,46 +49,67 @@ public class QuestController extends BaseController implements Initializable, UI
 
     private MQTTHandler mqttClient;
 
-    private String selectedTask;
+    //private String selectedTask;
+    private ArrayList<Task> tasks;
+    private ObservableList<Task> data;
+
 
 
 
     public void initialize(URL arg0, ResourceBundle arg1) {
         mqttClient = new MQTTHandler(this);
+
     }
 
 
     @Override
     protected void afterMainController() {
         Quest quest = quietQuestFacade.getQuestManager().getQuestSelection();
-        //Task tasks = quietQuestFacade.getQuestManager().getTaskSelection();
+        Task tasks = quietQuestFacade.getQuestManager().getTaskSelection();
         titleLabel.setText(quest.getTitle());
         //descLabel.setText(quest.getDescription());
-        //tasksListView.getItems().addAll(quest.getTasks());
+        tasksListView.getItems().addAll(tasks);
+        data = FXCollections.observableArrayList(tasks);
+        tasksListView.setItems(data);
         setSelectedTask();
         setCheckBoxListCell();
+        displayTasks();
+
+
 
     }
+
+    public void displayTasks(){
+        tasksListView.getItems().addAll();
+        data = FXCollections.observableArrayList(tasks);
+        tasksListView.setItems(data);
+       }
+
 
 
     private void setSelectedTask() {
-        tasksListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+        tasksListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Task>() {
             @Override
-            public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
-                selectedTask = tasksListView.getSelectionModel().getSelectedItem();
+            public void changed(ObservableValue<? extends Task> observableValue, Task oldValue, Task newValue) {
+                tasksListView.getSelectionModel().getSelectedItem();
+                tasksListView.getItems().addAll(tasks);
+                data = FXCollections.observableArrayList(tasks);
+                tasksListView.setItems(data);
             }
         });
+
     }
 
     private void setCheckBoxListCell(){
-        tasksListView.setCellFactory(CheckBoxListCell.forListView(new Callback<String, ObservableValue<Boolean>>() {
+        tasksListView.setCellFactory(CheckBoxListCell.forListView(new Callback<Task, ObservableValue<Boolean>>() {
             @Override
-            public ObservableValue<Boolean> call(String selectedTask) {
+            public ObservableValue<Boolean> call(Task task) {
                 BooleanProperty observable = new SimpleBooleanProperty();
                 observable.addListener((obs, wasSelected, isNowSelected) ->
-                        System.out.println("Check box for "+selectedTask+" changed from "+wasSelected+" to "+isNowSelected)
+                        System.out.println("Check box for "+tasks+" changed from "+wasSelected+" to "+isNowSelected)
+
                 );
-                return observable ;
+                return observable;
             }
         }));
 

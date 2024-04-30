@@ -33,7 +33,7 @@ public class QuestManager {
   public void deleteQuest(String title) {
     quests.remove(title);
   }
-  public void deleteTask(String task){
+  public void deleteTask(Task task){
     tasks.remove(task);
   }
 

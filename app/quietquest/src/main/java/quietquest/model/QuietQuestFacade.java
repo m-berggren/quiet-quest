@@ -27,7 +27,7 @@ public class QuietQuestFacade {
     questManager.deleteQuest(title);
   }
 
-  public void deleteTask(String task){questManager.deleteTask(task);}
+  public void deleteTask(Task task){questManager.deleteTask(task);}
 
   public void setQuestSelection(Quest quest) {
     questManager.setQuestSelection(quest);

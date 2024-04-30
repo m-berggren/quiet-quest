@@ -42,16 +42,86 @@ public class LogInController {
     private String username;
     private String password;
 
-    public void onLogInClick() {
+    /**
+     * Load start page upon clicking "Log In" if user credentials match what is in the database
+     */
+    public void onLogInClick(ActionEvent event) throws IOException {
+        username = usernameField.getText();
+        password = passwordField.getText();
 
+        /*if (username && password match database) {
+            loadFxml("start-view.fxml", event);
+        } else {
+            showPopup();
+        }
+
+         */
     }
+
+    /**
+     * Load sign-up page upon clicking "Sign Up" button
+     * @param event
+     * @throws IOException
+     */
     public void onSignUpClick(ActionEvent event) throws IOException {
         loadFxml("create-user-view.fxml", event);
     }
-    public void onTryAgainClick() {
 
+    /**
+     * Clear username and password fields upon clicking "Try Again" button. Does not show popup message
+     */
+    public void onTryAgainClick() {
+        usernameField.clear();
+        passwordField.clear();
+        doNotShowPopup();
     }
 
+    /**
+     * Show popup message and disable all other buttons and text fields
+     */
+    public void showPopup() {
+        // show popup elements
+        popupPane.setDisable(false);
+        popupPane.setVisible(true);
+        popupText.setVisible(true);
+        popupTextbox.setVisible(true);
+        popupSmallText.setVisible(true);
+        popupSignUpButton.setVisible(true);
+        tryAgainButton.setVisible(true);
+
+        // disable regular buttons/text fields
+        signUpButton.setDisable(true);
+        logInButton.setDisable(true);
+        usernameField.setDisable(true);
+        passwordField.setDisable(true);
+    }
+
+    /**
+     * Make popup invisible and enable regular buttons and text fields
+     */
+    public void doNotShowPopup() {
+        // do not show popup elements
+        popupPane.setDisable(true);
+        popupPane.setVisible(false);
+        popupText.setVisible(false);
+        popupTextbox.setVisible(false);
+        popupSmallText.setVisible(false);
+        popupSignUpButton.setVisible(false);
+        tryAgainButton.setVisible(false);
+
+        // enable regular buttons/text fields
+        signUpButton.setDisable(false);
+        logInButton.setDisable(false);
+        usernameField.setDisable(false);
+        passwordField.setDisable(false);
+    }
+
+    /**
+     * Method used to load the page specified
+     * @param fxmlFile specifies the page that is loaded
+     * @param event
+     * @throws IOException
+     */
     private void loadFxml(String fxmlFile, ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(QuietQuestMain.class.getResource(FxmlFile.MAIN));
         Parent root = loader.load();

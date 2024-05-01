@@ -1,4 +1,4 @@
-image: gradle:alpine
+image: amazoncorretto:21-alpine-jdk
 
 before_script:
   - GRADLE_USER_HOME="$(pwd)/.gradle"

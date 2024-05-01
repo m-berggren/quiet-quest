@@ -12,12 +12,16 @@
 
 image: gradle:alpine
 
+
+
 before_script:
   - GRADLE_USER_HOME="$(pwd)/.gradle"
   - export GRADLE_USER_HOME
 
 build:
   stage: build
+  tags:
+    - docker
   script: gradle --build-cache assemble
   cache:
     key: "$CI_COMMIT_REF_NAME"
@@ -28,6 +32,8 @@ build:
 
 test:
   stage: test
+  tags:
+    - docker
   script: gradle check
   cache:
     key: "$CI_COMMIT_REF_NAME"
@@ -36,6 +42,3 @@ test:
       - build
       - .gradle
 
-job:
-  tags:
-    - docker

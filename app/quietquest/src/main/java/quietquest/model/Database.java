@@ -10,6 +10,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 import java.util.stream.Collectors;
+import java.sql.PreparedStatement;
+import java.sql.*;
 
 public class Database {
   private Connection connection;
@@ -35,7 +37,50 @@ public class Database {
       throw new SQLException("Failed to initialize database connection or execute SQL file.", e);
     }
   }
-    public void disconnect() throws SQLException {
-      connection.close();
+  public void disconnect() throws SQLException {
+    connection.close();
+  }
+
+  /**
+   * Check if the provided username exists in the database
+   * @param username
+   * @return
+   * @throws SQLException
+   */
+
+  public boolean checkIfUsernameExists(String username) throws SQLException {
+    String sql = "SELECT * FROM \"user\" WHERE username = ?";
+    boolean usernameExists = false;
+
+    try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+      pstmt.setString(1, username);
+      ResultSet rs = pstmt.executeQuery();
+      if (rs.next()) {
+        usernameExists = true;
+      }
     }
+    return usernameExists;
+  }
+
+  /**
+   * Check if the provided password matches the provided username
+   * @param username
+   * @param password
+   * @return
+   * @throws SQLException
+   */
+  public boolean checkIfPasswordCorrect(String username, String password) throws SQLException {
+    String sql = "SELECT * FROM \"user\" WHERE username = ? AND password = ?";
+    boolean correctPassword = false;
+
+    try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+      pstmt.setString(1, username);
+      pstmt.setString(2, password);
+      ResultSet rs = pstmt.executeQuery();
+      if (rs.next()) {
+        correctPassword = true;
+        }
+      }
+    return correctPassword;
+  }
 }

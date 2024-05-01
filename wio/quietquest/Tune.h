@@ -1,3 +1,6 @@
+#ifndef TUNE_H          // Stops header file from being redefined over and over
+#define TUNE_H
+
 class Tune {
     public:
         void playTune(int, char[], int[], int); //length, notes, beats, tempo
@@ -12,3 +15,4 @@ extern Tune questStart;
 extern Tune questStop;
 extern Tune taskStop;
 
+#endif                  // TUNE_H

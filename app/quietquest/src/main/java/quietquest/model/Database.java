@@ -50,21 +50,16 @@ public class Database {
 
   public boolean checkIfUsernameExists(String username) throws SQLException {
     String sql = "SELECT * FROM \"user\" WHERE username = ?";
-    PreparedStatement pstmt = null;
-    ResultSet rs = null;
     boolean usernameExists = false;
 
-    pstmt = connection.prepareStatement(sql);
-    pstmt.setString(1, username);
-    rs = pstmt.executeQuery();
-
-    if (rs.next()) {
-      int count = rs.getInt(1);
-      usernameExists = count > 0;
+    try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+      pstmt.setString(1, username);
+      try (ResultSet rs = pstmt.executeQuery()) {
+        if (rs.next()) {
+          usernameExists = true;
+        }
+      }
     }
-    rs.close();
-    pstmt.close();
-
     return usernameExists;
   }
 
@@ -77,22 +72,17 @@ public class Database {
    */
   public boolean checkIfPasswordCorrect(String username, String password) throws SQLException {
     String sql = "SELECT * FROM \"user\" WHERE username = ? AND password = ?";
-    PreparedStatement pstmt = null;
-    ResultSet rs = null;
     boolean correctPassword = false;
 
-    pstmt = connection.prepareStatement(sql);
-    pstmt.setString(1, username);
-    pstmt.setString(2, password);
-    rs = pstmt.executeQuery();
-
-    if (rs.next()) {
-      int count = rs.getInt(1);
-      correctPassword = count > 0;
+    try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+      pstmt.setString(1, username);
+      pstmt.setString(2, password);
+      try (ResultSet rs = pstmt.executeQuery()) {
+        if (rs.next()) {
+          correctPassword = true;
+        }
+      }
     }
-      rs.close();
-      pstmt.close();
-
     return correctPassword;
   }
 }

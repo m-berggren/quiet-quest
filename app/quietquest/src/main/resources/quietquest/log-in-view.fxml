@@ -57,12 +57,12 @@
    <Pane fx:id="popupPane" disable="true" layoutX="500.0" layoutY="200.0" prefHeight="200.0" prefWidth="512.0" visible="false">
       <children>
          <Rectangle fx:id="popupTextbox" arcHeight="5.0" arcWidth="5.0" fill="#57cc99" height="200.0" stroke="#22577a" strokeType="INSIDE" style="-fx-arc-width: 15; -fx-arc-height: 15;" visible="false" width="512.0" />
-         <Text fx:id="popupText" fill="#22577a" layoutX="23.0" layoutY="61.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Account not found" textAlignment="CENTER" visible="false" wrappingWidth="466.782958984375">
+         <Text fx:id="popupText" fill="#22577a" layoutX="46.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Wrong password or account not found" textAlignment="CENTER" visible="false" wrappingWidth="420.3829345703125">
             <font>
                <Font size="31.0" />
             </font>
          </Text>
-         <Text fx:id="popupSmallText" fill="#22577a" layoutX="19.0" layoutY="108.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Try again or create a new user account" textAlignment="CENTER" visible="false" wrappingWidth="474.00000000000006">
+         <Text fx:id="popupSmallText" fill="#22577a" layoutX="19.0" layoutY="114.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Try again or create a new user account" textAlignment="CENTER" visible="false" wrappingWidth="474.00000000000006">
             <font>
                <Font size="19.0" />
             </font>

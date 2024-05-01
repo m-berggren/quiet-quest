@@ -169,7 +169,7 @@ public void showTaskList(Task currentTask) {
         } else {
             currentQuest = quietQuestFacade.getQuestSelection();
             currentTask = quietQuestFacade.getTaskSelection();
-            if(currentQuest !=null && currentTask != null){
+            if(currentQuest !=null){
 
             // show quest details on the right side:
             // title details:

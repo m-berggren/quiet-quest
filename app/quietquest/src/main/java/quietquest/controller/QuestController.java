@@ -1,6 +1,8 @@
 package quietquest.controller;
 
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
@@ -12,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.util.Callback;
+import javafx.util.Duration;
 import quietquest.model.Quest;
 import quietquest.model.Task;
 import quietquest.utility.MQTTHandler;
@@ -20,6 +23,7 @@ import javafx.scene.control.cell.CheckBoxListCell;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.ResourceBundle;
 
 
@@ -46,12 +50,16 @@ public class QuestController extends BaseController implements Initializable, UI
     private Label mqttConnectionMessage;
     @FXML
     private Label mqttLightMessage;
+    @FXML
+    private Label motivationalMessage;
 
     private MQTTHandler mqttClient;
 
     //private String selectedTask;
     private ArrayList<Task> tasks;
     private ObservableList<Task> data;
+
+    private String []message;
 
 
 
@@ -121,13 +129,17 @@ public class QuestController extends BaseController implements Initializable, UI
                 if (empty || data == null) {
                     setText(null);
                     setGraphic(null);
+                    motivationalMessage.setVisible(false);
                 } else {
                      CheckBox checkBox = new CheckBox(data.getTasks());
                      checkBox.setSelected(data.isCompleted());
                      checkBox.setOnAction(event -> {
                          data.setCompleted(checkBox.isSelected());
+
+                         showMessage();
                      });
                      setGraphic(checkBox);
+                     motivationalMessage.setVisible(false);
                  }
             }
         };
@@ -138,6 +150,23 @@ public class QuestController extends BaseController implements Initializable, UI
 
 
     }
+
+    public void showMessage (){
+        message = new String[]{"Good Job!", "Amazing!", "One step closer to a nap","You can do it!", "Wow! Is there anything you can´t do?"};
+        Random random = new Random();
+        int index = random.nextInt(message.length);
+        String setMessage = message[index];
+        motivationalMessage.setText(setMessage);
+        motivationalMessage.setVisible(true);
+
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(3), event -> {
+                motivationalMessage.setVisible(false);
+            }));
+            timeline.play();
+    }
+
+
+
 
 
 

@@ -24,7 +24,7 @@ import java.util.ResourceBundle;
 
 
 
-public class QuestController extends BaseController implements Initializable, UIUpdater {
+public class QuestController extends BaseController implements Initializable, UIUpdater, Callback<ListView<Task>, ListCell<Task>> {
     @FXML
     private Button startQuestButton;
     @FXML
@@ -56,8 +56,11 @@ public class QuestController extends BaseController implements Initializable, UI
 
 
 
+
+
     public void initialize(URL arg0, ResourceBundle arg1) {
         mqttClient = new MQTTHandler(this);
+        tasksListView.setCellFactory(this);
 
     }
 
@@ -65,14 +68,15 @@ public class QuestController extends BaseController implements Initializable, UI
     @Override
     protected void afterMainController() {
         Quest quest = quietQuestFacade.getQuestManager().getQuestSelection();
-        Task tasks = quietQuestFacade.getQuestManager().getTaskSelection();
+        ArrayList<Task> tasks = quietQuestFacade.getQuestManager().getQuestSelection().getTasks();
         titleLabel.setText(quest.getTitle());
         //descLabel.setText(quest.getDescription());
         tasksListView.getItems().addAll(tasks);
-        data = FXCollections.observableArrayList(tasks);
-        tasksListView.setItems(data);
+        if(tasks != null) {
+            data = FXCollections.observableArrayList(tasks);
+            tasksListView.setItems(data);
+        }
         setSelectedTask();
-        setCheckBoxListCell();
         displayTasks();
 
 
@@ -80,9 +84,10 @@ public class QuestController extends BaseController implements Initializable, UI
     }
 
     public void displayTasks(){
-        tasksListView.getItems().addAll();
-        data = FXCollections.observableArrayList(tasks);
-        tasksListView.setItems(data);
+        if(tasks != null && !tasks.isEmpty()) {
+            data = FXCollections.observableArrayList(tasks);
+            tasksListView.setItems(data);
+        }
        }
 
 
@@ -91,27 +96,44 @@ public class QuestController extends BaseController implements Initializable, UI
         tasksListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Task>() {
             @Override
             public void changed(ObservableValue<? extends Task> observableValue, Task oldValue, Task newValue) {
-                tasksListView.getSelectionModel().getSelectedItem();
-                tasksListView.getItems().addAll(tasks);
-                data = FXCollections.observableArrayList(tasks);
-                tasksListView.setItems(data);
+                if(newValue != null) {
+                    tasksListView.getItems().clear();
+                    tasksListView.getItems().add(newValue);
+                }
+
+
+
+
+
+
             }
         });
 
     }
+     @Override
+    public ListCell<Task> call (ListView<Task> param){
+        return new ListCell<>(){
 
-    private void setCheckBoxListCell(){
-        tasksListView.setCellFactory(CheckBoxListCell.forListView(new Callback<Task, ObservableValue<Boolean>>() {
+
             @Override
-            public ObservableValue<Boolean> call(Task task) {
-                BooleanProperty observable = new SimpleBooleanProperty();
-                observable.addListener((obs, wasSelected, isNowSelected) ->
-                        System.out.println("Check box for "+tasks+" changed from "+wasSelected+" to "+isNowSelected)
-
-                );
-                return observable;
+            public void updateItem(Task data,boolean empty){
+                super.updateItem(data, empty);
+                if (empty || data == null) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                     CheckBox checkBox = new CheckBox(data.getTasks());
+                     checkBox.setSelected(data.isCompleted());
+                     checkBox.setOnAction(event -> {
+                         data.setCompleted(checkBox.isSelected());
+                     });
+                     setGraphic(checkBox);
+                 }
             }
-        }));
+        };
+
+
+
 
 
 

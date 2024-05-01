@@ -33,24 +33,15 @@
          <Font name="System Bold Italic" size="19.0" />
       </font>
    </Label>
-   <AnchorPane layoutX="102.0" layoutY="75.0" prefHeight="919.0" prefWidth="711.0" style="-fx-background-color: #fff; -fx-border-radius: 50 px; -fx-background-radius: 50px;" AnchorPane.bottomAnchor="261.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="689.0" AnchorPane.topAnchor="75.0">
-      <children>
-         <ImageView fitHeight="923.0" fitWidth="836.0" layoutX="-125.0" layoutY="-4.0" pickOnBounds="true">
-            <image>
-               <Image url="@../images/scroll.png" />
-            </image>
-         </ImageView>
-         <Label fx:id="titleLabel" alignment="CENTER" layoutX="-21.0" layoutY="51.0" text="TITLE" AnchorPane.leftAnchor="-21.0" AnchorPane.rightAnchor="21.0" AnchorPane.topAnchor="51.0">
-            <font>
-               <Font name="American Typewriter" size="26.0" />
-            </font>
-         </Label>
-         <Label layoutX="187.0" layoutY="74.0" prefHeight="26.0" prefWidth="96.0" text="TASKS" AnchorPane.leftAnchor="187.0" AnchorPane.rightAnchor="228.0" AnchorPane.topAnchor="74.0">
-            <font>
-               <Font name="American Typewriter" size="21.0" />
-            </font>
-         </Label>
-         <ListView fx:id="tasksListView" layoutX="179.0" layoutY="104.0" onEditStart="#displayTasks" opacity="0.0" prefHeight="335.0" prefWidth="328.0" AnchorPane.bottomAnchor="480.0" AnchorPane.leftAnchor="179.0" AnchorPane.rightAnchor="204.0" AnchorPane.topAnchor="104.0" />
-      </children>
-   </AnchorPane>
+   <Label fx:id="titleLabel" alignment="CENTER" layoutX="122.0" layoutY="110.0" prefHeight="32.0" prefWidth="207.0" text="TITLE" AnchorPane.leftAnchor="122.0" AnchorPane.rightAnchor="881.0" AnchorPane.topAnchor="110.0">
+      <font>
+         <Font name="American Typewriter" size="26.0" />
+      </font>
+   </Label>
+   <Label layoutX="150.0" layoutY="168.0" prefHeight="26.0" prefWidth="179.0" text="TASKS" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="881.0" AnchorPane.topAnchor="168.0">
+      <font>
+         <Font name="American Typewriter" size="21.0" />
+      </font>
+   </Label>
+   <ListView fx:id="tasksListView" layoutX="100.0" layoutY="207.0" opacity="1.0" prefHeight="426.0" prefWidth="422.0" visible="true" AnchorPane.bottomAnchor="127.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="688.0" AnchorPane.topAnchor="207.0" />
 </AnchorPane>

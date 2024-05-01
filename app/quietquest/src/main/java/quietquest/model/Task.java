@@ -8,6 +8,7 @@ import javafx.scene.control.MultipleSelectionModel;
 
 public class Task implements Activity{
     private String task;
+    private boolean completed;
     public Task(){
 
     }
@@ -47,6 +48,15 @@ public class Task implements Activity{
     @Override
     public void completeTask() {
 
+    }
+
+
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
     }
 
 }

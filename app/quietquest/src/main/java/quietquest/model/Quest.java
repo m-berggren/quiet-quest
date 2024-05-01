@@ -1,19 +1,28 @@
 package quietquest.model;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableValue;
+
 import java.util.ArrayList;
+
+import static javafx.application.Application.launch;
 
 public class Quest {
 
   // attributes of Quest
   private String title;
   private String description;
-  private ArrayList<String> tasks;
+  private ArrayList<Task>tasks = new ArrayList<>();
+
 
   // constructors
   public Quest() {
   }
 
-  public Quest(String title, String description, ArrayList<String> tasks) {
+  public Quest(String title, String description, ArrayList<Task> tasks) {
     this.title = title;
     this.description = description;
     this.tasks = tasks;
@@ -28,10 +37,9 @@ public class Quest {
     return this.description;
   }
 
-  public ArrayList<String> getTasks() {
+  public ArrayList<Task> getTasks(){
     return this.tasks;
   }
-
     // setters
     public void setTitle(String title) {
         this.title = title;
@@ -39,25 +47,20 @@ public class Quest {
     public void setDescription(String description){
         this.description = description;
     }
-    public void setTasks(ArrayList<String> tasks){
-        this.tasks = tasks;
+
+    public void setTasks (ArrayList<Task> tasks){
+    this.tasks = tasks;
     }
-    public void setTask(int index, String task) {
-        this.tasks.set(index, task);
-    }
-    public void addTask(String task) {
-        this.tasks.add(task);
-    }
-    public void removeTask(int index) {
-        this.tasks.remove(index);
-    }
+
 
   @Override
   public String toString() {
     return title;
   }
 
-  public String getTask(int index) {
-    return tasks.get(index);
-  }
 }
+
+
+
+
+

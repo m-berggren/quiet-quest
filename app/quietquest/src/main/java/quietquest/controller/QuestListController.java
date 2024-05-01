@@ -1,19 +1,17 @@
 package quietquest.controller;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import quietquest.model.Quest;
-import quietquest.utility.MQTTHandler;
+import quietquest.model.Task;
 import quietquest.utility.FxmlFile;
 
 import java.io.IOException;
@@ -23,9 +21,6 @@ import java.util.*;
 public class QuestListController extends BaseController implements Initializable {
     @FXML
     private ListView<String> questListView;
-
-
-
     @FXML
     private TextField titleField;
     @FXML
@@ -55,7 +50,7 @@ public class QuestListController extends BaseController implements Initializable
     @FXML
     private FxmlFile view;
     @FXML
-    private ListView<String> taskListView;
+    private ListView<Task> taskListView;
     @FXML
     private TextField taskField;
     @FXML
@@ -65,21 +60,31 @@ public class QuestListController extends BaseController implements Initializable
     private HashMap<String, Quest> quests;
 
     private Quest currentQuest;
-    private ArrayList<String> tasks;
+    private ArrayList< Task> tasks;
+
+    private Task currentTask;
+
+    private ObservableList<Task> data;
 
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
 
         currentQuest = null;
+        currentTask = null;
     }
 
     @Override
     public void afterMainController() {
         quests = quietQuestFacade.getQuests();
+        tasks = quietQuestFacade.getTasks();
         displayQuests();
         setSelectedQuest();
         currentQuest = null; // set to null to avoid another quest's details being shown
+        //tasks = quietQuestFacade.getTasks();
+        displayTasks();
+        //setSelectedTasks();
+        //currentTask = null;
     }
 
     public void onGoToQuestClick(ActionEvent event) throws IOException {
@@ -90,15 +95,35 @@ public class QuestListController extends BaseController implements Initializable
         questListView.getItems().addAll(quests.keySet());
     }
 
+    public void displayTasks(){
+        taskListView.getItems().addAll();
+        data = FXCollections.observableArrayList(tasks);
+        taskListView.setItems(data);
+        showTaskList(currentTask);}
+
+// show task list
+public void showTaskList(Task currentTask) {
+    taskListView.getItems().clear();
+    taskListView.getItems().addAll(data);
+    taskListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE); // can only select 1 task at a time
+    taskListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Task>() {
+        @Override
+        public void changed(ObservableValue<? extends Task> observableValue, Task oldValue, Task newValue) {
+
+        }
+
+    });showSelected();
+}
+
     private void setSelectedQuest() {
         questListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
                 String selectedKey = questListView.getSelectionModel().getSelectedItem();
                 quietQuestFacade.setQuestSelection(quests.get(selectedKey));
-                showSelected();
+
             }
-        });
+        });showSelected();
     }
 
     public void onDeleteQuest(ActionEvent event) {
@@ -143,7 +168,8 @@ public class QuestListController extends BaseController implements Initializable
             showWarning("Your changes will not be saved", "Are you sure you want to proceed?");
         } else {
             currentQuest = quietQuestFacade.getQuestSelection();
-            tasks = currentQuest.getTasks();
+            currentTask = quietQuestFacade.getTaskSelection();
+            if(currentQuest !=null){
 
             // show quest details on the right side:
             // title details:
@@ -165,18 +191,19 @@ public class QuestListController extends BaseController implements Initializable
             // pre-fill quest details:
             titleField.setText(currentQuest.getTitle());
             descriptionField.setText(currentQuest.getDescription());
-            showTaskList();
+            showTaskList(currentTask);
+            }else{//error handling
+            }
         }
     }
 
     // show task list view details:
-    public void showTaskList() {
-        currentQuest = quietQuestFacade.getQuestSelection();
-        tasks = currentQuest.getTasks();
+    /*public void showTaskList(Task currentTask) {
+        this.currentTask = quietQuestFacade.getTaskSelection();
         taskListView.getItems().clear();
-        taskListView.getItems().addAll(quietQuestFacade.getQuestSelection().getTasks());
+        taskListView.getItems().addAll(quietQuestFacade.getTaskSelection().getTasks());
         taskListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE); // can select multiple tasks at a time
-    }
+    }*/
 
     // warning message pop-up:
     public void showWarning(String message, String smallMessage) {
@@ -255,19 +282,20 @@ public class QuestListController extends BaseController implements Initializable
 
     // add task to task list:
     public void addNewTask() {
-        String newTask = taskField.getText(); // update current task to what is in the field
-        if (!newTask.isEmpty()) {
-            quietQuestFacade.getQuestSelection().addTask(newTask); // add current task to task list
-            showTaskList(); // reload task list view so that it displays updated information
+        String newTaskTitle = taskField.getText();// update current task to what is in the field
+        if (!newTaskTitle.isEmpty()) {
+            Task newTask = new Task(newTaskTitle);
+            quietQuestFacade.addTasks(newTask); // add current task to task list
+            showTaskList(currentTask);
             taskField.clear(); // clear text field after adding task to task list
         }
-        System.out.println("tasks now: " + currentQuest.getTasks());
+        System.out.println("tasks now: " + currentTask.getTasks());
     }
 
     // delete selected task from task list:
     public void deleteFirstTask() {
-        quietQuestFacade.getQuestSelection().removeTask(taskListView.getSelectionModel().getSelectedIndex());
-        showTaskList(); // reload task list information so that it displays updated information
+        quietQuestFacade.deleteTask(taskListView.getSelectionModel().getSelectedItem());
+        showTaskList(currentTask); // reload task list information so that it displays updated information
     }
 
     // save quest/task details by clicking saveButton:
@@ -283,6 +311,8 @@ public class QuestListController extends BaseController implements Initializable
         currentQuest.setDescription(newDescription);
 
         // save tasks:
+
+
         currentQuest.setTasks(tasks);
 
         // make fields non-editable:

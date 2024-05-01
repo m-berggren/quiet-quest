@@ -9,35 +9,10 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="760.0" prefWidth="1210.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="quietquest.controller.QuestController">
+<AnchorPane fx:id="AnchorPane" prefHeight="760.0" prefWidth="1210.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="quietquest.controller.QuestController">
    <ImageView fitHeight="760.0" fitWidth="1210.0" pickOnBounds="true" preserveRatio="true">
       <Image url="@../images/create_page_background.png" />
    </ImageView>
-   <AnchorPane layoutX="102.0" layoutY="75.0" prefHeight="580.0" prefWidth="580.0" style="-fx-background-color: #fff; -fx-border-radius: 50 px; -fx-background-radius: 50px;" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="600.0" AnchorPane.topAnchor="75.0">
-      <children>
-         <Label fx:id="titleLabel" alignment="CENTER" layoutX="43.0" layoutY="36.0" text="TITLE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
-            <font>
-               <Font name="American Typewriter" size="26.0" />
-            </font>
-         </Label>
-         <Label fx:id="descLabel" alignment="TOP_LEFT" layoutX="94.0" layoutY="108.0" prefHeight="131.0" prefWidth="391.0" text="Description" AnchorPane.bottomAnchor="300.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="80.0">
-            <font>
-               <Font size="16.0" />
-            </font>
-         </Label>
-         <ListView fx:id="tasksListView" layoutX="87.0" layoutY="300.0" prefHeight="204.0" prefWidth="200.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="330.0" />
-         <Label layoutX="10.0" layoutY="301.0" text="TASKS" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="301.0">
-            <font>
-               <Font name="American Typewriter" size="21.0" />
-            </font>
-         </Label>
-      </children>
-   </AnchorPane>
-   <Button fx:id="tickTaskButton" layoutX="605.0" layoutY="680.0" mnemonicParsing="false" onAction="#onTickTaskClick" text="Tick off task" AnchorPane.rightAnchor="457.0" AnchorPane.topAnchor="680.0">
-      <font>
-         <Font size="23.0" />
-      </font>
-   </Button>
    <Button fx:id="startQuestButton" layoutX="355.0" layoutY="680.0" mnemonicParsing="false" onAction="#onStartQuestClick" text="Start Quest" AnchorPane.leftAnchor="355.0" AnchorPane.topAnchor="680.0">
       <font>
          <Font size="23.0" />
@@ -53,4 +28,20 @@
          <Font size="23.0" />
       </font>
    </Button>
+   <Label fx:id="motivationalMessage" layoutX="889.0" layoutY="43.0" prefHeight="113.0" prefWidth="242.0" text="MotivationalMessage" visible="false" wrapText="true">
+      <font>
+         <Font name="System Bold Italic" size="19.0" />
+      </font>
+   </Label>
+   <Label fx:id="titleLabel" alignment="CENTER" layoutX="122.0" layoutY="110.0" prefHeight="32.0" prefWidth="207.0" text="TITLE" AnchorPane.leftAnchor="122.0" AnchorPane.rightAnchor="881.0" AnchorPane.topAnchor="110.0">
+      <font>
+         <Font name="American Typewriter" size="26.0" />
+      </font>
+   </Label>
+   <Label layoutX="150.0" layoutY="168.0" prefHeight="26.0" prefWidth="179.0" text="TASKS" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="881.0" AnchorPane.topAnchor="168.0">
+      <font>
+         <Font name="American Typewriter" size="21.0" />
+      </font>
+   </Label>
+   <ListView fx:id="tasksListView" layoutX="100.0" layoutY="207.0" opacity="1.0" prefHeight="426.0" prefWidth="422.0" visible="true" AnchorPane.bottomAnchor="127.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="688.0" AnchorPane.topAnchor="207.0" />
 </AnchorPane>

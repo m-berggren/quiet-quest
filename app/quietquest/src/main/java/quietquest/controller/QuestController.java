@@ -1,34 +1,40 @@
 package quietquest.controller;
 
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.ToggleButton;
-import quietquest.QuietQuestMain;
+import javafx.scene.control.*;
+import javafx.util.Callback;
+import javafx.util.Duration;
 import quietquest.model.Quest;
-import quietquest.model.QuestManager;
+import quietquest.model.Task;
 import quietquest.utility.MQTTHandler;
-
+import javafx.scene.control.ListView;
+import javafx.scene.control.cell.CheckBoxListCell;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Random;
 import java.util.ResourceBundle;
 
 
-public class QuestController extends BaseController implements Initializable, UIUpdater {
+
+public class QuestController extends BaseController implements Initializable, UIUpdater, Callback<ListView<Task>, ListCell<Task>> {
     @FXML
     private Button startQuestButton;
     @FXML
-    private Button tickTaskButton;
+    private Button completeQuestButton;
     @FXML
-    private Button  completeQuestButton;
-    @FXML
-    private ListView tasksListView;
+    private ListView<Task> tasksListView;
     @FXML
     private Label titleLabel;
     @FXML
@@ -44,33 +50,124 @@ public class QuestController extends BaseController implements Initializable, UI
     private Label mqttConnectionMessage;
     @FXML
     private Label mqttLightMessage;
+    @FXML
+    private Label motivationalMessage;
 
     private MQTTHandler mqttClient;
 
-    private String selectedTask;
+    //private String selectedTask;
+    private ArrayList<Task> tasks;
+    private ObservableList<Task> data;
+
+    private String []message;
+
+
+
+
+
 
     public void initialize(URL arg0, ResourceBundle arg1) {
         mqttClient = new MQTTHandler(this);
+        tasksListView.setCellFactory(this);
+
     }
 
 
     @Override
     protected void afterMainController() {
         Quest quest = quietQuestFacade.getQuestManager().getQuestSelection();
+        ArrayList<Task> tasks = quietQuestFacade.getQuestManager().getQuestSelection().getTasks();
         titleLabel.setText(quest.getTitle());
-        descLabel.setText(quest.getDescription());
-        tasksListView.getItems().addAll(quest.getTasks());
+        //descLabel.setText(quest.getDescription());
+        tasksListView.getItems().addAll(tasks);
+        if(tasks != null) {
+            data = FXCollections.observableArrayList(tasks);
+            tasksListView.setItems(data);
+        }
         setSelectedTask();
+        displayTasks();
+
+
+
     }
 
-    private void setSelectedTask(){
-        tasksListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+    public void displayTasks(){
+        if(tasks != null && !tasks.isEmpty()) {
+            data = FXCollections.observableArrayList(tasks);
+            tasksListView.setItems(data);
+        }
+       }
+
+
+
+    private void setSelectedTask() {
+        tasksListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Task>() {
             @Override
-            public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
-                selectedTask = (String)tasksListView.getSelectionModel().getSelectedItem();
+            public void changed(ObservableValue<? extends Task> observableValue, Task oldValue, Task newValue) {
+                if(newValue != null) {
+                    tasksListView.getItems().clear();
+                    tasksListView.getItems().add(newValue);
+                }
+
+
+
+
+
+
             }
         });
+
     }
+     @Override
+    public ListCell<Task> call (ListView<Task> param){
+        return new ListCell<>(){
+
+
+            @Override
+            public void updateItem(Task data,boolean empty){
+                super.updateItem(data, empty);
+                if (empty || data == null) {
+                    setText(null);
+                    setGraphic(null);
+                    motivationalMessage.setVisible(false);
+                } else {
+                     CheckBox checkBox = new CheckBox(data.getTasks());
+                     checkBox.setSelected(data.isCompleted());
+                     checkBox.setOnAction(event -> {
+                         data.setCompleted(checkBox.isSelected());
+
+                         showMessage();
+                     });
+                     setGraphic(checkBox);
+                     motivationalMessage.setVisible(false);
+                 }
+            }
+        };
+
+
+
+
+
+
+    }
+
+    public void showMessage (){
+        message = new String[]{"Good Job!", "Amazing!", "One step closer to a nap","You can do it!", "Wow! Is there anything you can´t do?"};
+        Random random = new Random();
+        int index = random.nextInt(message.length);
+        String setMessage = message[index];
+        motivationalMessage.setText(setMessage);
+        motivationalMessage.setVisible(true);
+
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(3), event -> {
+                motivationalMessage.setVisible(false);
+            }));
+            timeline.play();
+    }
+
+
+
+
 
 
     public void onTickTaskClick(ActionEvent event) {
@@ -120,6 +217,7 @@ public class QuestController extends BaseController implements Initializable, UI
             mqttConnectionMessage.getStyleClass().add("label-all-red");
         }
     }
+
     @Override
     public void updateLightSensorUI(int lightValue) {
         mqttLightMessage.setText("Light value: " + lightValue);
@@ -160,4 +258,5 @@ public class QuestController extends BaseController implements Initializable, UI
             mqttDistanceMessage.getStyleClass().add("label-all-red");
         }
     }
+
 }

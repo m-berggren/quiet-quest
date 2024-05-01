@@ -2,6 +2,8 @@ package quietquest.controller;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,6 +23,7 @@ import quietquest.QuietQuestMain;
 import quietquest.QuietQuestMain;
 import quietquest.model.Quest;
 import quietquest.model.QuestManager;
+import quietquest.model.Task;
 import quietquest.utility.FxmlFile;
 import quietquest.utility.MQTTHandler;
 
@@ -55,7 +58,7 @@ public class CreateQuestController extends BaseController implements Initializab
     @FXML
     private Text popupSmallText;
     @FXML
-    private ListView<String> taskListView;
+    private ListView<Task> taskListView;
     @FXML
     private Text allTasksText;
 
@@ -63,24 +66,35 @@ public class CreateQuestController extends BaseController implements Initializab
     private Stage stage;
     private Scene scene;
     private FXMLLoader loader;
-    private ArrayList<String> tasks;
+
+    private ArrayList <Task> tasks;
+    private ObservableList<Task> data;
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
         tasks = new ArrayList<>();
+        data = FXCollections.observableArrayList(tasks);
+        taskListView.setItems(data);
         showTaskList();
     }
 
-    // show task list if not empty:
+    // show task list
     public void showTaskList() {
         taskListView.getItems().clear();
-        taskListView.getItems().addAll(tasks);
+        taskListView.getItems().addAll(data);
         taskListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE); // can only select 1 task at a time
-        taskListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+        taskListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Task>() {
             @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+            public void changed(ObservableValue<? extends Task> observableValue, Task oldValue, Task newValue) {
+
             }
+
         });
+        visibility();
+    }
+
+    //check if task list is not empty
+    private void visibility(){
         if (!tasks.isEmpty()) {
             // if there are tasks in the list, make task list elements visible:
             allTasksText.setVisible(true);
@@ -97,18 +111,28 @@ public class CreateQuestController extends BaseController implements Initializab
 
     // add task to task list:
     public void addNewTask() {
-        String newTask = taskFieldOne.getText(); // update current task to what is in the field
-        if (!newTask.isEmpty()) {
-            tasks.add(newTask); // add current task to task list
-            showTaskList(); // reload task list view so that it displays updated information
+        String newTaskTitle = taskFieldOne.getText();// update current task to what is in the field
+        if (!newTaskTitle.isEmpty()) {
+            Task newTask = new Task(newTaskTitle);
+            tasks.add(newTask);
+            data.add(newTask);
+            //quietQuestFacade.addTasks(newTask); // add current task to task list
+            visibility(); // reload task list view so that it displays updated information
         }
+
     }
+
+
 
     // delete selected task from task list:
     public void deleteFirstTask() {
-        tasks.remove(taskListView.getSelectionModel().getSelectedIndex());
-        showTaskList(); // reload task list view so that it displays updated information
+        //quietQuestFacade.deleteTask((taskListView.getItems().remove(tasks)));
+        quietQuestFacade.deleteTask(taskListView.getSelectionModel().getSelectedItem());
+        quietQuestFacade.resetQuestSelection();
+        visibility();
     }
+
+
 
 
     // create a quest by clicking "Save Quest" button:

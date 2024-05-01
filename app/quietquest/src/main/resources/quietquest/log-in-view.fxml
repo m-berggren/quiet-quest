@@ -28,7 +28,7 @@
             <Font size="30.0" />
         </font>
     </Button>
-    <Button fx:id="signUpButton" layoutX="614.0" layoutY="518.0" mnemonicParsing="false" onAction="#onSignUpClick" prefHeight="58.0" prefWidth="269.0" style="-fx-background-color: #38A3A5;" text="Sign Up" textFill="#22577a">
+    <Button fx:id="createUserButton" layoutX="614.0" layoutY="518.0" mnemonicParsing="false" onAction="#onCreateUserClick" prefHeight="58.0" prefWidth="269.0" style="-fx-background-color: #38A3A5;" text="Create Account" textFill="#22577a">
         <font>
             <Font size="28.0" />
         </font>
@@ -62,17 +62,17 @@
                <Font size="31.0" />
             </font>
          </Text>
-         <Text fx:id="popupSmallText" fill="#22577a" layoutX="19.0" layoutY="108.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Try again, or sign up if you don't have an account yet" textAlignment="CENTER" visible="false" wrappingWidth="474.00000000000006">
+         <Text fx:id="popupSmallText" fill="#22577a" layoutX="19.0" layoutY="108.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Try again or create a new user account" textAlignment="CENTER" visible="false" wrappingWidth="474.00000000000006">
             <font>
                <Font size="19.0" />
             </font>
          </Text>
-         <Button fx:id="tryAgainButton" layoutX="70.0" layoutY="130.0" mnemonicParsing="false" onAction="#onTryAgainClick" prefHeight="43.0" prefWidth="146.0" style="-fx-font-family: Montserrat; -fx-font-size: 20; -fx-text-fill: #22577A; -fx-background-color: #38A3A5;" text="Try Again" textFill="#22577a" visible="false">
+         <Button fx:id="tryAgainButton" layoutX="48.0" layoutY="130.0" mnemonicParsing="false" onAction="#onTryAgainClick" prefHeight="43.0" prefWidth="168.0" style="-fx-font-family: Montserrat; -fx-font-size: 20; -fx-text-fill: #22577A; -fx-background-color: #38A3A5;" text="Try Again" textFill="#22577a" visible="false">
             <font>
                <Font size="16.0" />
             </font>
          </Button>
-         <Button fx:id="popupSignUpButton" layoutX="284.0" layoutY="130.0" mnemonicParsing="false" onAction="#onSignUpClick" prefHeight="43.0" prefWidth="146.0" style="-fx-font-family: Montserrat; -fx-font-size: 20; -fx-text-fill: #22577A; -fx-background-color: #38A3A5;" text="Sign Up" textFill="#22577a" visible="false">
+         <Button fx:id="popupCreateUserButton" layoutX="284.0" layoutY="130.0" mnemonicParsing="false" onAction="#onCreateUserClick" prefHeight="43.0" prefWidth="168.0" style="-fx-font-family: Montserrat; -fx-font-size: 20; -fx-text-fill: #22577A; -fx-background-color: #38A3A5;" text="Create Account" textFill="#22577a" visible="false">
             <font>
                <Font size="16.0" />
             </font>

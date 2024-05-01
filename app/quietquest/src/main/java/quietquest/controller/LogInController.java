@@ -29,7 +29,7 @@ public class LogInController {
     @FXML
     private Button logInButton;
     @FXML
-    private Button signUpButton;
+    private Button createUserButton;
     @FXML
     private Pane popupPane;
     @FXML
@@ -41,7 +41,7 @@ public class LogInController {
     @FXML
     private Button tryAgainButton;
     @FXML
-    private Button popupSignUpButton;
+    private Button popupCreateUserButton;
 
     private String username;
     private String password;
@@ -63,11 +63,11 @@ public class LogInController {
     }
 
     /**
-     * Load sign-up page upon clicking "Sign Up" button
+     * Load sign-up page upon clicking "Create User Account" button
      * @param event
      * @throws IOException
      */
-    public void onSignUpClick(ActionEvent event) throws IOException {
+    public void onCreateUserClick(ActionEvent event) throws IOException {
         loadFxml("create-user.fxml", event);
     }
 
@@ -92,11 +92,11 @@ public class LogInController {
         popupText.setVisible(true);
         popupTextbox.setVisible(true);
         popupSmallText.setVisible(true);
-        popupSignUpButton.setVisible(true);
+        popupCreateUserButton.setVisible(true);
         tryAgainButton.setVisible(true);
 
         // disable regular buttons/text fields
-        signUpButton.setDisable(true);
+        createUserButton.setDisable(true);
         logInButton.setDisable(true);
         usernameField.setDisable(true);
         passwordField.setDisable(true);
@@ -112,11 +112,11 @@ public class LogInController {
         popupText.setVisible(false);
         popupTextbox.setVisible(false);
         popupSmallText.setVisible(false);
-        popupSignUpButton.setVisible(false);
+        popupCreateUserButton.setVisible(false);
         tryAgainButton.setVisible(false);
 
         // enable regular buttons/text fields
-        signUpButton.setDisable(false);
+        createUserButton.setDisable(false);
         logInButton.setDisable(false);
         usernameField.setDisable(false);
         passwordField.setDisable(false);

@@ -35,3 +35,7 @@ test:
     paths:
       - build
       - .gradle
+
+job:
+  tags:
+    - docker

@@ -54,10 +54,9 @@ public class Database {
 
     try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
       pstmt.setString(1, username);
-      try (ResultSet rs = pstmt.executeQuery()) {
-        if (rs.next()) {
-          usernameExists = true;
-        }
+      ResultSet rs = pstmt.executeQuery();
+      if (rs.next()) {
+        usernameExists = true;
       }
     }
     return usernameExists;
@@ -77,12 +76,11 @@ public class Database {
     try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
       pstmt.setString(1, username);
       pstmt.setString(2, password);
-      try (ResultSet rs = pstmt.executeQuery()) {
-        if (rs.next()) {
-          correctPassword = true;
+      ResultSet rs = pstmt.executeQuery();
+      if (rs.next()) {
+        correctPassword = true;
         }
       }
-    }
     return correctPassword;
   }
 }

@@ -28,7 +28,7 @@
          <Font size="23.0" />
       </font>
    </Button>
-   <Label fx:id="motivationalMessage" layoutX="889.0" layoutY="43.0" prefHeight="113.0" prefWidth="242.0" text="MotivationalMessage" visible="false">
+   <Label fx:id="motivationalMessage" layoutX="889.0" layoutY="43.0" prefHeight="113.0" prefWidth="242.0" text="MotivationalMessage" visible="false" wrapText="true">
       <font>
          <Font name="System Bold Italic" size="19.0" />
       </font>

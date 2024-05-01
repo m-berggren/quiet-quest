@@ -43,6 +43,10 @@ public class MainController extends BaseController {
     showQuestList();
   }
 
+  public void onCreateUserClick() {
+    showCreateUser();
+  }
+
   public void loadView(String view) {
     try {
       FXMLLoader fxmlLoader = new FXMLLoader(QuietQuestMain.class.getResource(view));

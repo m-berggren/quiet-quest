@@ -15,7 +15,7 @@ public class QuietQuestMain extends Application {
   @Override
   public void start(Stage stage) throws IOException, SQLException {
     new Database();
-    FXMLLoader loader = new FXMLLoader(getClass().getResource(FxmlFile.START));
+    FXMLLoader loader = new FXMLLoader(getClass().getResource(FxmlFile.LOG_IN));
     Parent root = loader.load();
     Scene scene = new Scene(root);
     stage.setScene(scene);

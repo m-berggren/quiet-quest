@@ -47,7 +47,7 @@ public class CreateQuestController extends BaseController implements Initializab
     @FXML
     private TextArea descriptionField;
     @FXML
-    private TextField taskFieldOne;
+    private TextField taskField;
     @FXML
     private Button deleteTaskButton;
     @FXML
@@ -64,6 +64,8 @@ public class CreateQuestController extends BaseController implements Initializab
     private ListView<Task> taskListView;
     @FXML
     private Text allTasksText;
+    @FXML
+    private Button addNewTaskButton;
 
     private Parent root;
     private Stage stage;
@@ -81,87 +83,67 @@ public class CreateQuestController extends BaseController implements Initializab
         showTaskList();
     }
 
-    // show task list
+    /**
+     * Show current task list in the taskListView.
+     */
     public void showTaskList() {
         taskListView.getItems().clear();
         taskListView.getItems().addAll(data);
-        taskListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE); // can only select 1 task at a time
-        taskListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Task>() {
+        taskListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+       /* taskListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Task>() {
             @Override
             public void changed(ObservableValue<? extends Task> observableValue, Task oldValue, Task newValue) {
-
             }
-
         });
-        //visibility();
+
+        */
     }
 
-    //check if task list is not empty
-    /*private void visibility(){
-        if (!tasks.isEmpty()) {
-            // if there are tasks in the list, make task list elements visible:
-            allTasksText.setVisible(true);
-            taskListView.setVisible(true);
-            deleteTaskButton.setVisible(true);
-        }
-        else {
-            // if no tasks in the list, make task list elements invisible:
-            allTasksText.setVisible(false);
-            taskListView.setVisible(false);
-            deleteTaskButton.setVisible(false);
-        }
-    }*/
-
-    // add task to task list:
+    /**
+     * New task added to task list and displayed in right side task list view.
+     */
     public void addNewTask() {
-        String newTaskTitle = taskFieldOne.getText();// update current task to what is in the field
+        String newTaskTitle = taskField.getText();
         if (!newTaskTitle.isEmpty()) {
             Task newTask = new Task(newTaskTitle);
             tasks.add(newTask);
             data.add(newTask);
-            //quietQuestFacade.addTasks(newTask); // add current task to task list
-            //visibility(); // reload task list view so that it displays updated information
+            taskField.clear();
         }
-
     }
 
-
-
-    // delete selected task from task list:
-    public void deleteFirstTask() {
-        //quietQuestFacade.deleteTask((taskListView.getItems().remove(tasks)));
-        quietQuestFacade.deleteTask(taskListView.getSelectionModel().getSelectedItem());
-        quietQuestFacade.resetQuestSelection();
-        //visibility();
+    /**
+     * Delete selected task from task list and remove from task list view too.
+     */
+    public void deleteTask() {
+        Task currentTask = taskListView.getSelectionModel().getSelectedItem();
+        quietQuestFacade.deleteTask(currentTask);
+        showTaskList();
     }
-
 
     /**
      * Creates a quest upon clicking "Save" button.
      */
     public void createQuest(ActionEvent event) throws Exception {
-
-            //if quest title field is left empty:
-            if (titleField.getText().isEmpty()) {
-                showMessage("Don't forget to name your quest!",
-                        "Quests must have a title. Do not leave this field empty.");
-                //if quest title is already taken:
-            } else if (quietQuestFacade.getQuests().containsKey(titleField.getText())) {
-                showMessage("Give your quest a unique title",
-                        "Each quest must have a unique title.");
-                //if everything good with title, create quest:
-            } else {
-                String title = titleField.getText();
-                String description = descriptionField.getText();
-                Quest quest = new Quest(title, description, tasks);
-                // add quest to quest list:
-                quietQuestFacade.addQuest(quest);
-                // display popup message for successful quest creation:
-                showMessage("Quest saved successfully!", "Create a new quest now or check all your quests on the Quest List page.");
-                System.out.println("quest: " + quest.getTitle());
-                System.out.println("tasks: " + quest.getTasks());
-                showCreateQuest();
-            }
+        //if quest title field is left empty:
+        if (titleField.getText().isEmpty()) {
+            showMessage("Don't forget to name your quest!",
+                    "Quests must have a title. Do not leave this field empty.");
+        //if quest title is already taken:
+        } else if (quietQuestFacade.getQuests().containsKey(titleField.getText())) {
+            showMessage("Give your quest a unique title",
+                    "Each quest must have a unique title.");
+        //if everything good with title, create quest:
+        } else {
+            String title = titleField.getText();
+            String description = descriptionField.getText();
+            Quest quest = new Quest(title, description, tasks);
+            // add quest to quest list:
+            quietQuestFacade.addQuest(quest);
+            System.out.println("quest: " + quest.getTitle());
+            System.out.println("tasks: " + quest.getTasks());
+            showCreateQuest();
+        }
     }
 
     /**
@@ -176,6 +158,16 @@ public class CreateQuestController extends BaseController implements Initializab
         popupText.setText(message);
         popupSmallText.setVisible(true);
         popupSmallText.setText(smallMessage);
+        // disable other fields and buttons
+        saveQuestButton.setDisable(true);
+        clearButton.setDisable(true);
+        goToQuestsButton.setDisable(true);
+        titleField.setDisable(true);
+        descriptionField.setDisable(true);
+        taskField.setDisable(true);
+        addNewTaskButton.setDisable(true);
+        taskListView.setDisable(true);
+        deleteTaskButton.setDisable(true);
     }
 
     /**
@@ -190,30 +182,34 @@ public class CreateQuestController extends BaseController implements Initializab
         popupText.setVisible(false);
         popupSmallText.setVisible(false);
         okayButton.setVisible(false);
+        // enable other fields and buttons
+        saveQuestButton.setDisable(false);
+        clearButton.setDisable(false);
+        goToQuestsButton.setDisable(false);
+        titleField.setDisable(false);
+        descriptionField.setDisable(false);
+        taskField.setDisable(false);
+        addNewTaskButton.setDisable(false);
+        taskListView.setDisable(false);
+        deleteTaskButton.setDisable(false);
+
     }
 
-    // clear all fields by clicking "Clear" button:
+    /**
+     * Clear all fields upon clicking "Clear" button.
+     */
     @FXML
     public void clearAllFields () throws IOException {
         titleField.clear();
         descriptionField.clear();
-        taskFieldOne.clear();
+        taskField.clear();
         taskListView.getItems().clear();
     }
 
-
-  /**
-   * Cancel quest creation by clicking "Cancel" button.
-   */
-  public void cancelQuestCreation(ActionEvent event) {
-    showStart();
-  }
-
-
-  /**
-   * Go to "Quest List" by clicking "See quests" button.
-   */
-  public void onGoToQuests(ActionEvent event) {
-    showQuestList();
-  }
+    /**
+    * Go to "Quest List" by clicking "List" button.
+    */
+    public void onGoToQuests() {
+        showQuestList();
+     }
 }

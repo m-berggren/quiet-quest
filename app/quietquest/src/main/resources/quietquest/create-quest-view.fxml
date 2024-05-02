@@ -39,7 +39,7 @@
                <Font name="American Typewriter" size="30.0" />
             </font>
          </Text>
-         <TextField fx:id="taskFieldOne" layoutX="20.0" layoutY="368.0" prefHeight="30.0" prefWidth="313.0" promptText="add a new task (optional)" AnchorPane.leftAnchor="20.0" />
+         <TextField fx:id="taskField" layoutX="20.0" layoutY="368.0" prefHeight="30.0" prefWidth="313.0" promptText="add a new task (optional)" AnchorPane.leftAnchor="20.0" />
          <Button fx:id="addNewTaskButton" alignment="CENTER" layoutX="346.0" layoutY="363.0" minWidth="38.0" mnemonicParsing="false" onAction="#addNewTask" prefHeight="21.0" prefWidth="50.0" style="-fx-background-color: #38A3A5; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="+" AnchorPane.topAnchor="363.0">
             <font>
                <Font size="20.0" />
@@ -55,7 +55,7 @@
             </font>
          </Text>
          <ListView fx:id="taskListView" layoutX="-115.0" layoutY="1.0" onEditStart="#showTaskList" prefHeight="261.0" prefWidth="380.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="85.0" />
-         <Button fx:id="deleteTaskButton" alignment="CENTER" layoutX="331.0" layoutY="363.0" minWidth="38.0" mnemonicParsing="false" onAction="#deleteFirstTask" prefHeight="28.0" prefWidth="70.0" style="-fx-background-color: #38A3A5; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="X" wrapText="true" AnchorPane.topAnchor="363.0">
+         <Button fx:id="deleteTaskButton" alignment="CENTER" layoutX="331.0" layoutY="363.0" minWidth="38.0" mnemonicParsing="false" onAction="#deleteTask" prefHeight="28.0" prefWidth="70.0" style="-fx-background-color: #38A3A5; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="X" wrapText="true" AnchorPane.topAnchor="363.0">
             <font>
                <Font size="20.0" />
             </font>

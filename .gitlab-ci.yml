@@ -1,34 +1,47 @@
+# Use amazoncorretto:21-alpine-jdk as the base Docker image for all jobs in this pipeline
 image: amazoncorretto:21-alpine-jdk
 
+# 'before_script' steps are executed before each job's script
 before_script:
+  # Define the GRADLE_USER_HOME environment variable
   - GRADLE_USER_HOME="$(pwd)/.gradle"
+  # Export the GRADLE_USER_HOME environment variable for use in all subsequent commands
   - export GRADLE_USER_HOME
 
+# Define the stages that make up the build process
+stages:
+  - build   # The 'build' stage compiles the application
+  - test    # The 'test' stage runs the application's tests
+
+# Define the build job
 build:
   stage: build
   tags:
-    - docker
+    - docker    # Ensure this job runs on runners with the 'docker' tag
   script: 
-    - cd app/quietquest 
-    - ./gradlew --build-cache assemble
+    - cd app/quietquest                     # Change directory to the 'app/quietquest' directory inside the project
+    - ./gradlew --build-cache assemble      # Execute the Gradle assemble command with caching to compile the project
+  # Cache configuration for the test job
   cache:
-    key: "$CI_COMMIT_REF_NAME"
-    policy: push
+    key: "$CI_COMMIT_REF_NAME"  # Cache key unique to the branch or tag
+    policy: push               # Push the cache after successful job completion
     paths:
-      - build
-      - .gradle
+      - build                  # Cache the build output directory
+      - .gradle                # Cache the Gradle data directory
 
+# Define the 'test' job
 test:
   stage: test
   tags:
     - docker
   script: 
-     - cd app/quietquest 
-     - ./gradlew check
+     - cd app/quietquest   # Change directory to the 'app/quietquest' directory inside the project
+     - ./gradlew check    # Execute the Gradle check command to run unit tests
+  # Configuration for using cached data in testing
   cache:
-    key: "$CI_COMMIT_REF_NAME"
-    policy: pull
+    key: "$CI_COMMIT_REF_NAME"  # Cache key unique to the branch or tag
+    policy: pull               # Pull the cache before the job starts
     paths:
-      - build
-      - .gradle
+      - build                  # Use the cached build output directory
+      - .gradle                # Use the cached Gradle data directory
 

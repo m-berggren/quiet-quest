@@ -62,19 +62,19 @@
          </Button>
       </children>
    </AnchorPane>
-   <Button fx:id="saveQuestButton" layoutX="45.0" layoutY="476.0" mnemonicParsing="false" onAction="#createQuest" prefHeight="83.0" prefWidth="145.0" style="-fx-background-color: #57CC99; -fx-font-size: 20; -fx-font-family: Monsterrat; -fx-background-radius: 15; -fx-text-fill: #22577A;" text="SAVE QUEST" wrapText="true" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="475.0">
+   <Button fx:id="saveQuestButton" layoutX="45.0" layoutY="476.0" mnemonicParsing="false" onAction="#createQuest" prefHeight="83.0" prefWidth="145.0" style="-fx-background-color: #57CC99; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="SAVE" wrapText="true" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="475.0">
       <font>
-         <Font size="33.0" />
+         <Font name="American Typewriter" size="30.0" />
       </font>
    </Button>
-   <Button fx:id="clearButton" layoutX="223.0" layoutY="483.0" mnemonicParsing="false" onAction="#clearAllFields" prefHeight="83.0" prefWidth="146.0" style="-fx-background-color: #57CC99; -fx-font-size: 20; -fx-font-family: Monsterrat; -fx-background-radius: 15; -fx-text-fill: #22577A;" text="CLEAR" textAlignment="CENTER" wrapText="true" AnchorPane.leftAnchor="170.0" AnchorPane.topAnchor="475.0">
+   <Button fx:id="clearButton" layoutX="223.0" layoutY="483.0" mnemonicParsing="false" onAction="#clearAllFields" prefHeight="83.0" prefWidth="146.0" style="-fx-background-color: #57CC99; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="CLEAR" textAlignment="CENTER" wrapText="true" AnchorPane.leftAnchor="170.0" AnchorPane.topAnchor="475.0">
       <font>
-         <Font size="33.0" />
+         <Font name="American Typewriter" size="30.0" />
       </font>
    </Button>
-   <Button fx:id="goToQuestsButton" layoutX="425.0" layoutY="494.0" mnemonicParsing="false" onAction="#onGoToQuests" prefHeight="83.0" prefWidth="146.0" style="-fx-background-color: #57CC99; -fx-font-size: 20; -fx-font-family: Monsterrat; -fx-background-radius: 15; -fx-text-fill: #22577A;" text="SEE QUESTS" wrapText="true" AnchorPane.leftAnchor="320.0" AnchorPane.topAnchor="475.0">
+   <Button fx:id="goToQuestsButton" layoutX="425.0" layoutY="494.0" mnemonicParsing="false" onAction="#onGoToQuests" prefHeight="83.0" prefWidth="146.0" style="-fx-background-color: #57CC99; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="LIST" wrapText="true" AnchorPane.leftAnchor="320.0" AnchorPane.topAnchor="475.0">
       <font>
-         <Font size="33.0" />
+         <Font name="American Typewriter" size="30.0" />
       </font>
    </Button>
    <Pane fx:id="emptyTitleErrorPane" layoutX="562.0" layoutY="476.0" prefHeight="200.0" prefWidth="512.0" style="-fx-background-color: #fff; -fx-background-radius: 10;" visible="false">

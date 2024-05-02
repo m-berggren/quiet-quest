@@ -20,7 +20,7 @@ import quietquest.utility.FxmlFile;
 import java.io.IOException;
 import java.sql.SQLException;
 
-public class CreateUserController extends BaseController{
+public class CreateUserController extends BaseController {
     @FXML
     private TextField usernameTextField;
     @FXML
@@ -35,6 +35,7 @@ public class CreateUserController extends BaseController{
 
     /**
      * Saves a new user to the database if a unique username and valid password are provided.
+     *
      * @param event
      * @throws SQLException
      * @throws IOException
@@ -61,7 +62,7 @@ public class CreateUserController extends BaseController{
             passwordHintLabel.setVisible(false);
         }
 
-        if(usernameOK && passwordOK){
+        if (usernameOK && passwordOK) {
             if (database.createUser(username, password)) {
                 System.out.println("Successfully created user.");
                 loadFxml("create-quest-view.fxml", event);
@@ -75,14 +76,15 @@ public class CreateUserController extends BaseController{
 
     /**
      * Checks validity of new password.
+     *
      * @param password String that should contain at least 8 characters where at least one must be a number.
      * @return True if password fulfills criteria, otherwise false.
      */
-    public boolean passwordValid(String password){
+    public boolean passwordValid(String password) {
         boolean length = password.length() >= 8;
         boolean containsNumber = false;
-        for(int i = 0; i < password.length(); i++){
-            if(Character.isDigit(password.charAt(i))){
+        for (int i = 0; i < password.length(); i++) {
+            if (Character.isDigit(password.charAt(i))) {
                 containsNumber = true;
                 i = password.length();
             }

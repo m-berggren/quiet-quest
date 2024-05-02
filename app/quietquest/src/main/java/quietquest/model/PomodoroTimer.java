@@ -2,7 +2,7 @@ package quietquest.model;
 
 import java.util.Timer;
 
-public class PomodoroTimer implements Activity{
+public class PomodoroTimer implements Activity {
     private Timer timer;
     private int focusTime;
     private int breakTime;
@@ -15,7 +15,8 @@ public class PomodoroTimer implements Activity{
         this.intervals = toMilliseconds(intervals);
     }
 
-    /** Creates milliseconds from minutes
+    /**
+     * Creates milliseconds from minutes
      *
      * @param minutes to convert
      * @return milliseconds
@@ -24,6 +25,7 @@ public class PomodoroTimer implements Activity{
         return minutes * 60000;
     }
 
-    public void completeTask() {}
+    public void completeTask() {
+    }
 
 }

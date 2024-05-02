@@ -20,24 +20,21 @@ long distanceValue;
 String boxStatus;
 
 void setup() {
-  pinMode(LIGHT_PIN, INPUT);                                                //
-  pinMode(MOTION_PIN, INPUT);                                               //
-  pinMode(DISTANCE_PIN, INPUT);                                             //
-  pinMode(WIO_BUZZER, OUTPUT);
+    pinMode(LIGHT_PIN, INPUT);                                                //
+    pinMode(MOTION_PIN, INPUT);                                               //
+    pinMode(DISTANCE_PIN, INPUT);                                             //
+    pinMode(WIO_BUZZER, OUTPUT);
 
-  Serial.begin(BAUD_RATE);                                                  //
+    Serial.begin(BAUD_RATE);                                                  //
 
-  led.init();                                                               // Initialize LED
+    led.init();                                                               // Initialize LED
 
-  displaySetup();                                                           // Initiates tft screen
-  
-  client.setServer(SERVER, PORT);
-  client.setCallback(callback);                                             // Callback method is in MQTT config file
-  setupNetwork();                                                           // Setup Wifi and MQTT broker connection
-  
+    displaySetup();                                                           // Initiates tft screen
+
+    client.setServer(SERVER, PORT);
+    client.setCallback(callback);                                             // Callback method is in MQTT config file
+    setupNetwork();                                                           // Setup Wifi and MQTT broker connection
 }
-
-
 
 void loop() {
 
@@ -62,11 +59,11 @@ void loop() {
 
     // LED light
     if (lightReading > LIGHT_VALUE_THRESHOLD) {
-      isBoxClosed = false;
-      led.setColorHSL(0, 1, 0.95, 0.1);                                     // (Red) box opened
+        isBoxClosed = false;
+        led.setColorHSL(0, 1, 0.95, 0.1);                                     // (Red) box opened
     } else {
-      isBoxClosed = true;
-      led.setColorHSL(0, 0.37, 1, 0.01);                                    // (Blue-green) box unopened
+        isBoxClosed = true;
+        led.setColorHSL(0, 0.37, 1, 0.01);                                    // (Blue-green) box unopened
     }
 
     // ==========================* MQTT & LCD *======================

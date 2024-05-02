@@ -6,24 +6,25 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.control.MultipleSelectionModel;
 
-public class Task implements Activity{
+public class Task implements Activity {
     private String task;
     private boolean completed;
-    public Task(){
+
+    public Task() {
 
     }
+
     public Task(String tasks) {
         this.task = tasks;
-
-
     }
+
     //getter
     public String getTasks() {
         return this.task;
     }
 
     //Setter
-    public void setTasks(String tasks){
+    public void setTasks(String tasks) {
         this.task = tasks;
     }
     /*public void setTask(int index, String task) {
@@ -44,12 +45,10 @@ public class Task implements Activity{
     }
 
 
-
     @Override
     public void completeTask() {
 
     }
-
 
     public boolean isCompleted() {
         return completed;

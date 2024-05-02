@@ -14,10 +14,11 @@ public class User {
 
     /**
      * User constructor
+     *
      * @param username
      * @param password
      */
-    public User(String username, String password){ //add confirmed_password stuff
+    public User(String username, String password) { //add confirmed_password stuff
         this.username = username;
         this.password = password;
         Date date = new Date();
@@ -27,45 +28,47 @@ public class User {
         this.desk_mode = false;
     }
 
-    public int getId(){
+    public int getId() {
         return id;
     }
-    public void setID(int id){
+
+    public void setID(int id) {
         this.id = id;
     }
+
     public String getUsername() {
         return username;
     }
 
-    public String getPassword(){
+    public String getPassword() {
         return password;
     }
 
-    public Timestamp getCreated_at(){
+    public Timestamp getCreated_at() {
         return created_at;
     }
 
-    public boolean getAppSound(){
+    public boolean getAppSound() {
         return app_sound;
     }
 
-    public void toggleAppSound(boolean setting){
+    public void toggleAppSound(boolean setting) {
         this.app_sound = setting;
     }
 
-    public boolean getSensorSound(){
+    public boolean getSensorSound() {
         return sensor_sound;
     }
 
-    public void toggleSensorSound(boolean setting){
+    public void toggleSensorSound(boolean setting) {
         this.sensor_sound = setting;
     }
 
-    public boolean getDeskMode(){
+    public boolean getDeskMode() {
         return desk_mode;
     }
 
-    public void toggleDeskMode(boolean setting){
+    public void toggleDeskMode(boolean setting) {
         this.desk_mode = setting;
     }
 }

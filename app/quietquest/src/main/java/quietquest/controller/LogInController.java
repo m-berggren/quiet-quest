@@ -50,7 +50,7 @@ public class LogInController {
      * Load start page upon clicking "Log In" if user credentials match what is in the database.
      * If inputted credentials are incorrect, show a popup message.
      */
-    public void onLogInClick (ActionEvent event) throws IOException, SQLException {
+    public void onLogInClick(ActionEvent event) throws IOException, SQLException {
         username = usernameField.getText();
         password = passwordField.getText();
         Database database = new Database();
@@ -64,6 +64,7 @@ public class LogInController {
 
     /**
      * Load sign-up page upon clicking "Create User Account" button
+     *
      * @param event
      * @throws IOException
      */
@@ -115,7 +116,7 @@ public class LogInController {
         popupCreateUserButton.setVisible(false);
         tryAgainButton.setVisible(false);
 
-        // enable regular buttons/text fields
+        // Enable regular buttons/text fields
         createUserButton.setDisable(false);
         logInButton.setDisable(false);
         usernameField.setDisable(false);
@@ -124,6 +125,7 @@ public class LogInController {
 
     /**
      * Method used to load the page specified
+     *
      * @param fxmlFile specifies the page that is loaded
      * @param event
      * @throws IOException

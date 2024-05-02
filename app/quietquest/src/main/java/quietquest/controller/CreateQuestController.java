@@ -1,4 +1,5 @@
 package quietquest.controller;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -26,6 +27,7 @@ import quietquest.model.QuestManager;
 import quietquest.model.Task;
 import quietquest.utility.FxmlFile;
 import quietquest.utility.MQTTHandler;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -68,7 +70,7 @@ public class CreateQuestController extends BaseController implements Initializab
     private Stage stage;
     private Scene scene;
     private FXMLLoader loader;
-    private ArrayList <Task> tasks;
+    private ArrayList<Task> tasks;
     private ObservableList<Task> data;
 
     @Override
@@ -123,11 +125,11 @@ public class CreateQuestController extends BaseController implements Initializab
         if (titleField.getText().isEmpty()) {
             showMessage("Don't forget to name your quest!",
                     "Quests must have a title. Do not leave this field empty.");
-        //if quest title is already taken:
+            //if quest title is already taken:
         } else if (quietQuestFacade.getQuests().containsKey(titleField.getText())) {
             showMessage("Give your quest a unique title",
                     "Each quest must have a unique title.");
-        //if everything good with title, create quest:
+            //if everything good with title, create quest:
         } else {
             String title = titleField.getText();
             String description = descriptionField.getText();
@@ -143,7 +145,7 @@ public class CreateQuestController extends BaseController implements Initializab
     /**
      * Method that makes error/success message pop-up window appear.
      */
-    public void showMessage(String message, String smallMessage){
+    public void showMessage(String message, String smallMessage) {
         popupPane.setDisable(false);
         popupPane.setVisible(true);
         popupTextbox.setVisible(true);
@@ -152,7 +154,7 @@ public class CreateQuestController extends BaseController implements Initializab
         popupText.setText(message);
         popupSmallText.setVisible(true);
         popupSmallText.setText(smallMessage);
-        // disable other fields and buttons
+        // Disable other fields and buttons
         saveQuestButton.setDisable(true);
         clearButton.setDisable(true);
         goToQuestsButton.setDisable(true);
@@ -166,10 +168,11 @@ public class CreateQuestController extends BaseController implements Initializab
 
     /**
      * Error/success message pop-up window disappears upon clicking "Okay" button.
+     *
      * @param event
      * @throws IOException
      */
-    public void onOkayButtonClick (ActionEvent event) throws IOException {
+    public void onOkayButtonClick(ActionEvent event) throws IOException {
         popupPane.setVisible(false);
         popupPane.setDisable(true);
         popupTextbox.setVisible(false);
@@ -192,7 +195,7 @@ public class CreateQuestController extends BaseController implements Initializab
      * Clear all fields upon clicking "Clear" button.
      */
     @FXML
-    public void clearAllFields () throws IOException {
+    public void clearAllFields() throws IOException {
         titleField.clear();
         descriptionField.clear();
         taskField.clear();
@@ -200,9 +203,9 @@ public class CreateQuestController extends BaseController implements Initializab
     }
 
     /**
-    * Go to "Quest List" by clicking "List" button.
-    */
+     * Go to "Quest List" by clicking "List" button.
+     */
     public void onGoToQuests() {
         showQuestList();
-     }
+    }
 }

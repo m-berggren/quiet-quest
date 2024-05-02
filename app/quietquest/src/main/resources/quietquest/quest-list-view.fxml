@@ -15,9 +15,9 @@
    <ImageView fitHeight="760.0" fitWidth="1210.0" pickOnBounds="true">
       <Image url="@../images/create_page_background.png" />
    </ImageView>
-   <AnchorPane fx:id="questlistAnchorPane" layoutX="169.0" layoutY="25.0" prefHeight="414.0" prefWidth="369.0" style="-fx-background-color: #fff; -fx-background-radius: 10;" AnchorPane.topAnchor="25.0">
+   <AnchorPane fx:id="questlistAnchorPane" layoutX="84.0" layoutY="70.0" prefHeight="414.0" prefWidth="369.0" style="-fx-background-color: #fff; -fx-background-radius: 10;" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="25.0">
       <children>
-          <Button fx:id="deleteButton" layoutX="204.0" layoutY="297.0" mnemonicParsing="false" onAction="#onDeleteQuest" prefHeight="80.0" prefWidth="145.0" style="-fx-background-color: #57CC99; -fx-background-radius: 15; -fx-text-fill: #22577A;" text="Delete" AnchorPane.leftAnchor="204.0" AnchorPane.topAnchor="297.0">
+          <Button fx:id="deleteButton" layoutX="204.0" layoutY="297.0" mnemonicParsing="false" onAction="#onDeleteQuest" prefHeight="80.0" prefWidth="145.0" style="-fx-background-color: #57CC99; -fx-background-radius: 15; -fx-text-fill: #22577A;" text="DELETE" AnchorPane.leftAnchor="204.0" AnchorPane.topAnchor="297.0">
             <font>
                <Font name="American Typewriter" size="24.0" />
             </font>
@@ -28,23 +28,23 @@
               </font>
           </Label>
           <ListView fx:id="questListView" layoutX="20.0" layoutY="57.0" onEditStart="#showSelected" prefHeight="200.0" prefWidth="300.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="70.0" />
-         <Button fx:id="goToQuestButton" layoutX="20.0" layoutY="297.0" mnemonicParsing="false" onAction="#onGoToQuestClick" prefHeight="80.0" prefWidth="145.0" style="-fx-background-color: #57CC99; -fx-background-radius: 15; -fx-text-fill: #22577A;" text="Go" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="297.0">
+         <Button fx:id="goToQuestButton" layoutX="20.0" layoutY="297.0" mnemonicParsing="false" onAction="#onGoToQuestClick" prefHeight="80.0" prefWidth="145.0" style="-fx-background-color: #57CC99; -fx-background-radius: 15; -fx-text-fill: #22577A;" text="GO" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="297.0">
             <font>
                <Font size="24.0" />
             </font>
          </Button>
       </children>
    </AnchorPane>
-   <AnchorPane fx:id="viewInfoAnchorPane" layoutX="591.0" layoutY="22.0" prefHeight="625.0" prefWidth="566.0" style="-fx-background-color: #fff; -fx-background-radius: 10;" AnchorPane.leftAnchor="591.0" AnchorPane.topAnchor="25.0">
+   <AnchorPane fx:id="viewInfoAnchorPane" layoutX="509.0" layoutY="70.0" prefHeight="625.0" prefWidth="566.0" style="-fx-background-color: #fff; -fx-background-radius: 10;" AnchorPane.leftAnchor="500.0" AnchorPane.topAnchor="25.0">
       <children>
          <TextField fx:id="titleField" editable="false" layoutX="17.0" layoutY="14.0" prefHeight="70.0" prefWidth="536.0" promptText="Set a title" AnchorPane.rightAnchor="13.0">
             <font>
                <Font size="30.0" />
             </font>
          </TextField>
-         <Text fx:id="descriptionHeader" fill="#22577a" layoutX="16.0" layoutY="118.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Montserrat;" text="Description" wrappingWidth="334.9270782470703">
+         <Text fx:id="descriptionHeader" fill="#22577a" layoutX="16.0" layoutY="118.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Description" wrappingWidth="334.9270782470703">
             <font>
-               <Font size="30.0" />
+               <Font name="American Typewriter" size="30.0" />
             </font>
          </Text>
          <TextArea fx:id="descriptionField" layoutX="15.0" layoutY="134.0" prefHeight="134.0" prefWidth="536.0" promptText="Add description (optional)" />
@@ -63,9 +63,9 @@
                <Font name="American Typewriter" size="24.0" />
             </font>
          </Button>
-         <Text fx:id="tasksHeader" fill="#22577a" layoutX="16.0" layoutY="304.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Montserrat;" text="Tasks" wrappingWidth="86.26045227050781">
+         <Text fx:id="tasksHeader" fill="#22577a" layoutX="16.0" layoutY="304.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tasks" wrappingWidth="86.26045227050781">
             <font>
-               <Font size="30.0" />
+               <Font name="American Typewriter" size="30.0" />
             </font>
          </Text>
          <ListView fx:id="taskListView" layoutX="15.0" layoutY="314.0" onEditStart="#displayTasks" prefHeight="171.0" prefWidth="463.0" />

@@ -16,7 +16,7 @@
    <ImageView fitHeight="760.0" fitWidth="1210.0" pickOnBounds="true">
       <Image url="@../images/create_page_background.png" />
    </ImageView>
-   <AnchorPane fx:id="newQuestAnchorPane" layoutX="31.0" layoutY="24.0" prefHeight="430.0" prefWidth="435.0" style="-fx-background-color: #fff; -fx-background-radius: 10;">
+   <AnchorPane fx:id="newQuestAnchorPane" layoutX="31.0" layoutY="24.0" prefHeight="430.0" prefWidth="435.0" style="-fx-background-color: #fff; -fx-background-radius: 10;" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="25.0">
       <children>
          <TextField fx:id="titleField" layoutX="14.0" layoutY="87.0" prefHeight="30.0" prefWidth="380.0" promptText="Set your quest title" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="85.0">
             <font>
@@ -47,7 +47,7 @@
          </Button>
       </children>
    </AnchorPane>
-   <AnchorPane fx:id="tasklistAnchorPane" layoutX="492.0" layoutY="24.0" prefHeight="430.0" prefWidth="435.0" style="-fx-background-color: #fff; -fx-background-radius: 10;">
+   <AnchorPane fx:id="tasklistAnchorPane" layoutX="492.0" layoutY="24.0" prefHeight="430.0" prefWidth="435.0" style="-fx-background-color: #fff; -fx-background-radius: 10;" AnchorPane.leftAnchor="500.0" AnchorPane.topAnchor="25.0">
       <children>
          <Text fx:id="allTasksText" fill="#22577a" layoutX="20.0" layoutY="56.1200008392334" strokeType="OUTSIDE" strokeWidth="0.0" text="Added Tasks" wrappingWidth="255.33333333333326" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">
             <font>

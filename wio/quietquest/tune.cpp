@@ -1,7 +1,7 @@
 #include "delay.h"
 #include "wiring_constants.h"
 #include "wiring_digital.h"
-#include "Tune.h"
+#include "tune.hpp"
 
 Tune longRange;
 Tune midRange;

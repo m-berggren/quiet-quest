@@ -6,7 +6,6 @@
 #include "mqtt_config.h"
 #include "pins.h"
 #include "display_config.h"
-#include "Tune.h"
 
 // Initializations
 Ultrasonic ultrasonic(PIN_WIRE_SCL);

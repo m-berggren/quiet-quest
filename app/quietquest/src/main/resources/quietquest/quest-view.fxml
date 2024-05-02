@@ -15,7 +15,7 @@
    </ImageView>
    <AnchorPane fx:id="questAnchorPane" layoutX="535.0" layoutY="20.0" prefHeight="575.0" prefWidth="413.0" style="-fx-background-color: #fff; -fx-background-radius: 10;" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="25.0">
       <children>
-         <ToggleButton fx:id="startQuestButton" layoutX="25.0" layoutY="503.0" mnemonicParsing="false" style="-fx-background-color: #57CC99; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="START" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="500.0">
+         <ToggleButton fx:id="startQuestButton" layoutX="25.0" layoutY="503.0" mnemonicParsing="false" onAction="#onStartQuestClick" style="-fx-background-color: #57CC99; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="START" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="500.0">
             <font>
                <Font name="American Typewriter" size="24.0" />
             </font>

@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -75,7 +77,7 @@ public class Database {
 
     try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
       pstmt.setString(1, username);
-      pstmt.setString(2, password);
+      pstmt.setString(2, hashPassword(password));
       ResultSet rs = pstmt.executeQuery();
       if (rs.next()) {
         correctPassword = true;
@@ -84,15 +86,14 @@ public class Database {
     return correctPassword;
   }
 
-  public boolean createUser(User user){
-    String sql = "INSERT INTO \"user\" (username, password, created_at, app_sound, sensor_sound, desk_mode) VALUES (?, ?, ?, ?, ?, ?)";
+  public boolean createUser(String username, String password){
+    String sql = "INSERT INTO \"user\" (username, password, app_sound, sensor_sound, desk_mode) VALUES (?, ?, ?, ?, ?)";
     try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-      pstmt.setString(1, user.getUsername());
-      pstmt.setString(2, user.getPassword());
-      pstmt.setTimestamp(3, user.getCreated_at());
-      pstmt.setBoolean(4, user.getAppSound());
-      pstmt.setBoolean(5, user.getSensorSound());
-      pstmt.setBoolean(6, user.getDeskMode());
+      pstmt.setString(1, username);
+      pstmt.setString(2, hashPassword(password));
+      pstmt.setBoolean(3, true);
+      pstmt.setBoolean(4, true);
+      pstmt.setBoolean(5, false);
       pstmt.executeUpdate();
       return true;
     } catch (SQLException e) {
@@ -101,4 +102,31 @@ public class Database {
     return false;
 
   }
+
+  /**
+   * Method to hash the password.
+   */
+  public static String hashPassword(String password) {
+    try {
+      // Create a MessageDigest instance for SHA-256
+      MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+
+      // Hash the password as bytes
+      byte[] passwordBytes = password.getBytes(StandardCharsets.UTF_8);
+      byte[] hashedBytes = messageDigest.digest(passwordBytes);
+
+      // Convert the hashed bytes to a hexadecimal string
+      StringBuilder hexString = new StringBuilder();
+      for (byte b : hashedBytes) {
+        hexString.append(String.format("%02x", b));
+      }
+
+      // Return the hashed password as a hexadecimal string
+      return hexString.toString();
+    } catch (NoSuchAlgorithmException e) {
+      // Handle the exception if the hashing algorithm is not supported
+      throw new RuntimeException("SHA-256 is not supported", e);
+    }
+  }
+
 }

@@ -48,7 +48,7 @@ public class CreateQuestController extends BaseController implements Initializab
     @FXML
     private TextField taskFieldOne;
     @FXML
-    private Button deleteTaskButton1;
+    private Button deleteTaskButton;
     @FXML
     private Shape popupTextbox;
     @FXML
@@ -90,24 +90,24 @@ public class CreateQuestController extends BaseController implements Initializab
             }
 
         });
-        visibility();
+        //visibility();
     }
 
     //check if task list is not empty
-    private void visibility(){
+    /*private void visibility(){
         if (!tasks.isEmpty()) {
             // if there are tasks in the list, make task list elements visible:
             allTasksText.setVisible(true);
             taskListView.setVisible(true);
-            deleteTaskButton1.setVisible(true);
+            deleteTaskButton.setVisible(true);
         }
         else {
             // if no tasks in the list, make task list elements invisible:
             allTasksText.setVisible(false);
             taskListView.setVisible(false);
-            deleteTaskButton1.setVisible(false);
+            deleteTaskButton.setVisible(false);
         }
-    }
+    }*/
 
     // add task to task list:
     public void addNewTask() {
@@ -117,7 +117,7 @@ public class CreateQuestController extends BaseController implements Initializab
             tasks.add(newTask);
             data.add(newTask);
             //quietQuestFacade.addTasks(newTask); // add current task to task list
-            visibility(); // reload task list view so that it displays updated information
+            //visibility(); // reload task list view so that it displays updated information
         }
 
     }
@@ -129,7 +129,7 @@ public class CreateQuestController extends BaseController implements Initializab
         //quietQuestFacade.deleteTask((taskListView.getItems().remove(tasks)));
         quietQuestFacade.deleteTask(taskListView.getSelectionModel().getSelectedItem());
         quietQuestFacade.resetQuestSelection();
-        visibility();
+        //visibility();
     }
 
 

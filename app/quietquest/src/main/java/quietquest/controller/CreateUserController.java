@@ -43,6 +43,7 @@ public class CreateUserController extends BaseController{
         Database database = new Database();
         String username = usernameTextField.getText();
         String password = passwordField.getText();
+
         boolean usernameOK = false;
         boolean passwordOK = false;
 
@@ -61,9 +62,7 @@ public class CreateUserController extends BaseController{
         }
 
         if(usernameOK && passwordOK){
-            User user = new User(username, password);
-
-            if (database.createUser(user)) {
+            if (database.createUser(username, password)) {
                 System.out.println("Successfully created user.");
                 loadFxml("create-quest-view.fxml", event);
             } else {

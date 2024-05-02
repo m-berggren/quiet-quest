@@ -49,7 +49,7 @@
                </font>
             </PasswordField>
             <Label fx:id="usernameExistsLabel" layoutX="177.0" layoutY="123.0" prefHeight="17.0" prefWidth="184.0" text="This username already exists." textFill="RED" visible="false" AnchorPane.leftAnchor="165.0" />
-            <Label fx:id="passwordHintLabel" layoutX="164.0" layoutY="189.0" prefHeight="64.0" prefWidth="201.0" text="Password must contain at least 8 characters and at least one must be a number." textFill="RED" wrapText="true" AnchorPane.leftAnchor="165.0" AnchorPane.rightAnchor="31.0" AnchorPane.topAnchor="189.0" />
+            <Label fx:id="passwordHintLabel" layoutX="164.0" layoutY="189.0" prefHeight="64.0" prefWidth="201.0" text="Password must contain at least 8 characters and at least one must be a number." textFill="RED" visible="false" wrapText="true" AnchorPane.leftAnchor="165.0" AnchorPane.rightAnchor="31.0" AnchorPane.topAnchor="189.0" />
          </children>
       </AnchorPane>
    </children>

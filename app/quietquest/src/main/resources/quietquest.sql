@@ -3,7 +3,6 @@ CREATE TABLE IF NOT EXISTS "user"
     "id"           integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL,
     "username"     varchar NOT NULL,
     "password"     varchar NOT NULL,
-    "created_at"   timestamp,
     "app_sound"    bool,
     "sensor_sound" bool,
     "desk_mode"    bool

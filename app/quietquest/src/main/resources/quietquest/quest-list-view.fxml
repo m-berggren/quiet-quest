@@ -8,8 +8,6 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
@@ -17,18 +15,29 @@
    <ImageView fitHeight="760.0" fitWidth="1210.0" pickOnBounds="true">
       <Image url="@../images/create_page_background.png" />
    </ImageView>
-    <ListView fx:id="questListView" layoutX="40.0" layoutY="125.0" onEditStart="#showSelected" prefHeight="200.0" prefWidth="200.0" />
-    <Label layoutX="40.0" layoutY="57.0" text="Quests">
-        <font>
-            <Font size="37.0" />
-        </font>
-    </Label>
-    <Button fx:id="deleteButton" layoutX="261.0" layoutY="125.0" mnemonicParsing="false" onAction="#onDeleteQuest" text="Delete" />
-    <Button layoutX="260.0" layoutY="175.0" mnemonicParsing="false" text="Start" />
-   <Button fx:id="goToQuestButton" layoutX="260.0" layoutY="175.0" mnemonicParsing="false" onAction="#onGoToQuestClick" text="Go to Quest" />
-   <AnchorPane fx:id="viewInfoAnchorPane" layoutX="888.0" layoutY="96.0" prefHeight="568.0" prefWidth="566.0">
+   <AnchorPane fx:id="questlistAnchorPane" layoutX="169.0" layoutY="25.0" prefHeight="414.0" prefWidth="369.0" style="-fx-background-color: #fff; -fx-background-radius: 10;" AnchorPane.topAnchor="25.0">
       <children>
-         <TextField fx:id="titleField" editable="false" layoutX="17.0" layoutY="14.0" prefHeight="70.0" prefWidth="536.0" promptText="Set a title">
+          <Button fx:id="deleteButton" layoutX="204.0" layoutY="297.0" mnemonicParsing="false" onAction="#onDeleteQuest" prefHeight="80.0" prefWidth="145.0" style="-fx-background-color: #57CC99; -fx-background-radius: 15; -fx-text-fill: #22577A;" text="Delete" AnchorPane.leftAnchor="204.0" AnchorPane.topAnchor="297.0">
+            <font>
+               <Font name="American Typewriter" size="24.0" />
+            </font>
+         </Button>
+          <Label fx:id="titleLabel" text="Quests" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">
+              <font>
+                  <Font name="American Typewriter" size="40.0" />
+              </font>
+          </Label>
+          <ListView fx:id="questListView" layoutX="20.0" layoutY="57.0" onEditStart="#showSelected" prefHeight="200.0" prefWidth="300.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="70.0" />
+         <Button fx:id="goToQuestButton" layoutX="20.0" layoutY="297.0" mnemonicParsing="false" onAction="#onGoToQuestClick" prefHeight="80.0" prefWidth="145.0" style="-fx-background-color: #57CC99; -fx-background-radius: 15; -fx-text-fill: #22577A;" text="Go" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="297.0">
+            <font>
+               <Font size="24.0" />
+            </font>
+         </Button>
+      </children>
+   </AnchorPane>
+   <AnchorPane fx:id="viewInfoAnchorPane" layoutX="591.0" layoutY="22.0" prefHeight="625.0" prefWidth="566.0" style="-fx-background-color: #fff; -fx-background-radius: 10;" AnchorPane.leftAnchor="591.0" AnchorPane.topAnchor="25.0">
+      <children>
+         <TextField fx:id="titleField" editable="false" layoutX="17.0" layoutY="14.0" prefHeight="70.0" prefWidth="536.0" promptText="Set a title" AnchorPane.rightAnchor="13.0">
             <font>
                <Font size="30.0" />
             </font>
@@ -39,19 +48,19 @@
             </font>
          </Text>
          <TextArea fx:id="descriptionField" layoutX="15.0" layoutY="134.0" prefHeight="134.0" prefWidth="536.0" promptText="Add description (optional)" />
-         <Button fx:id="saveButton" layoutX="210.0" layoutY="492.0" mnemonicParsing="false" onAction="#onSaveButtonClick" prefHeight="83.0" prefWidth="146.0" style="-fx-background-color: #57CC99; -fx-font-size: 20; -fx-font-family: Monsterrat; -fx-background-radius: 15; -fx-text-fill: #22577A;" text="SAVE">
+         <Button fx:id="saveButton" layoutX="211.0" layoutY="515.0" mnemonicParsing="false" onAction="#onSaveButtonClick" prefHeight="80.0" prefWidth="145.0" style="-fx-background-color: #57CC99; -fx-background-radius: 15; -fx-text-fill: #22577A;" text="SAVE">
             <font>
-               <Font size="33.0" />
+               <Font name="American Typewriter" size="24.0" />
             </font>
          </Button>
-         <Button fx:id="editButton" layoutX="42.0" layoutY="492.0" mnemonicParsing="false" onAction="#setEditable" prefHeight="83.0" prefWidth="146.0" style="-fx-background-color: #38A3A599; -fx-font-size: 20; -fx-font-family: Monsterrat; -fx-background-radius: 15; -fx-text-fill: #22577A;" text="EDIT">
+         <Button fx:id="editButton" layoutX="29.0" layoutY="515.0" mnemonicParsing="false" onAction="#setEditable" prefHeight="80.0" prefWidth="145.0" style="-fx-background-color: #57CC99; -fx-background-radius: 15; -fx-text-fill: #22577A;" text="EDIT">
             <font>
-               <Font size="33.0" />
+               <Font name="American Typewriter" size="24.0" />
             </font>
          </Button>
-         <Button fx:id="completeButton" layoutX="376.0" layoutY="492.0" mnemonicParsing="false" prefHeight="83.0" prefWidth="146.0" style="-fx-background-color: #80ED99; -fx-font-size: 20; -fx-font-family: Monsterrat; -fx-background-radius: 15; -fx-text-fill: #22577A;" text="COMPLETED">
+         <Button fx:id="completeButton" layoutX="386.0" layoutY="515.0" mnemonicParsing="false" prefHeight="80.0" prefWidth="145.0" style="-fx-background-color: #57CC99; -fx-background-radius: 15; -fx-text-fill: #22577A;" text="DONE">
             <font>
-               <Font size="33.0" />
+               <Font name="American Typewriter" size="24.0" />
             </font>
          </Button>
          <Text fx:id="tasksHeader" fill="#22577a" layoutX="16.0" layoutY="304.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Montserrat;" text="Tasks" wrappingWidth="86.26045227050781">
@@ -60,42 +69,17 @@
             </font>
          </Text>
          <ListView fx:id="taskListView" layoutX="15.0" layoutY="314.0" onEditStart="#displayTasks" prefHeight="171.0" prefWidth="463.0" />
-         <Button fx:id="addNewTaskButton" alignment="CENTER" layoutX="487.0" layoutY="276.0" minWidth="38.0" mnemonicParsing="false" onAction="#addNewTask" prefHeight="21.0" prefWidth="70.0" style="-fx-background-color: #38A3A5; -fx-background-radius: 8; -fx-font-size: 15; -fx-text-fill: #22577A;" text="+">
+         <Button fx:id="addNewTaskButton" alignment="CENTER" layoutX="487.0" layoutY="276.0" minWidth="38.0" mnemonicParsing="false" onAction="#addNewTask" prefHeight="21.0" prefWidth="70.0" style="-fx-background-color: #38A3A5; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="+">
             <font>
-               <Font size="6.0" />
+               <Font size="18.0" />
             </font>
          </Button>
-         <Button fx:id="deleteTaskButton" alignment="CENTER" layoutX="488.0" layoutY="314.0" minWidth="38.0" mnemonicParsing="false" onAction="#deleteFirstTask" prefHeight="32.0" prefWidth="67.0" style="-fx-background-color: #38A3A5; -fx-background-radius: 8; -fx-font-size: 14; -fx-text-fill: #22577A;" text="delete" wrapText="true">
+         <Button fx:id="deleteTaskButton" alignment="CENTER" layoutX="488.0" layoutY="314.0" minWidth="38.0" mnemonicParsing="false" onAction="#deleteFirstTask" prefHeight="32.0" prefWidth="67.0" style="-fx-background-color: #38A3A5; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="X">
             <font>
-               <Font size="9.0" />
+               <Font size="18.0" />
             </font>
          </Button>
          <TextField fx:id="taskField" layoutX="102.0" layoutY="277.0" prefHeight="30.0" prefWidth="378.0" promptText="add a new task (optional)" />
       </children>
    </AnchorPane>
-   <Pane fx:id="warningPane" disable="true" layoutX="421.0" layoutY="284.0" prefHeight="200.0" prefWidth="512.0">
-      <children>
-         <Rectangle fx:id="warningTextbox" arcHeight="5.0" arcWidth="5.0" fill="#57cc99" height="200.0" stroke="#22577a" strokeType="INSIDE" style="-fx-arc-width: 15; -fx-arc-height: 15;" visible="false" width="512.0" />
-         <Text fx:id="warningText" fill="#22577a" layoutX="32.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" visible="false" wrappingWidth="448.5535888671875">
-            <font>
-               <Font size="31.0" />
-            </font>
-         </Text>
-         <Text fx:id="warningSmallText" fill="#22577a" layoutX="67.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" visible="false" wrappingWidth="377.60003662109375">
-            <font>
-               <Font size="16.0" />
-            </font>
-         </Text>
-         <Button fx:id="okayButton" layoutX="21.0" layoutY="134.0" mnemonicParsing="false" onAction="#onOkayButtonClick" style="-fx-font-family: Montserrat; -fx-font-size: 20; -fx-text-fill: #22577A; -fx-background-color: #38A3A5;" text="Yes, proceed anyway" visible="false">
-            <font>
-               <Font size="16.0" />
-            </font>
-         </Button>
-         <Button fx:id="keepEditingButton" layoutX="281.0" layoutY="134.0" mnemonicParsing="false" onAction="#onKeepEditingClick" prefHeight="43.0" prefWidth="210.0" style="-fx-font-family: Montserrat; -fx-font-size: 20; -fx-text-fill: #22577A; -fx-background-color: #38A3A5;" text="No, keep editing" visible="false">
-            <font>
-               <Font size="16.0" />
-            </font>
-         </Button>
-      </children>
-   </Pane>
 </AnchorPane>

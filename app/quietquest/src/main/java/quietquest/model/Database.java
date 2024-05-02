@@ -83,4 +83,22 @@ public class Database {
       }
     return correctPassword;
   }
+
+  public boolean createUser(User user){
+    String sql = "INSERT INTO \"user\" (username, password, created_at, app_sound, sensor_sound, desk_mode) VALUES (?, ?, ?, ?, ?, ?)";
+    try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+      pstmt.setString(1, user.getUsername());
+      pstmt.setString(2, user.getPassword());
+      pstmt.setTimestamp(3, user.getCreated_at());
+      pstmt.setBoolean(4, user.getAppSound());
+      pstmt.setBoolean(5, user.getSensorSound());
+      pstmt.setBoolean(6, user.getDeskMode());
+      pstmt.executeUpdate();
+      return true;
+    } catch (SQLException e) {
+      System.out.println(e.getMessage());
+    }
+    return false;
+
+  }
 }

@@ -13,38 +13,43 @@
    <ImageView fitHeight="760.0" fitWidth="1210.0" pickOnBounds="true">
       <Image url="@../images/create_page_background.png" />
    </ImageView>
-   <AnchorPane fx:id="questAnchorPane" layoutX="535.0" layoutY="20.0" prefHeight="575.0" prefWidth="428.0" style="-fx-background-color: #fff; -fx-background-radius: 10;" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">
+   <AnchorPane fx:id="questAnchorPane" layoutX="535.0" layoutY="20.0" prefHeight="575.0" prefWidth="413.0" style="-fx-background-color: #fff; -fx-background-radius: 10;" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="25.0">
       <children>
-         <Button fx:id="startQuestButton" layoutX="30.0" layoutY="533.0" mnemonicParsing="false" onAction="#onStartQuestClick" text="Start Quest" AnchorPane.bottomAnchor="147.0" AnchorPane.leftAnchor="30.0">
+         <Button fx:id="startQuestButton" layoutX="36.0" layoutY="494.0" mnemonicParsing="false" onAction="#onStartQuestClick" style="-fx-background-color: #57CC99; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="Start Quest" AnchorPane.bottomAnchor="38.0" AnchorPane.leftAnchor="36.0">
             <font>
                <Font size="23.0" />
             </font>
          </Button>
-         <Button fx:id="completeQuestButton" layoutX="200.0" layoutY="539.0" mnemonicParsing="false" onAction="#onCompleteQuestClick" text="Complete Quest" AnchorPane.bottomAnchor="141.0" AnchorPane.leftAnchor="200.0">
+         <Button fx:id="completeQuestButton" layoutX="198.0" layoutY="494.0" mnemonicParsing="false" onAction="#onCompleteQuestClick" style="-fx-text-fill: #22577A; -fx-background-color: #57CC99; -fx-background-radius: 8;" text="Complete Quest" AnchorPane.bottomAnchor="38.0" AnchorPane.leftAnchor="198.0">
             <font>
                <Font size="23.0" />
             </font>
          </Button>
-         <Label fx:id="titleLabel" alignment="CENTER" prefHeight="32.0" prefWidth="153.0" text="TITLE" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="676.0" AnchorPane.topAnchor="20.0">
+         <Label fx:id="titleLabel" alignment="CENTER" prefHeight="32.0" prefWidth="333.0" text="TITLE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
             <font>
                <Font name="American Typewriter" size="26.0" />
             </font>
          </Label>
-         <Label layoutX="54.0" layoutY="69.0" prefHeight="26.0" prefWidth="92.0" text="TASKS" AnchorPane.leftAnchor="54.0" AnchorPane.rightAnchor="777.0" AnchorPane.topAnchor="69.0">
+         <Label layoutY="200.0" prefHeight="26.0" prefWidth="242.0" text="TASKS" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="200.0">
             <font>
                <Font name="American Typewriter" size="21.0" />
             </font>
          </Label>
-         <ListView fx:id="tasksListView" layoutX="46.0" layoutY="118.0" opacity="1.0" prefHeight="389.0" prefWidth="234.0" visible="true" AnchorPane.bottomAnchor="216.0" AnchorPane.leftAnchor="46.0" AnchorPane.rightAnchor="569.0" AnchorPane.topAnchor="118.0" />
+         <ListView fx:id="tasksListView" layoutX="25.0" layoutY="231.0" opacity="1.0" prefHeight="251.0" prefWidth="384.0" visible="true" AnchorPane.bottomAnchor="93.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="39.0" AnchorPane.topAnchor="231.0" />
+         <Label fx:id="descriptionLabel" alignment="TOP_LEFT" layoutX="36.0" layoutY="69.0" prefHeight="125.0" prefWidth="373.0" text="Description..." wrapText="true" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
+            <font>
+               <Font name="American Typewriter" size="15.0" />
+            </font>
+         </Label>
       </children>
    </AnchorPane>
-   <AnchorPane fx:id="mqttAnchorPane" layoutX="914.0" layoutY="21.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff; -fx-background-radius: 10;" AnchorPane.leftAnchor="915.0">
+   <AnchorPane fx:id="mqttAnchorPane" layoutX="914.0" layoutY="21.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff; -fx-background-radius: 10;" AnchorPane.leftAnchor="500.0" AnchorPane.topAnchor="25.0">
       <children>
          <Label fx:id="mqttConnectionMessage" prefHeight="17.0" prefWidth="242.0" text="..." AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0" />
          <Label fx:id="mqttDistanceMessage" prefHeight="17.0" prefWidth="242.0" text="..." AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="45.0" />
          <Label fx:id="mqttMotionMessage" prefHeight="17.0" prefWidth="242.0" text="..." AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="70.0" />
          <Label fx:id="mqttLightMessage" text="..." AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="95.0" />
-         <ToggleButton fx:id="subscribeButton" layoutY="134.0" mnemonicParsing="false" onAction="#onSubscribeButtonClick" text="Subscribe" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="134.0" />
+         <ToggleButton fx:id="subscribeButton" layoutY="134.0" mnemonicParsing="false" onAction="#onSubscribeButtonClick" style="-fx-background-color: #eee; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="Subscribe" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="134.0" />
       </children>
    </AnchorPane>
    <Label fx:id="motivationalMessage" layoutX="889.0" layoutY="43.0" prefHeight="113.0" prefWidth="242.0" text="MotivationalMessage" visible="false" wrapText="true" AnchorPane.leftAnchor="915.0" AnchorPane.topAnchor="300.0">

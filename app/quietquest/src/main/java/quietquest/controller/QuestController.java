@@ -38,8 +38,7 @@ public class QuestController extends BaseController implements Initializable, UI
     @FXML
     private Label titleLabel;
     @FXML
-    private Label descLabel;
-
+    private Label descriptionLabel;
     @FXML
     private ToggleButton subscribeButton;
     @FXML
@@ -58,12 +57,7 @@ public class QuestController extends BaseController implements Initializable, UI
     //private String selectedTask;
     private ArrayList<Task> tasks;
     private ObservableList<Task> data;
-
     private String []message;
-
-
-
-
 
 
     public void initialize(URL arg0, ResourceBundle arg1) {
@@ -72,13 +66,12 @@ public class QuestController extends BaseController implements Initializable, UI
 
     }
 
-
     @Override
     protected void afterMainController() {
         Quest quest = quietQuestFacade.getQuestManager().getQuestSelection();
         ArrayList<Task> tasks = quietQuestFacade.getQuestManager().getQuestSelection().getTasks();
         titleLabel.setText(quest.getTitle());
-        //descLabel.setText(quest.getDescription());
+        descriptionLabel.setText(quest.getDescription());
         tasksListView.getItems().addAll(tasks);
         if(tasks != null) {
             data = FXCollections.observableArrayList(tasks);
@@ -108,12 +101,6 @@ public class QuestController extends BaseController implements Initializable, UI
                     tasksListView.getItems().clear();
                     tasksListView.getItems().add(newValue);
                 }
-
-
-
-
-
-
             }
         });
 

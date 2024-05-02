@@ -30,7 +30,7 @@ import java.util.ResourceBundle;
 
 public class QuestController extends BaseController implements Initializable, UIUpdater, Callback<ListView<Task>, ListCell<Task>> {
     @FXML
-    private Button startQuestButton;
+    private ToggleButton startQuestButton;
     @FXML
     private Button completeQuestButton;
     @FXML
@@ -39,8 +39,6 @@ public class QuestController extends BaseController implements Initializable, UI
     private Label titleLabel;
     @FXML
     private Label descriptionLabel;
-    @FXML
-    private ToggleButton subscribeButton;
     @FXML
     private Label mqttMotionMessage;
     @FXML
@@ -63,7 +61,6 @@ public class QuestController extends BaseController implements Initializable, UI
     public void initialize(URL arg0, ResourceBundle arg1) {
         mqttClient = new MQTTHandler(this);
         tasksListView.setCellFactory(this);
-
     }
 
     @Override
@@ -79,9 +76,6 @@ public class QuestController extends BaseController implements Initializable, UI
         }
         setSelectedTask();
         displayTasks();
-
-
-
     }
 
     public void displayTasks(){
@@ -90,8 +84,6 @@ public class QuestController extends BaseController implements Initializable, UI
             tasksListView.setItems(data);
         }
        }
-
-
 
     private void setSelectedTask() {
         tasksListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Task>() {
@@ -130,12 +122,6 @@ public class QuestController extends BaseController implements Initializable, UI
                  }
             }
         };
-
-
-
-
-
-
     }
 
     public void showMessage (){
@@ -152,20 +138,22 @@ public class QuestController extends BaseController implements Initializable, UI
             timeline.play();
     }
 
-
-
-
-
-
     public void onTickTaskClick(ActionEvent event) {
         String message = "You have completed a task!";
         mqttClient.publishMessage("/quietquest/application/start", message);
     }
 
-
     public void onStartQuestClick(ActionEvent event) {
-        String message = "Your quest has started";
-        mqttClient.publishMessage("/quietquest/application/start", message);
+        if (startQuestButton.isSelected()) {
+            mqttClient.connect(); // Connect to MQTT broker
+            mqttClient.subscribe(); // Subscribe
+            String message = "Your quest has started";
+            mqttClient.publishMessage("/quietquest/application/start", message);
+        } else {
+            mqttClient.disconnect();
+            mqttConnectionMessage.getStyleClass().clear();
+            mqttConnectionMessage.setText("");
+        }
     }
 
     public void onCompleteQuestClick(ActionEvent event) {
@@ -176,21 +164,6 @@ public class QuestController extends BaseController implements Initializable, UI
     public void disconnectMqtt() {
         mqttClient.disconnect();
     }
-
-
-    @FXML
-    private void onSubscribeButtonClick() {
-        if (subscribeButton.isSelected()) {
-            mqttClient.connect(); // Connect to MQTT broker
-            mqttClient.subscribe(); // Subscribe
-        } else {
-            mqttClient.disconnect();
-            mqttConnectionMessage.getStyleClass().clear();
-            mqttConnectionMessage.setText("");
-
-        }
-    }
-
 
     @Override
     public void updateConnectionStatusUI(boolean connectionStatus) {

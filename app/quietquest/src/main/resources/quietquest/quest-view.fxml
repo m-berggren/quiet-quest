@@ -15,14 +15,14 @@
    </ImageView>
    <AnchorPane fx:id="questAnchorPane" layoutX="535.0" layoutY="20.0" prefHeight="575.0" prefWidth="413.0" style="-fx-background-color: #fff; -fx-background-radius: 10;" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="25.0">
       <children>
-         <Button fx:id="startQuestButton" layoutX="36.0" layoutY="494.0" mnemonicParsing="false" onAction="#onStartQuestClick" style="-fx-background-color: #57CC99; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="Start Quest" AnchorPane.bottomAnchor="38.0" AnchorPane.leftAnchor="36.0">
+         <ToggleButton fx:id="startQuestButton" layoutX="25.0" layoutY="503.0" mnemonicParsing="false" style="-fx-background-color: #57CC99; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="START" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="500.0">
             <font>
-               <Font size="23.0" />
+               <Font name="American Typewriter" size="24.0" />
             </font>
-         </Button>
-         <Button fx:id="completeQuestButton" layoutX="198.0" layoutY="494.0" mnemonicParsing="false" onAction="#onCompleteQuestClick" style="-fx-text-fill: #22577A; -fx-background-color: #57CC99; -fx-background-radius: 8;" text="Complete Quest" AnchorPane.bottomAnchor="38.0" AnchorPane.leftAnchor="198.0">
+         </ToggleButton>
+         <Button fx:id="completeQuestButton" layoutX="157.0" layoutY="503.0" mnemonicParsing="false" onAction="#onCompleteQuestClick" style="-fx-text-fill: #22577A; -fx-background-color: #57CC99; -fx-background-radius: 8;" text="COMPLETE" AnchorPane.leftAnchor="155.0" AnchorPane.topAnchor="500.0">
             <font>
-               <Font size="23.0" />
+               <Font name="American Typewriter" size="24.0" />
             </font>
          </Button>
          <Label fx:id="titleLabel" alignment="CENTER" prefHeight="32.0" prefWidth="333.0" text="TITLE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
@@ -49,7 +49,6 @@
          <Label fx:id="mqttDistanceMessage" prefHeight="17.0" prefWidth="242.0" text="..." AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="45.0" />
          <Label fx:id="mqttMotionMessage" prefHeight="17.0" prefWidth="242.0" text="..." AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="70.0" />
          <Label fx:id="mqttLightMessage" text="..." AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="95.0" />
-         <ToggleButton fx:id="subscribeButton" layoutY="134.0" mnemonicParsing="false" onAction="#onSubscribeButtonClick" style="-fx-background-color: #eee; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="Subscribe" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="134.0" />
       </children>
    </AnchorPane>
    <Label fx:id="motivationalMessage" layoutX="889.0" layoutY="43.0" prefHeight="113.0" prefWidth="242.0" text="MotivationalMessage" visible="false" wrapText="true" AnchorPane.leftAnchor="915.0" AnchorPane.topAnchor="300.0">

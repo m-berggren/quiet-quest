@@ -36,8 +36,6 @@ public class QuestListController extends BaseController implements Initializable
     @FXML
     private Button completeButton;
     @FXML
-    private Pane warningPane;
-    @FXML
     private Rectangle warningTextbox;
     @FXML
     private Button okayButton;
@@ -207,7 +205,6 @@ public void showTaskList(Task currentTask) {
 
     // warning message pop-up:
     public void showWarning(String message, String smallMessage) {
-        warningPane.setDisable(false);
         warningTextbox.setVisible(true);
         okayButton.setVisible(true);
         okayButton.setDisable(false);
@@ -241,7 +238,6 @@ public void showTaskList(Task currentTask) {
     }
 
     public void doNotShowWarning() {
-        //    warningPane.setDisable(true);
         warningTextbox.setVisible(false);
         okayButton.setVisible(false);
         keepEditingButton.setVisible(false);

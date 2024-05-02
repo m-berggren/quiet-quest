@@ -9,39 +9,51 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="AnchorPane" prefHeight="760.0" prefWidth="1210.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="quietquest.controller.QuestController">
-   <ImageView fitHeight="760.0" fitWidth="1210.0" pickOnBounds="true" preserveRatio="true">
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="760.0" prefWidth="1210.0" style="-fx-background-color: #C7F9CC;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="quietquest.controller.QuestController">
+   <ImageView fitHeight="760.0" fitWidth="1210.0" pickOnBounds="true">
       <Image url="@../images/create_page_background.png" />
    </ImageView>
-   <Button fx:id="startQuestButton" layoutX="355.0" layoutY="680.0" mnemonicParsing="false" onAction="#onStartQuestClick" text="Start Quest" AnchorPane.leftAnchor="355.0" AnchorPane.topAnchor="680.0">
-      <font>
-         <Font size="23.0" />
-      </font>
-   </Button>
-   <Label fx:id="mqttConnectionMessage" layoutX="671.0" layoutY="126.0" prefHeight="17.0" prefWidth="242.0" text="..." />
-   <Label fx:id="mqttDistanceMessage" layoutX="671.0" layoutY="190.0" prefHeight="17.0" prefWidth="242.0" text="..." />
-   <Label fx:id="mqttMotionMessage" layoutX="671.0" layoutY="222.0" prefHeight="17.0" prefWidth="242.0" text="..." />
-   <ToggleButton fx:id="subscribeButton" layoutX="671.0" layoutY="289.0" mnemonicParsing="false" onAction="#onSubscribeButtonClick" text="Subscribe" />
-   <Label fx:id="mqttLightMessage" layoutX="672.0" layoutY="164.0" text="..." />
-   <Button fx:id="completeQuestButton" layoutX="785.0" layoutY="680.0" mnemonicParsing="false" onAction="#onCompleteQuestClick" text="Complete Quest">
-      <font>
-         <Font size="23.0" />
-      </font>
-   </Button>
-   <Label fx:id="motivationalMessage" layoutX="889.0" layoutY="43.0" prefHeight="113.0" prefWidth="242.0" text="MotivationalMessage" visible="false" wrapText="true">
+   <AnchorPane fx:id="questAnchorPane" layoutX="535.0" layoutY="20.0" prefHeight="575.0" prefWidth="413.0" style="-fx-background-color: #fff; -fx-background-radius: 10;" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="25.0">
+      <children>
+         <ToggleButton fx:id="startQuestButton" layoutX="25.0" layoutY="503.0" mnemonicParsing="false" onAction="#onStartQuestClick" style="-fx-background-color: #57CC99; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="START" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="500.0">
+            <font>
+               <Font name="American Typewriter" size="24.0" />
+            </font>
+         </ToggleButton>
+         <Button fx:id="completeQuestButton" layoutX="157.0" layoutY="503.0" mnemonicParsing="false" onAction="#onCompleteQuestClick" style="-fx-text-fill: #22577A; -fx-background-color: #57CC99; -fx-background-radius: 8;" text="COMPLETE" AnchorPane.leftAnchor="155.0" AnchorPane.topAnchor="500.0">
+            <font>
+               <Font name="American Typewriter" size="24.0" />
+            </font>
+         </Button>
+         <Label fx:id="titleLabel" alignment="CENTER" prefHeight="32.0" prefWidth="333.0" text="TITLE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
+            <font>
+               <Font name="American Typewriter" size="26.0" />
+            </font>
+         </Label>
+         <Label layoutY="200.0" prefHeight="26.0" prefWidth="242.0" text="TASKS" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="200.0">
+            <font>
+               <Font name="American Typewriter" size="21.0" />
+            </font>
+         </Label>
+         <ListView fx:id="tasksListView" layoutX="25.0" layoutY="231.0" opacity="1.0" prefHeight="251.0" prefWidth="384.0" visible="true" AnchorPane.bottomAnchor="93.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="39.0" AnchorPane.topAnchor="231.0" />
+         <Label fx:id="descriptionLabel" alignment="TOP_LEFT" layoutX="36.0" layoutY="69.0" prefHeight="125.0" prefWidth="373.0" text="Description..." wrapText="true" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
+            <font>
+               <Font name="American Typewriter" size="15.0" />
+            </font>
+         </Label>
+      </children>
+   </AnchorPane>
+   <AnchorPane fx:id="mqttAnchorPane" layoutX="914.0" layoutY="21.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fff; -fx-background-radius: 10;" AnchorPane.leftAnchor="500.0" AnchorPane.topAnchor="25.0">
+      <children>
+         <Label fx:id="mqttConnectionMessage" prefHeight="17.0" prefWidth="242.0" text="..." AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0" />
+         <Label fx:id="mqttDistanceMessage" prefHeight="17.0" prefWidth="242.0" text="..." AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="45.0" />
+         <Label fx:id="mqttMotionMessage" prefHeight="17.0" prefWidth="242.0" text="..." AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="70.0" />
+         <Label fx:id="mqttLightMessage" text="..." AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="95.0" />
+      </children>
+   </AnchorPane>
+   <Label fx:id="motivationalMessage" layoutX="889.0" layoutY="43.0" prefHeight="113.0" prefWidth="242.0" text="MotivationalMessage" visible="false" wrapText="true" AnchorPane.leftAnchor="915.0" AnchorPane.topAnchor="300.0">
       <font>
          <Font name="System Bold Italic" size="19.0" />
       </font>
    </Label>
-   <Label fx:id="titleLabel" alignment="CENTER" layoutX="122.0" layoutY="110.0" prefHeight="32.0" prefWidth="207.0" text="TITLE" AnchorPane.leftAnchor="122.0" AnchorPane.rightAnchor="881.0" AnchorPane.topAnchor="110.0">
-      <font>
-         <Font name="American Typewriter" size="26.0" />
-      </font>
-   </Label>
-   <Label layoutX="150.0" layoutY="168.0" prefHeight="26.0" prefWidth="179.0" text="TASKS" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="881.0" AnchorPane.topAnchor="168.0">
-      <font>
-         <Font name="American Typewriter" size="21.0" />
-      </font>
-   </Label>
-   <ListView fx:id="tasksListView" layoutX="100.0" layoutY="207.0" opacity="1.0" prefHeight="426.0" prefWidth="422.0" visible="true" AnchorPane.bottomAnchor="127.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="688.0" AnchorPane.topAnchor="207.0" />
 </AnchorPane>

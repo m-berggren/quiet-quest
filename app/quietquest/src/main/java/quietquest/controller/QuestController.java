@@ -30,7 +30,7 @@ import java.util.ResourceBundle;
 
 public class QuestController extends BaseController implements Initializable, UIUpdater, Callback<ListView<Task>, ListCell<Task>> {
     @FXML
-    private Button startQuestButton;
+    private ToggleButton startQuestButton;
     @FXML
     private Button completeQuestButton;
     @FXML
@@ -38,10 +38,7 @@ public class QuestController extends BaseController implements Initializable, UI
     @FXML
     private Label titleLabel;
     @FXML
-    private Label descLabel;
-
-    @FXML
-    private ToggleButton subscribeButton;
+    private Label descriptionLabel;
     @FXML
     private Label mqttMotionMessage;
     @FXML
@@ -58,27 +55,20 @@ public class QuestController extends BaseController implements Initializable, UI
     //private String selectedTask;
     private ArrayList<Task> tasks;
     private ObservableList<Task> data;
-
     private String []message;
-
-
-
-
 
 
     public void initialize(URL arg0, ResourceBundle arg1) {
         mqttClient = new MQTTHandler(this);
         tasksListView.setCellFactory(this);
-
     }
-
 
     @Override
     protected void afterMainController() {
         Quest quest = quietQuestFacade.getQuestManager().getQuestSelection();
         ArrayList<Task> tasks = quietQuestFacade.getQuestManager().getQuestSelection().getTasks();
         titleLabel.setText(quest.getTitle());
-        //descLabel.setText(quest.getDescription());
+        descriptionLabel.setText(quest.getDescription());
         tasksListView.getItems().addAll(tasks);
         if(tasks != null) {
             data = FXCollections.observableArrayList(tasks);
@@ -86,9 +76,6 @@ public class QuestController extends BaseController implements Initializable, UI
         }
         setSelectedTask();
         displayTasks();
-
-
-
     }
 
     public void displayTasks(){
@@ -98,8 +85,6 @@ public class QuestController extends BaseController implements Initializable, UI
         }
        }
 
-
-
     private void setSelectedTask() {
         tasksListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Task>() {
             @Override
@@ -108,12 +93,6 @@ public class QuestController extends BaseController implements Initializable, UI
                     tasksListView.getItems().clear();
                     tasksListView.getItems().add(newValue);
                 }
-
-
-
-
-
-
             }
         });
 
@@ -143,12 +122,6 @@ public class QuestController extends BaseController implements Initializable, UI
                  }
             }
         };
-
-
-
-
-
-
     }
 
     public void showMessage (){
@@ -165,20 +138,22 @@ public class QuestController extends BaseController implements Initializable, UI
             timeline.play();
     }
 
-
-
-
-
-
     public void onTickTaskClick(ActionEvent event) {
         String message = "You have completed a task!";
         mqttClient.publishMessage("/quietquest/application/start", message);
     }
 
-
     public void onStartQuestClick(ActionEvent event) {
-        String message = "Your quest has started";
-        mqttClient.publishMessage("/quietquest/application/start", message);
+        if (startQuestButton.isSelected()) {
+            mqttClient.connect(); // Connect to MQTT broker
+            mqttClient.subscribe(); // Subscribe
+            String message = "Your quest has started";
+            mqttClient.publishMessage("/quietquest/application/start", message);
+        } else {
+            mqttClient.disconnect();
+            mqttConnectionMessage.getStyleClass().clear();
+            mqttConnectionMessage.setText("");
+        }
     }
 
     public void onCompleteQuestClick(ActionEvent event) {
@@ -189,21 +164,6 @@ public class QuestController extends BaseController implements Initializable, UI
     public void disconnectMqtt() {
         mqttClient.disconnect();
     }
-
-
-    @FXML
-    private void onSubscribeButtonClick() {
-        if (subscribeButton.isSelected()) {
-            mqttClient.connect(); // Connect to MQTT broker
-            mqttClient.subscribe(); // Subscribe
-        } else {
-            mqttClient.disconnect();
-            mqttConnectionMessage.getStyleClass().clear();
-            mqttConnectionMessage.setText("");
-
-        }
-    }
-
 
     @Override
     public void updateConnectionStatusUI(boolean connectionStatus) {

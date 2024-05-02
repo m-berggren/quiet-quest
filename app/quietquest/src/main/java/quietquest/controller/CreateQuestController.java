@@ -16,6 +16,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -49,6 +50,8 @@ public class CreateQuestController extends BaseController implements Initializab
     private TextField taskFieldOne;
     @FXML
     private Button deleteTaskButton;
+    @FXML
+    private Pane popupPane;
     @FXML
     private Shape popupTextbox;
     @FXML
@@ -133,9 +136,9 @@ public class CreateQuestController extends BaseController implements Initializab
     }
 
 
-
-
-    // create a quest by clicking "Save Quest" button:
+    /**
+     * Creates a quest upon clicking "Save" button.
+     */
     public void createQuest(ActionEvent event) throws Exception {
 
             //if quest title field is left empty:
@@ -161,8 +164,12 @@ public class CreateQuestController extends BaseController implements Initializab
             }
     }
 
-    // error/success message pop-up:
+    /**
+     * Method that makes error/success message pop-up window appear.
+     */
     public void showMessage(String message, String smallMessage){
+        popupPane.setDisable(false);
+        popupPane.setVisible(true);
         popupTextbox.setVisible(true);
         okayButton.setVisible(true);
         popupText.setVisible(true);
@@ -171,9 +178,15 @@ public class CreateQuestController extends BaseController implements Initializab
         popupSmallText.setText(smallMessage);
     }
 
-    // exit error/success message pop-up by clicking "Okay" button:
+    /**
+     * Error/success message pop-up window disappears upon clicking "Okay" button.
+     * @param event
+     * @throws IOException
+     */
     public void onOkayButtonClick (ActionEvent event) throws IOException {
-        popupTextbox.setVisible(false); // error message pop-up appears
+        popupPane.setVisible(false);
+        popupPane.setDisable(true);
+        popupTextbox.setVisible(false);
         popupText.setVisible(false);
         popupSmallText.setVisible(false);
         okayButton.setVisible(false);

@@ -60,6 +60,26 @@
                <Font size="20.0" />
             </font>
          </Button>
+         <Pane fx:id="popupPane" disable="true" layoutX="-236.0" layoutY="194.0" prefHeight="200.0" prefWidth="512.0" style="-fx-background-color: #fff; -fx-background-radius: 10;" visible="false">
+            <children>
+               <Rectangle fx:id="popupTextbox" arcHeight="5.0" arcWidth="5.0" fill="#57cc99" height="200.0" smooth="false" stroke="#22577a" strokeType="INSIDE" style="-fx-arc-width: 15; -fx-arc-height: 15;" visible="false" width="512.0" />
+               <Text fx:id="popupText" fill="#22577a" layoutX="23.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="text" textAlignment="CENTER" visible="false" wrappingWidth="466.782958984375">
+                  <font>
+                     <Font size="31.0" />
+                  </font>
+               </Text>
+               <Text fx:id="popupSmallText" fill="#22577a" layoutX="70.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="text" textAlignment="CENTER" visible="false" wrappingWidth="382.00000000000006">
+                  <font>
+                     <Font size="16.0" />
+                  </font>
+               </Text>
+               <Button fx:id="okayButton" layoutX="226.0" layoutY="134.0" mnemonicParsing="false" onAction="#onOkayButtonClick" style="-fx-font-family: Montserrat; -fx-font-size: 20; -fx-text-fill: #22577A; -fx-background-color: #38A3A5;" text="Okay" visible="false">
+                  <font>
+                     <Font size="16.0" />
+                  </font>
+               </Button>
+            </children>
+         </Pane>
       </children>
    </AnchorPane>
    <Button fx:id="saveQuestButton" layoutX="45.0" layoutY="476.0" mnemonicParsing="false" onAction="#createQuest" prefHeight="83.0" prefWidth="145.0" style="-fx-background-color: #57CC99; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="SAVE" wrapText="true" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="475.0">
@@ -77,24 +97,4 @@
          <Font name="American Typewriter" size="30.0" />
       </font>
    </Button>
-   <Pane fx:id="emptyTitleErrorPane" layoutX="562.0" layoutY="476.0" prefHeight="200.0" prefWidth="512.0" style="-fx-background-color: #fff; -fx-background-radius: 10;" visible="false">
-      <children>
-         <Rectangle fx:id="popupTextbox" arcHeight="5.0" arcWidth="5.0" fill="#57cc99" height="200.0" smooth="false" stroke="#22577a" strokeType="INSIDE" style="-fx-arc-width: 15; -fx-arc-height: 15;" width="512.0" />
-         <Text fx:id="popupText" fill="#22577a" layoutX="23.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="text" textAlignment="CENTER" visible="false" wrappingWidth="466.782958984375">
-            <font>
-               <Font size="31.0" />
-            </font>
-         </Text>
-         <Text fx:id="popupSmallText" fill="#22577a" layoutX="70.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="text" textAlignment="CENTER" visible="false" wrappingWidth="382.00000000000006">
-            <font>
-               <Font size="16.0" />
-            </font>
-         </Text>
-         <Button fx:id="okayButton" layoutX="226.0" layoutY="134.0" mnemonicParsing="false" onAction="#onOkayButtonClick" style="-fx-font-family: Montserrat; -fx-font-size: 20; -fx-text-fill: #22577A; -fx-background-color: #38A3A5;" text="Okay" visible="false">
-            <font>
-               <Font size="16.0" />
-            </font>
-         </Button>
-      </children>
-   </Pane>
 </AnchorPane>

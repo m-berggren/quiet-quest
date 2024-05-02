@@ -1,5 +1,4 @@
 package quietquest.controller;
-
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -27,7 +26,6 @@ import quietquest.model.QuestManager;
 import quietquest.model.Task;
 import quietquest.utility.FxmlFile;
 import quietquest.utility.MQTTHandler;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -66,12 +64,10 @@ public class CreateQuestController extends BaseController implements Initializab
     private Text allTasksText;
     @FXML
     private Button addNewTaskButton;
-
     private Parent root;
     private Stage stage;
     private Scene scene;
     private FXMLLoader loader;
-
     private ArrayList <Task> tasks;
     private ObservableList<Task> data;
 
@@ -90,13 +86,11 @@ public class CreateQuestController extends BaseController implements Initializab
         taskListView.getItems().clear();
         taskListView.getItems().addAll(data);
         taskListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-       /* taskListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Task>() {
+        taskListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Task>() {
             @Override
             public void changed(ObservableValue<? extends Task> observableValue, Task oldValue, Task newValue) {
             }
         });
-
-        */
     }
 
     /**
@@ -117,8 +111,8 @@ public class CreateQuestController extends BaseController implements Initializab
      */
     public void deleteTask() {
         Task currentTask = taskListView.getSelectionModel().getSelectedItem();
-        quietQuestFacade.deleteTask(currentTask);
-        showTaskList();
+        tasks.remove(currentTask);
+        data.remove(currentTask);
     }
 
     /**
@@ -192,7 +186,6 @@ public class CreateQuestController extends BaseController implements Initializab
         addNewTaskButton.setDisable(false);
         taskListView.setDisable(false);
         deleteTaskButton.setDisable(false);
-
     }
 
     /**

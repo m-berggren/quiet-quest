@@ -32,6 +32,15 @@ public class CreateUserController {
     @FXML
     private Label passwordHintLabel;
 
+    /**
+     * Directs back to the login page without saving new user into the database.
+     *
+     * @param event
+     * @throws IOException
+     */
+    public void onBackClick(ActionEvent event) throws IOException {
+        loadFxml("log-in-view.fxml", event);
+    }
 
     /**
      * Saves a new user to the database if a unique username and valid password are provided.

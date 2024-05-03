@@ -166,9 +166,9 @@ public class QuestListController extends BaseController implements Initializable
     //
     public void showSelected() {
         // if fields are actively being edited, warning pop-up appears:
-        if (titleField.isEditable()) {
+        /* if (titleField.isEditable()) {
             showWarning("Your changes will not be saved", "Are you sure you want to proceed?");
-        } else {
+        } else { */
             currentQuest = quietQuestFacade.getQuestSelection();
             currentTask = quietQuestFacade.getTaskSelection();
             if (currentQuest != null) {
@@ -189,14 +189,14 @@ public class QuestListController extends BaseController implements Initializable
                 completeButton.setVisible(true);
                 // set fields uneditable:
                 setSelectedUneditable();
-                doNotShowWarning();
+            //    doNotShowWarning();
                 // pre-fill quest details:
                 titleField.setText(currentQuest.getTitle());
                 descriptionField.setText(currentQuest.getDescription());
                 showTaskList(currentTask);
             } else {//error handling
             }
-        }
+        // }
     }
 
     // show task list view details:
@@ -207,7 +207,7 @@ public class QuestListController extends BaseController implements Initializable
         taskListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE); // can select multiple tasks at a time
     }*/
 
-    // warning message pop-up:
+    /* // warning message pop-up:
     public void showWarning(String message, String smallMessage) {
         warningTextbox.setVisible(true);
         okayButton.setVisible(true);
@@ -227,21 +227,27 @@ public class QuestListController extends BaseController implements Initializable
         completeButton.setDisable(true);
     }
 
-    // discard edits and show new quest selection when by clicking okayButton:
+     */
+
+    /* // discard edits and show new quest selection when by clicking okayButton:
     public void onOkayButtonClick() {
         doNotShowWarning();
         setSelectedUneditable();
         showSelected();
     }
 
-    // stay on same quest in editing mode by clicking keepEditingButton:
+     */
+
+    /* // stay on same quest in editing mode by clicking keepEditingButton:
     public void onKeepEditingClick() {
         doNotShowWarning();
         setEditable();
         taskListView.setDisable(false);
     }
 
-    public void doNotShowWarning() {
+     */
+
+    /* public void doNotShowWarning() {
         warningTextbox.setVisible(false);
         okayButton.setVisible(false);
         keepEditingButton.setVisible(false);
@@ -251,6 +257,8 @@ public class QuestListController extends BaseController implements Initializable
         questListView.setDisable(false);
         taskListView.setDisable(false);
     }
+
+     */
 
     // Edit selected quest by clicking editButton:
     public void setEditable() {

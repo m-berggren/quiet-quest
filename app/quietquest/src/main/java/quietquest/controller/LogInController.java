@@ -135,7 +135,7 @@ public class LogInController {
      * @throws IOException
      */
     private void loadFxml(String fxmlFile, ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(QuietQuestMain.class.getResource(FxmlFile.HOME));
+        FXMLLoader loader = new FXMLLoader(QuietQuestMain.class.getResource(fxmlFile));
         Parent root = loader.load();
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);

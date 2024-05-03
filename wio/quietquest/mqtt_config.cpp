@@ -81,11 +81,11 @@ void setupMqtt() {
         //try to connect
         Serial.println(String("Failed, returned: ") + client.state());
         Serial.println("Trying again ...");
-        client.connect(clientID.c_str());                                    // Attempts to connect client to MQTT broker
+        client.connect(clientID.c_str());                                   // Attempts to connect client to MQTT broker
         delay(3000);
     }
-     
-    Serial.println("Connected to broker.");                                // Starts subscribing to topics
+    client.subscribe(TOPIC_SUB_QUEST);                                      // Starts subscribing to topics
+    Serial.println("Connected to broker.");
 }
 
 // ==========================* CHECKS *==============================

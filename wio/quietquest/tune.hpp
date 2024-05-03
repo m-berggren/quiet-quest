@@ -1,5 +1,5 @@
-#ifndef TUNE_H          // Stops header file from being redefined over and over
-#define TUNE_H
+#ifndef TUNE_HPP          // Stops header file from being redefined over and over
+#define TUNE_HPP
 
 class Tune {
     public:

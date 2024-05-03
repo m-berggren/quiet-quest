@@ -12,51 +12,53 @@ import static javafx.application.Application.launch;
 
 public class Quest {
 
-  // attributes of Quest
-  private String title;
-  private String description;
-  private ArrayList<Task>tasks = new ArrayList<>();
+    // Attributes of Quest
+    private String title;
+    private String description;
+    private ArrayList<Task> tasks = new ArrayList<>();
 
 
-  // constructors
-  public Quest() {
-  }
+    // Constructors
+    public Quest() {
+    }
 
-  public Quest(String title, String description, ArrayList<Task> tasks) {
-    this.title = title;
-    this.description = description;
-    this.tasks = tasks;
-  }
+    public Quest(String title, String description, ArrayList<Task> tasks) {
+        this.title = title;
+        this.description = description;
+        this.tasks = tasks;
+    }
 
-  // getters
-  public String getTitle() {
-    return this.title;
-  }
+    // Getters
+    public String getTitle() {
+        return this.title;
+    }
 
-  public String getDescription() {
-    return this.description;
-  }
+    public String getDescription() {
+        return this.description;
+    }
 
-  public ArrayList<Task> getTasks(){
-    return this.tasks;
-  }
-    // setters
+    public ArrayList<Task> getTasks() {
+        return this.tasks;
+    }
+
+    // Setters
     public void setTitle(String title) {
         this.title = title;
     }
-    public void setDescription(String description){
+
+    public void setDescription(String description) {
         this.description = description;
     }
 
-    public void setTasks (ArrayList<Task> tasks){
-    this.tasks = tasks;
+    public void setTasks(ArrayList<Task> tasks) {
+        this.tasks = tasks;
     }
 
 
-  @Override
-  public String toString() {
-    return title;
-  }
+    @Override
+    public String toString() {
+        return title;
+    }
 
 }
 

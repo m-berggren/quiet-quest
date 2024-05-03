@@ -20,7 +20,7 @@ import quietquest.utility.FxmlFile;
 import java.io.IOException;
 import java.sql.SQLException;
 
-public class CreateUserController extends BaseController{
+public class CreateUserController {
     @FXML
     private TextField usernameTextField;
     @FXML
@@ -32,9 +32,19 @@ public class CreateUserController extends BaseController{
     @FXML
     private Label passwordHintLabel;
 
+    /**
+     * Directs back to the login page without saving new user into the database.
+     *
+     * @param event
+     * @throws IOException
+     */
+    public void onBackClick(ActionEvent event) throws IOException {
+        loadFxml("log-in-view.fxml", event);
+    }
 
     /**
      * Saves a new user to the database if a unique username and valid password are provided.
+     *
      * @param event
      * @throws SQLException
      * @throws IOException
@@ -61,10 +71,10 @@ public class CreateUserController extends BaseController{
             passwordHintLabel.setVisible(false);
         }
 
-        if(usernameOK && passwordOK){
+        if (usernameOK && passwordOK) {
             if (database.createUser(username, password)) {
                 System.out.println("Successfully created user.");
-                loadFxml("create-quest-view.fxml", event);
+                loadFxml("log-in-view.fxml", event);
             } else {
                 System.out.println("Something went wrong.");
             }
@@ -75,14 +85,15 @@ public class CreateUserController extends BaseController{
 
     /**
      * Checks validity of new password.
+     *
      * @param password String that should contain at least 8 characters where at least one must be a number.
      * @return True if password fulfills criteria, otherwise false.
      */
-    public boolean passwordValid(String password){
+    public boolean passwordValid(String password) {
         boolean length = password.length() >= 8;
         boolean containsNumber = false;
-        for(int i = 0; i < password.length(); i++){
-            if(Character.isDigit(password.charAt(i))){
+        for (int i = 0; i < password.length(); i++) {
+            if (Character.isDigit(password.charAt(i))) {
                 containsNumber = true;
                 i = password.length();
             }
@@ -91,15 +102,12 @@ public class CreateUserController extends BaseController{
     }
 
     private void loadFxml(String fxmlFile, ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(QuietQuestMain.class.getResource(FxmlFile.MAIN));
+        FXMLLoader loader = new FXMLLoader(QuietQuestMain.class.getResource(fxmlFile));
         Parent root = loader.load();
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm()); // adding CSS styling option
         stage.setScene(scene);
         stage.show();
-
-        MainController controller = loader.getController();
-        controller.loadView(fxmlFile);
     }
 }

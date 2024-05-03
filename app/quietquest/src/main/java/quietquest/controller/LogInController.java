@@ -50,12 +50,12 @@ public class LogInController {
      * Load start page upon clicking "Log In" if user credentials match what is in the database.
      * If inputted credentials are incorrect, show a popup message.
      */
-    public void onLogInClick (ActionEvent event) throws IOException, SQLException {
+    public void onLogInClick(ActionEvent event) throws IOException, SQLException {
         username = usernameField.getText();
         password = passwordField.getText();
         Database database = new Database();
         if (database.checkIfUsernameExists(username) && database.checkIfPasswordCorrect(username, password)) {
-            loadFxml("create-quest-view.fxml", event);
+            loadFxml("start-view.fxml", event);
         } else { // username does not exist OR wrong password
             showPopup();
         }
@@ -64,11 +64,16 @@ public class LogInController {
 
     /**
      * Load sign-up page upon clicking "Create User Account" button
+     *
      * @param event
      * @throws IOException
      */
     public void onCreateUserClick(ActionEvent event) throws IOException {
-        loadFxml("create-user.fxml", event);
+        try {
+            loadFxml("create-user.fxml", event);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -115,7 +120,7 @@ public class LogInController {
         popupCreateUserButton.setVisible(false);
         tryAgainButton.setVisible(false);
 
-        // enable regular buttons/text fields
+        // Enable regular buttons/text fields
         createUserButton.setDisable(false);
         logInButton.setDisable(false);
         usernameField.setDisable(false);
@@ -124,20 +129,18 @@ public class LogInController {
 
     /**
      * Method used to load the page specified
+     *
      * @param fxmlFile specifies the page that is loaded
      * @param event
      * @throws IOException
      */
     private void loadFxml(String fxmlFile, ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(QuietQuestMain.class.getResource(FxmlFile.MAIN));
+        FXMLLoader loader = new FXMLLoader(QuietQuestMain.class.getResource(fxmlFile));
         Parent root = loader.load();
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm()); // adding CSS styling option
         stage.setScene(scene);
         stage.show();
-
-        MainController controller = loader.getController();
-        controller.loadView(fxmlFile);
     }
 }

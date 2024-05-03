@@ -16,15 +16,10 @@ public abstract class BaseController {
         afterMainController();
     }
 
-
     /**
      * Hook that runs after setting main controller. Default is no action.
      */
     protected void afterMainController() {
-    }
-
-    public void showStart() {
-        mainController.loadView(FxmlFile.START);
     }
 
     public void showHome() {
@@ -55,14 +50,9 @@ public abstract class BaseController {
         mainController.loadView(FxmlFile.HELP);
     }
 
-    public void showLogOut() {
-
-    }
-
     public void showLogIn() {
         mainController.loadView(FxmlFile.LOG_IN);
     }
-
 
     public QuietQuestFacade getQuietQuestFacade() {
         return this.quietQuestFacade;

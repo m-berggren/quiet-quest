@@ -55,7 +55,7 @@ public class LogInController {
         password = passwordField.getText();
         Database database = new Database();
         if (database.checkIfUsernameExists(username) && database.checkIfPasswordCorrect(username, password)) {
-            loadFxml("create-quest-view.fxml", event);
+            loadFxml("start-view.fxml", event);
         } else { // username does not exist OR wrong password
             showPopup();
         }
@@ -69,7 +69,11 @@ public class LogInController {
      * @throws IOException
      */
     public void onCreateUserClick(ActionEvent event) throws IOException {
-        loadFxml("create-user.fxml", event);
+        try {
+            loadFxml("create-user.fxml", event);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -131,15 +135,12 @@ public class LogInController {
      * @throws IOException
      */
     private void loadFxml(String fxmlFile, ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(QuietQuestMain.class.getResource(FxmlFile.MAIN));
+        FXMLLoader loader = new FXMLLoader(QuietQuestMain.class.getResource(FxmlFile.HOME));
         Parent root = loader.load();
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm()); // adding CSS styling option
         stage.setScene(scene);
         stage.show();
-
-        MainController controller = loader.getController();
-        controller.loadView(fxmlFile);
     }
 }

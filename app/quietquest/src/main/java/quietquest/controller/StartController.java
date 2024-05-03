@@ -14,7 +14,7 @@ import quietquest.utility.FxmlFile;
 
 import java.io.IOException;
 
-public class StartController {
+public class StartController extends BaseController {
     @FXML
     private Label welcomeText;
 

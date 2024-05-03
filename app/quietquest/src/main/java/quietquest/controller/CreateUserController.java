@@ -20,7 +20,7 @@ import quietquest.utility.FxmlFile;
 import java.io.IOException;
 import java.sql.SQLException;
 
-public class CreateUserController extends BaseController {
+public class CreateUserController {
     @FXML
     private TextField usernameTextField;
     @FXML
@@ -65,7 +65,7 @@ public class CreateUserController extends BaseController {
         if (usernameOK && passwordOK) {
             if (database.createUser(username, password)) {
                 System.out.println("Successfully created user.");
-                loadFxml("create-quest-view.fxml", event);
+                loadFxml("log-in-view.fxml", event);
             } else {
                 System.out.println("Something went wrong.");
             }
@@ -93,15 +93,12 @@ public class CreateUserController extends BaseController {
     }
 
     private void loadFxml(String fxmlFile, ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(QuietQuestMain.class.getResource(FxmlFile.MAIN));
+        FXMLLoader loader = new FXMLLoader(QuietQuestMain.class.getResource(FxmlFile.LOG_IN));
         Parent root = loader.load();
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm()); // adding CSS styling option
         stage.setScene(scene);
         stage.show();
-
-        MainController controller = loader.getController();
-        controller.loadView(fxmlFile);
     }
 }

@@ -43,14 +43,12 @@
                <Font name="American Typewriter" size="18.0" />
             </font>
          </Button>
-         <Label alignment="CENTER" prefHeight="50.0" prefWidth="200.0" style="-fx-border-color: #57CC99; -fx-border-radius: 10;" text="Logout" textAlignment="RIGHT">
-            <VBox.margin>
-               <Insets top="100.0" />
-            </VBox.margin>
+         <Label prefHeight="104.0" prefWidth="200.0" />
+         <Button fx:id="logOutButton" mnemonicParsing="false" onAction="#onLogOutButtonClick" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: #C7F9CC; -fx-background-radius: 8; -fx-border-color: #57CC99; -fx-border-radius: 8;" text="Log out">
             <font>
                <Font name="American Typewriter" size="18.0" />
             </font>
-         </Label>
+         </Button>
       </VBox>
    </left>
 </BorderPane>

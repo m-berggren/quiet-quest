@@ -34,6 +34,16 @@ public class MQTTHandler {
         client.connectWith().send();
     }
 
+    public void connect(String pubTopic, String pubMessage) {
+        client.connectWith()
+                .send()
+                .whenComplete((connAck, throwable) -> {
+                    if (throwable == null) {
+                        publishMessage(pubTopic, pubMessage);
+                    }
+                });
+    }
+
     public void disconnect() {
         client.disconnect();
     }
@@ -46,12 +56,12 @@ public class MQTTHandler {
                 .send();
     }
 
-    private void handleMessage(Mqtt5Publish publish) {
-        ByteBuffer buffer = publish.getPayload().orElse(ByteBuffer.allocate(0));
+    private void handleMessage(Mqtt5Publish subMessage) {
+        ByteBuffer buffer = subMessage.getPayload().orElse(ByteBuffer.allocate(0));
         String messageContent = UTF_8.decode(buffer).toString();
-        String topic = publish.getTopic().toString();
+        String topic = subMessage.getTopic().toString();
 
-        System.out.println("Received message on topic " + publish.getTopic() + ": " + messageContent);
+        System.out.println("Received message on topic " + subMessage.getTopic() + ": " + messageContent);
 
         String[] topicParts = topic.split("/");
         if (topicParts.length > 3) { // making sure to only handle topics with 3 parts (first '/' creates empty segment)

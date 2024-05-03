@@ -32,8 +32,8 @@ void setup() {
     displaySetup();                                                           // Initiates tft screen
 
     client.setServer(SERVER, PORT);
-    client.setCallback(callback);                                             // Callback method is in MQTT config file
     setupNetwork();                                                           // Setup Wifi and MQTT broker connection
+    client.setCallback(callback);                                             // Callback method is in MQTT config file
 }
 
 void loop() {

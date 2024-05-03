@@ -145,10 +145,9 @@ public class QuestController extends BaseController implements Initializable, UI
 
     public void onStartQuestClick(ActionEvent event) {
         if (startQuestButton.isSelected()) {
-            mqttClient.connect(); // Connect to MQTT broker
-            mqttClient.subscribe(); // Subscribe
             String message = "Your quest has started";
-            mqttClient.publishMessage("/quietquest/application/start", message);
+            mqttClient.connect("/quietquest/application/start", message); // Connect to MQTT broker & publish
+            mqttClient.subscribe(); // Subscribe
         } else {
             mqttClient.disconnect();
             mqttConnectionMessage.getStyleClass().clear();

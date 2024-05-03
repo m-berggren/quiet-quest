@@ -27,10 +27,9 @@ import java.util.Random;
 import java.util.ResourceBundle;
 
 
-
 public class QuestController extends BaseController implements Initializable, UIUpdater, Callback<ListView<Task>, ListCell<Task>> {
     @FXML
-    private ToggleButton startQuestButton;
+    private Button startQuestButton;
     @FXML
     private Button completeQuestButton;
     @FXML
@@ -52,10 +51,10 @@ public class QuestController extends BaseController implements Initializable, UI
 
     private MQTTHandler mqttClient;
 
-    //private String selectedTask;
+    // Private String selectedTask;
     private ArrayList<Task> tasks;
     private ObservableList<Task> data;
-    private String []message;
+    private String[] message;
 
 
     public void initialize(URL arg0, ResourceBundle arg1) {
@@ -70,7 +69,7 @@ public class QuestController extends BaseController implements Initializable, UI
         titleLabel.setText(quest.getTitle());
         descriptionLabel.setText(quest.getDescription());
         tasksListView.getItems().addAll(tasks);
-        if(tasks != null) {
+        if (tasks != null) {
             data = FXCollections.observableArrayList(tasks);
             tasksListView.setItems(data);
         }
@@ -78,18 +77,18 @@ public class QuestController extends BaseController implements Initializable, UI
         displayTasks();
     }
 
-    public void displayTasks(){
-        if(tasks != null && !tasks.isEmpty()) {
+    public void displayTasks() {
+        if (tasks != null && !tasks.isEmpty()) {
             data = FXCollections.observableArrayList(tasks);
             tasksListView.setItems(data);
         }
-       }
+    }
 
     private void setSelectedTask() {
         tasksListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Task>() {
             @Override
             public void changed(ObservableValue<? extends Task> observableValue, Task oldValue, Task newValue) {
-                if(newValue != null) {
+                if (newValue != null) {
                     tasksListView.getItems().clear();
                     tasksListView.getItems().add(newValue);
                 }
@@ -97,35 +96,37 @@ public class QuestController extends BaseController implements Initializable, UI
         });
 
     }
-     @Override
-    public ListCell<Task> call (ListView<Task> param){
-        return new ListCell<>(){
+
+    @Override
+    public ListCell<Task> call(ListView<Task> param) {
+        return new ListCell<>() {
 
 
             @Override
-            public void updateItem(Task data,boolean empty){
+            public void updateItem(Task data, boolean empty) {
                 super.updateItem(data, empty);
                 if (empty || data == null) {
                     setText(null);
                     setGraphic(null);
                     motivationalMessage.setVisible(false);
                 } else {
-                     CheckBox checkBox = new CheckBox(data.getTasks());
-                     checkBox.setSelected(data.isCompleted());
-                     checkBox.setOnAction(event -> {
-                         data.setCompleted(checkBox.isSelected());
-
-                         showMessage();
-                     });
-                     setGraphic(checkBox);
-                     motivationalMessage.setVisible(false);
-                 }
+                    CheckBox checkBox = new CheckBox(data.getTasks());
+                    checkBox.setSelected(data.isCompleted());
+                    checkBox.setOnAction(event -> {
+                        data.setCompleted(checkBox.isSelected());
+                        if (checkBox.isSelected()) {
+                            showMessage();
+                        }
+                    });
+                    setGraphic(checkBox);
+                    motivationalMessage.setVisible(false);
+                }
             }
         };
     }
 
-    public void showMessage (){
-        message = new String[]{"Good Job!", "Amazing!", "One step closer to a nap","You can do it!", "Wow! Is there anything you can´t do?"};
+    public void showMessage() {
+        message = new String[]{"Good Job!", "Amazing!", "One step closer to a nap", "You can do it!", "Wow! Is there anything you can´t do?"};
         Random random = new Random();
         int index = random.nextInt(message.length);
         String setMessage = message[index];
@@ -133,9 +134,9 @@ public class QuestController extends BaseController implements Initializable, UI
         motivationalMessage.setVisible(true);
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(3), event -> {
-                motivationalMessage.setVisible(false);
-            }));
-            timeline.play();
+            motivationalMessage.setVisible(false);
+        }));
+        timeline.play();
     }
 
     public void onTickTaskClick(ActionEvent event) {
@@ -144,21 +145,18 @@ public class QuestController extends BaseController implements Initializable, UI
     }
 
     public void onStartQuestClick(ActionEvent event) {
-        if (startQuestButton.isSelected()) {
-            mqttClient.connect(); // Connect to MQTT broker
-            mqttClient.subscribe(); // Subscribe
             String message = "Your quest has started";
-            mqttClient.publishMessage("/quietquest/application/start", message);
-        } else {
-            mqttClient.disconnect();
-            mqttConnectionMessage.getStyleClass().clear();
-            mqttConnectionMessage.setText("");
-        }
+            mqttClient.connect("/quietquest/application/start", message); // Connect to MQTT broker & publish
+            mqttClient.subscribe(); // Subscribe
     }
 
     public void onCompleteQuestClick(ActionEvent event) {
         String message = "You have completed your quest!";
         mqttClient.publishMessage("/quietquest/application/start", message);
+
+        mqttClient.disconnect();
+        mqttConnectionMessage.getStyleClass().clear();
+        mqttConnectionMessage.setText("");
     }
 
     public void disconnectMqtt() {

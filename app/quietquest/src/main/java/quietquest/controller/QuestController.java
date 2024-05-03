@@ -29,7 +29,7 @@ import java.util.ResourceBundle;
 
 public class QuestController extends BaseController implements Initializable, UIUpdater, Callback<ListView<Task>, ListCell<Task>> {
     @FXML
-    private ToggleButton startQuestButton;
+    private Button startQuestButton;
     @FXML
     private Button completeQuestButton;
     @FXML
@@ -144,20 +144,18 @@ public class QuestController extends BaseController implements Initializable, UI
     }
 
     public void onStartQuestClick(ActionEvent event) {
-        if (startQuestButton.isSelected()) {
             String message = "Your quest has started";
             mqttClient.connect("/quietquest/application/start", message); // Connect to MQTT broker & publish
             mqttClient.subscribe(); // Subscribe
-        } else {
-            mqttClient.disconnect();
-            mqttConnectionMessage.getStyleClass().clear();
-            mqttConnectionMessage.setText("");
-        }
     }
 
     public void onCompleteQuestClick(ActionEvent event) {
         String message = "You have completed your quest!";
         mqttClient.publishMessage("/quietquest/application/start", message);
+
+        mqttClient.disconnect();
+        mqttConnectionMessage.getStyleClass().clear();
+        mqttConnectionMessage.setText("");
     }
 
     public void disconnectMqtt() {

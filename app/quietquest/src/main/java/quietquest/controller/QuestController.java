@@ -114,8 +114,9 @@ public class QuestController extends BaseController implements Initializable, UI
                     checkBox.setSelected(data.isCompleted());
                     checkBox.setOnAction(event -> {
                         data.setCompleted(checkBox.isSelected());
-
-                        showMessage();
+                        if (checkBox.isSelected()) {
+                            showMessage();
+                        }
                     });
                     setGraphic(checkBox);
                     motivationalMessage.setVisible(false);

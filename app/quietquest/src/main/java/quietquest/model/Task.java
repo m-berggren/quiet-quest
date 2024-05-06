@@ -1,11 +1,5 @@
 package quietquest.model;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import javafx.scene.control.MultipleSelectionModel;
-
 public class Task implements Activity {
     private String task;
     private boolean completed;
@@ -19,7 +13,7 @@ public class Task implements Activity {
     }
 
     //getter
-    public String getTasks() {
+    public String getTask() {
         return this.task;
     }
 
@@ -48,6 +42,10 @@ public class Task implements Activity {
     @Override
     public void completeTask() {
 
+    }
+
+    @Override
+    public void start() {
     }
 
     public boolean isCompleted() {

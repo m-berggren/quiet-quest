@@ -47,6 +47,11 @@ public class QuestController extends BaseController implements Initializable, UI
     @FXML
     private Label motivationalMessage;
     private Activity currentActivity;
+    private Quest currentQuest;
+
+    private final String PUB_TOPIC_START = "/quietquest/application/start";
+    private final String PUB_TOPIC_TASK_DONE = "/quietquest/application/task_done";
+    private final String PUB_TOPIC_END = "/quietquest/application/end";
 
     private ObservableList<Activity> activityObservableArrayList;
     private String[] message;
@@ -58,11 +63,11 @@ public class QuestController extends BaseController implements Initializable, UI
 
     @Override
     protected void afterMainController() {
-        Quest quest = quietQuestFacade.getQuestSelection();
-        titleLabel.setText(quest.getTitle());
-        descriptionLabel.setText(quest.getDescription());
+        currentQuest = quietQuestFacade.getQuestSelection();
+        titleLabel.setText(currentQuest.getTitle());
+        descriptionLabel.setText(currentQuest.getDescription());
 
-        activityObservableArrayList = FXCollections.observableArrayList(quest.getActivities());
+        activityObservableArrayList = FXCollections.observableArrayList(currentQuest.getActivities());
         activityListView.setItems(activityObservableArrayList);
 
         setSelectedTask();
@@ -128,28 +133,26 @@ public class QuestController extends BaseController implements Initializable, UI
 
     public void onTickTaskClick(ActionEvent event) {
         String message = "You have completed a task!";
-        mqttHandler.publishMessage("/quietquest/application/start", message);
+        mqttHandler.publishMessage(PUB_TOPIC_TASK_DONE, message);
     }
 
     public void onStartQuestClick(ActionEvent event) {
-        String message = "Your quest has started";
-        mqttHandler.connect("/quietquest/application/start", message); // Connect to MQTT broker & publish
+        String message = "Your quest has started.";
+        mqttHandler.connect(PUB_TOPIC_START, message); // Connect to MQTT broker & publish
         mqttHandler.subscribe(); // Subscribe
 
-        currentActivity.start();
+        currentQuest.startActivity(); // Starts quest, mqtt pub & sub
     }
 
     public void onCompleteQuestClick(ActionEvent event) {
-        String message = "You have completed your quest!";
-        mqttHandler.publishMessage("/quietquest/application/start", message);
-
+        currentQuest.endActivity(); // Publishes last message
+        mqttHandler.publishMessage(PUB_TOPIC_END, "Your quest has ended.");
         mqttHandler.disconnect();
+
+        // Remove or change later:
         mqttConnectionMessage.getStyleClass().clear();
         mqttConnectionMessage.setText("");
-    }
 
-    public void disconnectMqtt() {
-        mqttHandler.disconnect();
     }
 
     @Override

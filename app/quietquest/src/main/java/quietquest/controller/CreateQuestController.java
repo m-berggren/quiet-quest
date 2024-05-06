@@ -84,14 +84,6 @@ public class CreateQuestController extends BaseController implements Initializab
     @Override
     protected void afterMainController() {
         super.afterMainController();
-        loadActivities();
-    }
-
-    public void loadActivities() {
-        //ArrayList<Activity> activities = quietQuestFacade.getQuestSelection().getActivities();
-        //getQuietQuestFacade().getActivities();
-        //activityObservableList.clear();
-        //activityObservableList.addAll(activities);
     }
 
     private void configureSliderListener() {
@@ -141,24 +133,13 @@ public class CreateQuestController extends BaseController implements Initializab
     private void onTabChange(Tab oldTab, Tab newTab) {
         if (!activityListView.getItems().isEmpty()) {
             Platform.runLater(() -> {
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                ConfirmationAlert alert = new ConfirmationAlert();
                 alert.setTitle("Confirmation");
                 alert.setHeaderText("Switching between tabs will erase all prior data.");
-                alert.setContentText("Do you want to continue:");
-
-                // Apply the CSS file to the alert dialog window
-                DialogPane dialogPane = alert.getDialogPane();
-                dialogPane.getStylesheets().add(
-                        CreateQuestController.class.getResource("/style.css").toExternalForm());
-                dialogPane.getStyleClass().add("dialog-pane");
-
-                ButtonType yesButton = new ButtonType("Yes");
-                ButtonType noButton = new ButtonType("No");
-
-                alert.getButtonTypes().setAll(yesButton, noButton);
+                alert.setContentText("Do you want to continue?:");
 
                 Optional<ButtonType> result = alert.showAndWait();
-                if (result.isPresent() && result.get() == noButton) {
+                if (result.isPresent() && result.get().getText().equals("No")) {
                     activityTabPane.getSelectionModel().select(oldTab);
                 } else {
                     lastSelectedTab = newTab;
@@ -188,8 +169,23 @@ public class CreateQuestController extends BaseController implements Initializab
         int focusTime = Integer.parseInt(focusTextField.getText());
         int breakTime = Integer.parseInt(breakTextField.getText());
         int intervals = Integer.parseInt(intervalTextField.getText());
+
         PomodoroTimer newPomodoro = new PomodoroTimer(focusTime, breakTime, intervals);
-        activityObservableList.add(newPomodoro);
+        if (!activityObservableList.isEmpty() && activityObservableList.getFirst() instanceof PomodoroTimer) {
+            ConfirmationAlert alert = new ConfirmationAlert();
+            alert.setTitle("Confirmation");
+            alert.setHeaderText("This will update existing Pomodoro activity.");
+            alert.setContentText("Do you want to continue?:");
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get().getText().equals("Yes")) {
+                activityObservableList.clear();
+                activityObservableList.add(newPomodoro);
+            }
+        } else {
+            activityObservableList.add(newPomodoro);
+        }
+
     }
 
     /**

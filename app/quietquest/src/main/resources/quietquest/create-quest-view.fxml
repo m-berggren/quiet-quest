@@ -58,21 +58,21 @@
                         <content>
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="214.0" prefWidth="380.0">
                                 <children>
-                                    <Slider fx:id="focusSlider" layoutX="14.0" layoutY="50.0" majorTickUnit="20.0" max="120.0" minorTickCount="1" prefHeight="14.0" prefWidth="208.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
-                                    <TextField fx:id="focusTextField" layoutX="243.0" layoutY="41.0" prefHeight="30.0" prefWidth="50.0" promptText="0">
+                                    <Slider fx:id="focusSlider" layoutX="14.0" layoutY="50.0" majorTickUnit="10.0" max="55.0" min="5.0" minorTickCount="1" prefHeight="14.0" prefWidth="208.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="25.0" />
+                                    <TextField fx:id="focusTextField" layoutX="243.0" layoutY="41.0" prefHeight="30.0" prefWidth="50.0" promptText="25">
                                         <font>
                                             <Font size="14.0" />
                                         </font>
                                     </TextField>
                                     <Label layoutX="298.0" layoutY="48.0" />
-                                    <Slider fx:id="breakSlider" layoutX="14.0" layoutY="109.0" majorTickUnit="10.0" max="60.0" minorTickCount="1" prefHeight="14.0" prefWidth="208.0" showTickLabels="true" showTickMarks="true" />
-                                    <TextField fx:id="breakTextField" layoutX="243.0" layoutY="101.0" prefHeight="30.0" prefWidth="50.0" text="0">
+                                    <Slider fx:id="breakSlider" layoutX="14.0" layoutY="109.0" majorTickUnit="5.0" max="30.0" minorTickCount="1" prefHeight="14.0" prefWidth="208.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="5.0" />
+                                    <TextField fx:id="breakTextField" layoutX="243.0" layoutY="101.0" prefHeight="30.0" prefWidth="50.0" promptText="5">
                                         <font>
                                             <Font size="14.0" />
                                         </font>
                                     </TextField>
-                                    <Slider fx:id="intervalSlider" blockIncrement="1.0" layoutX="14.0" layoutY="166.0" majorTickUnit="1.0" max="8.0" min="1.0" minorTickCount="0" prefHeight="14.0" prefWidth="208.0" showTickLabels="true" showTickMarks="true" value="1.0" />
-                                    <TextField fx:id="intervalTextField" layoutX="242.0" layoutY="162.0" prefHeight="30.0" prefWidth="50.0" text="1">
+                                    <Slider fx:id="intervalSlider" blockIncrement="1.0" layoutX="14.0" layoutY="166.0" majorTickUnit="1.0" max="8.0" min="1.0" minorTickCount="0" prefHeight="14.0" prefWidth="208.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="4.0" />
+                                    <TextField fx:id="intervalTextField" layoutX="242.0" layoutY="162.0" prefHeight="30.0" prefWidth="50.0" promptText="4">
                                         <font>
                                             <Font size="14.0" />
                                         </font>

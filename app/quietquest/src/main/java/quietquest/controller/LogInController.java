@@ -1,6 +1,7 @@
 package quietquest.controller;
 
 import javafx.event.ActionEvent;
+import javafx.event.EventTarget;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -9,6 +10,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
@@ -55,11 +58,24 @@ public class LogInController {
         password = passwordField.getText();
         Database database = new Database();
         if (database.checkIfUsernameExists(username) && database.checkIfPasswordCorrect(username, password)) {
-            loadFxml("start-view.fxml", event);
+            loadFxml(FxmlFile.START, event);
         } else { // username does not exist OR wrong password
             showPopup();
         }
         database.disconnect();
+    }
+
+    @FXML
+    private void onEnterKeyPressed(KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER) {
+            EventTarget target = event.getTarget();
+            ActionEvent actionEvent = new ActionEvent(target, null);
+            try {
+                onLogInClick(actionEvent);
+            } catch (IOException | SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -70,7 +86,7 @@ public class LogInController {
      */
     public void onCreateUserClick(ActionEvent event) throws IOException {
         try {
-            loadFxml("create-user.fxml", event);
+            loadFxml(FxmlFile.CREATE_USER, event);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -68,13 +68,17 @@
                <Font name="American Typewriter" size="30.0" />
             </font>
          </Text>
-         <ListView fx:id="taskListView" layoutX="15.0" layoutY="314.0" onEditStart="#displayTasks" prefHeight="171.0" prefWidth="463.0" />
-         <Button fx:id="addNewTaskButton" alignment="CENTER" layoutX="487.0" layoutY="276.0" minWidth="38.0" mnemonicParsing="false" onAction="#addNewTask" prefHeight="21.0" prefWidth="70.0" style="-fx-background-color: #38A3A5; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="+">
+          <ListView fx:id="taskListView" layoutX="15.0" layoutY="314.0" prefHeight="171.0" prefWidth="463.0"/>
+          <Button fx:id="addNewTaskButton" alignment="CENTER" layoutX="487.0" layoutY="276.0" minWidth="38.0"
+                  mnemonicParsing="false" prefHeight="21.0" prefWidth="70.0"
+                  style="-fx-background-color: #38A3A5; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="+">
             <font>
                <Font size="18.0" />
             </font>
          </Button>
-         <Button fx:id="deleteTaskButton" alignment="CENTER" layoutX="488.0" layoutY="314.0" minWidth="38.0" mnemonicParsing="false" onAction="#deleteFirstTask" prefHeight="32.0" prefWidth="67.0" style="-fx-background-color: #38A3A5; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="X">
+          <Button fx:id="deleteTaskButton" alignment="CENTER" layoutX="488.0" layoutY="314.0" minWidth="38.0"
+                  mnemonicParsing="false" prefHeight="32.0" prefWidth="67.0"
+                  style="-fx-background-color: #38A3A5; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="X">
             <font>
                <Font size="18.0" />
             </font>

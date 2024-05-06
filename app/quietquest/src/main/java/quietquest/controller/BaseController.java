@@ -2,13 +2,17 @@ package quietquest.controller;
 
 import quietquest.model.Quest;
 import quietquest.model.QuietQuestFacade;
-import quietquest.model.Task;
 import quietquest.utility.FxmlFile;
+import quietquest.utility.MQTTHandler;
 
 public abstract class BaseController {
+    protected final MQTTHandler mqttHandler;
     private MainController mainController;
     protected QuietQuestFacade quietQuestFacade;
 
+    public BaseController() {
+        mqttHandler = MQTTHandler.getInstance();
+    }
 
     public void setMainController(MainController mainController) {
         this.mainController = mainController;
@@ -33,7 +37,6 @@ public abstract class BaseController {
     public void showQuestList() {
         mainController.loadView(FxmlFile.QUEST_LIST);
     }
-
     public void showQuest(Quest quest) {
         mainController.loadView(FxmlFile.SHOW_QUEST);
     }

@@ -1,12 +1,16 @@
 package quietquest.controller;
 
+import quietquest.model.Database;
 import quietquest.model.Quest;
 import quietquest.model.QuietQuestFacade;
+import quietquest.model.User;
 import quietquest.utility.FxmlFile;
 import quietquest.utility.MQTTHandler;
 
 public abstract class BaseController {
     protected final MQTTHandler mqttHandler;
+    protected Database database;
+    protected User user;
     private MainController mainController;
     protected QuietQuestFacade quietQuestFacade;
 
@@ -24,6 +28,22 @@ public abstract class BaseController {
      * Hook that runs after setting main controller. Default is no action.
      */
     protected void afterMainController() {
+    }
+
+    public Database getDatabase() {
+        return database;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setDatabase(Database database) {
+        this.database = database;
     }
 
     public void showHome() {

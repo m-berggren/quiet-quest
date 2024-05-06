@@ -4,8 +4,20 @@ import java.util.HashMap;
 
 public class QuietQuestFacade {
     private final QuestManager questManager = new QuestManager();
+    private final User user;
+    private final Database database;
 
-    public QuietQuestFacade() {
+    public QuietQuestFacade(User user, Database database) {
+        this.user = user;
+        this.database = database;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public Database getDatabase() {
+        return database;
     }
 
     public HashMap<String, Quest> getQuests() {

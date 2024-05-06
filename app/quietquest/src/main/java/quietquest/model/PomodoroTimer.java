@@ -8,7 +8,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class PomodoroTimer implements Activity {
-    private final Timer timer;
+    private Timer timer;
     private final int focusTime;
     private final int breakTime;
     private int intervals;
@@ -52,9 +52,7 @@ public class PomodoroTimer implements Activity {
      */
     private void scheduleNextTask(boolean isInterrupted) {
         if (intervals <= 0 || isInterrupted) { // Need a stop for recursive function, isInterrupted through manual exit
-            timer.cancel();
-            alert("Pomodoro session complete!");
-            mqttHandler.publishMessage(PUB_TOPIC, "pomodoro_finished");
+            stopPomodoro();
             return;
         }
 
@@ -68,13 +66,20 @@ public class PomodoroTimer implements Activity {
             task = new FocusTime(this);
             delay = toMilliseconds(focusTime);
         }
-        timer.schedule(task, delay);
+        if (!isInterrupted) {
+            timer.schedule(task, delay);
+        }
     }
 
     /**
      *
      */
     public void completeTask() {
+        if (isInterrupted) {
+            stopPomodoro();
+            return;
+        }
+
         String taskType = isBreak ? "Break" : "Focus";
         alert(taskType + "interval complete!");
 
@@ -86,7 +91,18 @@ public class PomodoroTimer implements Activity {
     }
 
     public void end() {
-        isInterrupted = true; // This will stop recursive function
+        isInterrupted = true;
+        stopPomodoro();
+    }
+
+    public void stopPomodoro() {
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
+
+        alert("Pomodoro session complete!");
+        mqttHandler.publishMessage(PUB_TOPIC, "pomodoro_finished");
     }
 
     private void alert(String message) {

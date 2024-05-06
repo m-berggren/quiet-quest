@@ -91,8 +91,8 @@ public class CreateQuestController extends BaseController implements Initializab
         focusSlider.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                // Rounds down value to intervals of 10. For example: 24 / 10 rounded to 2.0 and multiplied by 10
-                double roundedValue = Math.round(newValue.doubleValue() / 10) * 10;
+                // Rounds down value to intervals of 5. For example: 24 / 5 rounded to 4.0 and multiplied by 5
+                double roundedValue = Math.round(newValue.doubleValue() / 5) * 5;
                 focusSlider.setValue(roundedValue); // Updates slider position
                 focusTextField.setText(String.valueOf((int) roundedValue)); // Updates text by intervals of 10
             }
@@ -159,6 +159,7 @@ public class CreateQuestController extends BaseController implements Initializab
         if (!newTaskTitle.isEmpty()) {
             Task newTask = new Task(newTaskTitle);
             activityObservableList.add(newTask);
+            taskField.clear();
         }
     }
 

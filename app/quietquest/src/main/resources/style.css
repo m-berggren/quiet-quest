@@ -2,6 +2,7 @@
 This file defines global css styles for the application.
 */
 
+/* Styling for label*/
 .label-all-green {
     -fx-border-color: darkgreen;
     -fx-border-width: 3;
@@ -46,4 +47,57 @@ This file defines global css styles for the application.
     -fx-border-color: gray;
     -fx-border-radius: 5;
     -fx-border-width: 1;
+}
+
+/* Styling for TabPane */
+.tab-pane {
+    -fx-tab-min-height: 30px;
+    -fx-tab-min-width: 80px;
+}
+
+.tab {
+    -fx-background-color: #d6dbd6; /* Base color for all tabs */
+    -fx-text-fill: white;
+}
+
+.tab:selected {
+    -fx-background-color: #57CC99; /* Different color for the selected tab */
+}
+
+.tab-header-area .tab-header-background {
+    -fx-background-color: #ffffff; /* Background for the header background */
+}
+
+.tab-content-area {
+    -fx-background-color: #ffffff; /* Background for the content area */
+}
+
+.tab-pane {
+    -fx-background-color: #000000; /* Top and bottom borders around TabPane*/
+}
+
+/* Styling for alert dialog window */
+.dialog-pane {
+    -fx-font-size: 14px;
+    -fx-background-color: #C7F9CC;
+}
+
+.dialog-pane .button {
+    -fx-font-size: 14px;
+    -fx-background-color: #57CC99;
+}
+
+.dialog-pane .content {
+    -fx-font-size: 16px;
+    -fx-background-color: #C7F9CC;
+}
+
+.dialog-pane .header-panel {
+    -fx-font-size: 20px;
+    -fx-background-color: #C7F9CC;
+}
+
+/* Custom ListView styling, mainly removing the alternating row colors */
+.list-cell:odd, .list-cell:even {
+    -fx-background: white;
 }

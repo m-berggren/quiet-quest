@@ -12,26 +12,34 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class MQTTHandler {
 
+    private static MQTTHandler instance = null;
+
     private final String HOST = "broker.hivemq.com";
     private final String SUB_TOPICS = "/quietquest/sensor/#";
-    private final String PUB_TOPICS = "/quietquest/application/#";
 
-    private final UIUpdater uiUpdater;
+    private UIUpdater uiUpdater;
     private final Mqtt5AsyncClient client;
 
     // Information used from this website:
     // https://console.hivemq.cloud/clients/java-hivemq?uuid=ee9e926915b642241a7bc895977db4ae9
     // For testing and building we are using a public MQTT broker by HiveMQ
 
-    public MQTTHandler(UIUpdater uiUpdater) {
-        this.uiUpdater = uiUpdater;
+    public MQTTHandler() {
+        this.uiUpdater = null;
         client = Mqtt5Client.builder()
                 .serverHost(HOST)
                 .buildAsync();
     }
 
-    public void connect() {
-        client.connectWith().send();
+    public static synchronized MQTTHandler getInstance() {
+        if (instance == null) {
+            instance = new MQTTHandler();
+        }
+        return instance;
+    }
+
+    public void setUIUpdater(UIUpdater uiUpdater) {
+        this.uiUpdater = uiUpdater;
     }
 
     public void connect(String pubTopic, String pubMessage) {

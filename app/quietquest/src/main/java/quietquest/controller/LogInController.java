@@ -1,6 +1,7 @@
 package quietquest.controller;
 
 import javafx.event.ActionEvent;
+import javafx.event.EventTarget;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -9,16 +10,18 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import quietquest.QuietQuestMain;
+import quietquest.model.User;
 import quietquest.utility.FxmlFile;
 import quietquest.model.Database;
 
 import java.io.IOException;
-import java.sql.Connection;
 import java.sql.SQLException;
 
 public class LogInController {
@@ -55,11 +58,37 @@ public class LogInController {
         password = passwordField.getText();
         Database database = new Database();
         if (database.checkIfUsernameExists(username) && database.checkIfPasswordCorrect(username, password)) {
-            loadFxml("start-view.fxml", event);
-        } else { // username does not exist OR wrong password
+            User user = database.getUserByUsername(username);
+            loadStartController(event, user, database); // Passing User and Database as parameters to use in application
+        } else { // Username does not exist OR wrong password
             showPopup();
         }
         database.disconnect();
+    }
+
+    private void loadStartController(ActionEvent event, User user, Database database) throws IOException {
+        FXMLLoader loader = new FXMLLoader(QuietQuestMain.class.getResource(FxmlFile.START));
+        Parent root = loader.load();
+        StartController startController = loader.getController();
+        startController.initialize(user, database);
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    @FXML
+    private void onEnterKeyPressed(KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER) {
+            EventTarget target = event.getTarget();
+            ActionEvent actionEvent = new ActionEvent(target, null);
+            try {
+                onLogInClick(actionEvent);
+            } catch (IOException | SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -70,7 +99,7 @@ public class LogInController {
      */
     public void onCreateUserClick(ActionEvent event) throws IOException {
         try {
-            loadFxml("create-user.fxml", event);
+            loadFxml(FxmlFile.CREATE_USER, event);
         } catch (IOException e) {
             e.printStackTrace();
         }

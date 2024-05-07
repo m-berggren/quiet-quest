@@ -2,7 +2,7 @@
 
 WiFiClient wifiClient; 
 PubSubClient client(wifiClient);
-QUEST_RUNS = false;
+boolean QUEST_RUNS = false;
 
 // ==========================* CALLBACK METHOD *=====================
 

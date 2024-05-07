@@ -5,7 +5,7 @@
 #include <PubSubClient.h>                           // Library used for connecting to MQTT
 #include "credentials.h"                            // SSID and PASSWORD information
 #include "utils.h"                                  // Stored global variables
-#include "Tune.h"                                   // Using questStart from Tune class
+#include "Tune.hpp"                                   // Using questStart from Tune class
 
 // ==========================* CONSTANTS *===========================
 

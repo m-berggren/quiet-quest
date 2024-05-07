@@ -129,7 +129,7 @@ public class QuestListController extends BaseController {
             titleField.setText(selectedQuest.getTitle());
             descriptionField.setText(selectedQuest.getDescription());
             if(selectedQuest.getType() == QuestType.TASK){
-                questTypeLabel.setText("Tasks");
+                questTypeLabel.setText("TASKS");
                 pomodoroAnchorPane.setVisible(false);
                 taskAnchorPane.setVisible(true);
 
@@ -141,7 +141,7 @@ public class QuestListController extends BaseController {
                 }
                 taskListView.setItems(tasks);
             } else if (selectedQuest.getType() == QuestType.POMODORO){
-                questTypeLabel.setText("Pomodoro");
+                questTypeLabel.setText("POMODORO");
                 taskAnchorPane.setVisible(false);
                 pomodoroAnchorPane.setVisible(true);
                 PomodoroTimer pomodoro = (PomodoroTimer) selectedQuest.getActivities().getFirst();

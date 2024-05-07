@@ -51,7 +51,7 @@
                <Font name="American Typewriter" size="21.0" />
             </font>
          </Label>
-         <AnchorPane fx:id="taskAnchorPane" layoutY="303.0" prefHeight="236.0" prefWidth="370.0" style="-fx-background-color: #ffffff;" AnchorPane.bottomAnchor="11.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="303.0">
+         <AnchorPane fx:id="taskAnchorPane" layoutY="303.0" prefHeight="210.0" prefWidth="370.0" style="-fx-background-color: #ffffff;" visible="false" AnchorPane.bottomAnchor="11.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="305.0">
             <children>
                 <ListView fx:id="taskListView" layoutX="20.0" layoutY="58.0" prefHeight="200.0" prefWidth="330.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="10.0" />
             </children>
@@ -67,7 +67,7 @@
                <Font name="American Typewriter" size="21.0" />
             </font>
          </Label>
-         <AnchorPane fx:id="pomodoroAnchorPane" prefHeight="119.0" prefWidth="370.0" visible="false" AnchorPane.bottomAnchor="156.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="275.0">
+         <AnchorPane fx:id="pomodoroAnchorPane" layoutY="312.0" prefHeight="120.0" prefWidth="370.0" visible="false" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="305.0">
             <children>
                <Label fx:id="focusLabel" layoutX="14.0" layoutY="21.0" prefHeight="18.0" prefWidth="320.0" text="Focus time:" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="10.0">
                   <font>

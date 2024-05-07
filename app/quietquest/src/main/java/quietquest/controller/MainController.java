@@ -12,6 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import quietquest.QuietQuestMain;
 import quietquest.model.Database;
+import quietquest.model.Quest;
 import quietquest.model.QuietQuestFacade;
 import quietquest.model.User;
 import quietquest.utility.FxmlFile;
@@ -70,6 +71,21 @@ public class MainController extends BaseController {
             baseController.setUser(user);
             baseController.setDatabase(database);
             baseController.setMainController(this);
+            mainPane.setCenter(node);
+        } catch (IOException | SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void loadQuestController(Quest quest) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(QuietQuestMain.class.getResource(FxmlFile.SHOW_QUEST));
+            Parent node = fxmlLoader.load();
+            QuestController questController = fxmlLoader.getController();
+            questController.initiateQuest(quest);
+            questController.setUser(user);
+            questController.setDatabase(database);
+            questController.setMainController(this);
             mainPane.setCenter(node);
         } catch (IOException | SQLException e) {
             throw new RuntimeException(e);

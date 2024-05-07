@@ -61,6 +61,22 @@ public class Quest {
         }
     }
 
+    public void endActivity() {
+        if (activities.isEmpty()) {
+            return;
+        }
+        if (activities.getFirst() instanceof PomodoroTimer) {
+            Activity activity = activities.getFirst();
+            activity.end(); // Will end recursive PomodoroTimer calls
+        } else if (activities.getFirst() instanceof Task) {
+            // Update tasks with end time
+            for (Activity activity : activities) {
+                Task task = (Task) activity;
+                task.setEndTime(Timestamp.from(Instant.now()));
+            }
+        }
+    }
+
     public Timestamp getStartTime() {
         return startTime;
     }
@@ -114,18 +130,6 @@ public class Quest {
 
     public ArrayList<Activity> getActivities() {
         return activities;
-    }
-
-    public void endActivity() {
-        if (activities.isEmpty()) {
-            return;
-        }
-        if (activities.getFirst() instanceof PomodoroTimer) {
-            Activity activity = activities.getFirst();
-            activity.end(); // Will end recursive PomodoroTimer calls
-        } else {
-            // May include publish message from Task later
-        }
     }
 
     @Override

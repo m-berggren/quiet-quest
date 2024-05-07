@@ -47,43 +47,28 @@ public class Database {
 
     public ArrayList<Quest> getAllQuests(User user) throws SQLException {
         ArrayList<Quest> quests = new ArrayList<>();
-        int userId;
 
-        String userSql = "SELECT * FROM \"user\" where \"username\" = ?";
-        try (PreparedStatement userStmt = connection.prepareStatement(userSql)) {
-            userStmt.setString(1, user.getUsername());
-            try (ResultSet rs = userStmt.executeQuery()) {
-                if (rs.next()) {
-                    userId = rs.getInt("id");
-                } else {
-                    throw new RuntimeException("User not found.");
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException("Failed to retrieve user ID.", e);
+        String questSql = "SELECT * FROM quest WHERE user_id = ?";
+
+        try (PreparedStatement questStmt = connection.prepareStatement(questSql)) {
+            questStmt.setInt(1, user.getId());
+            ResultSet rs = questStmt.executeQuery();
+            while (rs.next()) {
+                String title = rs.getString("title");
+                String description = rs.getString("detail");
+                boolean completionState = rs.getBoolean("completion_state");
+                Timestamp startTime = rs.getTimestamp("start_time");
+                Timestamp completeTime = rs.getTimestamp("complete_time");
+                int boxOpenTimes = rs.getInt("box_open_times");
+
+                ArrayList<Activity> activities = getActivitiesForQuest(rs.getInt("id"));
+                Quest quest = new Quest(title, description, activities, completionState, startTime, completeTime, boxOpenTimes);
+                quests.add(quest);
             }
-
-            String questSql = "SELECT * FROM quest WHERE user_id = ?";
-
-            try (PreparedStatement questStmt = connection.prepareStatement(questSql)) {
-                questStmt.setInt(1, userId);
-                ResultSet rs = questStmt.executeQuery();
-                while (rs.next()) {
-                    String title = rs.getString("title");
-                    String description = rs.getString("detail");
-                    boolean completionState = rs.getBoolean("completion_state");
-                    Timestamp startTime = rs.getTimestamp("start_time");
-                    Timestamp completeTime = rs.getTimestamp("complete_time");
-                    int boxOpenTimes = rs.getInt("box_open_times");
-
-                    ArrayList<Activity> activities = getActivitiesForQuest(rs.getInt("id"));
-                    Quest quest = new Quest(title, description, activities, completionState, startTime, completeTime, boxOpenTimes);
-                    quests.add(quest);
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-            return quests;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
+        return quests;
     }
 
     private ArrayList<Activity> getActivitiesForQuest(int questId) throws SQLException {
@@ -122,24 +107,6 @@ public class Database {
             }
         }
         return activities;
-    }
-
-    public User getUserByUsername(String username) throws SQLException {
-        String sql = "SELECT * FROM \"user\" WHERE username = ?";
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setString(1, username);
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                int id = rs.getInt("id");
-                String password = rs.getString("password");
-                boolean appSound = rs.getBoolean("app_sound");
-                boolean sensorSound = rs.getBoolean("sensor_sound");
-                boolean deskMode = rs.getBoolean("desk_mode");
-
-                return new User(id, username, password, appSound, sensorSound, deskMode);
-            }
-        }
-        return null;
     }
 
     public void disconnect() throws SQLException {
@@ -206,6 +173,8 @@ public class Database {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+
+        createActivities(user, quest);
     }
 
     /**
@@ -213,10 +182,7 @@ public class Database {
      * @param quest
      * @return
      */
-    public void updateQuest(User user, Quest quest) {
-        // Update Quest object
-        int user_id = user.getId();
-        String title = quest.getTitle();
+    public void updateQuest(User user, Quest quest) throws SQLException {
         String sql = "UPDATE \"quest\" SET completion_state = ?, complete_time = ?, start_time = ?, box_open_times = ? WHERE user_id = ? AND title = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setBoolean(1, quest.getCompletionState());
@@ -235,28 +201,62 @@ public class Database {
         deleteActivities(user, quest);
 
         // Re-create activities
-        for (Activity activity : quest.getActivities()) {
-            if (activity instanceof PomodoroTimer pomodoro) {
-                createPomodoroTimer(user, quest, pomodoro);
-            } else if (activity instanceof Task task) {
+        createActivities(user, quest);
+    }
+
+    public void updateQuestOnly(User user, Quest quest) {
+        String sql = "UPDATE \"quest\" SET completion_state = ?, complete_time = ?, start_time = ?, box_open_times = ? WHERE user_id = ? AND title = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setBoolean(1, quest.getCompletionState());
+            pstmt.setTimestamp(2, quest.getCompleteTime());
+            pstmt.setTimestamp(3, quest.getStartTime());
+            pstmt.setInt(4, quest.getBoxOpenTimes());
+            pstmt.setInt(5, user.getId());
+            pstmt.setString(6, quest.getTitle());
+
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    private void createActivities(User user, Quest quest) {
+        ArrayList<Activity> activities = quest.getActivities();
+        if (activities.isEmpty()) {
+            return;
+        }
+        if (activities.getFirst() instanceof PomodoroTimer pomodoro) {
+            createPomodoroTimer(user, quest, pomodoro);
+        } else if (activities.getFirst() instanceof Task) {
+            for (Activity activity : activities) {
+                Task task = (Task) activity;
                 createTask(user, quest, task);
             }
         }
     }
 
-    public void deleteActivities(User user, Quest quest) {
+    public void deleteActivities(User user, Quest quest) throws SQLException {
+        String pomodoroSql = "DELETE FROM \"pomodoro_quest\" WHERE quest_id = ?";
+        try (PreparedStatement pomodoroStmt = connection.prepareStatement(pomodoroSql)) {
+            pomodoroStmt.setInt(1, getQuestIdByTitle(user, quest));
+            pomodoroStmt.executeUpdate();
+        }
 
+        String taskSql = "DELETE FROM \"task\" WHERE quest_id = ?";
+        try (PreparedStatement taskStmt = connection.prepareStatement(taskSql)) {
+            taskStmt.setInt(1, getQuestIdByTitle(user, quest));
+            taskStmt.executeUpdate();
+        }
     }
 
-    public int getQuestIdByTitle(User user, Quest quest) {
+    private int getQuestIdByTitle(User user, Quest quest) {
         String sql = "SELECT id FROM \"quest\" WHERE user_id = ? AND title = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setInt(1, user.getId());
             pstmt.setString(2, quest.getTitle());
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                int id = rs.getInt("id");
-                return id;
+                return rs.getInt("id");
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -322,6 +322,32 @@ public class Database {
         }
         return false;
 
+    }
+
+    /**
+     * Method to get all needed attributes of User with aid of username as a unique identifier.
+     * Most important are the stored id of the User.
+     *
+     * @param username - This is a unique identifier in the database.
+     * @return - returns User object.
+     * @throws SQLException
+     */
+    public User getUserByUsername(String username) throws SQLException {
+        String sql = "SELECT * FROM \"user\" WHERE username = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setString(1, username);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                int id = rs.getInt("id");
+                String password = rs.getString("password");
+                boolean appSound = rs.getBoolean("app_sound");
+                boolean sensorSound = rs.getBoolean("sensor_sound");
+                boolean deskMode = rs.getBoolean("desk_mode");
+
+                return new User(id, username, password, appSound, sensorSound, deskMode);
+            }
+        }
+        return null;
     }
 
     /**

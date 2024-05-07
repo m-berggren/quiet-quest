@@ -57,15 +57,20 @@ public class QuestController extends BaseController implements Initializable, UI
 
     private ObservableList<Activity> activityObservableArrayList;
     private String[] message;
+    private boolean isQuestRunning = false;
 
     public void initialize(URL arg0, ResourceBundle arg1) {
         mqttHandler.setUIUpdater(this);
         activityListView.setCellFactory(this);
     }
 
+    public void initiateQuest(Quest quest) {
+        currentQuest = quest;
+    }
+
     @Override
     protected void afterMainController() {
-        currentQuest = quietQuestFacade.getQuestSelection();
+        //currentQuest = quietQuestFacade.getQuestSelection();
         titleLabel.setText(currentQuest.getTitle());
         descriptionLabel.setText(currentQuest.getDescription());
 
@@ -103,12 +108,18 @@ public class QuestController extends BaseController implements Initializable, UI
                     CheckBox checkBox = new CheckBox(task.getDescription());
                     checkBox.setSelected(task.getCompletionState());
                     checkBox.setOnAction(event -> {
-                        task.setCompletionState(checkBox.isSelected());
-                        if (checkBox.isSelected()) {
+                        if (checkBox.isSelected() && isQuestRunning) {
                             showMessage();
-                            task.setCompletionState(true);
+                            task.setCompletionState(checkBox.isSelected());
                             task.setEndTime(Timestamp.from(Instant.now())); // Provides current timestamp using java.time
-                            database.updateTask(user, currentQuest, task); // Updates Task with End time
+                            try {
+                                database.connect();
+                                database.updateTask(user, currentQuest, task); // Updates Task with End time
+                                database.disconnect();
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
+
                         }
                     });
                     setGraphic(checkBox);
@@ -142,6 +153,7 @@ public class QuestController extends BaseController implements Initializable, UI
     }
 
     public void onStartQuestClick(ActionEvent event) throws SQLException {
+        isQuestRunning = true;
         String message = "Your quest has started.";
         currentQuest.setStartTime(Timestamp.from(Instant.now()));
         currentQuest.startActivity(); // Starts PomodoroTimer, mqtt pub & sub, Tasks are updated with startTime
@@ -153,15 +165,23 @@ public class QuestController extends BaseController implements Initializable, UI
         mqttHandler.subscribe(); // Subscribe
     }
 
-    public void onCompleteQuestClick(ActionEvent event) {
-        currentQuest.endActivity(); // Publishes last message
+    public void onCompleteQuestClick(ActionEvent event) throws SQLException {
+        isQuestRunning = false;
+        currentQuest.endActivity(); // Publishes last message & handles pomodoroTimer & Task
+        currentQuest.setCompletionState(true);
+        currentQuest.setCompleteTime(Timestamp.from(Instant.now()));
+        // This needs to be implemented: currentQuest.setBoxOpenTimes(x);
+
+        database.connect();
+        database.updateQuestOnly(user, currentQuest);
+        database.disconnect();
+
         mqttHandler.publishMessage(PUB_TOPIC_END, "Your quest has ended.");
         mqttHandler.disconnect();
 
         // Remove or change later:
         mqttConnectionMessage.getStyleClass().clear();
         mqttConnectionMessage.setText("");
-
     }
 
     @Override

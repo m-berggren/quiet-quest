@@ -1,13 +1,6 @@
 # Use amazoncorretto:21-alpine-jdk as the base Docker image for all jobs in this pipeline
 image: amazoncorretto:21-alpine-jdk
 
-services:
-  - docker:dind
-
-variables:
-  DOCKER_HOST: tcp://docker:2375/
-  DOCKER_DRIVER: overlay2
-  GRADLE_USER_HOME: "$(pwd)/.gradle"
   
 # 'before_script' steps are executed before each job's script
 before_script:
@@ -15,7 +8,7 @@ before_script:
   - GRADLE_USER_HOME="$(pwd)/.gradle"
   # Export the GRADLE_USER_HOME environment variable for use in all subsequent commands
   - export GRADLE_USER_HOME
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+
 
 
 # Define the stages that make up the build process

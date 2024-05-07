@@ -46,20 +46,9 @@
    </AnchorPane>
    <AnchorPane fx:id="questAnchorPane" layoutX="468.0" layoutY="25.0" prefHeight="550.0" prefWidth="370.0" style="-fx-background-color: #fff; -fx-background-radius: 10;" AnchorPane.leftAnchor="470.0" AnchorPane.topAnchor="25.0">
       <children>
-         <AnchorPane fx:id="taskAnchorPane" layoutX="14.0" layoutY="279.0" prefHeight="246.0" prefWidth="347.0" style="-fx-background-color: #ffffff;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="275.0">
+         <AnchorPane fx:id="taskAnchorPane" layoutX="14.0" layoutY="279.0" prefHeight="246.0" prefWidth="347.0" style="-fx-background-color: #ffffff;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="275.0">
             <children>
-               <TextField fx:id="taskField" editable="false" layoutX="20.0" layoutY="3.0" prefHeight="30.0" prefWidth="274.0" promptText="add a new task (optional)" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="10.0" />
-                <Button fx:id="addNewTaskButton" alignment="CENTER" disable="true" layoutX="300.0" layoutY="2.0" minWidth="38.0" mnemonicParsing="false" prefHeight="21.0" prefWidth="50.0" style="-fx-background-color: #57CC99; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="+" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="8.0">
-                  <font>
-                     <Font size="18.0" />
-                  </font>
-               </Button>
-                <Button fx:id="deleteTaskButton" alignment="CENTER" disable="true" layoutX="300.0" layoutY="197.0" minWidth="38.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="50.0" style="-fx-background-color: #57CC99; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="X" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="200.0">
-                  <font>
-                     <Font size="18.0" />
-                  </font>
-               </Button>
-                <ListView fx:id="taskListView" layoutX="20.0" layoutY="57.0" prefHeight="140.0" prefWidth="330.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" />
+                <ListView fx:id="taskListView" layoutX="20.0" layoutY="13.0" prefHeight="236.0" prefWidth="330.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" />
             </children>
          </AnchorPane>
          <TextField fx:id="titleField" editable="false" layoutX="20.0" layoutY="16.0" prefHeight="70.0" promptText="Title" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="16.0">

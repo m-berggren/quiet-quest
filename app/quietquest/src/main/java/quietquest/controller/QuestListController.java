@@ -16,8 +16,6 @@ import java.util.*;
 
 public class QuestListController extends BaseController {
     @FXML
-    private AnchorPane questAnchorPane;
-    @FXML
     private AnchorPane taskAnchorPane;
     @FXML
     private AnchorPane pomodoroAnchorPane;
@@ -33,12 +31,6 @@ public class QuestListController extends BaseController {
     private Button editButton;
     @FXML
     private ListView<Task> taskListView;
-    @FXML
-    private TextField taskField;
-    @FXML
-    private Button addNewTaskButton;
-    @FXML
-    private Button deleteTaskButton;
     @FXML
     private Label questTypeLabel;
     @FXML
@@ -150,11 +142,6 @@ public class QuestListController extends BaseController {
         editButton.setDisable(true);
         titleField.setEditable(true);
         descriptionField.setEditable(true);
-        if(selectedQuest.getType() == QuestType.TASK){
-            addNewTaskButton.setDisable(false);
-            deleteTaskButton.setDisable(false);
-            taskField.setEditable(true);
-        }
     }
 
     public void onSaveButtonClick() {
@@ -170,9 +157,6 @@ public class QuestListController extends BaseController {
         saveButton.setDisable(true);
         titleField.setEditable(false);
         descriptionField.setEditable(false);
-        addNewTaskButton.setDisable(false);
-        deleteTaskButton.setDisable(false);
-        taskField.setEditable(false);
     }
 
 

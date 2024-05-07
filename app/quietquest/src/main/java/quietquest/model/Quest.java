@@ -43,7 +43,13 @@ public class Quest {
         return this.description;
     }
 
-
+    public QuestType getType(){
+        if (activities.getFirst() instanceof PomodoroTimer) {
+            return QuestType.POMODORO;
+        } else {
+            return QuestType.TASK;
+        }
+    }
     // Setters
     public void setTitle(String title) {
         this.title = title;

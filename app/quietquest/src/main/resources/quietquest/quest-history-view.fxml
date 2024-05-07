@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TreeView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="760.0" prefWidth="1210.0" style="-fx-background-color: #C7F9CC;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="quietquest.controller.QuestHistoryController">
+   <children>
+      <ImageView fitHeight="760.0" fitWidth="1210.0" layoutX="7.0" pickOnBounds="true">
+         <image>
+            <Image url="@../images/create_page_background.png" />
+         </image>
+      </ImageView>
+      <TreeView fx:id="questHistoryTree" layoutX="54.0" layoutY="91.0" opacity="0.57" prefHeight="633.0" prefWidth="760.0" />
+      <Label layoutX="61.0" layoutY="21.0" prefHeight="52.0" prefWidth="677.0" text="Completed Quests">
+         <font>
+            <Font size="39.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

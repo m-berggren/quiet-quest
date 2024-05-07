@@ -1,12 +1,15 @@
 # Use amazoncorretto:21-alpine-jdk as the base Docker image for all jobs in this pipeline
 image: amazoncorretto:21-alpine-jdk
 
+  
 # 'before_script' steps are executed before each job's script
 before_script:
   # Define the GRADLE_USER_HOME environment variable
   - GRADLE_USER_HOME="$(pwd)/.gradle"
   # Export the GRADLE_USER_HOME environment variable for use in all subsequent commands
   - export GRADLE_USER_HOME
+
+
 
 # Define the stages that make up the build process
 stages:

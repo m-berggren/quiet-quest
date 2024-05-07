@@ -9,9 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
-import quietquest.model.Quest;
-import quietquest.model.QuestType;
-import quietquest.model.Task;
+import quietquest.model.*;
 
 import java.io.IOException;
 import java.util.*;
@@ -43,6 +41,12 @@ public class QuestListController extends BaseController {
     private Button deleteTaskButton;
     @FXML
     private Label questTypeLabel;
+    @FXML
+    private Label focusLabel;
+    @FXML
+    private Label breakLabel;
+    @FXML
+    private Label intervalsLabel;
 
     private HashMap<String, Quest> quests;
     private Quest selectedQuest;
@@ -126,10 +130,15 @@ public class QuestListController extends BaseController {
                 questTypeLabel.setText("Tasks");
                 pomodoroAnchorPane.setVisible(false);
                 taskAnchorPane.setVisible(true);
-            } else {
+            } else if (selectedQuest.getType() == QuestType.POMODORO){
                 questTypeLabel.setText("Pomodoro");
                 taskAnchorPane.setVisible(false);
                 pomodoroAnchorPane.setVisible(true);
+
+                PomodoroTimer pomodoro = (PomodoroTimer) selectedQuest.getActivities().getFirst();
+                focusLabel.setText("Focus time: " + pomodoro.getFocusTime());
+                breakLabel.setText("Break time: " + pomodoro.getBreakTime());
+                intervalsLabel.setText("Intervals: " + pomodoro.getIntervals());
             }
         } else {
             System.out.println("selectedQuest is null");
@@ -145,8 +154,6 @@ public class QuestListController extends BaseController {
             addNewTaskButton.setDisable(false);
             deleteTaskButton.setDisable(false);
             taskField.setEditable(true);
-        } else {
-
         }
     }
 

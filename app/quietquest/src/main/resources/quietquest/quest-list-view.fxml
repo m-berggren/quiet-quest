@@ -46,15 +46,10 @@
    </AnchorPane>
    <AnchorPane fx:id="questAnchorPane" layoutX="468.0" layoutY="25.0" prefHeight="550.0" prefWidth="370.0" style="-fx-background-color: #fff; -fx-background-radius: 10;" AnchorPane.leftAnchor="470.0" AnchorPane.topAnchor="25.0">
       <children>
-         <AnchorPane fx:id="pomodoroAnchorPane" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="275.0">
-            <children>
-               <Label layoutX="41.0" layoutY="38.0" prefHeight="17.0" prefWidth="237.0" text="Pomodoro Stuff" />
-            </children>
-         </AnchorPane>
          <AnchorPane fx:id="taskAnchorPane" layoutX="14.0" layoutY="279.0" prefHeight="246.0" prefWidth="347.0" style="-fx-background-color: #ffffff;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="275.0">
             <children>
-               <TextField fx:id="taskField" editable="false" layoutX="20.0" layoutY="3.0" prefHeight="30.0" prefWidth="274.0" promptText="add a new task (optional)" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="5.0" />
-                <Button fx:id="addNewTaskButton" alignment="CENTER" disable="true" layoutX="300.0" layoutY="2.0" minWidth="38.0" mnemonicParsing="false" prefHeight="21.0" prefWidth="50.0" style="-fx-background-color: #57CC99; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="+" AnchorPane.rightAnchor="20.0">
+               <TextField fx:id="taskField" editable="false" layoutX="20.0" layoutY="3.0" prefHeight="30.0" prefWidth="274.0" promptText="add a new task (optional)" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="10.0" />
+                <Button fx:id="addNewTaskButton" alignment="CENTER" disable="true" layoutX="300.0" layoutY="2.0" minWidth="38.0" mnemonicParsing="false" prefHeight="21.0" prefWidth="50.0" style="-fx-background-color: #57CC99; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="+" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="8.0">
                   <font>
                      <Font size="18.0" />
                   </font>
@@ -83,6 +78,25 @@
                <Font name="American Typewriter" size="21.0" />
             </font>
          </Label>
+         <AnchorPane fx:id="pomodoroAnchorPane" prefHeight="119.0" prefWidth="370.0" visible="false" AnchorPane.bottomAnchor="156.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="275.0">
+            <children>
+               <Label fx:id="focusLabel" layoutX="14.0" layoutY="21.0" prefHeight="18.0" prefWidth="320.0" text="Focus time:" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="10.0">
+                  <font>
+                     <Font name="American Typewriter" size="15.0" />
+                  </font>
+               </Label>
+               <Label fx:id="breakLabel" layoutX="14.0" layoutY="50.0" prefHeight="18.0" prefWidth="320.0" text="Break time:" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="40.0">
+                  <font>
+                     <Font name="American Typewriter" size="15.0" />
+                  </font>
+               </Label>
+               <Label fx:id="intervalsLabel" layoutX="13.0" layoutY="82.0" prefHeight="18.0" prefWidth="320.0" text="Intervals:" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="70.0">
+                  <font>
+                     <Font name="American Typewriter" size="15.0" />
+                  </font>
+               </Label>
+            </children>
+         </AnchorPane>
       </children>
    </AnchorPane>
 </AnchorPane>

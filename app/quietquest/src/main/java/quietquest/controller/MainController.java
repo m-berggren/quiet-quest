@@ -11,16 +11,17 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import quietquest.QuietQuestMain;
-import quietquest.model.Database;
-import quietquest.model.Quest;
 import quietquest.model.QuietQuestFacade;
-import quietquest.model.User;
 import quietquest.utility.FxmlFile;
-
-import java.io.IOException;
+import quietquest.model.Database;
+import quietquest.model.User;
+import quietquest.model.Quest;
 import java.sql.SQLException;
+import java.io.IOException;
 
 public class MainController extends BaseController {
+    @FXML
+    private BorderPane mainPane;
     @FXML
     private VBox sideMenu;
     @FXML
@@ -30,10 +31,9 @@ public class MainController extends BaseController {
     @FXML
     private Button questListButton;
     @FXML
-    private Button logOutButton;
-
+    private Button questHistoryButton;
     @FXML
-    private BorderPane mainPane;
+    private Button statisticsButton;
     @FXML
     private VBox menuVBox;
 
@@ -57,6 +57,14 @@ public class MainController extends BaseController {
 
     public void onQuestListButtonClick() {
         showQuestList();
+    }
+
+    public void onQuestHistoryButtonClick() {
+        showHistory();
+    }
+
+    public void onStatisticsButtonClick() {
+        showStatistics();
     }
 
     public void onLogOutButtonClick(ActionEvent event) throws IOException, SQLException {

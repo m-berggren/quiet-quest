@@ -86,7 +86,7 @@
                </Label>
             </children>
          </AnchorPane>
-         <Label fx:id="descLabel1" layoutX="20.0" layoutY="22.0" text="TITLE" AnchorPane.topAnchor="22.0">
+         <Label fx:id="titleLabel" layoutX="20.0" layoutY="22.0" text="TITLE" AnchorPane.topAnchor="22.0">
             <font>
                <Font name="American Typewriter" size="21.0" />
             </font>

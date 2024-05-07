@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventTarget;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -22,7 +23,9 @@ import quietquest.utility.FxmlFile;
 import quietquest.model.Database;
 
 import java.io.IOException;
+import java.net.URL;
 import java.sql.SQLException;
+import java.util.ResourceBundle;
 
 public class LogInController {
     @FXML
@@ -66,8 +69,8 @@ public class LogInController {
         database.disconnect();
     }
 
-    private void loadStartController(ActionEvent event, User user, Database database) throws IOException {
-        FXMLLoader loader = new FXMLLoader(QuietQuestMain.class.getResource(FxmlFile.HOME));
+    private void loadStartController(ActionEvent event, User user, Database database) throws IOException, SQLException {
+        FXMLLoader loader = new FXMLLoader(QuietQuestMain.class.getResource(FxmlFile.START));
         Parent root = loader.load();
         StartController startController = loader.getController();
         startController.initialize(user, database);

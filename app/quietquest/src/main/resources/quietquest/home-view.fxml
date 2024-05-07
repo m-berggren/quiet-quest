@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="760.0" prefWidth="1210.0" style="-fx-background-color: #C7F9CC;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="quietquest.controller.HomeController">
+    <ImageView fitHeight="760.0" fitWidth="1210.0" pickOnBounds="true">
+        <Image url="@../images/create_page_background.png" />
+    </ImageView>
+    <AnchorPane fx:id="userInfoAnchorPane" layoutX="32.0" layoutY="25.0" prefHeight="465.0" prefWidth="435.0" style="-fx-background-color: #fff; -fx-background-radius: 10;" AnchorPane.leftAnchor="32.0" AnchorPane.topAnchor="25.0">
+        <children>
+            <Label fx:id="titleLabel" alignment="TOP_LEFT" layoutX="14.0" layoutY="44.0" prefHeight="134.0" prefWidth="411.0" text="Adventure awaits" textFill="#22577a">
+                <font>
+                    <Font size="36.0" />
+                </font>
+            </Label>
+            <ListView fx:id="questListView" layoutX="28.0" layoutY="170.0" prefHeight="217.0" prefWidth="380.0" AnchorPane.leftAnchor="28.0" AnchorPane.topAnchor="170.0" />
+            <Button fx:id="continueQuestButton" alignment="CENTER" layoutX="85.0" layoutY="409.0" minWidth="38.0" mnemonicParsing="false" onAction="#onContinueQuestClick" prefHeight="43.0" prefWidth="238.0" style="-fx-background-color: #38A3A5; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="CONTINUE QUEST" wrapText="true" AnchorPane.topAnchor="409.0">
+                <font>
+                    <Font size="20.0" />
+                </font>
+            </Button>
+        </children>
+    </AnchorPane>
+    <AnchorPane fx:id="badgeGalleryAnchorPane" layoutX="492.0" layoutY="24.0" prefHeight="647.0" prefWidth="435.0" style="-fx-background-color: #fff; -fx-background-radius: 10;" AnchorPane.leftAnchor="500.0" AnchorPane.topAnchor="25.0">
+        <children>
+         <Label fx:id="badgeGalleryLabel" alignment="TOP_CENTER" layoutX="12.0" layoutY="47.0" prefHeight="54.0" prefWidth="411.0" text="Your Badges" textFill="#22577a">
+            <font>
+               <Font size="36.0" />
+            </font>
+         </Label>
+        </children>
+    </AnchorPane>
+    <Button fx:id="createQuestButton" layoutX="32.0" layoutY="498.0" mnemonicParsing="false" onAction="#onCreateQuestClick" prefHeight="54.0" prefWidth="210.0" style="-fx-background-color: #57CC99; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="CREATE NEW" visible="false" wrapText="true" AnchorPane.leftAnchor="32.0" AnchorPane.topAnchor="498.0">
+        <font>
+            <Font size="24.0" />
+        </font>
+    </Button>
+    <Button fx:id="goToQuestsButton" layoutX="256.0" layoutY="498.0" mnemonicParsing="false" onAction="#onGoToQuests" prefHeight="54.0" prefWidth="210.0" style="-fx-background-color: #57CC99; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="VIEW LIST" visible="false" wrapText="true" AnchorPane.leftAnchor="256.0" AnchorPane.topAnchor="498.0">
+        <font>
+            <Font size="24.0" />
+        </font>
+    </Button>
+</AnchorPane>

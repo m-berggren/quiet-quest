@@ -19,15 +19,17 @@ import java.sql.SQLException;
 
 public class StartController extends BaseController {
 
-    public void initialize(User user, Database database) {
+    public void initialize(User user, Database database) throws SQLException {
         setUser(user);
         setDatabase(database);
     }
-    @FXML
-    private Label welcomeText;
 
     @FXML
-    private Button helloButton;
+    private Label welcomeLabel;
+
+    @Override
+    protected void afterMainController() throws SQLException {
+    }
 
     @FXML
     protected void onNewQuestButtonClick(ActionEvent event) throws IOException, SQLException {

@@ -67,7 +67,7 @@ public class LogInController {
     }
 
     private void loadStartController(ActionEvent event, User user, Database database) throws IOException {
-        FXMLLoader loader = new FXMLLoader(QuietQuestMain.class.getResource(FxmlFile.START));
+        FXMLLoader loader = new FXMLLoader(QuietQuestMain.class.getResource(FxmlFile.HOME));
         Parent root = loader.load();
         StartController startController = loader.getController();
         startController.initialize(user, database);

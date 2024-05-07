@@ -28,6 +28,17 @@ public class User {
         this.desk_mode = false;
     }
 
+    public User(int id, String username, boolean app_sound, boolean sensor_sound, boolean desk_mode) {
+        this.id = id;
+        this.username = username;
+        this.password = null;
+        Date date = new Date();
+        this.created_at = new Timestamp(date.getTime());
+        this.app_sound = app_sound;
+        this.sensor_sound = sensor_sound;
+        this.desk_mode = desk_mode;
+    }
+
     public int getId() {
         return id;
     }

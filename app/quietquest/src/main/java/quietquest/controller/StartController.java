@@ -10,11 +10,18 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import quietquest.QuietQuestMain;
+import quietquest.model.Database;
+import quietquest.model.User;
 import quietquest.utility.FxmlFile;
 
 import java.io.IOException;
 
 public class StartController extends BaseController {
+
+    public void initialize(User user, Database database) {
+        setUser(user);
+        setDatabase(database);
+    }
     @FXML
     private Label welcomeText;
 
@@ -41,6 +48,7 @@ public class StartController extends BaseController {
         stage.show();
 
         MainController controller = loader.getController();
+        controller.initialize(user, database);
         controller.loadView(fxmlFile);
     }
 }

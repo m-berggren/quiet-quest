@@ -48,6 +48,9 @@ public class Task implements Activity {
     public void start() {
     }
 
+    @Override
+    public void end() {
+    }
     public boolean isCompleted() {
         return completed;
     }

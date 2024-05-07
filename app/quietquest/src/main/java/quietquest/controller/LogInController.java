@@ -17,6 +17,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import quietquest.QuietQuestMain;
+import quietquest.model.User;
 import quietquest.utility.FxmlFile;
 import quietquest.model.Database;
 
@@ -58,11 +59,24 @@ public class LogInController {
         password = passwordField.getText();
         Database database = new Database();
         if (database.checkIfUsernameExists(username) && database.checkIfPasswordCorrect(username, password)) {
-            loadFxml(FxmlFile.START, event);
+            User user = database.getUserByUsername(username);
+            loadStartController(event, user, database);
         } else { // username does not exist OR wrong password
             showPopup();
         }
         database.disconnect();
+    }
+
+    private void loadStartController(ActionEvent event, User user, Database database) throws IOException {
+        FXMLLoader loader = new FXMLLoader(QuietQuestMain.class.getResource(FxmlFile.START));
+        Parent root = loader.load();
+        StartController startController = loader.getController();
+        startController.initialize(user, database);
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
+        stage.setScene(scene);
+        stage.show();
     }
 
     @FXML

@@ -11,7 +11,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import quietquest.QuietQuestMain;
+import quietquest.model.Database;
 import quietquest.model.QuietQuestFacade;
+import quietquest.model.User;
 import quietquest.utility.FxmlFile;
 
 import java.io.IOException;
@@ -34,7 +36,12 @@ public class MainController extends BaseController {
     private VBox menuVBox;
 
     public MainController() {
-        this.quietQuestFacade = new QuietQuestFacade();
+    }
+
+    public void initialize(User user, Database database) {
+        setUser(user);
+        setDatabase(database);
+        this.quietQuestFacade = new QuietQuestFacade(user, database);
         setMainController(this);
     }
 
@@ -59,6 +66,8 @@ public class MainController extends BaseController {
             FXMLLoader fxmlLoader = new FXMLLoader(QuietQuestMain.class.getResource(view));
             Parent node = fxmlLoader.load();
             BaseController baseController = fxmlLoader.getController();
+            baseController.setUser(user);
+            baseController.setDatabase(database);
             baseController.setMainController(this);
             mainPane.setCenter(node);
         } catch (IOException e) {

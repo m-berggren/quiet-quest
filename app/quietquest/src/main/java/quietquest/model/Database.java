@@ -40,6 +40,25 @@ public class Database {
         }
     }
 
+    public User getUserByUsername(String username) throws SQLException {
+        String sql = "SELECT * FROM \"user\" WHERE username = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setString(1, username);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("username");
+                String password = rs.getString("password");
+                boolean appSound = rs.getBoolean("app_sound");
+                boolean sensorSound = rs.getBoolean("sensor_sound");
+                boolean deskMode = rs.getBoolean("desk_mode");
+
+                return new User(id, username, appSound, sensorSound, deskMode);
+            }
+        }
+        return null;
+    }
+
     public void disconnect() throws SQLException {
         connection.close();
     }

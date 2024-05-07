@@ -7,6 +7,8 @@ before_script:
   - GRADLE_USER_HOME="$(pwd)/.gradle"
   # Export the GRADLE_USER_HOME environment variable for use in all subsequent commands
   - export GRADLE_USER_HOME
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+
 
 # Define the stages that make up the build process
 stages:

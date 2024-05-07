@@ -172,6 +172,7 @@ public class QuestController extends BaseController implements UIUpdater, Callba
     public void onStartQuestClick(ActionEvent event) {
         Timestamp startTime = new Timestamp(System.currentTimeMillis());
         currentQuest.setStartTime(startTime);
+        startTimeLabel.setText("Start: " + currentQuest.getStartTime());
 
         String message = "Your quest has started.";
         mqttHandler.connect(PUB_TOPIC_START, message); // Connect to MQTT broker & publish
@@ -184,6 +185,7 @@ public class QuestController extends BaseController implements UIUpdater, Callba
     public void onCompleteQuestClick(ActionEvent event) {
         Timestamp endTime = new Timestamp(System.currentTimeMillis());
         currentQuest.setEndTime(endTime);
+        endTimeLabel.setText("End: " + currentQuest.getEndTime());
 
         currentQuest.endActivity(); // Publishes last message
         mqttHandler.publishMessage(PUB_TOPIC_END, "Your quest has ended.");

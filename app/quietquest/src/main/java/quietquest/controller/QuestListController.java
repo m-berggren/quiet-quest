@@ -55,6 +55,9 @@ public class QuestListController extends BaseController {
         showQuest(selectedQuest);
     }
 
+    /**
+     * Displays the current user's list of created quests in a ListView.
+     */
     public void displayQuests() {
         if (quietQuestFacade != null) {
             quests = quietQuestFacade.getQuests();
@@ -74,6 +77,10 @@ public class QuestListController extends BaseController {
         }
     }
 
+    /**
+     * Sets the selectedQuest property to the selected item in a ListView, and calls showSelectedQuest()
+     * to display Quest information in the UI.
+     */
     private void setSelectedQuest() {
         questListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Quest>() {
             @Override
@@ -113,7 +120,10 @@ public class QuestListController extends BaseController {
         taskListView.getItems().clear();
     }
 
-    //
+    /**
+     * Displays quest information depending on the type of quest that is currently the selectedQuest:
+     * "task" or "pomodoro".
+     */
     public void showSelectedQuest() {
         if (selectedQuest != null) {
             titleField.setText(selectedQuest.getTitle());
@@ -144,6 +154,9 @@ public class QuestListController extends BaseController {
         }
     }
 
+    /**
+     * Makes the quest title and description editable.
+     */
     public void onEditClick() {
         saveButton.setDisable(false);
         editButton.setDisable(true);
@@ -165,6 +178,4 @@ public class QuestListController extends BaseController {
         titleField.setEditable(false);
         descriptionField.setEditable(false);
     }
-
-
 }

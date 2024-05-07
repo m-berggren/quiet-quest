@@ -21,7 +21,7 @@
                <Font name="American Typewriter" size="24.0" />
             </font>
          </Button>
-          <Label fx:id="titleLabel" text="Quests" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">
+          <Label fx:id="titleLabel" text="QUESTS" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">
               <font>
                   <Font name="American Typewriter" size="40.0" />
               </font>
@@ -46,23 +46,23 @@
    </AnchorPane>
    <AnchorPane fx:id="questAnchorPane" layoutX="468.0" layoutY="25.0" prefHeight="550.0" prefWidth="370.0" style="-fx-background-color: #fff; -fx-background-radius: 10;" AnchorPane.leftAnchor="470.0" AnchorPane.topAnchor="25.0">
       <children>
-         <AnchorPane fx:id="taskAnchorPane" layoutX="14.0" layoutY="279.0" prefHeight="246.0" prefWidth="347.0" style="-fx-background-color: #ffffff;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="275.0">
-            <children>
-                <ListView fx:id="taskListView" layoutX="20.0" layoutY="13.0" prefHeight="236.0" prefWidth="330.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" />
-            </children>
-         </AnchorPane>
-         <TextField fx:id="titleField" editable="false" layoutX="20.0" layoutY="16.0" prefHeight="70.0" promptText="Title" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="16.0">
-            <font>
-               <Font size="30.0" />
-            </font>
-         </TextField>
-         <TextArea fx:id="descriptionField" editable="false" layoutX="15.0" layoutY="134.0" prefHeight="100.0" promptText="Add description (optional)" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" />
-         <Label fx:id="descLabel" layoutX="20.0" layoutY="105.0" text="Description" AnchorPane.leftAnchor="20.0">
+         <Label fx:id="questTypeLabel" layoutX="22.0" layoutY="280.0" text="ACTIVITY" AnchorPane.leftAnchor="20.0">
             <font>
                <Font name="American Typewriter" size="21.0" />
             </font>
          </Label>
-         <Label fx:id="questTypeLabel" layoutX="17.0" layoutY="249.0" text="QuestType" AnchorPane.leftAnchor="20.0">
+         <AnchorPane fx:id="taskAnchorPane" layoutY="303.0" prefHeight="236.0" prefWidth="370.0" style="-fx-background-color: #ffffff;" AnchorPane.bottomAnchor="11.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="303.0">
+            <children>
+                <ListView fx:id="taskListView" layoutX="20.0" layoutY="58.0" prefHeight="200.0" prefWidth="330.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="10.0" />
+            </children>
+         </AnchorPane>
+         <TextField fx:id="titleField" editable="false" layoutX="20.0" layoutY="49.0" prefHeight="70.0" promptText="Title" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="49.0">
+            <font>
+               <Font size="30.0" />
+            </font>
+         </TextField>
+         <TextArea fx:id="descriptionField" editable="false" layoutX="20.0" layoutY="163.0" prefHeight="100.0" promptText="Add description (optional)" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" />
+         <Label fx:id="descLabel" layoutX="20.0" layoutY="136.0" text="DESCRIPTION" AnchorPane.leftAnchor="20.0">
             <font>
                <Font name="American Typewriter" size="21.0" />
             </font>
@@ -86,6 +86,11 @@
                </Label>
             </children>
          </AnchorPane>
+         <Label fx:id="descLabel1" layoutX="20.0" layoutY="22.0" text="TITLE" AnchorPane.topAnchor="22.0">
+            <font>
+               <Font name="American Typewriter" size="21.0" />
+            </font>
+         </Label>
       </children>
    </AnchorPane>
 </AnchorPane>

@@ -30,7 +30,7 @@ public class QuestListController extends BaseController {
     @FXML
     private Button editButton;
     @FXML
-    private ListView<Task> taskListView;
+    private ListView<String> taskListView;
     @FXML
     private Label questTypeLabel;
     @FXML
@@ -122,11 +122,18 @@ public class QuestListController extends BaseController {
                 questTypeLabel.setText("Tasks");
                 pomodoroAnchorPane.setVisible(false);
                 taskAnchorPane.setVisible(true);
+
+                ObservableList<String> tasks = FXCollections.observableArrayList();
+                for(Activity activity : selectedQuest.getActivities()){
+                    if(activity instanceof Task){
+                        tasks.add(((Task) activity).toString());
+                    }
+                }
+                taskListView.setItems(tasks);
             } else if (selectedQuest.getType() == QuestType.POMODORO){
                 questTypeLabel.setText("Pomodoro");
                 taskAnchorPane.setVisible(false);
                 pomodoroAnchorPane.setVisible(true);
-
                 PomodoroTimer pomodoro = (PomodoroTimer) selectedQuest.getActivities().getFirst();
                 focusLabel.setText("Focus time: " + pomodoro.getFocusTime());
                 breakLabel.setText("Break time: " + pomodoro.getBreakTime());

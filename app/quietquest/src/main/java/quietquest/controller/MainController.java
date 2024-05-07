@@ -17,6 +17,7 @@ import quietquest.model.User;
 import quietquest.utility.FxmlFile;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class MainController extends BaseController {
     @FXML
@@ -38,7 +39,7 @@ public class MainController extends BaseController {
     public MainController() {
     }
 
-    public void initialize(User user, Database database) {
+    public void initialize(User user, Database database) throws SQLException {
         setUser(user);
         setDatabase(database);
         this.quietQuestFacade = new QuietQuestFacade(user, database);
@@ -57,7 +58,7 @@ public class MainController extends BaseController {
         showQuestList();
     }
 
-    public void onLogOutButtonClick(ActionEvent event) throws IOException {
+    public void onLogOutButtonClick(ActionEvent event) throws IOException, SQLException {
         loadOnLogout(event);
     }
 
@@ -70,12 +71,12 @@ public class MainController extends BaseController {
             baseController.setDatabase(database);
             baseController.setMainController(this);
             mainPane.setCenter(node);
-        } catch (IOException e) {
+        } catch (IOException | SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void loadOnLogout(ActionEvent event) throws IOException {
+    public void loadOnLogout(ActionEvent event) throws IOException, SQLException {
         FXMLLoader loader = new FXMLLoader(QuietQuestMain.class.getResource(FxmlFile.LOG_IN));
         Parent root = loader.load();
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -83,5 +84,7 @@ public class MainController extends BaseController {
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm()); // adding CSS styling option
         stage.setScene(scene);
         stage.show();
+        database.disconnect();
+        mqttHandler.disconnect();
     }
 }

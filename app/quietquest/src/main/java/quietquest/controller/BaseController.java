@@ -7,6 +7,8 @@ import quietquest.model.User;
 import quietquest.utility.FxmlFile;
 import quietquest.utility.MQTTHandler;
 
+import java.sql.SQLException;
+
 public abstract class BaseController {
     protected final MQTTHandler mqttHandler;
     protected Database database;
@@ -18,7 +20,7 @@ public abstract class BaseController {
         mqttHandler = MQTTHandler.getInstance();
     }
 
-    public void setMainController(MainController mainController) {
+    public void setMainController(MainController mainController) throws SQLException {
         this.mainController = mainController;
         this.quietQuestFacade = mainController.getQuietQuestFacade();
         afterMainController();
@@ -27,7 +29,7 @@ public abstract class BaseController {
     /**
      * Hook that runs after setting main controller. Default is no action.
      */
-    protected void afterMainController() {
+    protected void afterMainController() throws SQLException {
     }
 
     public Database getDatabase() {

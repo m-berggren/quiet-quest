@@ -22,7 +22,6 @@ import quietquest.utility.FxmlFile;
 import quietquest.model.Database;
 
 import java.io.IOException;
-import java.sql.Connection;
 import java.sql.SQLException;
 
 public class LogInController {
@@ -60,8 +59,8 @@ public class LogInController {
         Database database = new Database();
         if (database.checkIfUsernameExists(username) && database.checkIfPasswordCorrect(username, password)) {
             User user = database.getUserByUsername(username);
-            loadStartController(event, user, database);
-        } else { // username does not exist OR wrong password
+            loadStartController(event, user, database); // Passing User and Database as parameters to use in application
+        } else { // Username does not exist OR wrong password
             showPopup();
         }
         database.disconnect();

@@ -10,12 +10,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import quietquest.model.Activity;
 import quietquest.model.Quest;
 import quietquest.model.Task;
 import quietquest.utility.FxmlFile;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.*;
 
 public class QuestListController extends BaseController implements Initializable {
@@ -60,11 +62,15 @@ public class QuestListController extends BaseController implements Initializable
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
-        displayQuests();
+        try {
+            displayQuests();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
-    public void afterMainController() {
+    public void afterMainController() throws SQLException {
         quests = quietQuestFacade.getQuests();
         displayQuests();
         setSelectedQuest();
@@ -74,10 +80,14 @@ public class QuestListController extends BaseController implements Initializable
         showQuest(currentQuest);
     }
 
-    public void displayQuests() {
+    public void displayQuests() throws SQLException {
         if (quietQuestFacade != null) {
-            quests = quietQuestFacade.getQuests();
-            ObservableList<Quest> questList = FXCollections.observableArrayList(quests.values());
+            database.connect();
+            ArrayList<Quest> questsList = database.getAllQuests(user);
+            database.disconnect();
+
+            //quests = quietQuestFacade.getQuests();
+            ObservableList<Quest> questList = FXCollections.observableArrayList(questsList);
             questListView.setItems(questList);
             questListView.setCellFactory(param -> new ListCell<Quest>() {
                 @Override

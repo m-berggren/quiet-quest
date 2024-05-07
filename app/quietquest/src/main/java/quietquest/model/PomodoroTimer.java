@@ -31,6 +31,18 @@ public class PomodoroTimer implements Activity {
         this.mqttHandler = MQTTHandler.getInstance();
     }
 
+    public int getFocusTime() {
+        return focusTime;
+    }
+
+    public int getBreakTime() {
+        return breakTime;
+    }
+
+    public int getIntervals() {
+        return intervals;
+    }
+
     /**
      * Creates milliseconds from minutes
      *

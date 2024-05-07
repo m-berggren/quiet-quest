@@ -17,10 +17,12 @@ import quietquest.model.Activity;
 import quietquest.model.PomodoroTimer;
 import quietquest.model.Quest;
 import quietquest.model.Task;
-import quietquest.utility.MQTTHandler;
 import javafx.scene.control.ListView;
 
 import java.net.URL;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Random;
 import java.util.ResourceBundle;
 
@@ -98,12 +100,15 @@ public class QuestController extends BaseController implements Initializable, UI
                     motivationalMessage.setVisible(false);
                 } else if (activity instanceof Task) {
                     Task task = (Task) activity;
-                    CheckBox checkBox = new CheckBox(task.getTask());
-                    checkBox.setSelected(task.isCompleted());
+                    CheckBox checkBox = new CheckBox(task.getDescription());
+                    checkBox.setSelected(task.getCompletionState());
                     checkBox.setOnAction(event -> {
-                        task.setCompleted(checkBox.isSelected());
+                        task.setCompletionState(checkBox.isSelected());
                         if (checkBox.isSelected()) {
                             showMessage();
+                            task.setCompletionState(true);
+                            task.setEndTime(Timestamp.from(Instant.now())); // Provides current timestamp using java.time
+                            database.updateTask(user, currentQuest, task); // Updates Task with End time
                         }
                     });
                     setGraphic(checkBox);
@@ -136,12 +141,16 @@ public class QuestController extends BaseController implements Initializable, UI
         mqttHandler.publishMessage(PUB_TOPIC_TASK_DONE, message);
     }
 
-    public void onStartQuestClick(ActionEvent event) {
+    public void onStartQuestClick(ActionEvent event) throws SQLException {
         String message = "Your quest has started.";
+        currentQuest.setStartTime(Timestamp.from(Instant.now()));
+        currentQuest.startActivity(); // Starts PomodoroTimer, mqtt pub & sub, Tasks are updated with startTime
+        database.connect();
+        database.updateQuest(user, currentQuest); // Updates Quest in database with startTime
+        database.disconnect();
+
         mqttHandler.connect(PUB_TOPIC_START, message); // Connect to MQTT broker & publish
         mqttHandler.subscribe(); // Subscribe
-
-        currentQuest.startActivity(); // Starts quest, mqtt pub & sub
     }
 
     public void onCompleteQuestClick(ActionEvent event) {

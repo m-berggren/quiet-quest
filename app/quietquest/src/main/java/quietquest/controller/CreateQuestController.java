@@ -19,6 +19,7 @@ import quietquest.model.*;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -82,7 +83,7 @@ public class CreateQuestController extends BaseController implements Initializab
     }
 
     @Override
-    protected void afterMainController() {
+    protected void afterMainController() throws SQLException {
         super.afterMainController();
     }
 
@@ -155,9 +156,9 @@ public class CreateQuestController extends BaseController implements Initializab
      *
      */
     public void createTask() {
-        String newTaskTitle = taskField.getText();
-        if (!newTaskTitle.isEmpty()) {
-            Task newTask = new Task(newTaskTitle);
+        String taskDescription = taskField.getText();
+        if (!taskDescription.isEmpty()) {
+            Task newTask = new Task(taskDescription);
             activityObservableList.add(newTask);
             taskField.clear();
         }
@@ -186,7 +187,6 @@ public class CreateQuestController extends BaseController implements Initializab
         } else {
             activityObservableList.add(newPomodoro);
         }
-
     }
 
     /**
@@ -213,14 +213,16 @@ public class CreateQuestController extends BaseController implements Initializab
         } else {
             String title = titleField.getText();
             String description = descriptionField.getText();
-            System.out.println(activityListView.getItems());
             ArrayList<Activity> activities = new ArrayList<>(activityListView.getItems());
             Quest quest = new Quest(title, description, activities);
             // add quest to quest list:
-            quietQuestFacade.addQuest(quest);
-            //System.out.println("quest: " + quest.getTitle());
-            //System.out.println("tasks: " + quest.getActivities());
+            quietQuestFacade.addQuest(quest); // Saves quest to QuietQuestFacade
+            database.connect();
+            database.createQuest(user, quest); // Creates Quest in database
+            database.disconnect();
             showCreateQuest();
+
+            // Printing for testing
             for (String key : quietQuestFacade.getQuests().keySet()) {
                 System.out.println(key);
             }

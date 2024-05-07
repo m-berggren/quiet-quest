@@ -1,41 +1,60 @@
 package quietquest.model;
 
+import java.sql.Timestamp;
+
 public class Task implements Activity {
-    private String task;
-    private boolean completed;
+    private String description;
+    private Timestamp startTime;
+    private Timestamp endTime;
+    private boolean completionState;
 
-    public Task() {
-
+    public Task(String description) {
+        this.description = description;
+        this.startTime = null;
+        this.endTime = null;
+        this.completionState = false;
     }
 
-    public Task(String tasks) {
-        this.task = tasks;
+    public Task(String description, Timestamp startTime, Timestamp endTime, boolean completionState) {
+        this.description = description;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.completionState = completionState;
     }
 
-    //getter
-    public String getTask() {
-        return this.task;
+    public String getDescription() {
+        return this.description;
     }
 
-    //Setter
-    public void setTasks(String tasks) {
-        this.task = tasks;
+    public void setDescription(String description) {
+        this.description = description;
     }
-    /*public void setTask(int index, String task) {
-        this.tasks.set(index, task);
-    }*/
-    /*public void addTask(String task) {
-        this.tasks.add(task);
-    }
-    public void removeTask(MultipleSelectionModel<String> selectionModel) {
-        this.tasks.remove();
-    }
-    public String getTask(int index) {
-        return tasks.get(index);
-    }*/
 
+    public Timestamp getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Timestamp startTime) {
+        this.startTime = startTime;
+    }
+
+    public Timestamp getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Timestamp endTime) {
+        this.endTime = endTime;
+    }
+
+    public boolean getCompletionState() {
+        return completionState;
+    }
+
+    public void setCompletionState(boolean completionState) {
+        this.completionState = completionState;
+    }
     public String toString() {
-        return task;
+        return description;
     }
 
 
@@ -50,13 +69,6 @@ public class Task implements Activity {
 
     @Override
     public void end() {
-    }
-    public boolean isCompleted() {
-        return completed;
-    }
-
-    public void setCompleted(boolean completed) {
-        this.completed = completed;
     }
 
 }

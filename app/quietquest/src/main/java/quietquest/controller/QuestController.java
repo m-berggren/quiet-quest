@@ -11,12 +11,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
 import javafx.util.Duration;
-import quietquest.model.Activity;
-import quietquest.model.PomodoroTimer;
-import quietquest.model.Quest;
-import quietquest.model.Task;
+import quietquest.model.*;
 import quietquest.utility.MQTTHandler;
 import javafx.scene.control.ListView;
 
@@ -25,13 +23,17 @@ import java.util.Random;
 import java.util.ResourceBundle;
 
 
-public class QuestController extends BaseController implements Initializable, UIUpdater, Callback<ListView<Activity>, ListCell<Activity>> {
+public class QuestController extends BaseController implements UIUpdater, Callback<ListView<Activity>, ListCell<Activity>> {
+    @FXML
+    private AnchorPane taskAnchorPane;
+    @FXML
+    private AnchorPane pomodoroAnchorPane;
     @FXML
     private Button startQuestButton;
     @FXML
     private Button completeQuestButton;
     @FXML
-    private ListView<Activity> activityListView;
+    private ListView<Task> taskListView;
     @FXML
     private Label titleLabel;
     @FXML
@@ -46,35 +48,63 @@ public class QuestController extends BaseController implements Initializable, UI
     private Label mqttLightMessage;
     @FXML
     private Label motivationalMessage;
+    @FXML
+    private Label focusLabel;
+    @FXML
+    private Label breakLabel;
+    @FXML
+    private Label intervalsLabel;
+    @FXML
+    private Label startTimeLabel;
+    @FXML
+    private Label endTimeLabel;
+    @FXML
+    private Label questTypeLabel;
     private Activity currentActivity;
     private Quest currentQuest;
 
     private final String PUB_TOPIC_START = "/quietquest/application/start";
     private final String PUB_TOPIC_TASK_DONE = "/quietquest/application/task_done";
     private final String PUB_TOPIC_END = "/quietquest/application/end";
-
-    private ObservableList<Activity> activityObservableArrayList;
     private String[] message;
 
+    /*
     public void initialize(URL arg0, ResourceBundle arg1) {
         mqttHandler.setUIUpdater(this);
-        activityListView.setCellFactory(this);
     }
+    */
 
     @Override
     protected void afterMainController() {
+        mqttHandler.setUIUpdater(this);
+
         currentQuest = quietQuestFacade.getQuestSelection();
         titleLabel.setText(currentQuest.getTitle());
         descriptionLabel.setText(currentQuest.getDescription());
 
-        activityObservableArrayList = FXCollections.observableArrayList(currentQuest.getActivities());
-        activityListView.setItems(activityObservableArrayList);
+        if(currentQuest.getType() == QuestType.TASK){
+            taskAnchorPane.setVisible(true);
+            pomodoroAnchorPane.setVisible(false);
+            questTypeLabel.setText("TASKS");
+
+            ObservableList<Task> tasks = FXCollections.observableArrayList();
+            for(Activity activity : currentQuest.getActivities()){
+                if(activity instanceof Task){
+                    tasks.add((Task) activity);
+                }
+            }
+            taskListView.setItems(tasks);
+        } else if(currentQuest.getType() == QuestType.POMODORO){
+            taskAnchorPane.setVisible(false);
+            pomodoroAnchorPane.setVisible(true);
+            questTypeLabel.setText("POMODORO");
+        }
 
         setSelectedTask();
     }
 
     private void setSelectedTask() {
-        activityListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Activity>() {
+        taskListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Activity>() {
             @Override
             public void changed(ObservableValue<? extends Activity> observableValue, Activity oldValue, Activity newValue) {
                 if (newValue != null) {

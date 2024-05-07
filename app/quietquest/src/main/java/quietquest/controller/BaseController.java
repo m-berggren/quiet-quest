@@ -1,6 +1,9 @@
 package quietquest.controller;
 
-import quietquest.model.*;
+import quietquest.model.Database;
+import quietquest.model.Quest;
+import quietquest.model.QuietQuestFacade;
+import quietquest.model.User;
 import quietquest.utility.FxmlFile;
 import quietquest.utility.MQTTHandler;
 
@@ -17,7 +20,7 @@ public abstract class BaseController {
         mqttHandler = MQTTHandler.getInstance();
     }
 
-    public void setMainController(MainController mainController) {
+    public void setMainController(MainController mainController) throws SQLException {
         this.mainController = mainController;
         this.quietQuestFacade = mainController.getQuietQuestFacade();
         afterMainController();
@@ -26,46 +29,62 @@ public abstract class BaseController {
     /**
      * Hook that runs after setting main controller. Default is no action.
      */
-    protected void afterMainController() {
+    protected void afterMainController() throws SQLException {
     }
 
-  public void showHome() {
-    mainController.loadView(FxmlFile.HOME);
-  }
+    public Database getDatabase() {
+        return database;
+    }
 
-  public void showCreateQuest() {
-    mainController.loadView(FxmlFile.CREATE_QUEST);
-  }
+    public User getUser() {
+        return user;
+    }
 
-  public void showQuestList() {
-    mainController.loadView(FxmlFile.QUEST_LIST);
-  }
+    public void setUser(User user) {
+        this.user = user;
+    }
 
-  public void showQuest(Quest quest) {
-    mainController.loadView(FxmlFile.SHOW_QUEST);
-  }
+    public void setDatabase(Database database) {
+        this.database = database;
+    }
 
-  public void showHistory() {
-    mainController.loadView(FxmlFile.HISTORY);
-  }
+    public void showHome() {
+        mainController.loadView(FxmlFile.HOME);
+    }
 
-  public void showStatistics() {
-    mainController.loadView(FxmlFile.STATISTICS);
-  }
+    public void showCreateQuest() {
+        mainController.loadView(FxmlFile.CREATE_QUEST);
+    }
 
-  public void showSettings() {
-    mainController.loadView(FxmlFile.SETTINGS);
-  }
+    public void showQuestList() {
+        mainController.loadView(FxmlFile.QUEST_LIST);
+    }
 
-  public void showHelp() {
-    mainController.loadView(FxmlFile.HELP);
-  }
+    public void showQuest(Quest quest) {
+        mainController.loadQuestController(quest);
+    }
 
-  public void showLogIn() {
-    mainController.loadView(FxmlFile.LOG_IN);
-  }
+    public void showHistory() {
+        mainController.loadView(FxmlFile.HISTORY);
+    }
 
-  public QuietQuestFacade getQuietQuestFacade() {
-    return this.quietQuestFacade;
-  }
+    public void showStatistics() {
+        mainController.loadView(FxmlFile.STATISTICS);
+    }
+
+    public void showSettings() {
+        mainController.loadView(FxmlFile.SETTINGS);
+    }
+
+    public void showHelp() {
+        mainController.loadView(FxmlFile.HELP);
+    }
+
+    public void showLogIn() {
+        mainController.loadView(FxmlFile.LOG_IN);
+    }
+
+    public QuietQuestFacade getQuietQuestFacade() {
+        return this.quietQuestFacade;
+    }
 }

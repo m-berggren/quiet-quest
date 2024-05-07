@@ -2,46 +2,45 @@ package quietquest.controller;
 
 
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import quietquest.model.Activity;
 import quietquest.model.Quest;
-import quietquest.model.Task;
-import java.net.URL;
+
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.ResourceBundle;
-import java.sql.Timestamp;
 
-public class QuestHistoryController extends BaseController implements Initializable {
+public class QuestHistoryController extends BaseController {
     private HashMap<String, Quest> quests;
 
     @FXML
-    private TreeView<Quest> questHistoryTree;
+    private TreeView<String> questHistoryTree;
+
     @FXML
     private Label questHistoryLabel;
 
 
-    public void initialize(URL location, ResourceBundle resources) {
+    @Override
+    public void afterMainController() throws SQLException {
+        quests = quietQuestFacade.getQuests();
         initializeQuestTreeView();
     }
 
     private void initializeQuestTreeView() {
         Quest rootQuest = new Quest("All Quests", "", new ArrayList<>()); // Assuming there is a simple constructor for names
-        TreeItem<Quest> rootItem = new TreeItem<>(rootQuest);
+        TreeItem<String> rootItem = new TreeItem<>(rootQuest.getTitle());
         rootItem.setExpanded(true);
         questHistoryTree.setRoot(rootItem);
 
-        // Assume quests is already populated, perhaps in another initialization step or via a service
         for (Quest quest : quests.values()) {
-            TreeItem<Quest> questItem = new TreeItem<>(quest);
+            TreeItem<String> questItem = new TreeItem<>(quest.getTitle());
             rootItem.getChildren().add(questItem);
 
-            // Optionally, add tasks directly if not doing lazy loading
-            for (Task task : quest.getTasks()) {
-                TreeItem<Quest> taskItem = new TreeItem<>(taskAsQuest);
+            for (Activity task : quest.getActivities()) {
+                TreeItem<String> taskItem = new TreeItem<>(task.toString());
                 questItem.getChildren().add(taskItem);
             }
         }
@@ -51,23 +50,16 @@ public class QuestHistoryController extends BaseController implements Initializa
 
     private void setupQuestTreeViewCellFactory() {
         //cell factory to display quest title,start time and end time
-        questHistoryTree.setCellFactory(tv -> new TreeCell<Quest>() {
-            //cell factory to display quest title,start time and end time
-            @Override
-            protected void updateItem(Quest quest, boolean empty) {
-                super.updateItem(quest, empty);
-                if (empty || quest == null) {
-                    setText(null);
-                } else {
-                    setText(quest.getTitle() + " (" + formatTimestamp(quest.getStartTime()) + " - " + formatTimestamp(quest.getEndTime()) + ")");       
-
-                }
+        questHistoryTree.setCellFactory(tv -> new TreeCell<>() {
+          @Override
+          protected void updateItem(String text, boolean empty) {
+            super.updateItem(text, empty);
+            if (empty || text == null) {
+              setText(null);
+            } else {
+              setText(text);
             }
-
-            private String formatTimestamp(Timestamp timestamp) {
-                return (timestamp != null) ? timestamp.toString() : "N/A";
-
-            }
+          }
         });
     }
 }

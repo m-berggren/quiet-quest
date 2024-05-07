@@ -2,6 +2,7 @@
 
 WiFiClient wifiClient; 
 PubSubClient client(wifiClient);
+boolean QUEST_RUNS = false;
 
 // ==========================* CALLBACK METHOD *=====================
 
@@ -21,7 +22,8 @@ void callback(char* topic, byte* payload, unsigned int length) {
     Serial.println(txt);
     free(txt);
 
-    if (strcmp(topic, TOPIC_SUB_QUEST) == 0) {
+    if (strcmp(topic, TOPIC_SUB_QUEST_START) == 0) {
+        QUEST_RUNS = true;
         if(strcmp(txt, "Your quest has started") == 0) {
             // TODO: implement to show text on terminal
             int beats[] = { 1, 1, 1, 4, 10 };
@@ -35,6 +37,8 @@ void callback(char* topic, byte* payload, unsigned int length) {
             int beats[] = { 1, 8, 10 };
             taskStop.playTune(3, "cc ", beats, 100);
         }
+    } else if (strcmp(topic, TOPIC_SUB_QUEST_END) == 0) {
+        QUEST_RUNS = false;
     }
 }
 
@@ -84,7 +88,8 @@ void setupMqtt() {
         client.connect(clientID.c_str());                                   // Attempts to connect client to MQTT broker
         delay(3000);
     }
-    client.subscribe(TOPIC_SUB_QUEST);                                      // Starts subscribing to topics
+    client.subscribe(TOPIC_SUB_QUEST_START);                                      // Starts subscribing to topics
+    client.subscribe(TOPIC_SUB_QUEST_END);
     Serial.println("Connected to broker.");
 }
 

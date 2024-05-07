@@ -24,12 +24,12 @@
                <Font name="American Typewriter" size="26.0" />
             </font>
          </Label>
-         <Label layoutY="200.0" prefHeight="26.0" prefWidth="242.0" text="TASKS" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="200.0">
+         <Label layoutY="200.0" prefHeight="26.0" prefWidth="242.0" text="ACTIVITIES" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="200.0">
             <font>
                <Font name="American Typewriter" size="21.0" />
             </font>
          </Label>
-         <ListView fx:id="tasksListView" layoutX="25.0" layoutY="231.0" opacity="1.0" prefHeight="251.0" prefWidth="384.0" visible="true" AnchorPane.bottomAnchor="93.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="39.0" AnchorPane.topAnchor="231.0" />
+          <ListView fx:id="activityListView" layoutX="25.0" layoutY="231.0" opacity="1.0" prefHeight="251.0" prefWidth="384.0" visible="true" AnchorPane.bottomAnchor="93.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="39.0" AnchorPane.topAnchor="231.0" />
          <Label fx:id="descriptionLabel" alignment="TOP_LEFT" layoutX="36.0" layoutY="69.0" prefHeight="125.0" prefWidth="373.0" text="Description..." wrapText="true" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
             <font>
                <Font name="American Typewriter" size="15.0" />

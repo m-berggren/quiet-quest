@@ -3,8 +3,6 @@ package quietquest.controller;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -15,25 +13,27 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.util.Callback;
 import javafx.util.Duration;
+import quietquest.model.Activity;
+import quietquest.model.PomodoroTimer;
 import quietquest.model.Quest;
 import quietquest.model.Task;
-import quietquest.utility.MQTTHandler;
 import javafx.scene.control.ListView;
-import javafx.scene.control.cell.CheckBoxListCell;
 
 import java.net.URL;
-import java.util.ArrayList;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Random;
 import java.util.ResourceBundle;
 
 
-public class QuestController extends BaseController implements Initializable, UIUpdater, Callback<ListView<Task>, ListCell<Task>> {
+public class QuestController extends BaseController implements Initializable, UIUpdater, Callback<ListView<Activity>, ListCell<Activity>> {
     @FXML
     private Button startQuestButton;
     @FXML
     private Button completeQuestButton;
     @FXML
-    private ListView<Task> tasksListView;
+    private ListView<Activity> activityListView;
     @FXML
     private Label titleLabel;
     @FXML
@@ -48,49 +48,45 @@ public class QuestController extends BaseController implements Initializable, UI
     private Label mqttLightMessage;
     @FXML
     private Label motivationalMessage;
+    private Activity currentActivity;
+    private Quest currentQuest;
 
-    private MQTTHandler mqttClient;
+    private final String PUB_TOPIC_START = "/quietquest/application/start";
+    private final String PUB_TOPIC_TASK_DONE = "/quietquest/application/task_done";
+    private final String PUB_TOPIC_END = "/quietquest/application/end";
 
-    // Private String selectedTask;
-    private ArrayList<Task> tasks;
-    private ObservableList<Task> data;
+    private ObservableList<Activity> activityObservableArrayList;
     private String[] message;
-
+    private boolean isQuestRunning = false;
 
     public void initialize(URL arg0, ResourceBundle arg1) {
-        mqttClient = new MQTTHandler(this);
-        tasksListView.setCellFactory(this);
+        mqttHandler.setUIUpdater(this);
+        activityListView.setCellFactory(this);
+    }
+
+    public void initiateQuest(Quest quest) {
+        currentQuest = quest;
     }
 
     @Override
     protected void afterMainController() {
-        Quest quest = quietQuestFacade.getQuestManager().getQuestSelection();
-        ArrayList<Task> tasks = quietQuestFacade.getQuestManager().getQuestSelection().getTasks();
-        titleLabel.setText(quest.getTitle());
-        descriptionLabel.setText(quest.getDescription());
-        tasksListView.getItems().addAll(tasks);
-        if (tasks != null) {
-            data = FXCollections.observableArrayList(tasks);
-            tasksListView.setItems(data);
-        }
-        setSelectedTask();
-        displayTasks();
-    }
+        //currentQuest = quietQuestFacade.getQuestSelection();
+        titleLabel.setText(currentQuest.getTitle());
+        descriptionLabel.setText(currentQuest.getDescription());
 
-    public void displayTasks() {
-        if (tasks != null && !tasks.isEmpty()) {
-            data = FXCollections.observableArrayList(tasks);
-            tasksListView.setItems(data);
-        }
+        activityObservableArrayList = FXCollections.observableArrayList(currentQuest.getActivities());
+        activityListView.setItems(activityObservableArrayList);
+
+        setSelectedTask();
     }
 
     private void setSelectedTask() {
-        tasksListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Task>() {
+        activityListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Activity>() {
             @Override
-            public void changed(ObservableValue<? extends Task> observableValue, Task oldValue, Task newValue) {
+            public void changed(ObservableValue<? extends Activity> observableValue, Activity oldValue, Activity newValue) {
                 if (newValue != null) {
-                    tasksListView.getItems().clear();
-                    tasksListView.getItems().add(newValue);
+                    currentActivity = newValue;
+                    System.out.println(currentActivity);
                 }
             }
         });
@@ -98,28 +94,40 @@ public class QuestController extends BaseController implements Initializable, UI
     }
 
     @Override
-    public ListCell<Task> call(ListView<Task> param) {
+    public ListCell<Activity> call(ListView<Activity> param) {
         return new ListCell<>() {
-
-
             @Override
-            public void updateItem(Task data, boolean empty) {
-                super.updateItem(data, empty);
-                if (empty || data == null) {
+            public void updateItem(Activity activity, boolean empty) {
+                super.updateItem(activity, empty);
+                if (empty || activity == null) {
                     setText(null);
                     setGraphic(null);
                     motivationalMessage.setVisible(false);
-                } else {
-                    CheckBox checkBox = new CheckBox(data.getTasks());
-                    checkBox.setSelected(data.isCompleted());
+                } else if (activity instanceof Task) {
+                    Task task = (Task) activity;
+                    CheckBox checkBox = new CheckBox(task.getDescription());
+                    checkBox.setSelected(task.getCompletionState());
                     checkBox.setOnAction(event -> {
-                        data.setCompleted(checkBox.isSelected());
-                        if (checkBox.isSelected()) {
+                        if (checkBox.isSelected() && isQuestRunning) {
                             showMessage();
+                            task.setCompletionState(checkBox.isSelected());
+                            task.setEndTime(Timestamp.from(Instant.now())); // Provides current timestamp using java.time
+                            try {
+                                database.connect();
+                                database.updateTask(user, currentQuest, task); // Updates Task with End time
+                                database.disconnect();
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
+
                         }
                     });
                     setGraphic(checkBox);
                     motivationalMessage.setVisible(false);
+                } else if (activity instanceof PomodoroTimer) {
+                    PomodoroTimer timer = (PomodoroTimer) activity;
+                    setText(timer.toString());
+                    setGraphic(null);
                 }
             }
         };
@@ -141,26 +149,39 @@ public class QuestController extends BaseController implements Initializable, UI
 
     public void onTickTaskClick(ActionEvent event) {
         String message = "You have completed a task!";
-        mqttClient.publishMessage("/quietquest/application/start", message);
+        mqttHandler.publishMessage(PUB_TOPIC_TASK_DONE, message);
     }
 
-    public void onStartQuestClick(ActionEvent event) {
-            String message = "Your quest has started";
-            mqttClient.connect("/quietquest/application/start", message); // Connect to MQTT broker & publish
-            mqttClient.subscribe(); // Subscribe
+    public void onStartQuestClick(ActionEvent event) throws SQLException {
+        isQuestRunning = true;
+        String message = "Your quest has started.";
+        currentQuest.setStartTime(Timestamp.from(Instant.now()));
+        currentQuest.startActivity(); // Starts PomodoroTimer, mqtt pub & sub, Tasks are updated with startTime
+        database.connect();
+        database.updateQuest(user, currentQuest); // Updates Quest in database with startTime
+        database.disconnect();
+
+        mqttHandler.connect(PUB_TOPIC_START, message); // Connect to MQTT broker & publish
+        mqttHandler.subscribe(); // Subscribe
     }
 
-    public void onCompleteQuestClick(ActionEvent event) {
-        String message = "You have completed your quest!";
-        mqttClient.publishMessage("/quietquest/application/start", message);
+    public void onCompleteQuestClick(ActionEvent event) throws SQLException {
+        isQuestRunning = false;
+        currentQuest.endActivity(); // Publishes last message & handles pomodoroTimer & Task
+        currentQuest.setCompletionState(true);
+        currentQuest.setCompleteTime(Timestamp.from(Instant.now()));
+        // This needs to be implemented: currentQuest.setBoxOpenTimes(x);
 
-        mqttClient.disconnect();
+        database.connect();
+        database.updateQuestOnly(user, currentQuest);
+        database.disconnect();
+
+        mqttHandler.publishMessage(PUB_TOPIC_END, "Your quest has ended.");
+        mqttHandler.disconnect();
+
+        // Remove or change later:
         mqttConnectionMessage.getStyleClass().clear();
         mqttConnectionMessage.setText("");
-    }
-
-    public void disconnectMqtt() {
-        mqttClient.disconnect();
     }
 
     @Override

@@ -1,41 +1,30 @@
 package quietquest.controller;
 
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
-import quietquest.QuietQuestMain;
-import quietquest.QuietQuestMain;
-import quietquest.model.Quest;
-import quietquest.model.QuestManager;
-import quietquest.model.Task;
-import quietquest.utility.FxmlFile;
-import quietquest.utility.MQTTHandler;
+import quietquest.model.*;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class CreateQuestController extends BaseController implements Initializable {
-    @FXML
-    private TextField taskDescriptionField;
     @FXML
     private Button saveQuestButton;
     @FXML
@@ -61,60 +50,151 @@ public class CreateQuestController extends BaseController implements Initializab
     @FXML
     private Text popupSmallText;
     @FXML
-    private ListView<Task> taskListView;
-    @FXML
-    private Text allTasksText;
-    @FXML
     private Button addNewTaskButton;
-    private Parent root;
-    private Stage stage;
-    private Scene scene;
-    private FXMLLoader loader;
-    private ArrayList<Task> tasks;
-    private ObservableList<Task> data;
+    @FXML
+    private Button addNewPomodoroButton;
+    @FXML
+    private TextField focusTextField;
+    @FXML
+    private TextField breakTextField;
+    @FXML
+    private TextField intervalTextField;
+    @FXML
+    private Slider focusSlider;
+    @FXML
+    private Slider breakSlider;
+    @FXML
+    private Slider intervalSlider;
+    @FXML
+    private TabPane activityTabPane;
+    @FXML
+    private ListView<Activity> activityListView;
+
+    private ObservableList<Activity> activityObservableList;
+    private Tab lastSelectedTab;
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
-        tasks = new ArrayList<>();
-        data = FXCollections.observableArrayList(tasks);
-        taskListView.setItems(data);
-        showTaskList();
+        configureSliderListener();
+        tabChangeListener();
+
+        activityObservableList = FXCollections.observableArrayList();
+        activityListView.setItems(activityObservableList);
     }
 
-    /**
-     * Show current task list in the taskListView.
-     */
-    public void showTaskList() {
-        taskListView.getItems().clear();
-        taskListView.getItems().addAll(data);
-        taskListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        taskListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Task>() {
+    @Override
+    protected void afterMainController() throws SQLException {
+        super.afterMainController();
+    }
+
+    private void configureSliderListener() {
+        // Add a listener to the Slider's value property
+        focusSlider.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
-            public void changed(ObservableValue<? extends Task> observableValue, Task oldValue, Task newValue) {
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                // Rounds down value to intervals of 5. For example: 24 / 5 rounded to 4.0 and multiplied by 5
+                double roundedValue = Math.round(newValue.doubleValue() / 5) * 5;
+                focusSlider.setValue(roundedValue); // Updates slider position
+                focusTextField.setText(String.valueOf((int) roundedValue)); // Updates text by intervals of 10
             }
         });
+        breakSlider.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                double roundedValue = Math.round(newValue.doubleValue() / 5) * 5;
+                breakSlider.setValue(roundedValue); // Updates slider position
+                breakTextField.setText(String.valueOf((int) roundedValue)); // Updates text by intervals of 5
+            }
+        });
+        intervalSlider.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                int intValue = newValue.intValue();
+                intervalSlider.setValue(intValue);
+                intervalTextField.setText(String.valueOf(intValue));
+            }
+        });
+
+    }
+
+    private void tabChangeListener() {
+        activityTabPane.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tab>() {
+            @Override
+            public void changed(ObservableValue<? extends Tab> observable, Tab oldTab, Tab newTab) {
+                if (newTab != lastSelectedTab) {
+                    // The tab has changed so method executes
+                    onTabChange(oldTab, newTab);
+                }
+            }
+        });
+        // Initialize lastSelectedTab to the current selected tab
+        lastSelectedTab = activityTabPane.getSelectionModel().getSelectedItem();
+    }
+
+    private void onTabChange(Tab oldTab, Tab newTab) {
+        if (!activityListView.getItems().isEmpty()) {
+            Platform.runLater(() -> {
+                ConfirmationAlert alert = new ConfirmationAlert();
+                alert.setTitle("Confirmation");
+                alert.setHeaderText("Switching between tabs will erase all prior data.");
+                alert.setContentText("Do you want to continue?:");
+
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.isPresent() && result.get().getText().equals("No")) {
+                    activityTabPane.getSelectionModel().select(oldTab);
+                } else {
+                    lastSelectedTab = newTab;
+                    activityListView.getItems().clear();
+                }
+            });
+        } else {
+            lastSelectedTab = newTab;
+        }
     }
 
     /**
-     * New task added to task list and displayed in right side task list view.
+     *
      */
-    public void addNewTask() {
-        String newTaskTitle = taskField.getText();
-        if (!newTaskTitle.isEmpty()) {
-            Task newTask = new Task(newTaskTitle);
-            tasks.add(newTask);
-            data.add(newTask);
+    public void createTask() {
+        String taskDescription = taskField.getText();
+        if (!taskDescription.isEmpty()) {
+            Task newTask = new Task(taskDescription);
+            activityObservableList.add(newTask);
             taskField.clear();
         }
     }
 
     /**
-     * Delete selected task from task list and remove from task list view too.
+     *
      */
-    public void deleteTask() {
-        Task currentTask = taskListView.getSelectionModel().getSelectedItem();
-        tasks.remove(currentTask);
-        data.remove(currentTask);
+    public void createPomodoroTimer() {
+        int focusTime = Integer.parseInt(focusTextField.getText());
+        int breakTime = Integer.parseInt(breakTextField.getText());
+        int intervals = Integer.parseInt(intervalTextField.getText());
+
+        PomodoroTimer newPomodoro = new PomodoroTimer(focusTime, breakTime, intervals);
+        if (!activityObservableList.isEmpty() && activityObservableList.getFirst() instanceof PomodoroTimer) {
+            ConfirmationAlert alert = new ConfirmationAlert();
+            alert.setTitle("Confirmation");
+            alert.setHeaderText("This will update existing Pomodoro activity.");
+            alert.setContentText("Do you want to continue?:");
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get().getText().equals("Yes")) {
+                activityObservableList.clear();
+                activityObservableList.add(newPomodoro);
+            }
+        } else {
+            activityObservableList.add(newPomodoro);
+        }
+    }
+
+    /**
+     * Delete selected activity from activity list and remove from activity list view too.
+     */
+    public void deleteActivity() {
+        Activity currentActivity = activityListView.getSelectionModel().getSelectedItem();
+        activityObservableList.remove(currentActivity);
     }
 
     /**
@@ -133,12 +213,19 @@ public class CreateQuestController extends BaseController implements Initializab
         } else {
             String title = titleField.getText();
             String description = descriptionField.getText();
-            Quest quest = new Quest(title, description, tasks);
+            ArrayList<Activity> activities = new ArrayList<>(activityListView.getItems());
+            Quest quest = new Quest(title, description, activities);
             // add quest to quest list:
-            quietQuestFacade.addQuest(quest);
-            System.out.println("quest: " + quest.getTitle());
-            System.out.println("tasks: " + quest.getTasks());
+            quietQuestFacade.addQuest(quest); // Saves quest to QuietQuestFacade
+            database.connect();
+            database.createQuest(user, quest); // Creates Quest in database
+            database.disconnect();
             showCreateQuest();
+
+            // Printing for testing
+            for (String key : quietQuestFacade.getQuests().keySet()) {
+                System.out.println(key);
+            }
         }
     }
 
@@ -162,7 +249,8 @@ public class CreateQuestController extends BaseController implements Initializab
         descriptionField.setDisable(true);
         taskField.setDisable(true);
         addNewTaskButton.setDisable(true);
-        taskListView.setDisable(true);
+        addNewPomodoroButton.setDisable(true);
+        //taskListView.setDisable(true);
         deleteTaskButton.setDisable(true);
     }
 
@@ -187,7 +275,8 @@ public class CreateQuestController extends BaseController implements Initializab
         descriptionField.setDisable(false);
         taskField.setDisable(false);
         addNewTaskButton.setDisable(false);
-        taskListView.setDisable(false);
+        addNewPomodoroButton.setDisable(false);
+        //taskListView.setDisable(false);
         deleteTaskButton.setDisable(false);
     }
 
@@ -199,13 +288,15 @@ public class CreateQuestController extends BaseController implements Initializab
         titleField.clear();
         descriptionField.clear();
         taskField.clear();
-        taskListView.getItems().clear();
+        activityObservableList.clear();
     }
 
     /**
      * Go to "Quest List" by clicking "List" button.
      */
     public void onGoToQuests() {
+        activityObservableList.clear();
+        //quietQuestFacade.clearActivities();
         showQuestList();
     }
 }

@@ -39,7 +39,7 @@ public class CreateUserController {
      * @throws IOException
      */
     public void onBackClick(ActionEvent event) throws IOException {
-        loadFxml("log-in-view.fxml", event);
+        loadFxml(FxmlFile.LOG_IN, event);
     }
 
     /**
@@ -74,7 +74,7 @@ public class CreateUserController {
         if (usernameOK && passwordOK) {
             if (database.createUser(username, password)) {
                 System.out.println("Successfully created user.");
-                loadFxml("log-in-view.fxml", event);
+                loadFxml(FxmlFile.LOG_IN, event);
             } else {
                 System.out.println("Something went wrong.");
             }

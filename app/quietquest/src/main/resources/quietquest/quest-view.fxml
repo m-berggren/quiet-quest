@@ -52,7 +52,7 @@
                 <ListView fx:id="taskListView" opacity="1.0" prefHeight="200.0" prefWidth="330.0" visible="true" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="0.0" />
             </children>
          </AnchorPane>
-         <Label fx:id="descriptionLabel" alignment="TOP_LEFT" layoutX="36.0" layoutY="69.0" prefHeight="100.0" prefWidth="373.0" text="Description..." wrapText="true" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="50.0">
+         <Label fx:id="descriptionLabel" alignment="TOP_LEFT" layoutX="20.0" layoutY="55.0" prefHeight="100.0" prefWidth="373.0" text="Description..." wrapText="true" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="55.0">
             <font>
                <Font name="American Typewriter" size="15.0" />
             </font>
@@ -62,12 +62,12 @@
                <Font name="American Typewriter" size="24.0" />
             </font>
          </Button>
-         <Label fx:id="startTimeLabel" layoutX="20.0" layoutY="155.0" prefHeight="18.0" prefWidth="330.0" text="Start: " AnchorPane.topAnchor="155.0">
+         <Label fx:id="startTimeLabel" layoutX="20.0" layoutY="160.0" prefHeight="18.0" prefWidth="330.0" text="Start: " AnchorPane.topAnchor="160.0">
             <font>
                <Font name="American Typewriter" size="15.0" />
             </font>
          </Label>
-         <Label fx:id="endTimeLabel" layoutX="20.0" layoutY="181.0" prefHeight="18.0" prefWidth="330.0" text="End:" AnchorPane.topAnchor="185.0">
+         <Label fx:id="endTimeLabel" layoutX="20.0" layoutY="190.0" prefHeight="18.0" prefWidth="330.0" text="End:" AnchorPane.topAnchor="190.0">
             <font>
                <Font name="American Typewriter" size="15.0" />
             </font>

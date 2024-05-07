@@ -19,6 +19,7 @@ import quietquest.utility.MQTTHandler;
 import javafx.scene.control.ListView;
 
 import java.net.URL;
+import java.sql.Timestamp;
 import java.util.Random;
 import java.util.ResourceBundle;
 
@@ -81,6 +82,8 @@ public class QuestController extends BaseController implements UIUpdater, Callba
         currentQuest = quietQuestFacade.getQuestSelection();
         titleLabel.setText(currentQuest.getTitle());
         descriptionLabel.setText(currentQuest.getDescription());
+        startTimeLabel.setText("Start: " + currentQuest.getStartTime());
+        endTimeLabel.setText("End: " + currentQuest.getEndTime());
 
         if(currentQuest.getType() == QuestType.TASK){
             taskAnchorPane.setVisible(true);
@@ -167,14 +170,19 @@ public class QuestController extends BaseController implements UIUpdater, Callba
     }
 
     public void onStartQuestClick(ActionEvent event) {
+        Timestamp startTime = new Timestamp(System.currentTimeMillis());
+        currentQuest.setStartTime(startTime);
+
         String message = "Your quest has started.";
         mqttHandler.connect(PUB_TOPIC_START, message); // Connect to MQTT broker & publish
         mqttHandler.subscribe(); // Subscribe
-
         currentQuest.startActivity(); // Starts quest, mqtt pub & sub
     }
 
     public void onCompleteQuestClick(ActionEvent event) {
+        Timestamp endTime = new Timestamp(System.currentTimeMillis());
+        currentQuest.setEndTime(endTime);
+
         currentQuest.endActivity(); // Publishes last message
         mqttHandler.publishMessage(PUB_TOPIC_END, "Your quest has ended.");
         mqttHandler.disconnect();

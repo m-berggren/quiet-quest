@@ -2,19 +2,20 @@ package quietquest.model;
 
 import quietquest.utility.MQTTHandler;
 
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 import static javafx.application.Application.launch;
 
 public class Quest {
-
-    // Attributes of Quest
     private String title;
     private String description;
     private ArrayList<Activity> activities;
     private MQTTHandler mqttHandler;
+    private Timestamp startTime;
+    private Timestamp endTime;
 
-    // Constructor
     public Quest(String title, String description, ArrayList<Activity> activities) {
         this.title = title;
         this.description = description;
@@ -50,6 +51,15 @@ public class Quest {
             return QuestType.TASK;
         }
     }
+
+    public Timestamp getStartTime(){
+        return startTime;
+    }
+
+    public Timestamp getEndTime(){
+        return endTime;
+    }
+
     // Setters
     public void setTitle(String title) {
         this.title = title;
@@ -57,6 +67,14 @@ public class Quest {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public void setStartTime(Timestamp timestamp){
+        this.startTime = timestamp;
+    }
+
+    public void setEndTime(Timestamp timestamp){
+        this.endTime = timestamp;
     }
 
     public ArrayList<Activity> getActivities() {

@@ -30,9 +30,13 @@ public class QuestController extends BaseController implements UIUpdater, Callba
     @FXML
     private AnchorPane pomodoroAnchorPane;
     @FXML
+    private AnchorPane motivationalAnchorPane;
+    @FXML
     private Button startQuestButton;
     @FXML
     private Button completeQuestButton;
+    @FXML
+    private Button finishTaskButton;
     @FXML
     private ListView<Task> taskListView;
     @FXML
@@ -84,6 +88,7 @@ public class QuestController extends BaseController implements UIUpdater, Callba
         descriptionLabel.setText(currentQuest.getDescription());
         startTimeLabel.setText("Start: " + currentQuest.getStartTime());
         endTimeLabel.setText("End: " + currentQuest.getEndTime());
+        motivationalAnchorPane.setVisible(false);
 
         if(currentQuest.getType() == QuestType.TASK){
             taskAnchorPane.setVisible(true);
@@ -128,7 +133,7 @@ public class QuestController extends BaseController implements UIUpdater, Callba
                 if (empty || activity == null) {
                     setText(null);
                     setGraphic(null);
-                    motivationalMessage.setVisible(false);
+                    motivationalAnchorPane.setVisible(false);
                 } else if (activity instanceof Task) {
                     Task task = (Task) activity;
                     CheckBox checkBox = new CheckBox(task.getTask());
@@ -140,7 +145,7 @@ public class QuestController extends BaseController implements UIUpdater, Callba
                         }
                     });
                     setGraphic(checkBox);
-                    motivationalMessage.setVisible(false);
+                    motivationalAnchorPane.setVisible(false);
                 } else if (activity instanceof PomodoroTimer) {
                     PomodoroTimer timer = (PomodoroTimer) activity;
                     setText(timer.toString());
@@ -156,17 +161,12 @@ public class QuestController extends BaseController implements UIUpdater, Callba
         int index = random.nextInt(message.length);
         String setMessage = message[index];
         motivationalMessage.setText(setMessage);
-        motivationalMessage.setVisible(true);
+        motivationalAnchorPane.setVisible(true);
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(3), event -> {
-            motivationalMessage.setVisible(false);
+            motivationalAnchorPane.setVisible(false);
         }));
         timeline.play();
-    }
-
-    public void onTickTaskClick(ActionEvent event) {
-        String message = "You have completed a task!";
-        mqttHandler.publishMessage(PUB_TOPIC_TASK_DONE, message);
     }
 
     public void onStartQuestClick(ActionEvent event) {
@@ -177,6 +177,8 @@ public class QuestController extends BaseController implements UIUpdater, Callba
         mqttHandler.connect(PUB_TOPIC_START, message); // Connect to MQTT broker & publish
         mqttHandler.subscribe(); // Subscribe
         currentQuest.startActivity(); // Starts quest, mqtt pub & sub
+
+        startQuestButton.setDisable(true);
     }
 
     public void onCompleteQuestClick(ActionEvent event) {
@@ -190,6 +192,17 @@ public class QuestController extends BaseController implements UIUpdater, Callba
         // Remove or change later:
         mqttConnectionMessage.getStyleClass().clear();
         mqttConnectionMessage.setText("");
+
+        completeQuestButton.setDisable(true);
+        showMessage();
+    }
+
+    public void onFinishTaskClick(){
+        String message = "You have completed a task!";
+        mqttHandler.publishMessage(PUB_TOPIC_TASK_DONE, message);
+        if(currentActivity instanceof Task){
+            showMessage();
+        }
 
     }
 

@@ -47,9 +47,14 @@
                   </font>
                </Label>
             </children></AnchorPane>
-         <AnchorPane fx:id="taskAnchorPane" prefHeight="210.0" prefWidth="370.0" visible="false" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="250.0">
+         <AnchorPane fx:id="taskAnchorPane" prefHeight="210.0" prefWidth="370.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="250.0">
             <children>
-                <ListView fx:id="taskListView" opacity="1.0" prefHeight="200.0" prefWidth="330.0" visible="true" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="0.0" />
+                <ListView fx:id="taskListView" opacity="1.0" prefHeight="200.0" prefWidth="287.0" visible="true" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="63.0" AnchorPane.topAnchor="0.0" />
+               <Button fx:id="finishTaskButton" layoutX="313.0" layoutY="7.0" mnemonicParsing="false" onAction="#onFinishTaskClick" prefWidth="20.0" style="-fx-text-fill: #22577A; -fx-background-color: #57CC99; -fx-background-radius: 8;" text="X" AnchorPane.topAnchor="0.0">
+                  <font>
+                     <Font name="American Typewriter" size="20.0" />
+                  </font>
+               </Button>
             </children>
          </AnchorPane>
          <Label fx:id="descriptionLabel" alignment="TOP_LEFT" layoutX="20.0" layoutY="55.0" prefHeight="100.0" prefWidth="373.0" text="Description..." wrapText="true" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="55.0">
@@ -74,17 +79,46 @@
          </Label>
       </children>
    </AnchorPane>
-   <AnchorPane fx:id="mqttAnchorPane" layoutX="914.0" layoutY="21.0" prefHeight="323.0" prefWidth="370.0" style="-fx-background-color: #fff; -fx-background-radius: 10;" AnchorPane.leftAnchor="470.0" AnchorPane.topAnchor="25.0">
+   <AnchorPane fx:id="mqttAnchorPane" layoutX="914.0" layoutY="21.0" prefHeight="278.0" prefWidth="370.0" style="-fx-background-color: #fff; -fx-background-radius: 10;" AnchorPane.leftAnchor="470.0" AnchorPane.topAnchor="25.0">
       <children>
-         <Label fx:id="mqttConnectionMessage" prefHeight="17.0" prefWidth="242.0" text="..." AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0" />
-         <Label fx:id="mqttDistanceMessage" prefHeight="17.0" prefWidth="242.0" text="..." AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="45.0" />
-         <Label fx:id="mqttMotionMessage" prefHeight="17.0" prefWidth="242.0" text="..." AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="70.0" />
-         <Label fx:id="mqttLightMessage" text="..." AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="95.0" />
+         <Label fx:id="mqttConnectionMessage" layoutX="24.0" layoutY="78.0" prefHeight="17.0" prefWidth="242.0" text="Connection Msg" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="80.0" />
+         <Label fx:id="mqttDistanceMessage" layoutX="24.0" layoutY="141.0" prefHeight="17.0" prefWidth="242.0" text="Distance Msg" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="135.0" />
+         <Label fx:id="mqttMotionMessage" layoutX="24.0" layoutY="219.0" prefHeight="17.0" prefWidth="242.0" text="Motion Msg" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="190.0" />
+         <Label fx:id="mqttLightMessage" layoutX="24.0" layoutY="263.0" text="Light Msg" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="245.0" />
+         <Label fx:id="mqttTitleLabel" layoutX="24.0" layoutY="21.0" text="MQTT DATA" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">
+            <font>
+               <Font name="American Typewriter" size="21.0" />
+            </font>
+         </Label>
+         <Label layoutX="24.0" layoutY="56.0" text="Connection Msg" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="55.0">
+            <font>
+               <Font name="American Typewriter" size="15.0" />
+            </font>
+         </Label>
+         <Label layoutX="24.0" layoutY="115.0" text="Distance" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="110.0">
+            <font>
+               <Font name="American Typewriter" size="15.0" />
+            </font>
+         </Label>
+         <Label layoutX="24.0" layoutY="162.0" text="Motion" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="165.0">
+            <font>
+               <Font name="American Typewriter" size="15.0" />
+            </font>
+         </Label>
+         <Label layoutX="24.0" layoutY="226.0" text="Light" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="220.0">
+            <font>
+               <Font name="American Typewriter" size="15.0" />
+            </font>
+         </Label>
       </children>
    </AnchorPane>
-   <Label fx:id="motivationalMessage" layoutX="889.0" layoutY="43.0" prefHeight="113.0" prefWidth="242.0" text="MotivationalMessage" visible="false" wrapText="true" AnchorPane.leftAnchor="915.0" AnchorPane.topAnchor="300.0">
-      <font>
-         <Font name="System Bold Italic" size="19.0" />
-      </font>
-   </Label>
+   <AnchorPane fx:id="motivationalAnchorPane" layoutX="470.0" layoutY="333.0" prefHeight="115.0" prefWidth="370.0" style="-fx-background-color: #ffffff; -fx-background-radius: 10;">
+      <children>
+         <Label fx:id="motivationalMessage" alignment="CENTER" prefHeight="113.0" prefWidth="350.0" text="MotivationalMessage" wrapText="true" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <font>
+               <Font name="System Bold Italic" size="19.0" />
+            </font>
+         </Label>
+      </children>
+   </AnchorPane>
 </AnchorPane>

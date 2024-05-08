@@ -12,6 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import quietquest.model.Activity;
 import quietquest.model.Quest;
+import quietquest.model.Task;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -47,7 +48,6 @@ public class QuestHistoryController extends BaseController {
   @Override
   public void afterMainController() throws SQLException {
     //quests = quietQuestFacade.getQuests();
-    //System.out.println("Number of quests loaded: " + quests.size());
     displayQuests();
   }
 
@@ -80,13 +80,19 @@ public class QuestHistoryController extends BaseController {
           // Creating a custom layout for the list cell
           VBox vBox = new VBox(5); // Vertical box with spacing
           Label titleLabel = new Label(quest.getTitle());
-          titleLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
+          titleLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 18px;");
 
-          Label startTimeLabel = new Label("Start Time: " + formatDate(quest.getStartTime()));
-          Label completionTimeLabel = new Label("Completed Time: " + formatDate(quest.getCompleteTime()));
+          Label startTimeLabel = new Label("    Start Time: " + formatDate(quest.getStartTime()));
+          Label completionTimeLabel = new Label("    Completed Time: " + formatDate(quest.getCompleteTime()));
+          //Show time spent calculated from the difference between the timestamp start time and completion time in minutes
+          long timeSpent = (quest.getCompleteTime().getTime() - quest.getStartTime().getTime()) / 60000;
+          Label timeSpentLabel = new Label("    Time Spent: " + timeSpent + " minutes");
+          Label boxOpenTimesLabel = new Label("    Box Open Times: " + quest.getBoxOpenTimes());
+          long averageBoxOpenInterval = (timeSpent/ (quest.getBoxOpenTimes() + 1) / 60000);
+          Label averageBoxOpenIntervalLabel = new Label("    Average Box Open Interval: " + averageBoxOpenInterval + " minutes");
 
-          vBox.getChildren().addAll(titleLabel, startTimeLabel, completionTimeLabel);
-          setGraphic(vBox); // Set the VBox as the graphic of the list cell
+          vBox.getChildren().addAll(titleLabel, startTimeLabel, completionTimeLabel, timeSpentLabel, boxOpenTimesLabel, averageBoxOpenIntervalLabel);
+          setGraphic(vBox);
         }
       }
     });
@@ -121,16 +127,22 @@ public class QuestHistoryController extends BaseController {
     if (activityListView == null) {
       System.out.println("activityListView is null");
     } else {
-      setupActivityListView();
+      setupActivityListView(quest);
     }
   }
 
-  private void setupActivityListView() {
+  private void setupActivityListView(Quest quest) {
+    ObservableList<Activity> taskItems = FXCollections.observableArrayList(quest.getActivities());
+    activityListView.setItems(taskItems);
     activityListView.setCellFactory(lv -> new ListCell<Activity>() {
       @Override
       protected void updateItem(Activity activity, boolean empty) {
         super.updateItem(activity, empty);
-        setText(empty || activity == null ? "" : activity.toString());
+        if (empty || activity == null) {
+          setText(null);
+        } else {
+          setText(activity instanceof Task ? ((Task) activity).getDescription() : "No description available");
+        }
       }
     });
   }

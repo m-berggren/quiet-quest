@@ -28,7 +28,12 @@
                <Font name="American Typewriter" size="18.0" />
             </font>
          </Button>
-         <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: #C7F9CC; -fx-background-radius: 8; -fx-border-color: #57CC99; -fx-border-radius: 8;" text="Statistics">
+         <Button fx:id="questHistoryButton" mnemonicParsing="false" onAction="#onQuestHistoryButtonClick" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: #C7F9CC; -fx-background-radius: 8; -fx-border-color: #57CC99; -fx-border-radius: 8;" text="Quest History">
+            <font>
+               <Font name="American Typewriter" size="18.0" />
+            </font>
+         </Button>
+         <Button fx:id="statisticsButton" mnemonicParsing="false" onAction="#onStatisticsButtonClick" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: #C7F9CC; -fx-background-radius: 8; -fx-border-color: #57CC99; -fx-border-radius: 8;" text="Statistics">
             <font>
                <Font name="American Typewriter" size="18.0" />
             </font>

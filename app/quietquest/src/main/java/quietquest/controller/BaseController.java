@@ -59,8 +59,13 @@ public abstract class BaseController {
     public void showQuestList() {
         mainController.loadView(FxmlFile.QUEST_LIST);
     }
+
     public void showQuest(Quest quest) {
         mainController.loadQuestController(quest);
+    }
+
+    public void showHistory() {
+        mainController.loadView(FxmlFile.HISTORY);
     }
 
     public void showStatistics() {

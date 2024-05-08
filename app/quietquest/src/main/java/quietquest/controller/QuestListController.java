@@ -162,6 +162,7 @@ public class QuestListController extends BaseController {
         editButton.setDisable(true);
         titleField.setEditable(true);
         descriptionField.setEditable(true);
+        questListView.setDisable(true);
     }
 
     public void onSaveButtonClick() {
@@ -177,5 +178,6 @@ public class QuestListController extends BaseController {
         saveButton.setDisable(true);
         titleField.setEditable(false);
         descriptionField.setEditable(false);
+        questListView.setDisable(false);
     }
 }

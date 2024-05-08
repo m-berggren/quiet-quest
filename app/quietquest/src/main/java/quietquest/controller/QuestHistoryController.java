@@ -122,7 +122,9 @@ public class QuestHistoryController extends BaseController {
   }
 
   private void updateQuestDetails(Quest quest) {
+    titleField.setEditable(false);
     titleField.setText(quest.getTitle());
+    descriptionField.setEditable(false);
     descriptionField.setText(quest.getDescription());
     if (activityListView == null) {
       System.out.println("activityListView is null");

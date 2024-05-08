@@ -13,7 +13,7 @@
 *.exe
 *.o
 *.so
-wio/quietquest/credentials.cpp
+wio/quietquest/credentials/credentials.cpp
 
 # Log files
 *.log

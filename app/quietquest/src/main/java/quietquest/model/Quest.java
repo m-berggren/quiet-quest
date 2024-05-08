@@ -2,26 +2,22 @@ package quietquest.model;
 
 import quietquest.utility.MQTTHandler;
 
+import java.sql.Time;
 import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.ArrayList;
 
 import static javafx.application.Application.launch;
 
 public class Quest {
-
-    // Attributes of Quest
     private String title;
     private String description;
     private ArrayList<Activity> activities;
     private MQTTHandler mqttHandler;
     private boolean completionState;
     private Timestamp startTime;
-    private Timestamp completeTime;
+    private Timestamp endTime;
     private int boxOpenTimes;
 
-
-    // Constructor
     public Quest(String title, String description, ArrayList<Activity> activities) {
         this.title = title;
         this.description = description;
@@ -29,9 +25,8 @@ public class Quest {
         this.mqttHandler = MQTTHandler.getInstance();
         this.completionState = false;
         this.startTime = null;
-        this.completeTime = null;
+        this.endTime = null;
         this.boxOpenTimes = 0;
-
     }
 
     public Quest(String title, String description, ArrayList<Activity> activities, boolean completionState, Timestamp startTime, Timestamp completeTime, int boxOpenTimes) {
@@ -41,7 +36,7 @@ public class Quest {
         this.mqttHandler = MQTTHandler.getInstance();
         this.completionState = completionState;
         this.startTime = startTime;
-        this.completeTime = completeTime;
+        this.endTime = completeTime;
         this.boxOpenTimes = boxOpenTimes;
     }
 
@@ -56,7 +51,7 @@ public class Quest {
             // Update startTime for all tasks
             for (Activity activity : activities) {
                 Task task = (Task) activity;
-                task.setStartTime(Timestamp.from(Instant.now()));
+                task.setStartTime(new Timestamp(System.currentTimeMillis()));
             }
         }
     }
@@ -72,41 +67,9 @@ public class Quest {
             // Update tasks with end time
             for (Activity activity : activities) {
                 Task task = (Task) activity;
-                task.setEndTime(Timestamp.from(Instant.now()));
+                task.setEndTime(new Timestamp(System.currentTimeMillis()));
             }
         }
-    }
-
-    public Timestamp getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(Timestamp startTime) {
-        this.startTime = startTime;
-    }
-
-    public int getBoxOpenTimes() {
-        return boxOpenTimes;
-    }
-
-    public void setBoxOpenTimes(int boxOpenTimes) {
-        this.boxOpenTimes = boxOpenTimes;
-    }
-
-    public Timestamp getCompleteTime() {
-        return completeTime;
-    }
-
-    public void setCompleteTime(Timestamp completeTime) {
-        this.completeTime = completeTime;
-    }
-
-    public void setCompletionState(boolean completionState) {
-        this.completionState = completionState;
-    }
-
-    public boolean getCompletionState() {
-        return completionState;
     }
 
     // Getters
@@ -114,10 +77,37 @@ public class Quest {
         return this.title;
     }
 
+    public boolean getCompletionState() {
+        return completionState;
+    }
+
     public String getDescription() {
         return this.description;
     }
 
+    public Timestamp getStartTime() {
+        return startTime;
+    }
+
+    public int getBoxOpenTimes() {
+        return boxOpenTimes;
+    }
+
+    public QuestType getType(){
+        if (activities.getFirst() instanceof PomodoroTimer) {
+            return QuestType.POMODORO;
+        } else {
+            return QuestType.TASK;
+        }
+    }
+
+    public Timestamp getEndTime(){
+        return endTime;
+    }
+
+    public ArrayList<Activity> getActivities() {
+        return activities;
+    }
 
     // Setters
     public void setTitle(String title) {
@@ -128,8 +118,20 @@ public class Quest {
         this.description = description;
     }
 
-    public ArrayList<Activity> getActivities() {
-        return activities;
+    public void setEndTime(Timestamp timestamp){
+        this.endTime = timestamp;
+    }
+
+    public void setStartTime(Timestamp timestamp){
+        this.startTime = timestamp;
+    }
+
+    public void setBoxOpenTimes(int boxOpenTimes) {
+        this.boxOpenTimes = boxOpenTimes;
+    }
+
+    public void setCompletionState(boolean completionState) {
+        this.completionState = completionState;
     }
 
     @Override

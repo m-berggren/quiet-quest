@@ -9,81 +9,88 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
 
 <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="760.0" prefWidth="1210.0" style="-fx-background-color: #C7F9CC;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="quietquest.controller.QuestListController">
    <ImageView fitHeight="760.0" fitWidth="1210.0" pickOnBounds="true">
       <Image url="@../images/create_page_background.png" />
    </ImageView>
-   <AnchorPane fx:id="questlistAnchorPane" layoutX="84.0" layoutY="70.0" prefHeight="414.0" prefWidth="369.0" style="-fx-background-color: #fff; -fx-background-radius: 10;" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="25.0">
+   <AnchorPane fx:id="questlistAnchorPane" layoutX="54.0" layoutY="25.0" prefHeight="550.0" prefWidth="370.0" style="-fx-background-color: #fff; -fx-background-radius: 8;" AnchorPane.leftAnchor="54.0" AnchorPane.topAnchor="25.0">
       <children>
-          <Button fx:id="deleteButton" layoutX="204.0" layoutY="297.0" mnemonicParsing="false" onAction="#onDeleteQuest" prefHeight="80.0" prefWidth="145.0" style="-fx-background-color: #57CC99; -fx-background-radius: 15; -fx-text-fill: #22577A;" text="DELETE" AnchorPane.leftAnchor="204.0" AnchorPane.topAnchor="297.0">
+          <Button fx:id="deleteButton" layoutX="204.0" layoutY="324.0" mnemonicParsing="false" onAction="#onDeleteQuest" prefHeight="80.0" prefWidth="145.0" style="-fx-background-color: #57CC99; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="DELETE" AnchorPane.leftAnchor="204.0" AnchorPane.topAnchor="324.0">
             <font>
                <Font name="American Typewriter" size="24.0" />
             </font>
          </Button>
-          <Label fx:id="titleLabel" text="Quests" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">
+          <Label fx:id="titleLabel" text="QUESTS" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">
               <font>
                   <Font name="American Typewriter" size="40.0" />
               </font>
           </Label>
-          <ListView fx:id="questListView" layoutX="20.0" layoutY="57.0" onEditStart="#showSelected" prefHeight="200.0" prefWidth="300.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="70.0" />
-         <Button fx:id="goToQuestButton" layoutX="20.0" layoutY="297.0" mnemonicParsing="false" onAction="#onGoToQuestClick" prefHeight="80.0" prefWidth="145.0" style="-fx-background-color: #57CC99; -fx-background-radius: 15; -fx-text-fill: #22577A;" text="GO" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="297.0">
+          <ListView fx:id="questListView" layoutX="20.0" layoutY="57.0" onEditStart="#showSelectedQuest" prefHeight="236.0" prefWidth="329.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="70.0" />
+         <Button fx:id="goToQuestButton" layoutX="20.0" layoutY="324.0" mnemonicParsing="false" onAction="#onGoToQuestClick" prefHeight="80.0" prefWidth="145.0" style="-fx-background-color: #57CC99; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="GO" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="324.0">
             <font>
                <Font size="24.0" />
             </font>
          </Button>
+         <Button fx:id="editButton" layoutX="20.0" layoutY="431.0" mnemonicParsing="false" onAction="#onEditClick" prefHeight="80.0" prefWidth="145.0" style="-fx-background-color: #57CC99; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="EDIT">
+            <font>
+               <Font name="American Typewriter" size="24.0" />
+            </font>
+         </Button>
+         <Button fx:id="saveButton" disable="true" layoutX="204.0" layoutY="431.0" mnemonicParsing="false" onAction="#onSaveButtonClick" prefHeight="80.0" prefWidth="145.0" style="-fx-background-color: #57CC99; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="SAVE">
+            <font>
+               <Font name="American Typewriter" size="24.0" />
+            </font>
+         </Button>
       </children>
    </AnchorPane>
-   <AnchorPane fx:id="viewInfoAnchorPane" layoutX="509.0" layoutY="70.0" prefHeight="625.0" prefWidth="566.0" style="-fx-background-color: #fff; -fx-background-radius: 10;" AnchorPane.leftAnchor="500.0" AnchorPane.topAnchor="25.0">
+   <AnchorPane fx:id="questAnchorPane" layoutX="468.0" layoutY="25.0" prefHeight="550.0" prefWidth="370.0" style="-fx-background-color: #fff; -fx-background-radius: 10;" AnchorPane.leftAnchor="470.0" AnchorPane.topAnchor="25.0">
       <children>
-         <TextField fx:id="titleField" editable="false" layoutX="17.0" layoutY="14.0" prefHeight="70.0" prefWidth="536.0" promptText="Set a title" AnchorPane.rightAnchor="13.0">
+         <Label fx:id="questTypeLabel" layoutX="22.0" layoutY="280.0" text="ACTIVITY" AnchorPane.leftAnchor="20.0">
+            <font>
+               <Font name="American Typewriter" size="21.0" />
+            </font>
+         </Label>
+         <AnchorPane fx:id="taskAnchorPane" layoutY="303.0" prefHeight="210.0" prefWidth="370.0" style="-fx-background-color: #ffffff;" visible="false" AnchorPane.bottomAnchor="11.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="305.0">
+            <children>
+                <ListView fx:id="taskListView" layoutX="20.0" layoutY="58.0" prefHeight="200.0" prefWidth="330.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="10.0" />
+            </children>
+         </AnchorPane>
+         <TextField fx:id="titleField" editable="false" layoutX="20.0" layoutY="49.0" prefHeight="70.0" promptText="Title" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="49.0">
             <font>
                <Font size="30.0" />
             </font>
          </TextField>
-         <Text fx:id="descriptionHeader" fill="#22577a" layoutX="16.0" layoutY="118.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Description" wrappingWidth="334.9270782470703">
+         <TextArea fx:id="descriptionField" editable="false" layoutX="20.0" layoutY="163.0" prefHeight="100.0" promptText="Add description (optional)" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" />
+         <Label fx:id="descLabel" layoutX="20.0" layoutY="136.0" text="DESCRIPTION" AnchorPane.leftAnchor="20.0">
             <font>
-               <Font name="American Typewriter" size="30.0" />
+               <Font name="American Typewriter" size="21.0" />
             </font>
-         </Text>
-         <TextArea fx:id="descriptionField" layoutX="15.0" layoutY="134.0" prefHeight="134.0" prefWidth="536.0" promptText="Add description (optional)" />
-         <Button fx:id="saveButton" layoutX="211.0" layoutY="515.0" mnemonicParsing="false" onAction="#onSaveButtonClick" prefHeight="80.0" prefWidth="145.0" style="-fx-background-color: #57CC99; -fx-background-radius: 15; -fx-text-fill: #22577A;" text="SAVE">
+         </Label>
+         <AnchorPane fx:id="pomodoroAnchorPane" layoutY="312.0" prefHeight="120.0" prefWidth="370.0" visible="false" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="305.0">
+            <children>
+               <Label fx:id="focusLabel" layoutX="14.0" layoutY="21.0" prefHeight="18.0" prefWidth="320.0" text="Focus time:" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="10.0">
+                  <font>
+                     <Font name="American Typewriter" size="15.0" />
+                  </font>
+               </Label>
+               <Label fx:id="breakLabel" layoutX="14.0" layoutY="50.0" prefHeight="18.0" prefWidth="320.0" text="Break time:" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="40.0">
+                  <font>
+                     <Font name="American Typewriter" size="15.0" />
+                  </font>
+               </Label>
+               <Label fx:id="intervalsLabel" layoutX="13.0" layoutY="82.0" prefHeight="18.0" prefWidth="320.0" text="Intervals:" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="70.0">
+                  <font>
+                     <Font name="American Typewriter" size="15.0" />
+                  </font>
+               </Label>
+            </children>
+         </AnchorPane>
+         <Label fx:id="titleLabel" layoutX="20.0" layoutY="22.0" text="TITLE" AnchorPane.topAnchor="22.0">
             <font>
-               <Font name="American Typewriter" size="24.0" />
+               <Font name="American Typewriter" size="21.0" />
             </font>
-         </Button>
-         <Button fx:id="editButton" layoutX="29.0" layoutY="515.0" mnemonicParsing="false" onAction="#setEditable" prefHeight="80.0" prefWidth="145.0" style="-fx-background-color: #57CC99; -fx-background-radius: 15; -fx-text-fill: #22577A;" text="EDIT">
-            <font>
-               <Font name="American Typewriter" size="24.0" />
-            </font>
-         </Button>
-         <Button fx:id="completeButton" layoutX="386.0" layoutY="515.0" mnemonicParsing="false" prefHeight="80.0" prefWidth="145.0" style="-fx-background-color: #57CC99; -fx-background-radius: 15; -fx-text-fill: #22577A;" text="DONE">
-            <font>
-               <Font name="American Typewriter" size="24.0" />
-            </font>
-         </Button>
-         <Text fx:id="tasksHeader" fill="#22577a" layoutX="16.0" layoutY="304.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tasks" wrappingWidth="86.26045227050781">
-            <font>
-               <Font name="American Typewriter" size="30.0" />
-            </font>
-         </Text>
-          <ListView fx:id="taskListView" layoutX="15.0" layoutY="314.0" prefHeight="171.0" prefWidth="463.0"/>
-          <Button fx:id="addNewTaskButton" alignment="CENTER" layoutX="487.0" layoutY="276.0" minWidth="38.0"
-                  mnemonicParsing="false" prefHeight="21.0" prefWidth="70.0"
-                  style="-fx-background-color: #38A3A5; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="+">
-            <font>
-               <Font size="18.0" />
-            </font>
-         </Button>
-          <Button fx:id="deleteTaskButton" alignment="CENTER" layoutX="488.0" layoutY="314.0" minWidth="38.0"
-                  mnemonicParsing="false" prefHeight="32.0" prefWidth="67.0"
-                  style="-fx-background-color: #38A3A5; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="X">
-            <font>
-               <Font size="18.0" />
-            </font>
-         </Button>
-         <TextField fx:id="taskField" layoutX="102.0" layoutY="277.0" prefHeight="30.0" prefWidth="378.0" promptText="add a new task (optional)" />
+         </Label>
       </children>
    </AnchorPane>
 </AnchorPane>

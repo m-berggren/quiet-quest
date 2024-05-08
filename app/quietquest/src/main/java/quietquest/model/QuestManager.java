@@ -14,7 +14,6 @@ public class QuestManager {
     public void addQuest(Quest quest) {
         quests.put(quest.getTitle(), quest);
         System.out.println("Added: " + quest.getTitle()); //for us to get confirmation when a quest is saved
-
     }
 
     public HashMap<String, Quest> getQuests() {

@@ -38,9 +38,7 @@ public class QuestController extends BaseController implements UIUpdater, Callba
     @FXML
     private Button completeQuestButton;
     @FXML
-    private Button finishTaskButton;
-    @FXML
-    private ListView<Task> taskListView;
+    private ListView<Activity> taskListView;
     @FXML
     private Label titleLabel;
     @FXML
@@ -75,12 +73,7 @@ public class QuestController extends BaseController implements UIUpdater, Callba
     private final String PUB_TOPIC_END = "/quietquest/application/end";
     private String[] message;
     private boolean isQuestRunning = false;
-
-    /*
-    public void initialize(URL arg0, ResourceBundle arg1) {
-        mqttHandler.setUIUpdater(this);
-    }
-    */
+    private ObservableList<Activity> tasks;
 
     public void initiateQuest(Quest quest) {
         currentQuest = quest;
@@ -88,6 +81,10 @@ public class QuestController extends BaseController implements UIUpdater, Callba
 
     @Override
     protected void afterMainController() {
+        taskListView.setCellFactory(this);
+        tasks = FXCollections.observableArrayList(currentQuest.getActivities());
+        taskListView.setItems(tasks);
+
         mqttHandler.setUIUpdater(this);
         currentQuest = quietQuestFacade.getQuestSelection();
         titleLabel.setText(currentQuest.getTitle());
@@ -100,20 +97,11 @@ public class QuestController extends BaseController implements UIUpdater, Callba
             taskAnchorPane.setVisible(true);
             pomodoroAnchorPane.setVisible(false);
             questTypeLabel.setText("TASKS");
-
-            ObservableList<Task> tasks = FXCollections.observableArrayList();
-            for(Activity activity : currentQuest.getActivities()){
-                if(activity instanceof Task){
-                    tasks.add((Task) activity);
-                }
-            }
-            taskListView.setItems(tasks);
         } else if(currentQuest.getType() == QuestType.POMODORO){
             taskAnchorPane.setVisible(false);
             pomodoroAnchorPane.setVisible(true);
             questTypeLabel.setText("POMODORO");
         }
-
         setSelectedTask();
     }
 
@@ -127,7 +115,6 @@ public class QuestController extends BaseController implements UIUpdater, Callba
                 }
             }
         });
-
     }
 
     @Override
@@ -147,6 +134,8 @@ public class QuestController extends BaseController implements UIUpdater, Callba
                     checkBox.setOnAction(event -> {
                         if (checkBox.isSelected() && isQuestRunning) {
                             showMessage();
+                            String message = "You have completed a task!";
+                            mqttHandler.publishMessage(PUB_TOPIC_TASK_DONE, message);
                             task.setCompletionState(checkBox.isSelected());
                             task.setEndTime(Timestamp.from(Instant.now())); // Provides current timestamp using java.time
                             try {
@@ -156,7 +145,6 @@ public class QuestController extends BaseController implements UIUpdater, Callba
                             } catch (SQLException e) {
                                 throw new RuntimeException(e);
                             }
-
                         }
                     });
                     setGraphic(checkBox);
@@ -182,11 +170,6 @@ public class QuestController extends BaseController implements UIUpdater, Callba
             motivationalAnchorPane.setVisible(false);
         }));
         timeline.play();
-    }
-
-    public void onTickTaskClick(ActionEvent event) {
-        String message = "You have completed a task!";
-        mqttHandler.publishMessage(PUB_TOPIC_TASK_DONE, message);
     }
 
     public void onStartQuestClick(ActionEvent event) throws SQLException {
@@ -228,13 +211,13 @@ public class QuestController extends BaseController implements UIUpdater, Callba
         showMessage();
     }
 
-    public void onFinishTaskClick(){
+    /*public void onFinishTaskClick(){
         String message = "You have completed a task!";
         mqttHandler.publishMessage(PUB_TOPIC_TASK_DONE, message);
         if(currentActivity instanceof Task){
             showMessage();
         }
-    }
+    }*/
 
     @Override
     public void updateConnectionStatusUI(boolean connectionStatus) {
@@ -280,7 +263,6 @@ public class QuestController extends BaseController implements UIUpdater, Callba
     public void updateUltrasonicSensorUI(int distanceValue) {
         mqttDistanceMessage.setText("Distance to obstacle: " + distanceValue + " cm.");
         mqttDistanceMessage.getStyleClass().clear();
-
         if (distanceValue > 100) {
             mqttDistanceMessage.getStyleClass().add("label-all-green");
         } else if (distanceValue > 50) {

@@ -186,7 +186,7 @@ public class Database {
         String sql = "UPDATE \"quest\" SET completion_state = ?, complete_time = ?, start_time = ?, box_open_times = ? WHERE user_id = ? AND title = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setBoolean(1, quest.getCompletionState());
-            pstmt.setTimestamp(2, quest.getCompleteTime());
+            pstmt.setTimestamp(2, quest.getEndTime());
             pstmt.setTimestamp(3, quest.getStartTime());
             pstmt.setInt(4, quest.getBoxOpenTimes());
             pstmt.setInt(5, user.getId());
@@ -208,7 +208,7 @@ public class Database {
         String sql = "UPDATE \"quest\" SET completion_state = ?, complete_time = ?, start_time = ?, box_open_times = ? WHERE user_id = ? AND title = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setBoolean(1, quest.getCompletionState());
-            pstmt.setTimestamp(2, quest.getCompleteTime());
+            pstmt.setTimestamp(2, quest.getEndTime());
             pstmt.setTimestamp(3, quest.getStartTime());
             pstmt.setInt(4, quest.getBoxOpenTimes());
             pstmt.setInt(5, user.getId());

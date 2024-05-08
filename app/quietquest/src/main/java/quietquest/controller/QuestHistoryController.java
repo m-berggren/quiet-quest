@@ -1,66 +1,138 @@
 package quietquest.controller;
 
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.TreeCell;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import quietquest.model.Activity;
 import quietquest.model.Quest;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class QuestHistoryController extends BaseController {
-    private HashMap<String, Quest> quests;
+  @FXML
+  public ListView<Quest> quesHistoryListView;
+  @FXML
+  private AnchorPane questlistAnchorPane;
+  @FXML
+  private Label titleLabel;
 
-    @FXML
-    private TreeView<String> questHistoryTree;
+  @FXML
+  private Button goToStatisticsButton;
+  @FXML
+  private AnchorPane viewInfoAnchorPane;
+  @FXML
+  private TextField titleField;
+  @FXML
+  private Text descriptionHeader;
+  @FXML
+  private TextArea descriptionField;
+  @FXML
+  private Text tasksHeader;
+  @FXML
+  private ListView<Activity> activityListView;
 
-    @FXML
-    private Label questHistoryLabel;
+  private HashMap<String, Quest> quests;
 
+  @Override
+  public void afterMainController() throws SQLException {
+    //quests = quietQuestFacade.getQuests();
+    //System.out.println("Number of quests loaded: " + quests.size());
+    displayQuests();
+  }
 
-    @Override
-    public void afterMainController() throws SQLException {
-        quests = quietQuestFacade.getQuests();
-        initializeQuestTreeView();
+  public void displayQuests() throws SQLException {
+    // Convert the values from the HashMap to an ObservableList
+    database.connect();
+    ArrayList<Quest> questsList = database.getAllQuests(user);
+    database.disconnect();
+    //Get a list of quest with quest completionStatus as true
+    ArrayList<Quest> completedQuestList = new ArrayList<>();
+    for (Quest quest : questsList) {
+      if (quest.getCompletionState()) {
+        completedQuestList.add(quest);
+      }
     }
+    ObservableList<Quest> questItems = FXCollections.observableArrayList(completedQuestList);
 
-    private void initializeQuestTreeView() {
-        Quest rootQuest = new Quest("All Quests", "", new ArrayList<>()); // Assuming there is a simple constructor for names
-        TreeItem<String> rootItem = new TreeItem<>(rootQuest.getTitle());
-        rootItem.setExpanded(true);
-        questHistoryTree.setRoot(rootItem);
+    // Set the items on the questHistoryListView
+    quesHistoryListView.setItems(questItems);
 
-        for (Quest quest : quests.values()) {
-            TreeItem<String> questItem = new TreeItem<>(quest.getTitle());
-            rootItem.getChildren().add(questItem);
+    // Set the cell factory to display the titles of quests
+    quesHistoryListView.setCellFactory(lv -> new ListCell<Quest>() {
+      @Override
+      protected void updateItem(Quest quest, boolean empty) {
+        super.updateItem(quest, empty);
+        if (empty || quest == null) {
+          setText(null);
+          setGraphic(null);
+        } else {
+          // Creating a custom layout for the list cell
+          VBox vBox = new VBox(5); // Vertical box with spacing
+          Label titleLabel = new Label(quest.getTitle());
+          titleLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
 
-            for (Activity task : quest.getActivities()) {
-                TreeItem<String> taskItem = new TreeItem<>(task.toString());
-                questItem.getChildren().add(taskItem);
-            }
+          Label startTimeLabel = new Label("Start Time: " + formatDate(quest.getStartTime()));
+          Label completionTimeLabel = new Label("Completed Time: " + formatDate(quest.getCompleteTime()));
+
+          vBox.getChildren().addAll(titleLabel, startTimeLabel, completionTimeLabel);
+          setGraphic(vBox); // Set the VBox as the graphic of the list cell
         }
+      }
+    });
 
-        setupQuestTreeViewCellFactory();
-    }
 
-    private void setupQuestTreeViewCellFactory() {
-        //cell factory to display quest title,start time and end time
-        questHistoryTree.setCellFactory(tv -> new TreeCell<>() {
-          @Override
-          protected void updateItem(String text, boolean empty) {
-            super.updateItem(text, empty);
-            if (empty || text == null) {
-              setText(null);
-            } else {
-              setText(text);
-            }
-          }
-        });
+    // Setup listener for item selection to update quest details
+    quesHistoryListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Quest>() {
+      @Override
+      public void changed(ObservableValue<? extends Quest> observable, Quest oldValue, Quest newValue) {
+        if (newValue != null) {
+          updateQuestDetails(newValue);
+        }
+      }
+    });
+  }
+
+
+  private String formatDate(Timestamp timestamp) {
+    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    return format.format(timestamp);
+  }
+
+  public void onStatisticsClick() {
+    goToStatisticsButton.setOnAction(event -> {
+      showStatistics();
+    });
+  }
+
+  private void updateQuestDetails(Quest quest) {
+    titleField.setText(quest.getTitle());
+    descriptionField.setText(quest.getDescription());
+    if (activityListView == null) {
+      System.out.println("activityListView is null");
+    } else {
+      setupActivityListView();
     }
+  }
+
+  private void setupActivityListView() {
+    activityListView.setCellFactory(lv -> new ListCell<Activity>() {
+      @Override
+      protected void updateItem(Activity activity, boolean empty) {
+        super.updateItem(activity, empty);
+        setText(empty || activity == null ? "" : activity.toString());
+      }
+    });
+  }
 }
 

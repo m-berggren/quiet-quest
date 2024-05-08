@@ -13,14 +13,31 @@ public class Quest {
     private String description;
     private ArrayList<Activity> activities;
     private MQTTHandler mqttHandler;
+    private boolean completionState;
     private Timestamp startTime;
     private Timestamp endTime;
+    private int boxOpenTimes;
 
     public Quest(String title, String description, ArrayList<Activity> activities) {
         this.title = title;
         this.description = description;
         this.activities = activities;
         this.mqttHandler = MQTTHandler.getInstance();
+        this.completionState = false;
+        this.startTime = null;
+        this.endTime = null;
+        this.boxOpenTimes = 0;
+    }
+
+    public Quest(String title, String description, ArrayList<Activity> activities, boolean completionState, Timestamp startTime, Timestamp completeTime, int boxOpenTimes) {
+        this.title = title;
+        this.description = description;
+        this.activities = activities;
+        this.mqttHandler = MQTTHandler.getInstance();
+        this.completionState = completionState;
+        this.startTime = startTime;
+        this.endTime = completeTime;
+        this.boxOpenTimes = boxOpenTimes;
     }
 
     public void startActivity() {
@@ -30,8 +47,28 @@ public class Quest {
         if (activities.getFirst() instanceof PomodoroTimer) {
             Activity activity = activities.getFirst();
             activity.start(); // Mqtt publish happens inside recursive function
-        } else {
-            // May include publish message from Task later
+        } else if (activities.getFirst() instanceof Task) {
+            // Update startTime for all tasks
+            for (Activity activity : activities) {
+                Task task = (Task) activity;
+                task.setStartTime(new Timestamp(System.currentTimeMillis()));
+            }
+        }
+    }
+
+    public void endActivity() {
+        if (activities.isEmpty()) {
+            return;
+        }
+        if (activities.getFirst() instanceof PomodoroTimer) {
+            Activity activity = activities.getFirst();
+            activity.end(); // Will end recursive PomodoroTimer calls
+        } else if (activities.getFirst() instanceof Task) {
+            // Update tasks with end time
+            for (Activity activity : activities) {
+                Task task = (Task) activity;
+                task.setEndTime(new Timestamp(System.currentTimeMillis()));
+            }
         }
     }
 
@@ -40,8 +77,20 @@ public class Quest {
         return this.title;
     }
 
+    public boolean getCompletionState() {
+        return completionState;
+    }
+
     public String getDescription() {
         return this.description;
+    }
+
+    public Timestamp getStartTime() {
+        return startTime;
+    }
+
+    public int getBoxOpenTimes() {
+        return boxOpenTimes;
     }
 
     public QuestType getType(){
@@ -52,12 +101,12 @@ public class Quest {
         }
     }
 
-    public Timestamp getStartTime(){
-        return startTime;
-    }
-
     public Timestamp getEndTime(){
         return endTime;
+    }
+
+    public ArrayList<Activity> getActivities() {
+        return activities;
     }
 
     // Setters
@@ -69,28 +118,20 @@ public class Quest {
         this.description = description;
     }
 
-    public void setStartTime(Timestamp timestamp){
-        this.startTime = timestamp;
-    }
-
     public void setEndTime(Timestamp timestamp){
         this.endTime = timestamp;
     }
 
-    public ArrayList<Activity> getActivities() {
-        return activities;
+    public void setStartTime(Timestamp timestamp){
+        this.startTime = timestamp;
     }
 
-    public void endActivity() {
-        if (activities.isEmpty()) {
-            return;
-        }
-        if (activities.getFirst() instanceof PomodoroTimer) {
-            Activity activity = activities.getFirst();
-            activity.end(); // Will end recursive PomodoroTimer calls
-        } else {
-            // May include publish message from Task later
-        }
+    public void setBoxOpenTimes(int boxOpenTimes) {
+        this.boxOpenTimes = boxOpenTimes;
+    }
+
+    public void setCompletionState(boolean completionState) {
+        this.completionState = completionState;
     }
 
     @Override

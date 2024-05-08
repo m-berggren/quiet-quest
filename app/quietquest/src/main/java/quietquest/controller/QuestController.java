@@ -15,11 +15,13 @@ import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
 import javafx.util.Duration;
 import quietquest.model.*;
-import quietquest.utility.MQTTHandler;
 import javafx.scene.control.ListView;
 
 import java.net.URL;
 import java.sql.Timestamp;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Random;
 import java.util.ResourceBundle;
 
@@ -72,6 +74,7 @@ public class QuestController extends BaseController implements UIUpdater, Callba
     private final String PUB_TOPIC_TASK_DONE = "/quietquest/application/task_done";
     private final String PUB_TOPIC_END = "/quietquest/application/end";
     private String[] message;
+    private boolean isQuestRunning = false;
 
     /*
     public void initialize(URL arg0, ResourceBundle arg1) {
@@ -79,10 +82,13 @@ public class QuestController extends BaseController implements UIUpdater, Callba
     }
     */
 
+    public void initiateQuest(Quest quest) {
+        currentQuest = quest;
+    }
+
     @Override
     protected void afterMainController() {
         mqttHandler.setUIUpdater(this);
-
         currentQuest = quietQuestFacade.getQuestSelection();
         titleLabel.setText(currentQuest.getTitle());
         descriptionLabel.setText(currentQuest.getDescription());
@@ -136,12 +142,21 @@ public class QuestController extends BaseController implements UIUpdater, Callba
                     motivationalAnchorPane.setVisible(false);
                 } else if (activity instanceof Task) {
                     Task task = (Task) activity;
-                    CheckBox checkBox = new CheckBox(task.getTask());
-                    checkBox.setSelected(task.isCompleted());
+                    CheckBox checkBox = new CheckBox(task.getDescription());
+                    checkBox.setSelected(task.getCompletionState());
                     checkBox.setOnAction(event -> {
-                        task.setCompleted(checkBox.isSelected());
-                        if (checkBox.isSelected()) {
+                        if (checkBox.isSelected() && isQuestRunning) {
                             showMessage();
+                            task.setCompletionState(checkBox.isSelected());
+                            task.setEndTime(Timestamp.from(Instant.now())); // Provides current timestamp using java.time
+                            try {
+                                database.connect();
+                                database.updateTask(user, currentQuest, task); // Updates Task with End time
+                                database.disconnect();
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
+
                         }
                     });
                     setGraphic(checkBox);
@@ -169,32 +184,46 @@ public class QuestController extends BaseController implements UIUpdater, Callba
         timeline.play();
     }
 
-    public void onStartQuestClick(ActionEvent event) {
+    public void onTickTaskClick(ActionEvent event) {
+        String message = "You have completed a task!";
+        mqttHandler.publishMessage(PUB_TOPIC_TASK_DONE, message);
+    }
+
+    public void onStartQuestClick(ActionEvent event) throws SQLException {
+        isQuestRunning = true;
         Timestamp startTime = new Timestamp(System.currentTimeMillis());
         currentQuest.setStartTime(startTime);
         startTimeLabel.setText("Start: " + currentQuest.getStartTime());
 
         String message = "Your quest has started.";
+        currentQuest.setStartTime(new Timestamp(System.currentTimeMillis()));
+        currentQuest.startActivity(); // Starts PomodoroTimer, mqtt pub & sub, Tasks are updated with startTime
+        database.connect();
+        database.updateQuest(user, currentQuest); // Updates Quest in database with startTime
+        database.disconnect();
+
         mqttHandler.connect(PUB_TOPIC_START, message); // Connect to MQTT broker & publish
         mqttHandler.subscribe(); // Subscribe
         currentQuest.startActivity(); // Starts quest, mqtt pub & sub
-
         startQuestButton.setDisable(true);
     }
 
-    public void onCompleteQuestClick(ActionEvent event) {
-        Timestamp endTime = new Timestamp(System.currentTimeMillis());
-        currentQuest.setEndTime(endTime);
+    public void onCompleteQuestClick(ActionEvent event) throws SQLException {
+        isQuestRunning = false;
+        currentQuest.endActivity(); // Publishes last message & handles pomodoroTimer & Task
+        currentQuest.setCompletionState(true);
+        currentQuest.setEndTime(new Timestamp(System.currentTimeMillis()));
         endTimeLabel.setText("End: " + currentQuest.getEndTime());
+        // This needs to be implemented: currentQuest.setBoxOpenTimes(x);
 
-        currentQuest.endActivity(); // Publishes last message
+        database.connect();
+        database.updateQuestOnly(user, currentQuest);
+        database.disconnect();
         mqttHandler.publishMessage(PUB_TOPIC_END, "Your quest has ended.");
         mqttHandler.disconnect();
-
         // Remove or change later:
         mqttConnectionMessage.getStyleClass().clear();
         mqttConnectionMessage.setText("");
-
         completeQuestButton.setDisable(true);
         showMessage();
     }
@@ -205,7 +234,6 @@ public class QuestController extends BaseController implements UIUpdater, Callba
         if(currentActivity instanceof Task){
             showMessage();
         }
-
     }
 
     @Override

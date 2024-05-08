@@ -13,7 +13,6 @@ CREATE TABLE IF NOT EXISTS "quest"
     "id"               integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL,
     "user_id"          integer                                          NOT NULL,
     "completion_state" bool,
-    "created_at"       timestamp,
     "title"            varchar                                          NOT NULL,
     "detail"           varchar,
     "start_time"       timestamp,
@@ -41,7 +40,7 @@ CREATE TABLE IF NOT EXISTS "box_open_record"
 
 CREATE TABLE IF NOT EXISTS "pomodoro_quest"
 (
-    "quest_id"   integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL,
+    "quest_id" integer PRIMARY KEY NOT NULL,
     "focus_time" integer                                          NOT NULL,
     "break_time" integer                                          NOT NULL,
     "interval"   integer                                          NOT NULL

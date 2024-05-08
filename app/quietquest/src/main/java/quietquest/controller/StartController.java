@@ -15,30 +15,33 @@ import quietquest.model.User;
 import quietquest.utility.FxmlFile;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class StartController extends BaseController {
 
-    public void initialize(User user, Database database) {
+    public void initialize(User user, Database database) throws SQLException {
         setUser(user);
         setDatabase(database);
     }
-    @FXML
-    private Label welcomeText;
 
     @FXML
-    private Button helloButton;
+    private Label welcomeLabel;
+
+    @Override
+    protected void afterMainController() throws SQLException {
+    }
 
     @FXML
-    protected void onNewQuestButtonClick(ActionEvent event) throws IOException {
+    protected void onNewQuestButtonClick(ActionEvent event) throws IOException, SQLException {
         loadFxml(FxmlFile.CREATE_QUEST, event);
     }
 
     @FXML
-    protected void onQuestListButtonClick(ActionEvent event) throws IOException {
+    protected void onQuestListButtonClick(ActionEvent event) throws IOException, SQLException {
         loadFxml(FxmlFile.QUEST_LIST, event);
     }
 
-    private void loadFxml(String fxmlFile, ActionEvent event) throws IOException {
+    private void loadFxml(String fxmlFile, ActionEvent event) throws IOException, SQLException {
         FXMLLoader loader = new FXMLLoader(QuietQuestMain.class.getResource(FxmlFile.MAIN));
         Parent root = loader.load();
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

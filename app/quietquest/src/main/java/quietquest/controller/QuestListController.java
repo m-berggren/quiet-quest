@@ -9,9 +9,12 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
+import quietquest.model.Activity;
 import quietquest.model.*;
 
 import java.io.IOException;
+import java.net.URL;
+import java.sql.SQLException;
 import java.util.*;
 
 public class QuestListController extends BaseController {
@@ -44,7 +47,7 @@ public class QuestListController extends BaseController {
     private Quest selectedQuest;
 
     @Override
-    public void afterMainController() {
+    public void afterMainController() throws SQLException {
         selectedQuest = null;
         quests = quietQuestFacade.getQuests();
         displayQuests();
@@ -58,10 +61,14 @@ public class QuestListController extends BaseController {
     /**
      * Displays the current user's list of created quests in a ListView.
      */
-    public void displayQuests() {
+    public void displayQuests() throws SQLException {
         if (quietQuestFacade != null) {
-            quests = quietQuestFacade.getQuests();
-            ObservableList<Quest> questList = FXCollections.observableArrayList(quests.values());
+            database.connect();
+            ArrayList<Quest> questsList = database.getAllQuests(user);
+            database.disconnect();
+
+            //quests = quietQuestFacade.getQuests();
+            ObservableList<Quest> questList = FXCollections.observableArrayList(questsList);
             questListView.setItems(questList);
             questListView.setCellFactory(param -> new ListCell<Quest>() {
                 @Override

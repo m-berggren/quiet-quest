@@ -8,12 +8,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.text.Text;
 import quietquest.model.Activity;
 import quietquest.model.*;
 
 import java.io.IOException;
-import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -43,13 +41,13 @@ public class QuestListController extends BaseController {
     @FXML
     private Label intervalsLabel;
 
-    private HashMap<String, Quest> quests;
+    private ArrayList<Quest> questArrayList;
     private Quest selectedQuest;
 
     @Override
     public void afterMainController() throws SQLException {
         selectedQuest = null;
-        quests = quietQuestFacade.getQuests();
+        questArrayList = getAllQuests();
         displayQuests();
         setSelectedQuest();
     }
@@ -61,14 +59,9 @@ public class QuestListController extends BaseController {
     /**
      * Displays the current user's list of created quests in a ListView.
      */
-    public void displayQuests() throws SQLException {
+    public void displayQuests() {
         if (quietQuestFacade != null) {
-            database.connect();
-            ArrayList<Quest> questsList = database.getAllQuests(user);
-            database.disconnect();
-
-            //quests = quietQuestFacade.getQuests();
-            ObservableList<Quest> questList = FXCollections.observableArrayList(questsList);
+            ObservableList<Quest> questList = FXCollections.observableArrayList(questArrayList);
             questListView.setItems(questList);
             questListView.setCellFactory(param -> new ListCell<Quest>() {
                 @Override
@@ -94,7 +87,6 @@ public class QuestListController extends BaseController {
             public void changed(ObservableValue<? extends Quest> observable, Quest oldValue, Quest newValue) {
                 if (newValue != null) {
                     selectedQuest = newValue;
-                    quietQuestFacade.setQuestSelection(selectedQuest);
                     showSelectedQuest();
                 }
             }
@@ -110,8 +102,7 @@ public class QuestListController extends BaseController {
             alert.setContentText("Are you sure you want to delete this quest?");
             alert.showAndWait().ifPresent(response -> {
                 if (response == ButtonType.OK) {
-                    quietQuestFacade.deleteQuest(selectedQuest.getTitle());
-                    quietQuestFacade.resetQuestSelection();
+                    quietQuestFacade.deleteQuest(selectedQuest);
                     clearQuestDetails();
                     showQuestList();
                 } else {
@@ -134,27 +125,23 @@ public class QuestListController extends BaseController {
     public void showSelectedQuest() {
         if (selectedQuest != null) {
             titleField.setText(selectedQuest.getTitle());
-            descriptionField.setText(selectedQuest.getDescription());
-            if(selectedQuest.getType() == QuestType.TASK){
+            descriptionField.setText(selectedQuest.getDetail());
+            Activity activity = getActivitiesFromQuest(selectedQuest).getFirst();
+            if (activity.getType() == QuestType.TASK) {
                 questTypeLabel.setText("TASKS");
                 pomodoroAnchorPane.setVisible(false);
                 taskAnchorPane.setVisible(true);
 
-                ObservableList<String> tasks = FXCollections.observableArrayList();
-                for(Activity activity : selectedQuest.getActivities()){
-                    if(activity instanceof Task){
-                        tasks.add(((Task) activity).toString());
-                    }
-                }
-                taskListView.setItems(tasks);
-            } else if (selectedQuest.getType() == QuestType.POMODORO){
+            } else if (activity.getType() == QuestType.POMODORO) {
                 questTypeLabel.setText("POMODORO");
                 taskAnchorPane.setVisible(false);
                 pomodoroAnchorPane.setVisible(true);
-                PomodoroTimer pomodoro = (PomodoroTimer) selectedQuest.getActivities().getFirst();
+
+                PomodoroTimer pomodoro = (PomodoroTimer) activity;
                 focusLabel.setText("Focus time: " + pomodoro.getFocusTime());
                 breakLabel.setText("Break time: " + pomodoro.getBreakTime());
-                intervalsLabel.setText("Intervals: " + pomodoro.getIntervals());
+                intervalsLabel.setText("Intervals: " + pomodoro.getInterval());
+
             }
         } else {
             System.out.println("selectedQuest is null");
@@ -179,7 +166,7 @@ public class QuestListController extends BaseController {
 
         String newDescription = descriptionField.getText();
         descriptionField.setText(newDescription);
-        selectedQuest.setDescription(newDescription);
+        selectedQuest.setDetail(newDescription);
 
         editButton.setDisable(false);
         saveButton.setDisable(true);

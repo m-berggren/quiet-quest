@@ -1,23 +1,17 @@
 package quietquest.controller;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import quietquest.model.Quest;
 
-import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.ResourceBundle;
 
 public class HomeController extends BaseController {
     @FXML
@@ -30,6 +24,22 @@ public class HomeController extends BaseController {
     private Button viewListButton;
     @FXML
     private Button createQuestButton;
+    @FXML
+    private ImageView firstQuestImage;
+    @FXML
+    private ImageView apprenticeImage;
+    @FXML
+    private ImageView speedyWitchImage;
+    @FXML
+    private ImageView questConquerorImage;
+    @FXML
+    private ImageView timeWizardImage;
+    @FXML
+    private ImageView focusWarriorImage;
+    @FXML
+    private ImageView questWarriorImage;
+    @FXML
+    private ImageView ultimateQuestMasterImage;
     private HashMap<String, Quest> quests;
     private Quest currentQuest;
 
@@ -37,6 +47,7 @@ public class HomeController extends BaseController {
     protected void afterMainController() throws SQLException {
         quests = quietQuestFacade.getQuests();
         displayCurrentQuest();
+        displayBadges();
     }
     public void onContinueQuestClick(ActionEvent event) {
         showQuest(currentQuest);
@@ -50,7 +61,7 @@ public class HomeController extends BaseController {
 
     /**
      * Displays the currently ongoing quest.
-     * If no ongoing quests found,
+     * If no ongoing quests found, directs the user to take another action.
      */
     public void displayCurrentQuest() throws SQLException {
         database.connect();
@@ -72,6 +83,26 @@ public class HomeController extends BaseController {
             viewListButton.setVisible(true);
             createQuestButton.setVisible(true);
         }
+    }
+
+    private Image theJourneyBeginsBW = new Image(getClass().getResourceAsStream("/images/theJourneyBeginsBW.png"));
+    private Image apprenticeBW = new Image(getClass().getResourceAsStream("/images/apprenticeBW.png"));
+    private Image speedyWitchBW = new Image(getClass().getResourceAsStream("/images/speedyWitchBW.png"));
+    private Image questConquerorBW = new Image(getClass().getResourceAsStream("/images/questConquerorBW.png"));
+    private Image timeWizardBW = new Image(getClass().getResourceAsStream("/images/timeWizardBW.png"));
+    private Image focusWarriorBW = new Image(getClass().getResourceAsStream("/images/focusWarriorBW.png"));
+    private Image questWarriorBW = new Image(getClass().getResourceAsStream("/images/questWarriorBW.png"));
+    private Image ultimateQuestMasterBW = new Image(getClass().getResourceAsStream("/images/ultimateQuestMasterBW.png"));
+
+    public void displayBadges() {
+        firstQuestImage.setImage(theJourneyBeginsBW);
+        apprenticeImage.setImage(apprenticeBW);
+        speedyWitchImage.setImage(speedyWitchBW);
+        questConquerorImage.setImage(questConquerorBW);
+        timeWizardImage.setImage(timeWizardBW);
+        focusWarriorImage.setImage(focusWarriorBW);
+        questWarriorImage.setImage(questWarriorBW);
+        ultimateQuestMasterImage.setImage(ultimateQuestMasterBW);
     }
 
 }

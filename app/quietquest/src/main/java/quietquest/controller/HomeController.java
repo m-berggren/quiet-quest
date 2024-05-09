@@ -7,6 +7,8 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import quietquest.model.Quest;
@@ -17,26 +19,24 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
-public class HomeController extends BaseController implements Initializable {
+public class HomeController extends BaseController {
     @FXML
     private ListView<Quest> questListView;
+    @FXML
+    private Label currentQuestLabel;
+    @FXML
+    private Button continueQuestButton;
+    @FXML
+    private Button viewListButton;
+    @FXML
+    private Button createQuestButton;
     private HashMap<String, Quest> quests;
     private Quest currentQuest;
 
     @Override
-    public void initialize(URL arg0, ResourceBundle arg1) {
-        try {
-            displayQuests();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
     protected void afterMainController() throws SQLException {
         quests = quietQuestFacade.getQuests();
-        displayQuests();
-        setSelectedQuest();
+        displayCurrentQuest();
     }
     public void onContinueQuestClick(ActionEvent event) {
         showQuest(currentQuest);
@@ -44,42 +44,34 @@ public class HomeController extends BaseController implements Initializable {
     public void onCreateQuestClick(ActionEvent event) {
         showCreateQuest();
     }
-    public void onGoToQuests(ActionEvent event) {
+    public void onViewListClick(ActionEvent event) {
         showQuestList();
     }
-    public void displayQuests() throws SQLException {
-        if (quietQuestFacade != null) {
-            database.connect();
-            ArrayList<Quest> questsList = database.getAllQuests(user);
-            database.disconnect();
 
-            //quests = quietQuestFacade.getQuests();
-            ObservableList<Quest> questList = FXCollections.observableArrayList(questsList);
-            questListView.setItems(questList);
-            questListView.setCellFactory(param -> new ListCell<Quest>() {
-                @Override
-                protected void updateItem(Quest item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty || item == null || item.getTitle() == null) {
-                        setText(null);
-                    } else {
-                        setText(item.getTitle());
-                    }
-                }
-            });
+    /**
+     * Displays the currently ongoing quest.
+     * If no ongoing quests found,
+     */
+    public void displayCurrentQuest() throws SQLException {
+        database.connect();
+        ArrayList<Quest> questsList = database.getAllQuests(user);
+        database.disconnect();
+        // Get the ongoing quest by checking that start time is not null and quest is not completed.
+        for (Quest quest : questsList) {
+            if (quest.getStartTime() != null && !quest.getCompletionState()) {
+                currentQuest = quest;
+            }
+        }
+        if (currentQuest != null) {
+            currentQuestLabel.setText(currentQuest.getTitle());
+            continueQuestButton.setVisible(true);
+            viewListButton.setVisible(false);
+            createQuestButton.setVisible(false);
+        } else {
+            continueQuestButton.setVisible(false);
+            viewListButton.setVisible(true);
+            createQuestButton.setVisible(true);
         }
     }
 
-    private void setSelectedQuest() {
-        questListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Quest>() {
-            @Override
-            public void changed(ObservableValue<? extends Quest> observable, Quest oldValue, Quest newValue) {
-                if (newValue != null) {
-                    currentQuest = newValue;
-                    quietQuestFacade.setQuestSelection(currentQuest);
-                }
-            }
-        });
-
-    }
 }

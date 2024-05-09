@@ -1,51 +1,162 @@
 package quietquest.model;
 
-import java.util.HashMap;
+import quietquest.controller.UIUpdater;
+import quietquest.utility.MQTTHandler;
+
+import java.sql.SQLException;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.util.ArrayList;
 
 public class QuietQuestFacade {
-    private final QuestManager questManager = new QuestManager();
-    private final User user;
-    private final Database database;
+    protected final MQTTHandler mqttHandler;
+    protected final Database database;
+    protected final User user;
 
+    // ==============================* CONSTRUCTOR *========================================
+
+    /**
+     * Constructs a new instance of QuietQuestFacade that acts as a bridge separating controllers
+     * from the model in the application and attempts to adhere to the MVC (Model-View-Controller)
+     * architecture. It manages the MQTT handler, user session and connections to database.
+     *
+     * @param user     is the User object to store login information, used for database querying.
+     * @param database is the single Database object that handles all query operations.
+     */
     public QuietQuestFacade(User user, Database database) {
+        this.mqttHandler = MQTTHandler.getInstance();
         this.user = user;
         this.database = database;
     }
 
+    // ==============================* DATABASE MANAGER *===================================
+
+    /**
+     * @return
+     */
+    public ArrayList<Quest> getAllQuests() {
+        return database.getAllQuests(user);
+    }
+
+    public void createQuest(Quest quest, ArrayList<Activity> activities) {
+        database.createQuest(quest, activities);
+    }
+
+    /**
+     *
+     */
+    public void DisconnectDb() throws SQLException {
+        database.disconnect();
+    }
+
+    /**
+     * @param quest
+     */
+    public void startQuest(Quest quest) {
+        database.startQuest(quest);
+
+        ArrayList<Activity> activities = database.getActivitiesFromQuest(quest);
+        if (activities.getFirst() instanceof PomodoroTimer pomodoro) {
+            pomodoro.start();
+        }
+    }
+
+    /**
+     * @param quest
+     */
+    public void completeQuest(Quest quest) {
+        database.completeQuest(quest);
+
+        ArrayList<Activity> activities = database.getActivitiesFromQuest(quest);
+        if (activities.getFirst() instanceof PomodoroTimer pomodoro) {
+            pomodoro.end();
+        }
+    }
+
+    /**
+     * @param quest
+     * @return
+     */
+    public ArrayList<Activity> getActivitiesFromQuest(Quest quest) {
+        return database.getActivitiesFromQuest(quest);
+    }
+
+    public void updateTaskInDb(Task currTask, Task updTask) {
+        database.updateTask(currTask, updTask);
+    }
+
+    public void updateQuestInDb(Quest currQuest, Quest updQuest) {
+        database.updateQuest(currQuest, updQuest);
+    }
+
+    public void updateTaskCompletionStateInDb(Task task) {
+        database.updateTaskCompletionState(task);
+    }
+
+    public void updateTaskEndTimeInDb(Task task) {
+        database.updateTaskEndTime(task);
+    }
+
+    public void deleteQuest(Quest quest) {
+        database.deleteQuest(quest);
+    }
+
+    // update task
+    // update pomodoroTimer
+    // or update activity
+    // delete activity
+
+    // ==============================* MQTT MANAGER *=======================================
+
+    /**
+     * @param pubTopic
+     * @param pubMessage
+     */
+    public void connectMqtt(String pubTopic, String pubMessage) {
+        mqttHandler.connect(pubTopic, pubMessage);
+    }
+
+    /**
+     *
+     */
+    public void subscribeMqtt() {
+        mqttHandler.subscribe();
+    }
+
+    /**
+     * @param topic
+     * @param message
+     */
+    public void publishMqttMessage(String topic, String message) {
+        mqttHandler.publishMessage(topic, message);
+    }
+
+    /**
+     * @param uiUpdater
+     */
+    public void setUIUpdater(UIUpdater uiUpdater) {
+        mqttHandler.setUIUpdater(uiUpdater);
+    }
+
+    /**
+     *
+     */
+    public void disconnectMqtt() {
+        mqttHandler.disconnect();
+    }
+
+    // create quest
+    // delete quest
+    // update quest
+
+
+    // ==============================* QUEST MANAGER *======================================
+
+
+    // ==============================* GETTERS & SETTERS *==================================
+
     public User getUser() {
         return user;
     }
-
-    public Database getDatabase() {
-        return database;
-    }
-
-    public HashMap<String, Quest> getQuests() {
-        return questManager.getQuests();
-    }
-
-    public void addQuest(Quest quest) {
-        questManager.addQuest(quest);
-    }
-
-    public void deleteQuest(String title) {
-        questManager.deleteQuest(title);
-    }
-
-    public void setQuestSelection(Quest quest) {
-        questManager.setQuestSelection(quest);
-    }
-
-    public Quest getQuestSelection() {
-        return questManager.getQuestSelection();
-    }
-
-    public void resetQuestSelection() {
-        questManager.resetQuestSelection();
-    }
-
-    public QuestManager getQuestManager() {
-        return questManager;
-    }
-
 }

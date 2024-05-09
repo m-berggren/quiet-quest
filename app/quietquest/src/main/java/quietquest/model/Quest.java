@@ -1,53 +1,49 @@
 package quietquest.model;
 
-import quietquest.utility.MQTTHandler;
-
-import java.sql.Time;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-
-import static javafx.application.Application.launch;
 
 public class Quest {
-    private String title;
-    private String description;
-    private ArrayList<Activity> activities;
-    private MQTTHandler mqttHandler;
+    private int id;
+    private final int userId;
     private boolean completionState;
+    private String title;
+    private String detail;
     private Timestamp startTime;
-    private Timestamp endTime;
+    private Timestamp completeTime;
     private int boxOpenTimes;
 
-    public Quest(String title, String description, ArrayList<Activity> activities) {
+    // ==============================* CONSTRUCTOR *========================================
+
+    /**
+     * Used for creating a container with the necessary information to pass into database. Not intended to use within
+     * application otherwise.
+     */
+    public Quest(User user, String title, String detail) {
+        this.userId = user.getId();
         this.title = title;
-        this.description = description;
-        this.activities = activities;
-        this.mqttHandler = MQTTHandler.getInstance();
-        this.completionState = false;
-        this.startTime = null;
-        this.endTime = null;
-        this.boxOpenTimes = 0;
+        this.detail = detail;
     }
 
-    public Quest(String title, String description, ArrayList<Activity> activities, boolean completionState, Timestamp startTime, Timestamp completeTime, int boxOpenTimes) {
-        this.title = title;
-        this.description = description;
-        this.activities = activities;
-        this.mqttHandler = MQTTHandler.getInstance();
+    /**
+     * Used to create full Quest object when querying database.
+     */
+    public Quest(int id, int userId, boolean completionState, String title, String detail, Timestamp startTime, Timestamp completeTime, int boxOpenTimes) {
+        this.id = id;
+        this.userId = userId;
         this.completionState = completionState;
+        this.title = title;
+        this.detail = detail;
         this.startTime = startTime;
-        this.endTime = completeTime;
+        this.completeTime = completeTime;
         this.boxOpenTimes = boxOpenTimes;
     }
 
-    public void startActivity() {
-        if (activities.isEmpty()) {
-            return;
-        }
-        if (activities.getFirst() instanceof PomodoroTimer) {
-            Activity activity = activities.getFirst();
-            activity.start(); // Mqtt publish happens inside recursive function
-        } else if (activities.getFirst() instanceof Task) {
+    // ==============================* QUEST MANAGEMENT *===================================
+
+    /*public void startQuest(Activity activity) {
+        if (activity instanceof PomodoroTimer pomodoro) {
+            pomodoro.start(); // Mqtt publish happens inside recursive function
+        } else if (activity instanceof Task) {
             // Update startTime for all tasks
             for (Activity activity : activities) {
                 Task task = (Task) activity;
@@ -55,8 +51,9 @@ public class Quest {
             }
         }
     }
+     */
 
-    public void endActivity() {
+    /*public void endQuest() {
         if (activities.isEmpty()) {
             return;
         }
@@ -70,78 +67,74 @@ public class Quest {
                 task.setEndTime(new Timestamp(System.currentTimeMillis()));
             }
         }
+    }*/
+
+    // ==============================* GETTERS & SETTERS *==============================
+
+    public int getId() {
+        return id;
     }
 
-    // Getters
-    public String getTitle() {
-        return this.title;
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getUserId() {
+        return userId;
     }
 
     public boolean getCompletionState() {
         return completionState;
     }
 
-    public String getDescription() {
-        return this.description;
+    public void setCompletionState(boolean completionState) {
+        this.completionState = completionState;
+    }
+
+    public String getTitle() {
+        return this.title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDetail() {
+        return this.detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
     }
 
     public Timestamp getStartTime() {
         return startTime;
     }
 
+    public void setStartTime(Timestamp timestamp) {
+        this.startTime = timestamp;
+    }
+
+    public Timestamp getCompleteTime() {
+        return completeTime;
+    }
+
+    public void setCompleteTime(Timestamp timestamp) {
+        this.completeTime = timestamp;
+    }
+
     public int getBoxOpenTimes() {
         return boxOpenTimes;
-    }
-
-    public QuestType getType(){
-        if (activities.getFirst() instanceof PomodoroTimer) {
-            return QuestType.POMODORO;
-        } else {
-            return QuestType.TASK;
-        }
-    }
-
-    public Timestamp getEndTime(){
-        return endTime;
-    }
-
-    public ArrayList<Activity> getActivities() {
-        return activities;
-    }
-
-    // Setters
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setEndTime(Timestamp timestamp){
-        this.endTime = timestamp;
-    }
-
-    public void setStartTime(Timestamp timestamp){
-        this.startTime = timestamp;
     }
 
     public void setBoxOpenTimes(int boxOpenTimes) {
         this.boxOpenTimes = boxOpenTimes;
     }
 
-    public void setCompletionState(boolean completionState) {
-        this.completionState = completionState;
-    }
+    // ==============================* UTILITY METHODS *====================================
 
     @Override
     public String toString() {
         return title;
     }
-
 }
-
-
-
-
-

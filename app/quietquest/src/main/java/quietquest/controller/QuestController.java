@@ -102,6 +102,13 @@ public class QuestController extends BaseController implements UIUpdater, Callba
             pomodoroAnchorPane.setVisible(true);
             questTypeLabel.setText("POMODORO");
         }
+
+        if (currentQuest.getStartTime() == null) {
+            completeQuestButton.setDisable(true);
+        } else {
+            startQuestButton.setDisable(true);
+        }
+
         setSelectedTask();
     }
 
@@ -189,6 +196,7 @@ public class QuestController extends BaseController implements UIUpdater, Callba
         mqttHandler.subscribe(); // Subscribe
         currentQuest.startActivity(); // Starts quest, mqtt pub & sub
         startQuestButton.setDisable(true);
+        completeQuestButton.setDisable(false);
     }
 
     public void onCompleteQuestClick(ActionEvent event) throws SQLException {

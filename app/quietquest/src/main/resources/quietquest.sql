@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS "box_open_record"
     PRIMARY KEY ("user_id", "quest_id", "time")
 );
 
-CREATE TABLE IF NOT EXISTS "pomodoro_quest"
+CREATE TABLE IF NOT EXISTS "pomodoro_timer"
 (
     "quest_id" integer PRIMARY KEY NOT NULL,
     "focus_time" integer                                          NOT NULL,

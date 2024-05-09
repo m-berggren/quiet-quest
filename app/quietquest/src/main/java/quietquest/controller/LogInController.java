@@ -21,11 +21,10 @@ import quietquest.QuietQuestMain;
 import quietquest.model.User;
 import quietquest.utility.FxmlFile;
 import quietquest.model.Database;
+import quietquest.utility.MQTTHandler;
 
 import java.io.IOException;
-import java.net.URL;
 import java.sql.SQLException;
-import java.util.ResourceBundle;
 
 public class LogInController {
     @FXML
@@ -66,7 +65,6 @@ public class LogInController {
         } else { // Username does not exist OR wrong password
             showPopup();
         }
-        database.disconnect();
     }
 
     private void loadStartController(ActionEvent event, User user, Database database) throws IOException, SQLException {

@@ -37,20 +37,27 @@ public class MainController extends BaseController {
     @FXML
     private VBox menuVBox;
 
-    public MainController() {
-    }
+    // ==============================* INITIALIZATION METHODS *=======================
 
     public void initialize(User user, Database database) throws SQLException {
-        setUser(user);
-        setDatabase(database);
         this.quietQuestFacade = new QuietQuestFacade(user, database);
         setMainController(this);
     }
+
+    @Override
+    protected void afterMainController() throws SQLException {
+        super.afterMainController();
+    }
+
+    // ==============================* VIEW MANAGEMENT *====================================
 
     public void onHomeButtonClick() {
         showHome();
     }
 
+    /**
+     *
+     */
     public void onCreateQuestButtonClick() {
         showCreateQuest();
     }
@@ -76,8 +83,6 @@ public class MainController extends BaseController {
             FXMLLoader fxmlLoader = new FXMLLoader(QuietQuestMain.class.getResource(view));
             Parent node = fxmlLoader.load();
             BaseController baseController = fxmlLoader.getController();
-            baseController.setUser(user);
-            baseController.setDatabase(database);
             baseController.setMainController(this);
             mainPane.setCenter(node);
         } catch (IOException | SQLException e) {
@@ -90,16 +95,13 @@ public class MainController extends BaseController {
             FXMLLoader fxmlLoader = new FXMLLoader(QuietQuestMain.class.getResource(FxmlFile.SHOW_QUEST));
             Parent node = fxmlLoader.load();
             QuestController questController = fxmlLoader.getController();
-            questController.initiateQuest(quest);
-            questController.setUser(user);
-            questController.setDatabase(database);
+            questController.initialize(quest);
             questController.setMainController(this);
             mainPane.setCenter(node);
         } catch (IOException | SQLException e) {
             throw new RuntimeException(e);
         }
     }
-
     public void loadOnLogout(ActionEvent event) throws IOException, SQLException {
         FXMLLoader loader = new FXMLLoader(QuietQuestMain.class.getResource(FxmlFile.LOG_IN));
         Parent root = loader.load();
@@ -108,7 +110,8 @@ public class MainController extends BaseController {
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm()); // adding CSS styling option
         stage.setScene(scene);
         stage.show();
-        database.disconnect();
-        mqttHandler.disconnect();
+
+        disconnectDb();
+        disconnectMqtt();
     }
 }

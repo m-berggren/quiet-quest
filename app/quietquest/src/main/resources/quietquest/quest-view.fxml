@@ -49,7 +49,7 @@
             </children></AnchorPane>
          <AnchorPane fx:id="taskAnchorPane" prefHeight="210.0" prefWidth="370.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="250.0">
             <children>
-                <ListView fx:id="taskListView" opacity="1.0" prefHeight="200.0" prefWidth="287.0" visible="true" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="0.0" />
+                <ListView fx:id="activityListView" opacity="1.0" prefHeight="200.0" prefWidth="287.0" visible="true" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="0.0" />
             </children>
          </AnchorPane>
          <Label fx:id="descriptionLabel" alignment="TOP_LEFT" layoutX="20.0" layoutY="55.0" prefHeight="100.0" prefWidth="373.0" text="Description..." wrapText="true" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="55.0">
@@ -76,10 +76,10 @@
    </AnchorPane>
    <AnchorPane fx:id="mqttAnchorPane" layoutX="914.0" layoutY="21.0" prefHeight="278.0" prefWidth="370.0" style="-fx-background-color: #fff; -fx-background-radius: 10;" AnchorPane.leftAnchor="470.0" AnchorPane.topAnchor="25.0">
       <children>
-         <Label fx:id="mqttConnectionMessage" layoutX="24.0" layoutY="78.0" prefHeight="17.0" prefWidth="242.0" text="Connection Msg" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="80.0" />
-         <Label fx:id="mqttDistanceMessage" layoutX="24.0" layoutY="141.0" prefHeight="17.0" prefWidth="242.0" text="Distance Msg" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="135.0" />
-         <Label fx:id="mqttMotionMessage" layoutX="24.0" layoutY="219.0" prefHeight="17.0" prefWidth="242.0" text="Motion Msg" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="190.0" />
-         <Label fx:id="mqttLightMessage" layoutX="24.0" layoutY="263.0" text="Light Msg" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="245.0" />
+         <Label fx:id="mqttConnectionMessage" layoutX="24.0" layoutY="78.0" prefHeight="17.0" prefWidth="242.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="80.0" />
+         <Label fx:id="mqttDistanceMessage" layoutX="24.0" layoutY="141.0" prefHeight="17.0" prefWidth="242.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="135.0" />
+         <Label fx:id="mqttMotionMessage" layoutX="24.0" layoutY="219.0" prefHeight="17.0" prefWidth="242.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="190.0" />
+         <Label fx:id="mqttLightMessage" layoutX="24.0" layoutY="263.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="245.0" />
          <Label fx:id="mqttTitleLabel" layoutX="24.0" layoutY="21.0" text="MQTT DATA" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">
             <font>
                <Font name="American Typewriter" size="21.0" />

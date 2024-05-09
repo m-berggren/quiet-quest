@@ -43,22 +43,18 @@ public class QuestHistoryController extends BaseController {
   @FXML
   private ListView<Activity> activityListView;
 
-  private HashMap<String, Quest> quests;
+    private ArrayList<Quest> questArrayList;
 
   @Override
   public void afterMainController() throws SQLException {
-    //quests = quietQuestFacade.getQuests();
+      questArrayList = getAllQuests();
     displayQuests();
   }
 
   public void displayQuests() throws SQLException {
-    // Convert the values from the HashMap to an ObservableList
-    database.connect();
-    ArrayList<Quest> questsList = database.getAllQuests(user);
-    database.disconnect();
     //Get a list of quest with quest completionStatus as true
     ArrayList<Quest> completedQuestList = new ArrayList<>();
-    for (Quest quest : questsList) {
+      for (Quest quest : questArrayList) {
       if (quest.getCompletionState()) {
         completedQuestList.add(quest);
       }
@@ -83,9 +79,9 @@ public class QuestHistoryController extends BaseController {
           titleLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 18px;");
 
           Label startTimeLabel = new Label("    Start Time: " + formatDate(quest.getStartTime()));
-          Label completionTimeLabel = new Label("    Completed Time: " + formatDate(quest.getEndTime()));
+            Label completionTimeLabel = new Label("    Completed Time: " + formatDate(quest.getCompleteTime()));
           //Show time spent calculated from the difference between the timestamp start time and completion time in minutes
-          long timeSpent = (quest.getEndTime().getTime() - quest.getStartTime().getTime()) / 60000;
+            long timeSpent = (quest.getCompleteTime().getTime() - quest.getStartTime().getTime()) / 60000;
           Label timeSpentLabel = new Label("    Time Spent: " + timeSpent + " minutes");
           Label boxOpenTimesLabel = new Label("    Box Open Times: " + quest.getBoxOpenTimes());
           long averageBoxOpenInterval = (timeSpent/ (quest.getBoxOpenTimes() + 1) / 60000);
@@ -125,7 +121,7 @@ public class QuestHistoryController extends BaseController {
     titleField.setEditable(false);
     titleField.setText(quest.getTitle());
     descriptionField.setEditable(false);
-    descriptionField.setText(quest.getDescription());
+      descriptionField.setText(quest.getDetail());
     if (activityListView == null) {
       System.out.println("activityListView is null");
     } else {
@@ -134,7 +130,7 @@ public class QuestHistoryController extends BaseController {
   }
 
   private void setupActivityListView(Quest quest) {
-    ObservableList<Activity> taskItems = FXCollections.observableArrayList(quest.getActivities());
+      ObservableList<Activity> taskItems = FXCollections.observableArrayList(getActivitiesFromQuest(quest));
     activityListView.setItems(taskItems);
     activityListView.setCellFactory(lv -> new ListCell<Activity>() {
       @Override

@@ -7,11 +7,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import quietquest.model.Activity;
 import quietquest.model.PomodoroTimer;
 import quietquest.model.Quest;
 
-import java.sql.Array;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,22 +41,24 @@ public class HomeController extends BaseController {
     private ImageView questWarriorImage;
     @FXML
     private ImageView ultimateQuestMasterImage;
-    private Image theJourneyBeginsBW = new Image(getClass().getResourceAsStream("/images/theJourneyBeginsBW.png"));
-    private Image theJourneyBegins = new Image(getClass().getResourceAsStream("/images/theJourneyBegins.png"));
-    private Image apprenticeBW = new Image(getClass().getResourceAsStream("/images/apprenticeBW.png"));
-    private Image apprentice = new Image(getClass().getResourceAsStream("/images/apprentice.png"));
-    private Image speedyWitchBW = new Image(getClass().getResourceAsStream("/images/speedyWitchBW.png"));
-    private Image speedyWitch = new Image(getClass().getResourceAsStream("/images/speedyWitch.png"));
-    private Image questConquerorBW = new Image(getClass().getResourceAsStream("/images/questConquerorBW.png"));
-    private Image questConqueror = new Image(getClass().getResourceAsStream("/images/questConqueror.png"));
-    private Image timeWizardBW = new Image(getClass().getResourceAsStream("/images/timeWizardBW.png"));
-    private Image timeWizard = new Image(getClass().getResourceAsStream("/images/timeWizard.png"));
-    private Image focusWarriorBW = new Image(getClass().getResourceAsStream("/images/focusWarriorBW.png"));
-    private Image focusWarrior = new Image(getClass().getResourceAsStream("/images/focusWarrior.png"));
-    private Image questWarriorBW = new Image(getClass().getResourceAsStream("/images/questWarriorBW.png"));
-    private Image questWarrior = new Image(getClass().getResourceAsStream("/images/questWarrior.png"));
-    private Image ultimateQuestMasterBW = new Image(getClass().getResourceAsStream("/images/ultimateQuestMasterBW.png"));
-    private Image ultimateQuestMaster = new Image(getClass().getResourceAsStream("/images/ultimateQuestMaster.png"));
+
+    private Image theJourneyBeginsBW;
+    private Image apprenticeBW;
+    private Image speedyWitchBW;
+    private Image questConquerorBW;
+    private Image timeWizardBW;
+    private Image focusWarriorBW;
+    private Image questWarriorBW;
+    private Image ultimateQuestMasterBW;
+
+    private Image theJourneyBegins;
+    private Image apprentice;
+    private Image speedyWitch;
+    private Image questConqueror;
+    private Image timeWizard;
+    private Image focusWarrior;
+    private Image questWarrior;
+    private Image ultimateQuestMaster;
 
     private HashMap<String, Quest> quests;
     private Quest currentQuest;
@@ -66,6 +66,7 @@ public class HomeController extends BaseController {
     @Override
     protected void afterMainController() throws SQLException {
         quests = quietQuestFacade.getQuests();
+        loadImages();
         displayCurrentQuest();
         displayBadges();
     }
@@ -106,65 +107,202 @@ public class HomeController extends BaseController {
     }
 
     /**
+     * Method to load a single image.
+     * @param path Specifies the path of the image.
+     * @return Returns the image loaded from the specified path.
+     */
+    private Image loadImage(String path) {
+        return new Image(getClass().getResourceAsStream(path));
+    }
+
+    /**
+     * Method to load all images connected to the various badge types.
+     */
+    private void loadImages() {
+        // Badge images in black-and-white
+        theJourneyBeginsBW = loadImage("/images/theJourneyBeginsBW.png");
+        apprenticeBW = loadImage("/images/apprenticeBW.png");
+        speedyWitchBW = loadImage("/images/speedyWitchBW.png");
+        questConquerorBW = loadImage("/images/questConquerorBW.png");
+        timeWizardBW = loadImage("/images/timeWizardBW.png");
+        focusWarriorBW = loadImage("/images/focusWarriorBW.png");
+        questWarriorBW = loadImage("/images/questWarriorBW.png");
+        ultimateQuestMasterBW = loadImage("/images/ultimateQuestMasterBW.png");
+        // Badge images in color
+        theJourneyBegins = loadImage("/images/theJourneyBegins.png");
+        apprentice = loadImage("/images/apprentice.png");
+        speedyWitch = loadImage("/images/speedyWitch.png");
+        questConqueror = loadImage("/images/questConqueror.png");
+        timeWizard = loadImage("/images/timeWizard.png");
+        focusWarrior = loadImage("/images/focusWarrior.png");
+        questWarrior = loadImage("/images/questWarrior.png");
+        ultimateQuestMaster = loadImage("/images/ultimateQuestMaster.png");
+    }
+
+    /**
      * Displays all badges.
      * Badges that have already been unlocked by the user appear in color,
      * all other badges appear in black-and-white.
      */
     public void displayBadges() throws SQLException {
-        // starts by displaying all black-and-white images
-        theJourneyBeginsImage.setImage(theJourneyBeginsBW);
-        apprenticeImage.setImage(apprenticeBW);
-        speedyWitchImage.setImage(speedyWitchBW);
-        questConquerorImage.setImage(questConquerorBW);
-        timeWizardImage.setImage(timeWizardBW);
-        focusWarriorImage.setImage(focusWarriorBW);
-        questWarriorImage.setImage(questWarriorBW);
-        ultimateQuestMasterImage.setImage(ultimateQuestMasterBW);
-
         database.connect();
         ArrayList<Quest> quests = database.getAllQuests(user);
         ArrayList<PomodoroTimer> pomodoroQuests = database.getAllPomodoroQuests(user);
         database.disconnect();
-        boolean completedWithinHour = false;
-        ArrayList<Quest> completedQuests = new ArrayList<>();
+
+        displayTheJourneyBeginsBadge(quests);
+        displayApprenticeBadge(quests);
+        displaySpeedyWitchBadge(quests);
+        displayQuestConquerorBadge(quests);
+        displayTimeWizardBadge(pomodoroQuests);
+        displayFocusWarriorBadge(quests);
+        displayQuestWarriorBadge(quests);
+        displayUltimateQuestMasterBadge(quests);
+    }
+
+    /**
+     * Method to count the completed quests associated with the user.
+     * @param quests ArrayList<Quest> quests associated with the user
+     * @return int value of the number of quests in the list
+     */
+    private int countCompletedQuests(ArrayList<Quest> quests) {
+        int count = 0;
         for (Quest quest : quests) {
             if (quest.getCompletionState()) {
-                completedQuests.add(quest);
-                if ((quest.getEndTime().getTime() - quest.getStartTime().getTime()) <= 60000 ) {
-                    completedWithinHour = true;
-                }
+                count++;
             }
         }
-        ArrayList<PomodoroTimer> minFourIntervalPomodoros = new ArrayList<>();
+        return count;
+    }
+
+    /**
+     * Calculates whether any quest associated with the user has been completed within one hour of starting it.
+     * @param quests ArrayList<Quest> the list of quests associated with the user
+     * @return boolean value returns true if at least one quest has been completed in one hour or less
+     */
+    private boolean hasQuestCompletedWithinHour(ArrayList<Quest> quests) {
+        for (Quest quest : quests) {
+            if (quest.getCompletionState() && quest.getEndTime().getTime() - quest.getStartTime().getTime() <= 60000) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Method for determining whether the user has at least one pomodoro-style quest that has at least 4 intervals.
+     * @param pomodoroQuests ArrayList<PomodoroTimer> the list of pomodoro quests associated with the user
+     * @return boolean value, returns true if there is at least one pomodoro with at least 4 intervals
+     */
+    private boolean hasFourOrMoreIntervals(ArrayList<PomodoroTimer> pomodoroQuests) {
         for (PomodoroTimer pomodoro : pomodoroQuests) {
             if (pomodoro.getIntervals() >= 4) {
-                minFourIntervalPomodoros.add(pomodoro);
+                return true;
             }
         }
+        return false;
+    }
 
-        if (!minFourIntervalPomodoros.isEmpty()) { // unlock timeWizard if a pomodoro with 4 or more focus sessions exists
-            timeWizardImage.setImage(timeWizard);
-        }
-        if (!quests.isEmpty()) { // unlock theJourneyBegins if at least 1 quest exists
+    /**
+     * Display theJourneyBegins badge. Unlocked if at least 1 quest has been created.
+     * @param quests ArrayList<Quest> the list of quests associated with the user
+     */
+    private void displayTheJourneyBeginsBadge(ArrayList<Quest> quests) {
+        if (!quests.isEmpty()) {
             theJourneyBeginsImage.setImage(theJourneyBegins);
+        } else {
+            theJourneyBeginsImage.setImage(theJourneyBeginsBW);
         }
-        if (!completedQuests.isEmpty()) { // unlock apprentice if completed at least 1 quest
+    }
+
+    /**
+     * Display apprentice badge. Unlocked if there is at least 1 completed quest.
+     * @param quests ArrayList<Quest> the list of quests associated with the user
+     */
+    private void displayApprenticeBadge(ArrayList<Quest> quests) {
+        int completedQuestsCount = countCompletedQuests(quests);
+        if (completedQuestsCount >= 1) {
             apprenticeImage.setImage(apprentice);
+        } else {
+            apprenticeImage.setImage(apprenticeBW);
         }
-        if (completedQuests.size() >= 3) { // unlock questConqueror if completed at least 3 quests
+    }
+
+    /**
+     * Display questConqueror badge. Unlocked if at least 3 quests are completed.
+     * @param quests ArrayList<Quest> the list of quests associated with the user
+     */
+    private void displayQuestConquerorBadge(ArrayList<Quest> quests) {
+        int completedQuestsCount = countCompletedQuests(quests);
+        if (completedQuestsCount >= 3) {
             questConquerorImage.setImage(questConqueror);
+        } else {
+            questConquerorImage.setImage(questConquerorBW);
         }
-        if (completedQuests.size() >= 10) { // unlock questWarrior if completed at least 10 quests
+    }
+
+    /**
+     * Display questWarrior badge. Unlocked if at least 10 quests are completed.
+     * @param quests ArrayList<Quest> the list of quests associated with the user
+     */
+    private void displayQuestWarriorBadge(ArrayList<Quest> quests) {
+        int completedQuestsCount = countCompletedQuests(quests);
+        if (completedQuestsCount >= 10) {
             questWarriorImage.setImage(questWarrior);
+        } else {
+            questWarriorImage.setImage(questWarriorBW);
         }
-        if (completedQuests.size() >= 25) { // unlock focusWarrior if completed at least 25 quests
+    }
+
+    /**
+     * Display focusWarrior badge. Unlocked if at least 25 quests are completed.
+     * @param quests ArrayList<Quest> the list of quests associated with the user
+     */
+    private void displayFocusWarriorBadge(ArrayList<Quest> quests) {
+        int completedQuestsCount = countCompletedQuests(quests);
+        if (completedQuestsCount >= 25) {
             focusWarriorImage.setImage(focusWarrior);
+        } else {
+            focusWarriorImage.setImage(focusWarriorBW);
         }
-        if (completedQuests.size() >= 100) { // unlock ultimateQuestMaster if completed at least 100 quests
+    }
+
+    /**
+     * Display ultimateQuestMaster badge. Unlocked if at least 100 quests are completed.
+     * @param quests ArrayList<Quest> the list of quests associated with the user
+     */
+    private void displayUltimateQuestMasterBadge(ArrayList<Quest> quests) {
+        int completedQuestsCount = countCompletedQuests(quests);
+        if (completedQuestsCount >= 100) {
             ultimateQuestMasterImage.setImage(ultimateQuestMaster);
+        } else {
+            ultimateQuestMasterImage.setImage(ultimateQuestMasterBW);
         }
-        if (completedWithinHour) { // unlock speedyWitch if at least 1 quest was completed within 1 hour
+    }
+
+    /**
+     * Display speedyWitch badge. Unlocked if at least one quest has been completed within 1 hour of starting it.
+     * @param quests ArrayList<Quest> the list of quests associated with the user
+     */
+    private void displaySpeedyWitchBadge(ArrayList<Quest> quests) {
+        boolean completedWithinHour = hasQuestCompletedWithinHour(quests);
+        if (completedWithinHour) {
             speedyWitchImage.setImage(speedyWitch);
+        } else {
+            speedyWitchImage.setImage(speedyWitchBW);
+        }
+    }
+
+    /**
+     * Display timeWizard badge. Unlocked if at least one of the user's pomodoro quests has 4 or more intervals.
+     * @param pomodoroQuests ArrayList<PomodoroTimer> the list of pomodoros associated with the user
+     */
+    private void displayTimeWizardBadge(ArrayList<PomodoroTimer> pomodoroQuests) {
+        boolean hasFourOrMore = hasFourOrMoreIntervals(pomodoroQuests);
+        if (hasFourOrMore) {
+            timeWizardImage.setImage(timeWizard);
+        } else {
+            timeWizardImage.setImage(timeWizardBW);
         }
     }
 

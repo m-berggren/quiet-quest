@@ -47,19 +47,21 @@
     </AnchorPane>
     <AnchorPane fx:id="badgeGalleryAnchorPane" layoutX="542.2857142857143" layoutY="24.0" prefHeight="635.0" prefWidth="355.0" style="-fx-background-color: #57CC99; -fx-background-radius: 10;" AnchorPane.leftAnchor="500.0" AnchorPane.topAnchor="25.0">
         <children>
-         <Label fx:id="badgeGalleryLabel" alignment="TOP_CENTER" layoutY="25.0" prefHeight="54.0" prefWidth="355.0" text="Your Badges" textFill="#22577a">
+         <AnchorPane layoutX="15.0" layoutY="15.0" prefHeight="62.0" prefWidth="325.0" style="-fx-background-color: #fff; -fx-background-radius: 10;" />
+         <Label fx:id="badgeGalleryLabel" alignment="TOP_CENTER" layoutY="20.0" prefHeight="54.0" prefWidth="355.0" text="Your Badges" textFill="#22577a">
             <font>
                <Font size="36.0" />
             </font>
          </Label>
+         <AnchorPane layoutX="14.0" layoutY="84.0" prefHeight="533.0" prefWidth="325.0" style="-fx-background-color: #fff; -fx-background-radius: 10;" />
          <ImageView fx:id="theJourneyBeginsImage" fitHeight="114.0" fitWidth="117.0" layoutX="40.0" layoutY="94.0" pickOnBounds="true" preserveRatio="true" />
          <ImageView fx:id="apprenticeImage" fitHeight="114.0" fitWidth="117.0" layoutX="200.0" layoutY="94.0" pickOnBounds="true" preserveRatio="true" />
-         <ImageView fx:id="questWarriorImage" fitHeight="114.0" fitWidth="117.0" layoutX="40.0" layoutY="493.0" pickOnBounds="true" preserveRatio="true" />
          <ImageView fx:id="speedyWitchImage" fitHeight="114.0" fitWidth="117.0" layoutX="40.0" layoutY="224.0" pickOnBounds="true" preserveRatio="true" />
-         <ImageView fx:id="ultimateQuestMasterImage" fitHeight="114.0" fitWidth="117.0" layoutX="200.0" layoutY="493.0" pickOnBounds="true" preserveRatio="true" />
          <ImageView fx:id="questConquerorImage" fitHeight="114.0" fitWidth="117.0" layoutX="200.0" layoutY="224.0" pickOnBounds="true" preserveRatio="true" />
          <ImageView fx:id="timeWizardImage" fitHeight="114.0" fitWidth="117.0" layoutX="40.0" layoutY="358.0" pickOnBounds="true" preserveRatio="true" />
          <ImageView fx:id="focusWarriorImage" fitHeight="114.0" fitWidth="117.0" layoutX="200.0" layoutY="358.0" pickOnBounds="true" preserveRatio="true" />
+         <ImageView fx:id="questWarriorImage" fitHeight="114.0" fitWidth="117.0" layoutX="40.0" layoutY="493.0" pickOnBounds="true" preserveRatio="true" />
+         <ImageView fx:id="ultimateQuestMasterImage" fitHeight="114.0" fitWidth="117.0" layoutX="200.0" layoutY="493.0" pickOnBounds="true" preserveRatio="true" />
         </children>
     </AnchorPane>
 </AnchorPane>

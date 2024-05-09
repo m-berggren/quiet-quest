@@ -11,14 +11,14 @@
     <ImageView fitHeight="760.0" fitWidth="1210.0" layoutY="-6.0" pickOnBounds="true">
         <Image url="@../images/create_page_background.png" />
     </ImageView>
-    <AnchorPane fx:id="userInfoAnchorPane" layoutX="32.0" layoutY="25.0" prefHeight="371.0" prefWidth="435.0" style="-fx-background-color: #fff; -fx-background-radius: 10;" AnchorPane.leftAnchor="32.0" AnchorPane.topAnchor="25.0">
+    <AnchorPane fx:id="userInfoAnchorPane" layoutX="32.0" layoutY="25.0" prefHeight="371.0" prefWidth="435.0" style="-fx-background-color: #C7F9CC; -fx-background-radius: 10;" AnchorPane.leftAnchor="32.0" AnchorPane.topAnchor="25.0">
         <children>
             <Label fx:id="titleLabel" alignment="CENTER" layoutX="12.0" layoutY="21.0" prefHeight="54.0" prefWidth="411.0" text="Adventure awaits" textAlignment="CENTER" textFill="#22577a">
                 <font>
                     <Font size="36.0" />
                 </font>
             </Label>
-            <Button fx:id="continueQuestButton" alignment="CENTER" layoutX="100.0" layoutY="233.57142857142858" minWidth="38.0" mnemonicParsing="false" onAction="#onContinueQuestClick" prefHeight="43.0" prefWidth="238.0" style="-fx-background-color: #38A3A5; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="CONTINUE QUEST" visible="false" wrapText="true" AnchorPane.topAnchor="233.57142857142858">
+            <Button fx:id="continueQuestButton" alignment="CENTER" layoutX="100.0" layoutY="233.57142857142858" minWidth="38.0" mnemonicParsing="false" onAction="#onContinueQuestClick" prefHeight="43.0" prefWidth="238.0" style="-fx-background-color: #57CC99; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="CONTINUE QUEST" visible="false" wrapText="true" AnchorPane.topAnchor="233.57142857142858">
                 <font>
                     <Font size="20.0" />
                 </font>
@@ -33,25 +33,33 @@
                <Font size="18.0" />
             </font>
          </Label>
-         <Button fx:id="viewListButton" alignment="CENTER" layoutX="12.0" layoutY="234.0" minWidth="38.0" mnemonicParsing="false" onAction="#onViewListClick" prefHeight="43.0" prefWidth="197.0" style="-fx-background-color: #38A3A5; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="VIEW LIST" visible="false" wrapText="true">
+         <Button fx:id="viewListButton" alignment="CENTER" layoutX="12.0" layoutY="234.0" minWidth="38.0" mnemonicParsing="false" onAction="#onViewListClick" prefHeight="43.0" prefWidth="197.0" style="-fx-background-color: #57CC99; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="VIEW LIST" visible="false" wrapText="true">
             <font>
                <Font size="18.0" />
             </font>
          </Button>
-         <Button fx:id="createQuestButton" alignment="CENTER" layoutX="225.0" layoutY="234.0" minWidth="38.0" mnemonicParsing="false" onAction="#onCreateQuestClick" prefHeight="43.0" prefWidth="197.0" style="-fx-background-color: #38A3A5; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="CREATE QUEST" visible="false" wrapText="true">
+         <Button fx:id="createQuestButton" alignment="CENTER" layoutX="225.0" layoutY="234.0" minWidth="38.0" mnemonicParsing="false" onAction="#onCreateQuestClick" prefHeight="43.0" prefWidth="197.0" style="-fx-background-color: #57CC99; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="CREATE QUEST" visible="false" wrapText="true">
             <font>
                <Font size="18.0" />
             </font>
          </Button>
         </children>
     </AnchorPane>
-    <AnchorPane fx:id="badgeGalleryAnchorPane" layoutX="492.0" layoutY="24.0" prefHeight="647.0" prefWidth="435.0" style="-fx-background-color: #fff; -fx-background-radius: 10;" AnchorPane.leftAnchor="500.0" AnchorPane.topAnchor="25.0">
+    <AnchorPane fx:id="badgeGalleryAnchorPane" layoutX="542.2857142857143" layoutY="24.0" prefHeight="635.0" prefWidth="355.0" style="-fx-background-color: #fff; -fx-background-radius: 10;" AnchorPane.leftAnchor="500.0" AnchorPane.topAnchor="25.0">
         <children>
-         <Label fx:id="badgeGalleryLabel" alignment="TOP_CENTER" layoutX="12.0" layoutY="14.0" prefHeight="54.0" prefWidth="411.0" text="Your Badges" textFill="#22577a">
+         <Label fx:id="badgeGalleryLabel" alignment="TOP_CENTER" layoutY="25.0" prefHeight="54.0" prefWidth="355.0" text="Your Badges" textFill="#22577a">
             <font>
                <Font size="36.0" />
             </font>
          </Label>
+         <ImageView fx:id="firstQuestImage" fitHeight="114.0" fitWidth="117.0" layoutX="40.0" layoutY="94.0" pickOnBounds="true" preserveRatio="true" />
+         <ImageView fx:id="apprenticeImage" fitHeight="114.0" fitWidth="117.0" layoutX="200.0" layoutY="94.0" pickOnBounds="true" preserveRatio="true" />
+         <ImageView fx:id="questWarriorImage" fitHeight="114.0" fitWidth="117.0" layoutX="40.0" layoutY="493.0" pickOnBounds="true" preserveRatio="true" />
+         <ImageView fx:id="speedyWitchImage" fitHeight="114.0" fitWidth="117.0" layoutX="40.0" layoutY="224.0" pickOnBounds="true" preserveRatio="true" />
+         <ImageView fx:id="ultimateQuestMasterImage" fitHeight="114.0" fitWidth="117.0" layoutX="200.0" layoutY="493.0" pickOnBounds="true" preserveRatio="true" />
+         <ImageView fx:id="questConquerorImage" fitHeight="114.0" fitWidth="117.0" layoutX="200.0" layoutY="224.0" pickOnBounds="true" preserveRatio="true" />
+         <ImageView fx:id="timeWizardImage" fitHeight="114.0" fitWidth="117.0" layoutX="40.0" layoutY="358.0" pickOnBounds="true" preserveRatio="true" />
+         <ImageView fx:id="focusWarriorImage" fitHeight="114.0" fitWidth="117.0" layoutX="200.0" layoutY="358.0" pickOnBounds="true" preserveRatio="true" />
         </children>
     </AnchorPane>
 </AnchorPane>

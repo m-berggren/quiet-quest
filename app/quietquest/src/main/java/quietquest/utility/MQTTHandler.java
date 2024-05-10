@@ -32,19 +32,6 @@ public class MQTTHandler {
                 .buildAsync();
     }
 
-    /**
-     * Check if MQTTHandler is already initiated somewhere in the application, if not then create it.
-     *
-     * @return an instance of MQTTHandler object.
-     * @deprecated No longer a needed feature as it is created upon start of application.
-     */
-    public static synchronized MQTTHandler getInstance() {
-        if (instance == null) {
-            instance = new MQTTHandler();
-        }
-        return instance;
-    }
-
     public void setUIUpdater(UIUpdater uiUpdater) {
         this.uiUpdater = uiUpdater;
     }

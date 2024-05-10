@@ -106,6 +106,10 @@ public class MainController extends BaseController {
             Parent node = fxmlLoader.load();
             BaseController baseController = fxmlLoader.getController();
             baseController.setMainController(this);
+
+            // Apply the stylesheet to the newly loaded view
+            node.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
+
             mainPane.setCenter(node);
         } catch (IOException | SQLException e) {
             throw new RuntimeException(e);

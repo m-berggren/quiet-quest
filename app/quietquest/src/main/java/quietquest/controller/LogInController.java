@@ -67,7 +67,8 @@ public class LogInController {
         password = passwordField.getText();
         if (database.checkIfUsernameExists(username) && database.checkIfPasswordCorrect(username, password)) {
             User user = database.getUserByUsername(username);
-            loadStartController(event, user, database, mqttHandler); // Passing User and Database as parameters to use in application
+            //loadStartController(event, user, database, mqttHandler); // Passing User and Database as parameters to use in application
+            loadHomeController(event, user, database, mqttHandler); // Passing User and Database as parameters to use in application
         } else { // Username does not exist OR wrong password
             showPopup();
         }
@@ -83,6 +84,20 @@ public class LogInController {
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
         stage.setScene(scene);
         stage.show();
+    }
+
+    private void loadHomeController(ActionEvent event, User user, Database database, MQTTHandler mqttHandler) throws IOException, SQLException {
+        FXMLLoader loader = new FXMLLoader(QuietQuestMain.class.getResource(FxmlFile.MAIN));
+        Parent root = loader.load();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm()); // adding CSS styling option
+        stage.setScene(scene);
+        stage.show();
+
+        MainController controller = loader.getController();
+        controller.initialize(user, database, mqttHandler);
+        controller.loadView(FxmlFile.HOME);
     }
 
     @FXML

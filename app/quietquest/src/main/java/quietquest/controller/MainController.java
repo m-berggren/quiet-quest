@@ -1,25 +1,26 @@
 package quietquest.controller;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import quietquest.QuietQuestMain;
-import quietquest.model.QuietQuestFacade;
+import quietquest.model.*;
 import quietquest.utility.FxmlFile;
-import quietquest.model.Database;
-import quietquest.model.User;
-import quietquest.model.Quest;
 import quietquest.utility.MQTTHandler;
 
 import java.sql.SQLException;
 import java.io.IOException;
+import java.util.Optional;
 
 public class MainController extends BaseController {
     @FXML
@@ -83,6 +84,20 @@ public class MainController extends BaseController {
 
     public void onLogOutButtonClick(ActionEvent event) throws IOException, SQLException {
         loadOnLogout(event);
+    }
+
+    public void onQuitButtonClick(ActionEvent event) {
+        ConfirmationAlert alert = new ConfirmationAlert();
+        alert.setTitle("Confirmation");
+        alert.setHeaderText("This will exit the application.");
+        alert.setContentText("Do you want to continue?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get().getText().equals("Yes")) {
+            mqttHandler.disconnect();
+            database.closeConnection();
+            Platform.exit();
+        }
     }
 
     public void loadView(String view) {

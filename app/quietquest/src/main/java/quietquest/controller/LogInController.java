@@ -1,5 +1,6 @@
 package quietquest.controller;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventTarget;
 import javafx.fxml.FXML;
@@ -131,6 +132,12 @@ public class LogInController {
         usernameField.clear();
         passwordField.clear();
         doNotShowPopup();
+    }
+
+    public void onQuitButtonClick(ActionEvent event) {
+        mqttHandler.disconnect();
+        database.closeConnection();
+        Platform.exit();
     }
 
     /**

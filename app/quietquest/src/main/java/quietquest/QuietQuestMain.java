@@ -26,14 +26,12 @@ public class QuietQuestMain extends Application {
         LogInController logInController = loader.getController();
         logInController.initialize(database, mqttHandler); // Passes database & mqttHandler object until MainController is reached
         Scene scene = new Scene(root);
-        //stage.setOnCloseRequest(event -> Platform.exit());
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent event) {
                 database.closeConnection();
                 mqttHandler.disconnect();
                 Platform.exit(); // Specific to JavaFX, terminates the runtime
-                System.exit(0); // Definitive shutdown of all processes
             }
         });
         stage.setScene(scene);

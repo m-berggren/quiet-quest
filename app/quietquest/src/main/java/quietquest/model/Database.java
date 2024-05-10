@@ -914,4 +914,27 @@ public class Database {
             throw new RuntimeException("SHA-256 is not supported", e);
         }
     }
+
+    public ArrayList<PomodoroTimer> getAllPomodoroQuests(User user) throws SQLException {
+        ArrayList<PomodoroTimer> pomodoroQuests = new ArrayList<>();
+
+        String questSql = "SELECT * FROM pomodoro_timer WHERE quest_id = ?";
+
+        try (PreparedStatement pomodoroStmt = connection.prepareStatement(questSql)) {
+            pomodoroStmt.setInt(1, user.getId());
+            ResultSet rs = pomodoroStmt.executeQuery();
+            while (rs.next()) {
+                int focusTime = rs.getInt("focus_time");
+                int breakTime = rs.getInt("break_time");
+                int interval = rs.getInt("interval");
+
+                PomodoroTimer pomodoro = new PomodoroTimer(focusTime, breakTime, interval);
+                pomodoroQuests.add(pomodoro);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return pomodoroQuests;
+    }
+
 }

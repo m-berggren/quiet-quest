@@ -53,6 +53,13 @@ public class QuietQuestFacade {
     }
 
     /**
+     * @return
+     */
+    public ArrayList<PomodoroTimer> getAllPomodoroQuests() throws SQLException {
+        return database.getAllPomodoroQuests(user);
+    }
+
+    /**
      * @param quest
      */
     public void completeQuest(Quest quest) {
@@ -72,11 +79,11 @@ public class QuietQuestFacade {
         return database.getActivitiesFromQuest(quest);
     }
 
-    public void updateTaskInDb(Task currTask, Task updTask) {
+    public void updateTask(Task currTask, Task updTask) {
         database.updateTask(currTask, updTask);
     }
 
-    public void updateQuestInDb(Quest currQuest, Quest updQuest) {
+    public void updateQuest(Quest currQuest, Quest updQuest) {
         database.updateQuest(currQuest, updQuest);
     }
 

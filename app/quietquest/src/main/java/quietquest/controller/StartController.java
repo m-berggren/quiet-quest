@@ -47,6 +47,11 @@ public class StartController extends BaseController {
         loadFxml(FxmlFile.QUEST_LIST, event);
     }
 
+    @FXML
+    protected void onHomeClick(ActionEvent event) throws SQLException, IOException {
+        loadFxml(FxmlFile.HOME, event);
+    }
+
     private void loadFxml(String fxmlFile, ActionEvent event) throws IOException, SQLException {
         FXMLLoader loader = new FXMLLoader(QuietQuestMain.class.getResource(FxmlFile.MAIN));
         Parent root = loader.load();

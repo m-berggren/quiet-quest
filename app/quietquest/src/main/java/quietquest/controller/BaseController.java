@@ -1,11 +1,9 @@
 package quietquest.controller;
 
-import quietquest.model.Activity;
-import quietquest.model.Quest;
-import quietquest.model.QuietQuestFacade;
-import quietquest.model.User;
+import quietquest.model.*;
 import quietquest.utility.FxmlFile;
 
+import java.sql.Array;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -116,10 +114,13 @@ public abstract class BaseController {
         return quietQuestFacade.getActivitiesFromQuest(quest);
     }
 
+    public ArrayList<PomodoroTimer> getAllPomodoroQuests() throws SQLException {
+        return quietQuestFacade.getAllPomodoroQuests();
+    }
+
     public User getUser() {
         return quietQuestFacade.getUser();
     }
-
 
 
 }

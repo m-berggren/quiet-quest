@@ -45,8 +45,16 @@ public class Database {
     /**
      * Disconnects the database connection.
      */
-    public void disconnect() throws SQLException {
-        connection.close();
+    public void closeConnection() {
+        if (connection == null) {
+            return;
+        }
+
+        try {
+            connection.close();
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to close database connection.", e);
+        }
     }
 
     // ==============================* INITIALIZATION & SETUP *=============================

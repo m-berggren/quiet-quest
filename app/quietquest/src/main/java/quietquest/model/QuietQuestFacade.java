@@ -4,9 +4,6 @@ import quietquest.controller.UIUpdater;
 import quietquest.utility.MQTTHandler;
 
 import java.sql.SQLException;
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.ArrayList;
 
 public class QuietQuestFacade {
@@ -24,8 +21,8 @@ public class QuietQuestFacade {
      * @param user     is the User object to store login information, used for database querying.
      * @param database is the single Database object that handles all query operations.
      */
-    public QuietQuestFacade(User user, Database database) {
-        this.mqttHandler = MQTTHandler.getInstance();
+    public QuietQuestFacade(User user, Database database, MQTTHandler mqttHandler) {
+        this.mqttHandler = mqttHandler;
         this.user = user;
         this.database = database;
     }
@@ -41,13 +38,6 @@ public class QuietQuestFacade {
 
     public void createQuest(Quest quest, ArrayList<Activity> activities) {
         database.createQuest(quest, activities);
-    }
-
-    /**
-     *
-     */
-    public void DisconnectDb() throws SQLException {
-        database.disconnect();
     }
 
     /**

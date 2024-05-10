@@ -120,13 +120,6 @@ public abstract class BaseController {
         return quietQuestFacade.getUser();
     }
 
-    public void disconnectMqtt() {
-        quietQuestFacade.disconnectMqtt();
-    }
-
-    public void disconnectDb() throws SQLException {
-        quietQuestFacade.DisconnectDb();
-    }
 
 
 }

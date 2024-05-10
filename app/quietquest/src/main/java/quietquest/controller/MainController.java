@@ -16,6 +16,8 @@ import quietquest.utility.FxmlFile;
 import quietquest.model.Database;
 import quietquest.model.User;
 import quietquest.model.Quest;
+import quietquest.utility.MQTTHandler;
+
 import java.sql.SQLException;
 import java.io.IOException;
 
@@ -37,10 +39,15 @@ public class MainController extends BaseController {
     @FXML
     private VBox menuVBox;
 
+    private Database database;
+    private MQTTHandler mqttHandler;
+
     // ==============================* INITIALIZATION METHODS *=======================
 
-    public void initialize(User user, Database database) throws SQLException {
-        this.quietQuestFacade = new QuietQuestFacade(user, database);
+    public void initialize(User user, Database database, MQTTHandler mqttHandler) throws SQLException {
+        this.database = database;
+        this.mqttHandler = mqttHandler;
+        this.quietQuestFacade = new QuietQuestFacade(user, database, mqttHandler);
         setMainController(this);
     }
 
@@ -105,13 +112,12 @@ public class MainController extends BaseController {
     public void loadOnLogout(ActionEvent event) throws IOException, SQLException {
         FXMLLoader loader = new FXMLLoader(QuietQuestMain.class.getResource(FxmlFile.LOG_IN));
         Parent root = loader.load();
+        LogInController logInController = loader.getController();
+        logInController.initialize(database, mqttHandler);
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm()); // adding CSS styling option
         stage.setScene(scene);
         stage.show();
-
-        disconnectDb();
-        disconnectMqtt();
     }
 }

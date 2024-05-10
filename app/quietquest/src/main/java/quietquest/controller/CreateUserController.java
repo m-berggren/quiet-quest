@@ -16,6 +16,7 @@ import quietquest.QuietQuestMain;
 import quietquest.model.Database;
 import quietquest.model.User;
 import quietquest.utility.FxmlFile;
+import quietquest.utility.MQTTHandler;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -32,6 +33,14 @@ public class CreateUserController {
     @FXML
     private Label passwordHintLabel;
 
+    private Database database;
+    private MQTTHandler mqttHandler;
+
+    public void initialize(Database database, MQTTHandler mqttHandler) {
+        this.database = database;
+        this.mqttHandler = mqttHandler;
+    }
+
     /**
      * Directs back to the login page without saving new user into the database.
      *
@@ -39,7 +48,7 @@ public class CreateUserController {
      * @throws IOException
      */
     public void onBackClick(ActionEvent event) throws IOException {
-        loadFxml(FxmlFile.LOG_IN, event);
+        loadFxml(FxmlFile.LOG_IN, event, database, mqttHandler);
     }
 
     /**
@@ -50,7 +59,6 @@ public class CreateUserController {
      * @throws IOException
      */
     public void onSaveClick(ActionEvent event) throws SQLException, IOException {
-        Database database = new Database();
         String username = usernameTextField.getText();
         String password = passwordField.getText();
 
@@ -74,13 +82,11 @@ public class CreateUserController {
         if (usernameOK && passwordOK) {
             if (database.createUser(username, password)) {
                 System.out.println("Successfully created user.");
-                loadFxml(FxmlFile.LOG_IN, event);
+                loadFxml(FxmlFile.LOG_IN, event, database, mqttHandler);
             } else {
                 System.out.println("Something went wrong.");
             }
         }
-
-        database.disconnect();
     }
 
     /**
@@ -101,9 +107,11 @@ public class CreateUserController {
         return length && containsNumber;
     }
 
-    private void loadFxml(String fxmlFile, ActionEvent event) throws IOException {
+    private void loadFxml(String fxmlFile, ActionEvent event, Database database, MQTTHandler mqttHandler) throws IOException {
         FXMLLoader loader = new FXMLLoader(QuietQuestMain.class.getResource(fxmlFile));
         Parent root = loader.load();
+        LogInController logInController = loader.getController();
+        logInController.initialize(database, mqttHandler);
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm()); // adding CSS styling option

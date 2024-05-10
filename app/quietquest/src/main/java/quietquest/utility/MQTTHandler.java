@@ -1,5 +1,6 @@
 package quietquest.utility;
 
+import com.hivemq.client.mqtt.MqttClientState;
 import com.hivemq.client.mqtt.mqtt5.Mqtt5AsyncClient;
 import com.hivemq.client.mqtt.mqtt5.Mqtt5Client;
 import com.hivemq.client.mqtt.mqtt5.message.publish.Mqtt5Publish;
@@ -18,7 +19,7 @@ public class MQTTHandler {
     private final String SUB_TOPICS = "/quietquest/sensor/#";
 
     private UIUpdater uiUpdater;
-    private final Mqtt5AsyncClient client;
+    private final Mqtt5AsyncClient client; // Used over Mqtt5BlockingClient to make sure application is responsive
 
     // Information used from this website:
     // https://console.hivemq.cloud/clients/java-hivemq?uuid=ee9e926915b642241a7bc895977db4ae9
@@ -31,6 +32,12 @@ public class MQTTHandler {
                 .buildAsync();
     }
 
+    /**
+     * Check if MQTTHandler is already initiated somewhere in the application, if not then create it.
+     *
+     * @return an instance of MQTTHandler object.
+     * @deprecated No longer a needed feature as it is created upon start of application.
+     */
     public static synchronized MQTTHandler getInstance() {
         if (instance == null) {
             instance = new MQTTHandler();
@@ -52,8 +59,13 @@ public class MQTTHandler {
                 });
     }
 
+    /**
+     * Checks if client is connected and disconnects if that is the case.
+     */
     public void disconnect() {
-        client.disconnect();
+        if (client.getState() == MqttClientState.CONNECTED) {
+            client.disconnect();
+        }
     }
 
     public void subscribe() {

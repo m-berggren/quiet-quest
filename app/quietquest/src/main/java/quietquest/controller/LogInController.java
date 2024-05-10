@@ -4,7 +4,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventTarget;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -50,28 +49,34 @@ public class LogInController {
 
     private String username;
     private String password;
+    private Database database;
+    private MQTTHandler mqttHandler;
 
     /**
      * Load start page upon clicking "Log In" if user credentials match what is in the database.
      * If inputted credentials are incorrect, show a popup message.
      */
+
+    public void initialize(Database database, MQTTHandler mqttHandler) {
+        this.database = database;
+        this.mqttHandler = mqttHandler;
+    }
     public void onLogInClick(ActionEvent event) throws IOException, SQLException {
         username = usernameField.getText();
         password = passwordField.getText();
-        Database database = new Database();
         if (database.checkIfUsernameExists(username) && database.checkIfPasswordCorrect(username, password)) {
             User user = database.getUserByUsername(username);
-            loadStartController(event, user, database); // Passing User and Database as parameters to use in application
+            loadStartController(event, user, database, mqttHandler); // Passing User and Database as parameters to use in application
         } else { // Username does not exist OR wrong password
             showPopup();
         }
     }
 
-    private void loadStartController(ActionEvent event, User user, Database database) throws IOException, SQLException {
+    private void loadStartController(ActionEvent event, User user, Database database, MQTTHandler mqttHandler) throws IOException, SQLException {
         FXMLLoader loader = new FXMLLoader(QuietQuestMain.class.getResource(FxmlFile.START));
         Parent root = loader.load();
         StartController startController = loader.getController();
-        startController.initialize(user, database);
+        startController.initialize(user, database, mqttHandler); // Important to pass these objects to the controller
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
@@ -96,14 +101,26 @@ public class LogInController {
      * Load sign-up page upon clicking "Create User Account" button
      *
      * @param event
-     * @throws IOException
      */
     public void onCreateUserClick(ActionEvent event) throws IOException {
-        try {
-            loadFxml(FxmlFile.CREATE_USER, event);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        loadCreateUserController(event, database, mqttHandler);
+    }
+
+    /**
+     * Method used to load the page specified
+     *
+     * @param event
+     */
+    private void loadCreateUserController(ActionEvent event, Database database, MQTTHandler mqttHandler) throws IOException {
+        FXMLLoader loader = new FXMLLoader(QuietQuestMain.class.getResource(FxmlFile.CREATE_USER));
+        Parent root = loader.load();
+        CreateUserController createUserController = loader.getController();
+        createUserController.initialize(database, mqttHandler);
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm()); // adding CSS styling option
+        stage.setScene(scene);
+        stage.show();
     }
 
     /**
@@ -155,22 +172,5 @@ public class LogInController {
         logInButton.setDisable(false);
         usernameField.setDisable(false);
         passwordField.setDisable(false);
-    }
-
-    /**
-     * Method used to load the page specified
-     *
-     * @param fxmlFile specifies the page that is loaded
-     * @param event
-     * @throws IOException
-     */
-    private void loadFxml(String fxmlFile, ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(QuietQuestMain.class.getResource(fxmlFile));
-        Parent root = loader.load();
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
-        scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm()); // adding CSS styling option
-        stage.setScene(scene);
-        stage.show();
     }
 }

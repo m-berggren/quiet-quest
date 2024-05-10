@@ -22,10 +22,12 @@ import java.sql.SQLException;
 public class StartController extends BaseController {
     private User user;
     private Database database;
+    private MQTTHandler mqttHandler;
 
-    public void initialize(User user, Database database) {
+    public void initialize(User user, Database database, MQTTHandler mqttHandler) {
         this.user = user;
         this.database = database;
+        this.mqttHandler = mqttHandler;
     }
 
     @FXML
@@ -55,7 +57,7 @@ public class StartController extends BaseController {
         stage.show();
 
         MainController controller = loader.getController();
-        controller.initialize(user, database);
+        controller.initialize(user, database, mqttHandler);
         controller.loadView(fxmlFile);
     }
 }

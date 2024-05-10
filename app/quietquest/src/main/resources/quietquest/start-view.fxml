@@ -43,4 +43,9 @@
          <Font size="24.0" />
       </font>
    </Label>
+   <Button fx:id="homeButton" layoutX="614.0" layoutY="537.0" mnemonicParsing="false" onAction="#onHomeClick" prefHeight="59.0" prefWidth="270.0" style="-fx-background-color: #57CC99;" text="Home" textFill="#22577a">
+      <font>
+         <Font size="28.0" />
+      </font>
+   </Button>
 </AnchorPane>

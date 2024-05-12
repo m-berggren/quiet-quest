@@ -41,13 +41,13 @@ public class QuestListController extends BaseController {
     @FXML
     private Label intervalsLabel;
 
-    private ArrayList<Quest> questArrayList;
+    private HashMap<String, Quest> quests;
     private Quest selectedQuest;
 
     @Override
     public void afterMainController() throws SQLException {
         selectedQuest = null;
-        questArrayList = getAllQuests();
+        quests = quietQuestFacade.getQuests();
         displayQuests();
         setSelectedQuest();
     }
@@ -61,6 +61,20 @@ public class QuestListController extends BaseController {
      */
     public void displayQuests() {
         if (quietQuestFacade != null) {
+            database.connect();
+            ArrayList<Quest> questsList = database.getAllQuests(user);
+            database.disconnect();
+
+            //only show quests that are not completed
+            ArrayList<Quest> uncompletedQuests = new ArrayList<>();
+            for(Quest quest : questsList){
+                if(!quest.getCompletionState()){
+                    uncompletedQuests.add(quest);
+                }
+            }
+
+            //quests = quietQuestFacade.getQuests();
+            ObservableList<Quest> questList = FXCollections.observableArrayList(uncompletedQuests);
             ObservableList<Quest> questList = FXCollections.observableArrayList(questArrayList);
             questListView.setItems(questList);
             questListView.setCellFactory(param -> new ListCell<Quest>() {

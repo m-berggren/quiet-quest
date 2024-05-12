@@ -93,9 +93,6 @@ public class Quest {
         return completionState;
     }
 
-    public void setCompletionState(boolean completionState) {
-        this.completionState = completionState;
-    }
 
     public String getTitle() {
         return this.title;

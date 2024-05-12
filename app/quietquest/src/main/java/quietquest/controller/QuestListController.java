@@ -13,10 +13,7 @@ import quietquest.model.PomodoroTimer;
 import quietquest.model.Quest;
 import quietquest.model.QuestType;
 
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 
 public class QuestListController extends BaseController {
@@ -49,14 +46,14 @@ public class QuestListController extends BaseController {
   private Quest selectedQuest;
 
   @Override
-  public void afterMainController() throws SQLException {
+  public void afterMainController() {
     selectedQuest = null;
     quests = quietQuestFacade.getAllQuests();
     displayQuests();
     setSelectedQuest();
   }
 
-  public void onGoToQuestClick(ActionEvent event) throws IOException {
+  public void onGoToQuestClick() {
     showQuest(selectedQuest);
   }
 
@@ -65,13 +62,9 @@ public class QuestListController extends BaseController {
    */
   public void displayQuests() {
     if (quietQuestFacade != null) {
-      database.connect();
-      ArrayList<Quest> questsList = database.getAllQuests(user);
-      database.disconnect();
-
       //only show quests that are not completed
       ArrayList<Quest> uncompletedQuests = new ArrayList<>();
-      for (Quest quest : questsList) {
+      for (Quest quest : quests) {
         if (!quest.getCompletionState()) {
           uncompletedQuests.add(quest);
         }
@@ -79,7 +72,6 @@ public class QuestListController extends BaseController {
 
       //quests = quietQuestFacade.getQuests();
       ObservableList<Quest> questList = FXCollections.observableArrayList(uncompletedQuests);
-      ObservableList<Quest> questList = FXCollections.observableArrayList(questArrayList);
       questListView.setItems(questList);
       questListView.setCellFactory(param -> new ListCell<Quest>() {
         @Override

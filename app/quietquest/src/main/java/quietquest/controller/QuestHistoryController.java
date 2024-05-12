@@ -69,7 +69,7 @@ public class QuestHistoryController extends BaseController {
       @Override
       protected void updateItem(Quest quest, boolean empty) {
         super.updateItem(quest, empty);
-        if (empty || quest == null) {
+        if (empty || quest == null ||quest.getStartTime() == null || quest.getEndTime() == null) {
           setText(null);
           setGraphic(null);
         } else {
@@ -77,7 +77,6 @@ public class QuestHistoryController extends BaseController {
           VBox vBox = new VBox(5); // Vertical box with spacing
           Label titleLabel = new Label(quest.getTitle());
           titleLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 18px;");
-
           Label startTimeLabel = new Label("    Start Time: " + formatDate(quest.getStartTime()));
             Label completionTimeLabel = new Label("    Completed Time: " + formatDate(quest.getCompleteTime()));
           //Show time spent calculated from the difference between the timestamp start time and completion time in minutes

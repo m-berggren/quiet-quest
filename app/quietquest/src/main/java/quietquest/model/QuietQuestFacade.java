@@ -99,6 +99,10 @@ public class QuietQuestFacade {
         database.deleteQuest(quest);
     }
 
+    public void saveBoxOpenTimes(Quest currentQuest) {
+        database.saveBoxOpenTimes(user.getUsername() , currentQuest.getId());
+    }
+
     // update task
     // update pomodoroTimer
     // or update activity
@@ -157,7 +161,4 @@ public class QuietQuestFacade {
         return user;
     }
 
-    public void saveBoxOpenTimes(Quest currentQuest) {
-        database.saveBoxOpenTimes(user.getUsername() , currentQuest.getId());
-    }
 }

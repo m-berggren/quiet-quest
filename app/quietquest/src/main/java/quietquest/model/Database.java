@@ -118,7 +118,7 @@ public class Database {
                 String detail = rs.getString("detail");
                 Timestamp startTime = rs.getTimestamp("start_time");
                 Timestamp completeTime = rs.getTimestamp("complete_time");
-                int boxOpenTimes = rs.getInt("box_open_times");
+                int boxOpenTimes = getBoxOpenTimes(id, user_id);
 
                 // Create new Quest object and add it to the list
                 Quest quest = new Quest(id, user_id, completionState, title, detail, startTime, completeTime, boxOpenTimes);
@@ -128,6 +128,29 @@ public class Database {
             throw new RuntimeException(e);
         }
         return quests;
+    }
+
+    public int getBoxOpenTimes(int questId, int userId) {
+        String sql = """
+                SELECT COUNT(*)
+                FROM "box_open_record"
+                WHERE quest_id = ? AND user_id = ?
+                """;
+
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setInt(1, questId);
+            pstmt.setInt(2, userId);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            } else {
+                return 0;
+            }
+        }
+         catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     /**

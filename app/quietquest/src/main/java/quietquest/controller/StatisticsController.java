@@ -22,6 +22,7 @@ import java.util.*;
 
 public class StatisticsController extends BaseController {
 
+
   private ArrayList<Quest> quests;
   @FXML
   private ScrollPane chartContainerPane;
@@ -29,6 +30,8 @@ public class StatisticsController extends BaseController {
   private VBox chartContainer;
   @FXML
   private Label statisticsTitle;
+  @FXML
+  public VBox statisticsLabel;
 
   public void afterMainController() throws SQLException {
     database.connect();
@@ -78,7 +81,7 @@ public class StatisticsController extends BaseController {
         totalOpenBoxTimes += quest.getBoxOpenTimes();
       }
     }
-    if (quests.size() == 0) {
+    if (quests.isEmpty()) {
       return 0;
     } else {
       return totalOpenBoxTimes / quests.size();
@@ -120,38 +123,32 @@ public class StatisticsController extends BaseController {
     }
   }
 
+
   private void displayStatistics() {
     chartContainerPane.setContent(chartContainer);
     chartContainer.getChildren().clear();
     //ADD LABELS SHOWING SOME MAJOR STATISTICS
-    Label completedQuestsLabel = new Label("Number of Completed Quests: " + getCompletedQuestsNumber());
-    //set label style
-    completedQuestsLabel.setStyle("-fx-font-size: 18; -fx-font-weight: bold;");
-    Label uncompletedQuestsLabel = new Label("Uncompleted Quests: " + getUncompleteQuestNumber());
-    uncompletedQuestsLabel.setStyle("-fx-font-size: 18; -fx-font-weight: bold;");
-    Label createdQuestsLabel = new Label("Number of Created Quests: " + getCreatedQuestsNumber());
-    createdQuestsLabel.setStyle("-fx-font-size: 18; -fx-font-weight: bold;");
-    Label averageOpenBoxTimesLabel = new Label("Average Open Box Times: " + getAverageOpenBoxTimes());
-    averageOpenBoxTimesLabel.setStyle("-fx-font-size: 18; -fx-font-weight: bold;");
-    Label averageOpenBoxIntervalLabel = new Label("Average Open Box Interval: " + getAverageOpenBoxInterval());
-    averageOpenBoxIntervalLabel.setStyle("-fx-font-size: 18; -fx-font-weight: bold;");
-    Label averageTimeSpentOnQuestLabel = new Label("Average Time Spent on Quests: " + getAverageTimeSpentOnQuest());
-    averageTimeSpentOnQuestLabel.setStyle("-fx-font-size: 18; -fx-font-weight: bold;");
-    chartContainer.getChildren().add(completedQuestsLabel);
-    chartContainer.getChildren().add(uncompletedQuestsLabel);
-    chartContainer.getChildren().add(createdQuestsLabel);
-    chartContainer.getChildren().add(averageOpenBoxTimesLabel);
-    chartContainer.getChildren().add(averageOpenBoxIntervalLabel);
-    chartContainer.getChildren().add(averageTimeSpentOnQuestLabel);
+    Label createdQuestsLabel = new Label("Number of All Created Quests: " + getCreatedQuestsNumber());
+    createdQuestsLabel.setStyle("-fx-font-size: 16; -fx-font-weight: bold;");
+    Label averageOpenBoxTimesLabel = new Label("Average Open Box Times on All Complete Quests: " + getAverageOpenBoxTimes());
+    averageOpenBoxTimesLabel.setStyle("-fx-font-size: 16; -fx-font-weight: bold;");
+    Label averageOpenBoxIntervalLabel = new Label("Average Open Box Interval on All Complete Quests: " + getAverageOpenBoxInterval());
+    averageOpenBoxIntervalLabel.setStyle("-fx-font-size: 16; -fx-font-weight: bold;");
+    Label averageTimeSpentOnQuestLabel = new Label("Average Time Spent on All Quests: " + getAverageTimeSpentOnQuest());
+    averageTimeSpentOnQuestLabel.setStyle("-fx-font-size: 16; -fx-font-weight: bold;");
+    statisticsLabel.getChildren().add(createdQuestsLabel);
+    statisticsLabel.getChildren().add(averageOpenBoxTimesLabel);
+    statisticsLabel.getChildren().add(averageOpenBoxIntervalLabel);
+    statisticsLabel.getChildren().add(averageTimeSpentOnQuestLabel);
     //Add charts and space between charts
-    chartContainer.setSpacing(20);
+    chartContainer.setSpacing(40);
+    chartContainer.getChildren().add(statisticsLabel);
     chartContainer.getChildren().add(createQuestStatusPieChart());
     chartContainer.getChildren().add(createCompletedQuestsBarChart());
     chartContainer.getChildren().add(createAverageTimeSpentLineChart());
     chartContainer.getChildren().add(createAverageOpenBoxTimesChart());
     chartContainer.getChildren().add(createAverageOpenBoxIntervalsChart());
   }
-
 
 
   private PieChart createQuestStatusPieChart() {

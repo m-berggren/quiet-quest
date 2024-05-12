@@ -67,8 +67,16 @@ public class QuestListController extends BaseController {
             ArrayList<Quest> questsList = database.getAllQuests(user);
             database.disconnect();
 
+            //only show quests that are not completed
+            ArrayList<Quest> uncompletedQuests = new ArrayList<>();
+            for(Quest quest : questsList){
+                if(!quest.getCompletionState()){
+                    uncompletedQuests.add(quest);
+                }
+            }
+
             //quests = quietQuestFacade.getQuests();
-            ObservableList<Quest> questList = FXCollections.observableArrayList(questsList);
+            ObservableList<Quest> questList = FXCollections.observableArrayList(uncompletedQuests);
             questListView.setItems(questList);
             questListView.setCellFactory(param -> new ListCell<Quest>() {
                 @Override

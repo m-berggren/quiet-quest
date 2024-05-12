@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import static javafx.application.Application.launch;
 
 public class Quest {
+    private int ID;
     private String title;
     private String description;
     private ArrayList<Activity> activities;
@@ -139,6 +140,9 @@ public class Quest {
         return title;
     }
 
+    public int getID() {
+        return this.ID;
+    }
 }
 
 

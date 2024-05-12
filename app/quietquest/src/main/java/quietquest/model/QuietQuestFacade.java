@@ -48,4 +48,8 @@ public class QuietQuestFacade {
         return questManager;
     }
 
+    public void saveBoxOpenTimes(Quest quest) {
+        database.saveBoxOpenTimes(user.getUsername(), quest.getID());
+    }
+
 }

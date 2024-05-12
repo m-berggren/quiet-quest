@@ -76,7 +76,7 @@ public class StatisticsController extends BaseController {
   public int getAverageOpenBoxTimes() {
     int totalOpenBoxTimes = 0;
     for (Quest quest : quests) {
-      if (quest.getCompletionState() && quest.getStartTime()!=null && quest.getEndTime()!=null) {
+      if (quest.getCompletionState() && quest.getStartTime()!=null && quest.getCompleteTime()!=null) {
         totalOpenBoxTimes += quest.getBoxOpenTimes();
       }
     }
@@ -93,8 +93,8 @@ public class StatisticsController extends BaseController {
     int totalBoxOpenTimes = 0;
     int averageOpenBoxInterval = 0;
     for (Quest quest : quests) {
-      if (quest.getCompletionState() && quest.getStartTime()!=null && quest.getEndTime()!=null) {
-        int timeSpent = (int) ((quest.getEndTime().getTime() - quest.getStartTime().getTime()) / 60000);
+      if (quest.getCompletionState() && quest.getStartTime()!=null && quest.getCompleteTime()!=null) {
+        int timeSpent = (int) ((quest.getCompleteTime().getTime() - quest.getStartTime().getTime()) / 60000);
         totalQuestTimeSpent += timeSpent;
         totalBoxOpenTimes += quest.getBoxOpenTimes() + 1;
       }
@@ -111,8 +111,8 @@ public class StatisticsController extends BaseController {
   public int getAverageTimeSpentOnQuest() {
     int totalQuestTimeSpent = 0;
     for (Quest quest : quests) {
-      if (quest.getCompletionState() && quest.getStartTime()!=null && quest.getEndTime()!=null) {
-        int timeSpent = (int) ((quest.getEndTime().getTime() - quest.getStartTime().getTime()) / 60000);
+      if (quest.getCompletionState() && quest.getStartTime()!=null && quest.getCompleteTime()!=null) {
+        int timeSpent = (int) ((quest.getCompleteTime().getTime() - quest.getStartTime().getTime()) / 60000);
         totalQuestTimeSpent += timeSpent;
       }
     }
@@ -224,8 +224,8 @@ public class StatisticsController extends BaseController {
     LocalDate eightWeeksAgo = now.minusWeeks(7); // Start of the period to consider
 
     for (Quest quest : quests) {
-      if (quest.getCompletionState() && quest.getEndTime() != null) {
-        LocalDate completionDate = toLocalDate(quest.getEndTime());
+      if (quest.getCompletionState() && quest.getCompleteTime() != null) {
+        LocalDate completionDate = toLocalDate(quest.getCompleteTime());
         if (completionDate.isAfter(eightWeeksAgo) || completionDate.equals(eightWeeksAgo)) {
           LocalDate startOfWeek = getStartOfWeek(completionDate);
           weeklyCompletionsMap.put(startOfWeek, weeklyCompletionsMap.getOrDefault(startOfWeek, 0) + 1);
@@ -275,12 +275,12 @@ public class StatisticsController extends BaseController {
     LocalDate eightWeeksAgo = now.minusWeeks(7); // Start of the period to consider
 
     for (Quest quest : quests) {
-      if (quest.getEndTime() != null && quest.getStartTime() != null) {
-        LocalDate completionDate = toLocalDate(quest.getEndTime());
+      if (quest.getCompleteTime() != null && quest.getStartTime() != null) {
+        LocalDate completionDate = toLocalDate(quest.getCompleteTime());
         if (completionDate.isAfter(eightWeeksAgo) || completionDate.equals(eightWeeksAgo)) {
           LocalDate startOfWeek = getStartOfWeek(completionDate);
           weeklyQuestTimes.putIfAbsent(startOfWeek, new ArrayList<>());
-          int timeSpent = (int) ((quest.getEndTime().getTime() - quest.getStartTime().getTime()) / 60000);
+          int timeSpent = (int) ((quest.getCompleteTime().getTime() - quest.getStartTime().getTime()) / 60000);
           weeklyQuestTimes.get(startOfWeek).add(timeSpent);
         }
       }
@@ -311,8 +311,8 @@ public class StatisticsController extends BaseController {
     LocalDate eightWeeksAgo = now.minusWeeks(7);// Start of the period to consider
 
     for (Quest quest : quests) {
-      if (quest.getCompletionState() && quest.getEndTime() != null && quest.getStartTime() != null) {
-        LocalDate completionDate = toLocalDate(quest.getEndTime());
+      if (quest.getCompletionState() && quest.getCompleteTime() != null && quest.getStartTime() != null) {
+        LocalDate completionDate = toLocalDate(quest.getCompleteTime());
         if (completionDate.isAfter(eightWeeksAgo) || completionDate.equals(eightWeeksAgo)) {
           LocalDate startOfWeek = getStartOfWeek(completionDate);
 
@@ -347,12 +347,12 @@ public class StatisticsController extends BaseController {
     LocalDate eightWeeksAgo = now.minusWeeks(7); // Start of the period to consider
 
     for (Quest quest : quests) {
-      if (quest.getEndTime() != null && quest.getStartTime() != null && quest.getCompletionState()) {
-        LocalDate completionDate = toLocalDate(quest.getEndTime());
+      if (quest.getCompleteTime() != null && quest.getStartTime() != null && quest.getCompletionState()) {
+        LocalDate completionDate = toLocalDate(quest.getCompleteTime());
         if (completionDate.isAfter(eightWeeksAgo) || completionDate.equals(eightWeeksAgo)) {
           LocalDate startOfWeek = getStartOfWeek(completionDate);
           weeklyBoxIntervals.putIfAbsent(startOfWeek, new ArrayList<>());
-          int interval = (int) ((quest.getEndTime().getTime() - quest.getStartTime().getTime()) / 60000);
+          int interval = (int) ((quest.getCompleteTime().getTime() - quest.getStartTime().getTime()) / 60000);
           weeklyBoxIntervals.get(startOfWeek).add(interval);
         }
       }

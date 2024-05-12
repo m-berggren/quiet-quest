@@ -69,7 +69,7 @@ public class QuestHistoryController extends BaseController {
       @Override
       protected void updateItem(Quest quest, boolean empty) {
         super.updateItem(quest, empty);
-        if (empty || quest == null ||quest.getStartTime() == null || quest.getEndTime() == null) {
+        if (empty || quest == null ||quest.getStartTime() == null || quest.getCompleteTime() == null) {
           setText(null);
           setGraphic(null);
         } else {

@@ -4,8 +4,6 @@ import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.geometry.Side;
-import javafx.scene.Node;
 import javafx.scene.chart.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -19,6 +17,8 @@ import java.time.ZoneId;
 import java.time.temporal.TemporalAdjusters;
 import java.time.temporal.WeekFields;
 import java.util.*;
+
+import static javafx.geometry.Pos.*;
 
 public class StatisticsController extends BaseController {
 
@@ -53,7 +53,7 @@ public class StatisticsController extends BaseController {
   public int getInProgressQuestsNumber() {
     int inProgressQuests = 0;
     for (Quest quest : quests) {
-      if (!quest.getCompletionState()|| quest.getStartTime() != null) {
+      if (!quest.getCompletionState() && quest.getStartTime() != null) {
         inProgressQuests++;
       }
     }
@@ -77,7 +77,7 @@ public class StatisticsController extends BaseController {
   public int getAverageOpenBoxTimes() {
     int totalOpenBoxTimes = 0;
     for (Quest quest : quests) {
-      if (quest.getCompletionState()) {
+      if (quest.getCompletionState() && quest.getStartTime()!=null && quest.getEndTime()!=null) {
         totalOpenBoxTimes += quest.getBoxOpenTimes();
       }
     }
@@ -93,7 +93,7 @@ public class StatisticsController extends BaseController {
     int totalQuestTimeSpent = 0;
     int totalBoxOpenTimes = 0;
     for (Quest quest : quests) {
-      if (quest.getCompletionState() ) {
+      if (quest.getCompletionState() && quest.getStartTime()!=null && quest.getEndTime()!=null) {
         int timeSpent = (int) ((quest.getEndTime().getTime() - quest.getStartTime().getTime()) / 60000);
         totalQuestTimeSpent += timeSpent;
         totalBoxOpenTimes += quest.getBoxOpenTimes() + 1;
@@ -111,7 +111,7 @@ public class StatisticsController extends BaseController {
   public int getAverageTimeSpentOnQuest() {
     int totalQuestTimeSpent = 0;
     for (Quest quest : quests) {
-      if (quest.getCompletionState()) {
+      if (quest.getCompletionState() && quest.getStartTime()!=null && quest.getEndTime()!=null) {
         int timeSpent = (int) ((quest.getEndTime().getTime() - quest.getStartTime().getTime()) / 60000);
         totalQuestTimeSpent += timeSpent;
       }
@@ -129,25 +129,48 @@ public class StatisticsController extends BaseController {
     chartContainer.getChildren().clear();
     //ADD LABELS SHOWING SOME MAJOR STATISTICS
     Label createdQuestsLabel = new Label("Number of All Created Quests: " + getCreatedQuestsNumber());
-    createdQuestsLabel.setStyle("-fx-font-size: 16; -fx-font-weight: bold;");
+    createdQuestsLabel.setStyle("-fx-font-size: 16");
     Label averageOpenBoxTimesLabel = new Label("Average Open Box Times on All Complete Quests: " + getAverageOpenBoxTimes());
-    averageOpenBoxTimesLabel.setStyle("-fx-font-size: 16; -fx-font-weight: bold;");
+    averageOpenBoxTimesLabel.setStyle("-fx-font-size: 16;");
     Label averageOpenBoxIntervalLabel = new Label("Average Open Box Interval on All Complete Quests: " + getAverageOpenBoxInterval());
-    averageOpenBoxIntervalLabel.setStyle("-fx-font-size: 16; -fx-font-weight: bold;");
+    averageOpenBoxIntervalLabel.setStyle("-fx-font-size: 16;");
     Label averageTimeSpentOnQuestLabel = new Label("Average Time Spent on All Quests: " + getAverageTimeSpentOnQuest());
-    averageTimeSpentOnQuestLabel.setStyle("-fx-font-size: 16; -fx-font-weight: bold;");
-    statisticsLabel.getChildren().add(createdQuestsLabel);
-    statisticsLabel.getChildren().add(averageOpenBoxTimesLabel);
-    statisticsLabel.getChildren().add(averageOpenBoxIntervalLabel);
-    statisticsLabel.getChildren().add(averageTimeSpentOnQuestLabel);
+    averageTimeSpentOnQuestLabel.setStyle("-fx-font-size: 16;");
     //Add charts and space between charts
-    chartContainer.setSpacing(40);
+    chartContainer.setSpacing(80);
     chartContainer.getChildren().add(statisticsLabel);
-    chartContainer.getChildren().add(createQuestStatusPieChart());
-    chartContainer.getChildren().add(createCompletedQuestsBarChart());
-    chartContainer.getChildren().add(createAverageTimeSpentLineChart());
-    chartContainer.getChildren().add(createAverageOpenBoxTimesChart());
-    chartContainer.getChildren().add(createAverageOpenBoxIntervalsChart());
+
+    VBox allQuests = new VBox();
+    allQuests.setAlignment(CENTER);
+    allQuests.getChildren().add(createQuestStatusPieChart());
+    allQuests.getChildren().add(createdQuestsLabel);
+
+    VBox completedQuests = new VBox();
+    completedQuests.setAlignment(CENTER);
+    completedQuests.getChildren().add(createCompletedQuestsBarChart());
+
+    VBox averageTimeSpent = new VBox();
+    averageTimeSpent.setAlignment(CENTER);
+    averageTimeSpent.getChildren().add(createAverageTimeSpentBarChart());
+    averageTimeSpent.getChildren().add(averageTimeSpentOnQuestLabel);
+
+    VBox averageOpenBoxTimes = new VBox();
+    averageOpenBoxTimes.setAlignment(CENTER);
+    averageOpenBoxTimes.getChildren().add(createAverageOpenBoxTimesChart());
+    averageOpenBoxTimes.getChildren().add(averageOpenBoxTimesLabel);
+
+    VBox averageOpenBoxInterval = new VBox();
+    averageOpenBoxInterval.setAlignment(CENTER);
+    averageOpenBoxInterval.getChildren().add(createAverageOpenBoxIntervalsChart());
+    averageOpenBoxInterval.getChildren().add(averageOpenBoxIntervalLabel);
+
+
+    chartContainer.getChildren().add(allQuests);
+    chartContainer.getChildren().add(completedQuests);
+    chartContainer.getChildren().add(averageTimeSpent);
+    chartContainer.getChildren().add(averageOpenBoxTimes);
+    chartContainer.getChildren().add(averageOpenBoxInterval);
+
   }
 
 
@@ -174,7 +197,7 @@ public class StatisticsController extends BaseController {
     CategoryAxis xAxis = new CategoryAxis();
     NumberAxis yAxis = new NumberAxis();
     yAxis.setLabel("Number of Completed Quests");
-    xAxis.setStyle("-fx-tick-label-fill: black;");
+    yAxis.setTickUnit(1);
 
     BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
     barChart.setTitle("Completed Quests in the Last 8 Weeks");
@@ -190,7 +213,6 @@ public class StatisticsController extends BaseController {
     for (Map.Entry<String, Integer> entry : weeklyCompletions.entrySet()) {
       series.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
     }
-
     barChart.getData().add(series);
     return barChart;
   }
@@ -223,15 +245,16 @@ public class StatisticsController extends BaseController {
     return formattedWeeklyCompletions;
   }
 
-  private BarChart<String, Number> createAverageTimeSpentLineChart() {
+  private BarChart<String, Number> createAverageTimeSpentBarChart() {
     CategoryAxis xAxis = new CategoryAxis();
     NumberAxis yAxis = new NumberAxis();
     yAxis.setLabel("Average Time Spent on Quests (minutes)");
+    yAxis.setTickUnit(30);
 
     BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
     barChart.setTitle("Average Time Spent on Quests in the Last 8 Weeks");
     //set min height to ensure the chart is displayed
-    barChart.setMinHeight(300);
+    barChart.setMinHeight(400);
 
     XYChart.Series<String, Number> series = new XYChart.Series<>();
     series.setName("Average Time Spent on Quests");
@@ -252,7 +275,7 @@ public class StatisticsController extends BaseController {
     LocalDate eightWeeksAgo = now.minusWeeks(7); // Start of the period to consider
 
     for (Quest quest : quests) {
-      if (quest.getEndTime() != null) {
+      if (quest.getEndTime() != null && quest.getStartTime() != null) {
         LocalDate completionDate = toLocalDate(quest.getEndTime());
         if (completionDate.isAfter(eightWeeksAgo) || completionDate.equals(eightWeeksAgo)) {
           LocalDate startOfWeek = getStartOfWeek(completionDate);
@@ -288,7 +311,7 @@ public class StatisticsController extends BaseController {
     LocalDate eightWeeksAgo = now.minusWeeks(7);// Start of the period to consider
 
     for (Quest quest : quests) {
-      if (quest.getCompletionState() && quest.getEndTime() != null) {
+      if (quest.getCompletionState() && quest.getEndTime() != null && quest.getStartTime() != null) {
         LocalDate completionDate = toLocalDate(quest.getEndTime());
         if (completionDate.isAfter(eightWeeksAgo) || completionDate.equals(eightWeeksAgo)) {
           LocalDate startOfWeek = getStartOfWeek(completionDate);
@@ -324,7 +347,7 @@ public class StatisticsController extends BaseController {
     LocalDate eightWeeksAgo = now.minusWeeks(7); // Start of the period to consider
 
     for (Quest quest : quests) {
-      if (quest.getEndTime() != null) {
+      if (quest.getEndTime() != null && quest.getStartTime() != null && quest.getCompletionState()) {
         LocalDate completionDate = toLocalDate(quest.getEndTime());
         if (completionDate.isAfter(eightWeeksAgo) || completionDate.equals(eightWeeksAgo)) {
           LocalDate startOfWeek = getStartOfWeek(completionDate);
@@ -337,7 +360,7 @@ public class StatisticsController extends BaseController {
 
     Map<String, Double> averageBoxIntervalsPerWeek = new LinkedHashMap<>();
     for (Map.Entry<LocalDate, List<Integer>> entry : weeklyBoxIntervals.entrySet()) {
-      int total = entry.getValue().stream().mapToInt(x -> x.intValue()).sum();
+      int total = entry.getValue().stream().mapToInt(x -> x).sum();
       double average = total / (double) entry.getValue().size();
       int weekOfYear = entry.getKey().get(WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear());
       averageBoxIntervalsPerWeek.put("Week " + weekOfYear, average);

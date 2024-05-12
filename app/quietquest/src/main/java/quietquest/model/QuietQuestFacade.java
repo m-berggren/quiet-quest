@@ -156,4 +156,8 @@ public class QuietQuestFacade {
     public User getUser() {
         return user;
     }
+
+    public void saveBoxOpenTimes(Quest currentQuest) {
+        database.saveBoxOpenTimes(user.getUsername() , currentQuest.getId());
+    }
 }

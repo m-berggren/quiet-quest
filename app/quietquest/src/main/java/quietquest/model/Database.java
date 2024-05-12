@@ -937,4 +937,15 @@ public class Database {
         return pomodoroQuests;
     }
 
+    public void saveBoxOpenTimes(String username, int questID) {
+        String sql = "UPDATE \"quest\" SET box_open_times = box_open_times + 1 WHERE user_id = ? AND id = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setInt(1, getUserByUsername(username).getId());
+            pstmt.setInt(2, questID);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
 }

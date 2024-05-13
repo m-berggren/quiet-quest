@@ -10,16 +10,14 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import quietquest.model.Quest;
 
-import java.sql.SQLException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.TemporalAdjusters;
 import java.time.temporal.WeekFields;
 import java.util.*;
-import java.util.ArrayList;
 
-import static javafx.geometry.Pos.*;
+import static javafx.geometry.Pos.CENTER;
 
 public class StatisticsController extends BaseController {
 
@@ -33,9 +31,9 @@ public class StatisticsController extends BaseController {
   private Label statisticsTitle;
 
 
-    public void afterMainController() {
-        quests = getAllQuests();
-        displayStatistics();
+  public void afterMainController() {
+    quests = getAllQuests();
+    displayStatistics();
   }
 
   public int getCompletedQuestsNumber() {
@@ -75,7 +73,7 @@ public class StatisticsController extends BaseController {
   public int getAverageOpenBoxTimes() {
     int totalOpenBoxTimes = 0;
     for (Quest quest : quests) {
-      if (quest.getCompletionState() && quest.getStartTime()!=null && quest.getCompleteTime()!=null) {
+      if (quest.getCompletionState() && quest.getStartTime() != null && quest.getCompleteTime() != null) {
         totalOpenBoxTimes += quest.getBoxOpenTimes();
       }
     }
@@ -90,9 +88,8 @@ public class StatisticsController extends BaseController {
   public int getAverageOpenBoxInterval() {
     int totalQuestTimeSpent = 0;
     int totalBoxOpenTimes = 0;
-    int averageOpenBoxInterval = 0;
     for (Quest quest : quests) {
-      if (quest.getCompletionState() && quest.getStartTime()!=null && quest.getCompleteTime()!=null) {
+      if (quest.getCompletionState() && quest.getStartTime() != null && quest.getCompleteTime() != null) {
         int timeSpent = (int) ((quest.getCompleteTime().getTime() - quest.getStartTime().getTime()) / 60000);
         totalQuestTimeSpent += timeSpent;
         totalBoxOpenTimes += quest.getBoxOpenTimes() + 1;
@@ -110,7 +107,7 @@ public class StatisticsController extends BaseController {
   public int getAverageTimeSpentOnQuest() {
     int totalQuestTimeSpent = 0;
     for (Quest quest : quests) {
-      if (quest.getCompletionState() && quest.getStartTime()!=null && quest.getCompleteTime()!=null) {
+      if (quest.getCompletionState() && quest.getStartTime() != null && quest.getCompleteTime() != null) {
         int timeSpent = (int) ((quest.getCompleteTime().getTime() - quest.getStartTime().getTime()) / 60000);
         totalQuestTimeSpent += timeSpent;
       }
@@ -284,23 +281,7 @@ public class StatisticsController extends BaseController {
       }
     }
 
-    Map<String, Double> averageQuestTimesPerWeek = new LinkedHashMap<>();
-    for (Map.Entry<LocalDate, List<Integer>> entry : weeklyQuestTimes.entrySet()) {
-      int total = entry.getValue().stream().mapToInt(Integer::intValue).sum();
-      double average = total / (double) entry.getValue().size();
-      int weekOfYear = entry.getKey().get(WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear());
-      averageQuestTimesPerWeek.put("Week " + weekOfYear, average);
-    }
-
-    Map<String, Double> formattedAverageQuestTimes = new LinkedHashMap<>();
-    for (int i = 0; i < 8; i++) {
-      LocalDate date = eightWeeksAgo.plusWeeks(i);
-      LocalDate startOfWeek = getStartOfWeek(date);
-      int weekOfYear = startOfWeek.get(WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear());
-      formattedAverageQuestTimes.put("Week " + weekOfYear, averageQuestTimesPerWeek.getOrDefault("Week " + weekOfYear, averageQuestTimesPerWeek.getOrDefault(startOfWeek, 0.0)));
-    }
-
-    return formattedAverageQuestTimes;
+    return getStringDoubleMap(weeklyQuestTimes, eightWeeksAgo);
   }
 
   private Map<String, Double> calculateAverageOpenBoxTimesPerWeek() {
@@ -320,24 +301,11 @@ public class StatisticsController extends BaseController {
       }
     }
 
-    Map<String, Double> averageBoxOpensPerWeek = new LinkedHashMap<>();
-    for (Map.Entry<LocalDate, List<Integer>> entry : weeklyBoxOpens.entrySet()) {
-      int total = entry.getValue().stream().mapToInt(Integer::intValue).sum();
-      double average = total / (double) entry.getValue().size();
-      int weekOfYear = entry.getKey().get(WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear());
-      averageBoxOpensPerWeek.put("Week " + weekOfYear, average);
-    }
-
-    Map<String, Double> formattedAverageBoxOpens = new LinkedHashMap<>();
-    for (int i = 0; i < 8; i++) {
-      LocalDate date = eightWeeksAgo.plusWeeks(i);
-      LocalDate startOfWeek = getStartOfWeek(date);
-      int weekOfYear = startOfWeek.get(WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear());
-      formattedAverageBoxOpens.put("Week " + weekOfYear, averageBoxOpensPerWeek.getOrDefault("Week " + weekOfYear, averageBoxOpensPerWeek.getOrDefault(startOfWeek, 0.0)));
-    }
-
-    return formattedAverageBoxOpens;
+    return getStringDoubleMap(weeklyBoxOpens, eightWeeksAgo);
   }
+
+
+
 
   private Map<String, Double> calculateAverageOpenBoxIntervalsPerWeek() {
     Map<LocalDate, List<Integer>> weeklyBoxIntervals = new HashMap<>();
@@ -356,22 +324,7 @@ public class StatisticsController extends BaseController {
       }
     }
 
-    Map<String, Double> averageBoxIntervalsPerWeek = new LinkedHashMap<>();
-    for (Map.Entry<LocalDate, List<Integer>> entry : weeklyBoxIntervals.entrySet()) {
-      int total = entry.getValue().stream().mapToInt(x -> x).sum();
-      double average = total / (double) entry.getValue().size();
-      int weekOfYear = entry.getKey().get(WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear());
-      averageBoxIntervalsPerWeek.put("Week " + weekOfYear, average);
-    }
-
-    Map<String, Double> formattedAverageBoxIntervals = new LinkedHashMap<>();
-    for (int i = 0; i < 8; i++) {
-      LocalDate date = eightWeeksAgo.plusWeeks(i);
-      LocalDate startOfWeek = getStartOfWeek(date);
-      int weekOfYear = startOfWeek.get(WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear());
-      formattedAverageBoxIntervals.put("Week " + weekOfYear, averageBoxIntervalsPerWeek.getOrDefault("Week " + weekOfYear, averageBoxIntervalsPerWeek.getOrDefault(startOfWeek, 0.0)));
-    }
-    return formattedAverageBoxIntervals;
+    return getStringDoubleMap(weeklyBoxIntervals, eightWeeksAgo);
   }
 
   private BarChart<String, Number> createAverageOpenBoxTimesChart() {
@@ -417,6 +370,25 @@ public class StatisticsController extends BaseController {
     return barChart;
   }
 
+  private Map<String, Double> getStringDoubleMap(Map<LocalDate, List<Integer>> weeklyMap, LocalDate eightWeeksAgo) {
+    Map<String, Double> averageBoxOpensPerWeek = new LinkedHashMap<>();
+    for (Map.Entry<LocalDate, List<Integer>> entry : weeklyMap.entrySet()) {
+      int total = entry.getValue().stream().mapToInt(Integer::intValue).sum();
+      double average = total / (double) entry.getValue().size();
+      int weekOfYear = entry.getKey().get(WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear());
+      averageBoxOpensPerWeek.put("Week " + weekOfYear, average);
+    }
+
+    Map<String, Double> formattedAverageBoxOpens = new LinkedHashMap<>();
+    for (int i = 0; i < 8; i++) {
+      LocalDate date = eightWeeksAgo.plusWeeks(i);
+      LocalDate startOfWeek = getStartOfWeek(date);
+      int weekOfYear = startOfWeek.get(WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear());
+      formattedAverageBoxOpens.put("Week " + weekOfYear, averageBoxOpensPerWeek.getOrDefault("Week " + weekOfYear, averageBoxOpensPerWeek.getOrDefault(startOfWeek, 0.0)));
+    }
+
+    return formattedAverageBoxOpens;
+  }
 
   private LocalDate toLocalDate(Date date) {
     return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();

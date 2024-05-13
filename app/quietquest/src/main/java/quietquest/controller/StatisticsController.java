@@ -31,8 +31,7 @@ public class StatisticsController extends BaseController {
   private VBox chartContainer;
   @FXML
   private Label statisticsTitle;
-  @FXML
-  public VBox statisticsLabel;
+
 
     public void afterMainController() {
         quests = getAllQuests();
@@ -137,8 +136,7 @@ public class StatisticsController extends BaseController {
     Label averageTimeSpentOnQuestLabel = new Label("Average Time Spent on All Quests: " + getAverageTimeSpentOnQuest());
     averageTimeSpentOnQuestLabel.setStyle("-fx-font-size: 16;");
     //Add charts and space between charts
-    chartContainer.setSpacing(80);
-    chartContainer.getChildren().add(statisticsLabel);
+    chartContainer.setSpacing(100);
 
     VBox allQuests = new VBox();
     allQuests.setAlignment(CENTER);
@@ -254,7 +252,7 @@ public class StatisticsController extends BaseController {
     BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
     barChart.setTitle("Average Time Spent on Quests in the Last 8 Weeks");
     //set min height to ensure the chart is displayed
-    barChart.setMinHeight(400);
+    barChart.setMinHeight(350);
 
     XYChart.Series<String, Number> series = new XYChart.Series<>();
     series.setName("Average Time Spent on Quests");

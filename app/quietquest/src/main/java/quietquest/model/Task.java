@@ -3,11 +3,19 @@ package quietquest.model;
 import java.sql.Timestamp;
 
 public class Task implements Activity {
+    private int id;
+    private int questId;
     private String description;
     private Timestamp startTime;
     private Timestamp endTime;
     private boolean completionState;
 
+    // ==============================* CONSTRUCTOR *========================================
+
+    /**
+     * Used for creating a container with the necessary information to pass into database. Not intended to use within
+     * application otherwise.
+     */
     public Task(String description) {
         this.description = description;
         this.startTime = null;
@@ -15,11 +23,24 @@ public class Task implements Activity {
         this.completionState = false;
     }
 
-    public Task(String description, Timestamp startTime, Timestamp endTime, boolean completionState) {
+    /**
+     * Used to create full Task object when querying database,
+     */
+    public Task(int id, int questId, String description, Timestamp startTime, Timestamp endTime, boolean completionState) {
+        this.id = id;
+        this.questId = questId;
         this.description = description;
         this.startTime = startTime;
         this.endTime = endTime;
         this.completionState = completionState;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public int getQuestId() {
+        return questId;
     }
 
     public String getDescription() {
@@ -40,6 +61,10 @@ public class Task implements Activity {
 
     public Timestamp getEndTime() {
         return endTime;
+    }
+
+    public QuestType getType() {
+        return QuestType.TASK;
     }
 
     public void setEndTime(Timestamp endTime) {

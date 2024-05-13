@@ -1,5 +1,6 @@
 package quietquest.controller;
 
+import com.hivemq.client.mqtt.mqtt5.Mqtt5Client;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,15 +14,20 @@ import quietquest.QuietQuestMain;
 import quietquest.model.Database;
 import quietquest.model.User;
 import quietquest.utility.FxmlFile;
+import quietquest.utility.MQTTHandler;
 
 import java.io.IOException;
 import java.sql.SQLException;
 
 public class StartController extends BaseController {
+    private User user;
+    private Database database;
+    private MQTTHandler mqttHandler;
 
-    public void initialize(User user, Database database) throws SQLException {
-        setUser(user);
-        setDatabase(database);
+    public void initialize(User user, Database database, MQTTHandler mqttHandler) {
+        this.user = user;
+        this.database = database;
+        this.mqttHandler = mqttHandler;
     }
 
     @FXML
@@ -56,7 +62,7 @@ public class StartController extends BaseController {
         stage.show();
 
         MainController controller = loader.getController();
-        controller.initialize(user, database);
+        controller.initialize(user, database, mqttHandler);
         controller.loadView(fxmlFile);
     }
 }

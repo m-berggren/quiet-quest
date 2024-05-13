@@ -72,6 +72,7 @@ public class CreateQuestController extends BaseController implements Initializab
 
     private ObservableList<Activity> activityObservableList;
     private Tab lastSelectedTab;
+    private User user;
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
@@ -84,6 +85,7 @@ public class CreateQuestController extends BaseController implements Initializab
 
     @Override
     protected void afterMainController() throws SQLException {
+        this.user = getUser();
         super.afterMainController();
     }
 
@@ -205,27 +207,20 @@ public class CreateQuestController extends BaseController implements Initializab
         if (titleField.getText().isEmpty()) {
             showMessage("Don't forget to name your quest!",
                     "Quests must have a title. Do not leave this field empty.");
+        /* You can now save quests with the same title
             //if quest title is already taken:
         } else if (quietQuestFacade.getQuests().containsKey(titleField.getText())) {
             showMessage("Give your quest a unique title",
                     "Each quest must have a unique title.");
             //if everything good with title, create quest:
+         */
         } else {
             String title = titleField.getText();
             String description = descriptionField.getText();
             ArrayList<Activity> activities = new ArrayList<>(activityListView.getItems());
-            Quest quest = new Quest(title, description, activities);
-            // add quest to quest list:
-            quietQuestFacade.addQuest(quest); // Saves quest to QuietQuestFacade
-            database.connect();
-            database.createQuest(user, quest); // Creates Quest in database
-            database.disconnect();
+            Quest quest = new Quest(user, title, description);
+            quietQuestFacade.createQuest(quest, activities);
             showCreateQuest();
-
-            // Printing for testing
-            for (String key : quietQuestFacade.getQuests().keySet()) {
-                System.out.println(key);
-            }
         }
     }
 

@@ -2,7 +2,7 @@
 #define DISPLAY_CONFIG_H
 
 #include <TFT_eSPI.h>
-#include "utils.h"
+#include "../utilities/utils.h"
 
 // ==========================* CONSTANTS *===========================
 

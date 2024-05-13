@@ -9,11 +9,11 @@ import java.util.TimerTask;
 
 public class PomodoroTimer implements Activity {
     private Timer timer;
+    private int questId;
     private final int focusTime;
     private final int breakTime;
-    private int intervals;
+    private int interval;
     private boolean isBreak;
-    private final MQTTHandler mqttHandler;
     private boolean isInterrupted;
     private final String PUB_TOPIC = "/quietquest/application/pomodoro_done";
     private final int milliSeconds = 1_000; // Default is 60_000
@@ -21,14 +21,21 @@ public class PomodoroTimer implements Activity {
     // Ideas from https://egandunning.com/projects/timemanagement-timer.html
     // and https://www.geeksforgeeks.org/java-util-timer-class-java/
 
-    public PomodoroTimer(int focusTime, int breakTime, int intervals) {
+    public PomodoroTimer(int focusTime, int breakTime, int interval) {
         this.timer = new Timer();
         this.focusTime = focusTime;
         this.breakTime = breakTime;
-        this.intervals = intervals;
+        this.interval = interval;
         this.isBreak = false;
         this.isInterrupted = false;
-        this.mqttHandler = MQTTHandler.getInstance();
+    }
+
+    public PomodoroTimer(int questId, int focusTime, int breakTime, int interval) {
+        this.timer = new Timer();
+        this.questId = questId;
+        this.focusTime = focusTime;
+        this.breakTime = breakTime;
+        this.interval = interval;
     }
 
     public int getFocusTime() {
@@ -39,8 +46,8 @@ public class PomodoroTimer implements Activity {
         return breakTime;
     }
 
-    public int getIntervals() {
-        return intervals;
+    public int getInterval() {
+        return interval;
     }
 
     /**
@@ -55,15 +62,22 @@ public class PomodoroTimer implements Activity {
 
     @Override
     public void start() {
-        mqttHandler.publishMessage(PUB_TOPIC, "pomodoro_started");
+        //mqttHandler.publishMessage(PUB_TOPIC, "pomodoro_started");
         scheduleNextTask(isInterrupted);
     }
 
+    public int getQuestId() {
+        return questId;
+    }
+
+    public QuestType getType() {
+        return QuestType.POMODORO;
+    }
     /**
      *
      */
     private void scheduleNextTask(boolean isInterrupted) {
-        if (intervals <= 0 || isInterrupted) { // Need a stop for recursive function, isInterrupted through manual exit
+        if (interval <= 0 || isInterrupted) { // Need a stop for recursive function, isInterrupted through manual exit
             stopPomodoro();
             return;
         }
@@ -96,7 +110,7 @@ public class PomodoroTimer implements Activity {
         alert(taskType + "interval complete!");
 
         if (!isBreak) {
-            intervals--;
+            interval--;
         }
         isBreak = !isBreak;
         scheduleNextTask(isInterrupted);
@@ -114,7 +128,7 @@ public class PomodoroTimer implements Activity {
         }
 
         alert("Pomodoro session complete!");
-        mqttHandler.publishMessage(PUB_TOPIC, "pomodoro_finished");
+        //mqttHandler.publishMessage(PUB_TOPIC, "pomodoro_finished");
     }
 
     private void alert(String message) {
@@ -129,7 +143,7 @@ public class PomodoroTimer implements Activity {
 
     @Override
     public String toString() {
-        return String.format("Focus Time: %d\nBreak Time: %d\nIntervals: %d\n", focusTime, breakTime, intervals);
+        return String.format("Focus Time: %d\nBreak Time: %d\nIntervals: %d\n", focusTime, breakTime, interval);
     }
 
     private class FocusTime extends TimerTask {

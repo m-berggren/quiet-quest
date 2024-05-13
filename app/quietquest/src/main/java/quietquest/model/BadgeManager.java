@@ -51,6 +51,7 @@ public class BadgeManager {
 
     /**
      * Method to count the completed quests associated with the user.
+     *
      * @param quests ArrayList<Quest> quests associated with the user
      * @return int value of the number of quests in the list
      */
@@ -66,13 +67,14 @@ public class BadgeManager {
 
     /**
      * Calculates whether any quest in the list has been completed within the specified time limit.
-     * @param quests ArrayList<Quest> the list of quests
+     *
+     * @param quests    ArrayList<Quest> the list of quests
      * @param timeLimit long value of the time limit in milliseconds
      * @return boolean value returns true if at least one quest has been completed in one hour or less
      */
     private boolean hasQuestCompletedWithinTime(ArrayList<Quest> quests, long timeLimit) {
         for (Quest quest : quests) {
-            if (quest.getCompletionState() && quest.getEndTime().getTime() - quest.getStartTime().getTime() <= timeLimit) {
+            if (quest.getCompletionState() && quest.getCompleteTime().getTime() - quest.getStartTime().getTime() <= timeLimit) {
                 return true;
             }
         }
@@ -81,13 +83,14 @@ public class BadgeManager {
 
     /**
      * Calculates whether any pomodoro-type quest in the list has the minimum number of intervals.
+     *
      * @param pomodoroQuests ArrayList<Quest> the list of pomodoro-style quests
-     * @param intervalCount int value of the minimum number of intervals needed
+     * @param intervalCount  int value of the minimum number of intervals needed
      * @return boolean value returns true if at least one quest has been completed in one hour or less
      */
     public boolean meetsIntervalCount(ArrayList<PomodoroTimer> pomodoroQuests, int intervalCount) {
         for (PomodoroTimer pomodoro : pomodoroQuests) {
-            if (pomodoro.getIntervals() >= intervalCount) {
+            if (pomodoro.getInterval() >= intervalCount) {
                 return true;
             }
         }

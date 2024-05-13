@@ -6,6 +6,8 @@ public interface Activity {
     public void start();
 
     public void end();
+
+    public QuestType getType();
 }
 
 

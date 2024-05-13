@@ -9,6 +9,7 @@ import javafx.scene.image.ImageView;
 import quietquest.model.BadgeManager;
 import quietquest.model.PomodoroTimer;
 import quietquest.model.Quest;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,9 +46,11 @@ public class HomeController extends BaseController {
     private Quest currentQuest;
     private BadgeManager badgeManager;
 
+
+    // ==============================* INITIALIZATION METHODS *===================================
+
     @Override
     protected void afterMainController() throws SQLException {
-        quests = quietQuestFacade.getQuests();
         badgeManager = new BadgeManager();
         displayCurrentQuest();
         displayBadges();
@@ -67,9 +70,7 @@ public class HomeController extends BaseController {
      * If no ongoing quests found, directs the user to take another action.
      */
     public void displayCurrentQuest() throws SQLException {
-        database.connect();
-        ArrayList<Quest> questsList = database.getAllQuests(user);
-        database.disconnect();
+        ArrayList<Quest> questsList = getAllQuests();
         // Get the ongoing quest by checking that start time is not null and quest is not completed.
         for (Quest quest : questsList) {
             if (quest.getStartTime() != null && !quest.getCompletionState()) {
@@ -94,10 +95,8 @@ public class HomeController extends BaseController {
      * Each badge image color is determined by the corresponding method in BadgeManager.
      */
     public void displayBadges() throws SQLException {
-        database.connect();
-        ArrayList<Quest> quests = database.getAllQuests(user);
-        ArrayList<PomodoroTimer> pomodoroQuests = database.getAllPomodoroQuests(user);
-        database.disconnect();
+        ArrayList<Quest> quests = getAllQuests();
+        ArrayList<PomodoroTimer> pomodoroQuests = getAllPomodoroQuests();
 
         theJourneyBeginsImage.setImage(badgeManager.getTheJourneyBeginsImage(quests));
         apprenticeImage.setImage(badgeManager.getApprenticeImage(quests));
@@ -108,5 +107,6 @@ public class HomeController extends BaseController {
         focusWarriorImage.setImage(badgeManager.getFocusWarriorImage(quests));
         ultimateQuestMasterImage.setImage(badgeManager.getUltimateQuestMasterImage(quests));
     }
+
 
 }

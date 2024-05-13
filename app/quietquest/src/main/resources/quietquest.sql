@@ -16,8 +16,7 @@ CREATE TABLE IF NOT EXISTS "quest"
     "title"            varchar                                          NOT NULL,
     "detail"           varchar,
     "start_time"       timestamp,
-    "complete_time"    timestamp,
-    "box_open_times"   int
+    "complete_time"    timestamp
 );
 
 CREATE TABLE IF NOT EXISTS "task"
@@ -38,7 +37,7 @@ CREATE TABLE IF NOT EXISTS "box_open_record"
     PRIMARY KEY ("user_id", "quest_id", "time")
 );
 
-CREATE TABLE IF NOT EXISTS "pomodoro_quest"
+CREATE TABLE IF NOT EXISTS "pomodoro_timer"
 (
     "quest_id" integer PRIMARY KEY NOT NULL,
     "focus_time" integer                                          NOT NULL,

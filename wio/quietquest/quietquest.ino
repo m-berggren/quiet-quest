@@ -2,10 +2,10 @@
 #include <Ultrasonic.h>
 #include <string.h>
 #include <ChainableLED.h>
-#include "utilities/utils.h"
-#include "mqtt/mqtt_config.h"
-#include "utilities/pins.h"
-#include "display/display_config.h"
+#include "src/utilities/utils.h"
+#include "src/mqtt/mqtt_config.h"
+#include "src/utilities/pins.h"
+#include "src/display/display_config.h"
 
 // Initializations
 Ultrasonic ultrasonic(PIN_WIRE_SCL);

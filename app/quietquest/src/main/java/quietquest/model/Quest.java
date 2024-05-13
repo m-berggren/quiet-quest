@@ -1,6 +1,12 @@
 package quietquest.model;
 
+import quietquest.utility.MQTTHandler;
+
+import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+
+import static javafx.application.Application.launch;
 
 public class Quest {
     private int id;
@@ -87,9 +93,6 @@ public class Quest {
         return completionState;
     }
 
-    public void setCompletionState(boolean completionState) {
-        this.completionState = completionState;
-    }
 
     public String getTitle() {
         return this.title;

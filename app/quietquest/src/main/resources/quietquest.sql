@@ -16,8 +16,7 @@ CREATE TABLE IF NOT EXISTS "quest"
     "title"            varchar                                          NOT NULL,
     "detail"           varchar,
     "start_time"       timestamp,
-    "complete_time"    timestamp,
-    "box_open_times"   int
+    "complete_time"    timestamp
 );
 
 CREATE TABLE IF NOT EXISTS "task"

@@ -208,6 +208,9 @@ public class QuestController extends BaseController implements UIUpdater, Callba
         mqttLightMessage.setText("Light value: " + lightValue);
         mqttLightMessage.getStyleClass().clear();
 
+        if (lightValue >5) {
+            quietQuestFacade.saveBoxOpenTimes(currentQuest);
+        }
         if (lightValue > 50) {
             mqttLightMessage.getStyleClass().add("label-all-red");
         } else if (lightValue > 30) {

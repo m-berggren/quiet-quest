@@ -108,4 +108,5 @@ public class HomeController extends BaseController {
         ultimateQuestMasterImage.setImage(badgeManager.getUltimateQuestMasterImage(quests));
     }
 
+
 }

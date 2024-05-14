@@ -1,7 +1,6 @@
 # Use amazoncorretto:21-alpine-jdk as the base Docker image for all jobs in this pipeline
 image: amazoncorretto:21-alpine-jdk
 
-  
 # 'before_script' steps are executed before each job's script
 before_script:
   # Define the GRADLE_USER_HOME environment variable
@@ -10,18 +9,18 @@ before_script:
   - export GRADLE_USER_HOME
 
 
-
 # Define the stages that make up the build process
 stages:
-  - build   # The 'build' stage compiles the application
-  - test    # The 'test' stage runs the application's tests
+  - build         # The 'build' stage compiles the application
+  - test          # The 'test' stage runs the application's tests
+  - arduino-build # The 'arduino-build' stage builds the Arduino code
 
 # Define the build job
 build:
   stage: build
   tags:
     - docker    # Ensure this job runs on runners with the 'docker' tag
-  script: 
+  script:
     - cd app/quietquest                     # Change directory to the 'app/quietquest' directory inside the project
     - ./gradlew --build-cache assemble      # Execute the Gradle assemble command with caching to compile the project
   # Cache configuration for the test job
@@ -37,7 +36,7 @@ test:
   stage: test
   tags:
     - docker
-  script: 
+  script:
      - cd app/quietquest   # Change directory to the 'app/quietquest' directory inside the project
      - ./gradlew check    # Execute the Gradle check command to run unit tests
   # Configuration for using cached data in testing
@@ -48,3 +47,21 @@ test:
       - build                  # Use the cached build output directory
       - .gradle                # Use the cached Gradle data directory
 
+# Define the 'arduino-build' job
+arduino-build:
+  image: ubuntu:latest
+  stage: arduino-build
+  tags:
+    - docker
+  script:
+    # Install arduino-cli
+    - apt-get update
+    - apt-get install curl -y
+    - curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
+    - export PATH=$PATH:/root/bin
+    - arduino-cli -version
+    # Install all dependencies
+    - ./wio/setup.sh
+    # Build the project
+    - cd wio/quietquest
+    - arduino-cli compile --fqbn Seeeduino:samd:seeed_wio_terminal

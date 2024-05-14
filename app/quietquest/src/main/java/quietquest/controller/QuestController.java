@@ -3,6 +3,7 @@ package quietquest.controller;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -11,18 +12,22 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.util.Callback;
 import javafx.util.Duration;
 import quietquest.model.*;
 import javafx.scene.control.ListView;
+import quietquest.model.PomodoroUIUpdater;
 
 import java.sql.Timestamp;
 import java.sql.SQLException;
 import java.time.Instant;
 import java.util.Random;
 
+import static quietquest.utility.MQTTTopics.*;
 
-public class QuestController extends BaseController implements UIUpdater, Callback<ListView<Activity>, ListCell<Activity>> {
+
+public class QuestController extends BaseController implements UIUpdater, PomodoroUIUpdater, Callback<ListView<Activity>, ListCell<Activity>> {
     @FXML
     private AnchorPane taskAnchorPane;
     @FXML
@@ -56,6 +61,10 @@ public class QuestController extends BaseController implements UIUpdater, Callba
     @FXML
     private Label intervalsLabel;
     @FXML
+    private Label pomodoroStatusLabel;
+    @FXML
+    private Label intervalsLeftLabel;
+    @FXML
     private Label startTimeLabel;
     @FXML
     private Label endTimeLabel;
@@ -64,9 +73,6 @@ public class QuestController extends BaseController implements UIUpdater, Callba
     private Activity currentActivity;
     private Quest currentQuest;
 
-    private final String PUB_TOPIC_START = "/quietquest/application/start";
-    private final String PUB_TOPIC_TASK_DONE = "/quietquest/application/task_done";
-    private final String PUB_TOPIC_END = "/quietquest/application/end";
     private String[] message;
     private boolean isQuestRunning = false;
     private ObservableList<Activity> activities;
@@ -88,15 +94,6 @@ public class QuestController extends BaseController implements UIUpdater, Callba
         endTimeLabel.setText("End: " + currentQuest.getCompleteTime());
         motivationalAnchorPane.setVisible(false);
 
-        /*if(currentQuest.getType() == QuestType.TASK){
-            taskAnchorPane.setVisible(true);
-            pomodoroAnchorPane.setVisible(false);
-            questTypeLabel.setText("TASKS");
-        } else if(currentQuest.getType() == QuestType.POMODORO){
-            taskAnchorPane.setVisible(false);
-            pomodoroAnchorPane.setVisible(true);
-            questTypeLabel.setText("POMODORO");
-        }*/
         setSelectedTask();
     }
 
@@ -135,7 +132,7 @@ public class QuestController extends BaseController implements UIUpdater, Callba
                             quietQuestFacade.updateTaskEndTimeInDb(task);
                             quietQuestFacade.updateTaskCompletionStateInDb(task);
 
-                            quietQuestFacade.publishMqttMessage(PUB_TOPIC_TASK_DONE, message);
+                            quietQuestFacade.publishMqttMessage(TOPIC_PUB_TASK_DONE, message);
                         }
                     });
                     setGraphic(checkBox);
@@ -147,6 +144,57 @@ public class QuestController extends BaseController implements UIUpdater, Callba
                 }
             }
         };
+    }
+
+    /**
+     * Overrides the update method in {@link PomodoroUIUpdater}.
+     * Used to update the UI through observer pattern.
+     *
+     * @param message the string to display.
+     */
+    @Override
+    public void update(String message) {
+
+        final String FOCUS_TIME = "Focus time started";
+        final String BREAK_TIME_START = "Break time started";
+        final String BREAK_TIME_END = "Break time ended";
+        final String POMODORO_END = "Pomodoro timer finished";
+
+        // Need Platform.runLater() as a separate thread with Timer is already running
+        Platform.runLater(() -> {
+            switch (message) {
+                case FOCUS_TIME -> {
+                    System.out.println(FOCUS_TIME);
+
+                    pomodoroAnchorPane.setVisible(true);
+                    pomodoroStatusLabel.setText("Focus time now active");
+                    pomodoroStatusLabel.setTextFill(Color.color(0.6, 0, 0));
+
+                    quietQuestFacade.publishMqttMessage(TOPIC_PUB_POMODORO_INTERVAL, FOCUS_TIME);
+                }
+                case BREAK_TIME_START -> {
+                    System.out.println(BREAK_TIME_START);
+
+                    pomodoroStatusLabel.setText("Break time now active");
+                    pomodoroStatusLabel.setTextFill(Color.color(0, 0.50, 0));
+
+                    quietQuestFacade.publishMqttMessage(TOPIC_PUB_POMODORO_INTERVAL, BREAK_TIME_START);
+                }
+                case BREAK_TIME_END -> {
+                    System.out.println(BREAK_TIME_END);
+
+                    quietQuestFacade.publishMqttMessage(TOPIC_PUB_POMODORO_INTERVAL, BREAK_TIME_END);
+                }
+                case POMODORO_END -> {
+                    System.out.println(POMODORO_END);
+
+                    pomodoroAnchorPane.setVisible(false);
+
+                    quietQuestFacade.publishMqttMessage(TOPIC_PUB_POMODORO_INTERVAL, POMODORO_END);
+                    onCompletion();
+                }
+            }
+        });
     }
 
     public void showMessage() {
@@ -168,26 +216,35 @@ public class QuestController extends BaseController implements UIUpdater, Callba
         isQuestRunning = true;
         startTimeLabel.setText("Start: " + currentQuest.getStartTime());
 
-        quietQuestFacade.startQuest(currentQuest);
-        quietQuestFacade.connectMqtt(PUB_TOPIC_START, "Your quest has started.");
+        // Connects to MQTT as soon as page loads
+        System.out.println("Starts quest");
+
+        quietQuestFacade.startQuest(currentQuest, this);
+        quietQuestFacade.publishMqttMessage(TOPIC_PUB_QUEST_START, "Your quest has started");
         quietQuestFacade.subscribeMqtt();
 
         startQuestButton.setDisable(true);
     }
 
     public void onCompleteQuestClick(ActionEvent event) throws SQLException {
+        onCompletion();
+        showMessage();
+    }
+
+    private void onCompletion() {
         isQuestRunning = false;
         endTimeLabel.setText("End: " + currentQuest.getCompleteTime());
 
         quietQuestFacade.completeQuest(currentQuest);
-        quietQuestFacade.publishMqttMessage(PUB_TOPIC_END, "Your quest has ended.");
-        quietQuestFacade.disconnectMqtt();
+        quietQuestFacade.publishMqttMessage(TOPIC_PUB_QUEST_END, "Your quest has ended");
+        quietQuestFacade.unsubscribeMqtt();
 
-        // Remove or change later:
         mqttConnectionMessage.getStyleClass().clear();
         mqttConnectionMessage.setText("");
+        mqttDistanceMessage.setVisible(false);
+        mqttMotionMessage.setVisible(false);
+        mqttLightMessage.setVisible(false);
         completeQuestButton.setDisable(true);
-        showMessage();
     }
 
     @Override
@@ -203,6 +260,11 @@ public class QuestController extends BaseController implements UIUpdater, Callba
         }
     }
 
+    /**
+     * Method for updating UI and database depending on the light values read from the terminal box.
+     *
+     * @param lightValue integer value 0-100.
+     */
     @Override
     public void updateLightSensorUI(int lightValue) {
         mqttLightMessage.setText("Light value: " + lightValue);

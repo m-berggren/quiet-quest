@@ -43,11 +43,17 @@ public class QuietQuestFacade {
     /**
      * @param quest
      */
-    public void startQuest(Quest quest) {
+    public void startQuest(Quest quest, PomodoroUIUpdater pomodoroObserver) {
         database.startQuest(quest);
 
         ArrayList<Activity> activities = database.getActivitiesFromQuest(quest);
+        // Quests can be created without an activity so list may be empty
+        if (activities.isEmpty()) {
+            return;
+        }
+
         if (activities.getFirst() instanceof PomodoroTimer pomodoro) {
+            pomodoro.setPomodoroObserver(pomodoroObserver);
             pomodoro.start();
         }
     }
@@ -65,7 +71,11 @@ public class QuietQuestFacade {
     public void completeQuest(Quest quest) {
         database.completeQuest(quest);
 
-        ArrayList<Activity> activities = database.getActivitiesFromQuest(quest);
+        ArrayList<Activity> activities = quest.getActivities(); //database.getActivitiesFromQuest(quest);
+        // Quests can be created without an activity so list may be empty
+        if (activities.isEmpty()) {
+            return;
+        }
         if (activities.getFirst() instanceof PomodoroTimer pomodoro) {
             pomodoro.end();
         }
@@ -111,23 +121,24 @@ public class QuietQuestFacade {
     // ==============================* MQTT MANAGER *=======================================
 
     /**
-     * @param pubTopic
-     * @param pubMessage
-     */
-    public void connectMqtt(String pubTopic, String pubMessage) {
-        mqttHandler.connect(pubTopic, pubMessage);
-    }
-
-    /**
-     *
+     * Start subscribing to all sensor data from terminal.
      */
     public void subscribeMqtt() {
         mqttHandler.subscribe();
     }
 
     /**
-     * @param topic
-     * @param message
+     * Methos to stop subscribing to sensor data from terminal.Used if a Quest is completed or when pausing during a break in
+     * PomodoroTimer.
+     */
+    public void unsubscribeMqtt() {
+        mqttHandler.unsubscribe();
+    }
+
+    /**
+     * Publishes topic data and payload to MQTT Broker for terminal to subscribe to.
+     * @param topic a string of the topic
+     * @param message a string of the payload message
      */
     public void publishMqttMessage(String topic, String message) {
         mqttHandler.publishMessage(topic, message);
@@ -146,11 +157,6 @@ public class QuietQuestFacade {
     public void disconnectMqtt() {
         mqttHandler.disconnect();
     }
-
-    // create quest
-    // delete quest
-    // update quest
-
 
     // ==============================* QUEST MANAGER *======================================
 

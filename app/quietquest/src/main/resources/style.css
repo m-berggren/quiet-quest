@@ -101,3 +101,9 @@ This file defines global css styles for the application.
 .list-cell:odd, .list-cell:even {
     -fx-background: white;
 }
+
+.background-pane {
+    -fx-background-image: url("images/questPage_background.png");
+    -fx-background-size: cover;
+    -fx-background-position: center;
+}

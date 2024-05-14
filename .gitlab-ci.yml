@@ -11,9 +11,27 @@ before_script:
 
 # Define the stages that make up the build process
 stages:
+  - arduino-build # The 'arduino-build' stage builds the Arduino code
   - build         # The 'build' stage compiles the application
   - test          # The 'test' stage runs the application's tests
-  - arduino-build # The 'arduino-build' stage builds the Arduino code
+
+# Define the 'arduino-build' job
+arduino-build:
+  image: ubuntu:latest
+  stage: arduino-build
+  tags:
+    - docker
+  script:
+    # Install arduino-cli
+    - apt-get update
+    - apt-get install curl -y
+    - curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
+    - export PATH=$PATH:/builds/courses/dit113/2024/group-12/quiet-quest/bin
+    - arduino-cli version
+    # Install dependencies (setup) and build the project
+    - cd wio/quietquest
+    - ./setup.sh
+    - arduino-cli compile --fqbn Seeeduino:samd:seeed_wio_terminal
 
 # Define the build job
 build:
@@ -46,22 +64,3 @@ test:
     paths:
       - build                  # Use the cached build output directory
       - .gradle                # Use the cached Gradle data directory
-
-# Define the 'arduino-build' job
-arduino-build:
-  image: ubuntu:latest
-  stage: arduino-build
-  tags:
-    - docker
-  script:
-    # Install arduino-cli
-    - apt-get update
-    - apt-get install curl -y
-    - curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
-    - export PATH=$PATH:/root/bin
-    - arduino-cli -version
-    # Install all dependencies
-    - ./wio/setup.sh
-    # Build the project
-    - cd wio/quietquest
-    - arduino-cli compile --fqbn Seeeduino:samd:seeed_wio_terminal

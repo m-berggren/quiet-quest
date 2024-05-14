@@ -17,6 +17,7 @@ public class Quest {
     private Timestamp startTime;
     private Timestamp completeTime;
     private int boxOpenTimes;
+    private ArrayList<Activity> activityArrayList;
 
     // ==============================* CONSTRUCTOR *========================================
 
@@ -24,10 +25,11 @@ public class Quest {
      * Used for creating a container with the necessary information to pass into database. Not intended to use within
      * application otherwise.
      */
-    public Quest(User user, String title, String detail) {
+    public Quest(User user, String title, String detail, ArrayList<Activity> activities) {
         this.userId = user.getId();
         this.title = title;
         this.detail = detail;
+        this.activityArrayList = activities;
     }
 
     /**
@@ -42,38 +44,11 @@ public class Quest {
         this.startTime = startTime;
         this.completeTime = completeTime;
         this.boxOpenTimes = boxOpenTimes;
+        this.activityArrayList = new ArrayList<>();
     }
 
     // ==============================* QUEST MANAGEMENT *===================================
 
-    /*public void startQuest(Activity activity) {
-        if (activity instanceof PomodoroTimer pomodoro) {
-            pomodoro.start(); // Mqtt publish happens inside recursive function
-        } else if (activity instanceof Task) {
-            // Update startTime for all tasks
-            for (Activity activity : activities) {
-                Task task = (Task) activity;
-                task.setStartTime(new Timestamp(System.currentTimeMillis()));
-            }
-        }
-    }
-     */
-
-    /*public void endQuest() {
-        if (activities.isEmpty()) {
-            return;
-        }
-        if (activities.getFirst() instanceof PomodoroTimer) {
-            Activity activity = activities.getFirst();
-            activity.end(); // Will end recursive PomodoroTimer calls
-        } else if (activities.getFirst() instanceof Task) {
-            // Update tasks with end time
-            for (Activity activity : activities) {
-                Task task = (Task) activity;
-                task.setEndTime(new Timestamp(System.currentTimeMillis()));
-            }
-        }
-    }*/
 
     // ==============================* GETTERS & SETTERS *==============================
 
@@ -132,6 +107,23 @@ public class Quest {
 
     public void setBoxOpenTimes(int boxOpenTimes) {
         this.boxOpenTimes = boxOpenTimes;
+    }
+
+    public ArrayList<Activity> getActivities() {
+        return this.activityArrayList;
+    }
+
+    /**
+     * Method is used to easily get the first object or null of ArrayList of Activity.
+     *
+     * @return either null or first Activity object in ArrayList
+     */
+    public Activity getFirstActivity() {
+        if (activityArrayList.isEmpty()) {
+            return null;
+        }
+
+        return activityArrayList.getFirst();
     }
 
     // ==============================* UTILITY METHODS *====================================

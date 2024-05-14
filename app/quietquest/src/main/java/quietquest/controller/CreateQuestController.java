@@ -218,7 +218,7 @@ public class CreateQuestController extends BaseController implements Initializab
             String title = titleField.getText();
             String description = descriptionField.getText();
             ArrayList<Activity> activities = new ArrayList<>(activityListView.getItems());
-            Quest quest = new Quest(user, title, description);
+            Quest quest = new Quest(user, title, description, activities);
             quietQuestFacade.createQuest(quest, activities);
             showCreateQuest();
         }

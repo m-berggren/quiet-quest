@@ -26,6 +26,7 @@ extern TFT_eSPI tft;
 
 extern void displaySetup();
 extern void drawOnScreen(String wifi, String mqtt, String motion, int light, long distance, String box);
+extern void drawOnScreen(String wifi, String mqtt);
 void initializeBuffer();
 void drawStaticElements();
 void drawLabel(const char* label, int yPosition);

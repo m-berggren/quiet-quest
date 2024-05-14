@@ -14,5 +14,6 @@ extern Tune shortRange;
 extern Tune questStart;
 extern Tune questStop;
 extern Tune taskStop;
+extern Tune pomodoroInterval;
 
-#endif                  // TUNE_H
+#endif

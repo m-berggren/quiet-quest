@@ -9,6 +9,7 @@ Tune shortRange;
 Tune questStart;
 Tune questStop;
 Tune taskStop;
+Tune pomodoroInterval;
 
 void Tune::playTune(int length, char notes[], int beats[], int tempo){
     for(int i = 0; i < length; i++) {

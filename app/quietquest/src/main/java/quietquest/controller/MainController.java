@@ -50,6 +50,8 @@ public class MainController extends BaseController {
         this.mqttHandler = mqttHandler;
         this.quietQuestFacade = new QuietQuestFacade(user, database, mqttHandler);
         setMainController(this);
+        mqttHandler.connect();
+
     }
 
     @Override

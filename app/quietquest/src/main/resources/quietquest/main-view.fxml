@@ -14,12 +14,12 @@
       <VBox fx:id="sideMenu" prefHeight="760.0" prefWidth="200.0" style="-fx-background-color: #C7F9CC;" BorderPane.alignment="CENTER">
          <HBox prefHeight="52.0" prefWidth="200.0">
             <children>
-               <Button fx:id="playButton" mnemonicParsing="false" onAction="#onPlayButtonClick" prefHeight="48.0" prefWidth="98.0" text="Play" />
-               <Button fx:id="stopButton" mnemonicParsing="false" onAction="#onStopButtonClick" prefHeight="48.0" prefWidth="102.0" text="Stop" />
+               <Button fx:id="playButton" mnemonicParsing="false" onAction="#onPlayButtonClick" prefHeight="48.0" prefWidth="98.0" styleClass="side-menu-button" text="Play" />
+               <Button fx:id="stopButton" mnemonicParsing="false" onAction="#onStopButtonClick" prefHeight="48.0" prefWidth="102.0" styleClass="side-menu-button" text="Stop" />
             </children>
          </HBox>
          <Slider fx:id="volumeSlider" value="100.0" />
-         <Button fx:id="homeButton" mnemonicParsing="false" onAction="#onHomeButtonClick" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: #C7F9CC; -fx-background-radius: 8; -fx-border-color: #57CC99; -fx-border-radius: 8;" text="Home">
+         <Button fx:id="homeButton" mnemonicParsing="false" onAction="#onHomeButtonClick" prefHeight="60.0" prefWidth="200.0" styleClass="side-menu-button" text="Home">
             <VBox.margin>
                <Insets top="150.0" />
             </VBox.margin>
@@ -27,43 +27,43 @@
                <Font name="American Typewriter" size="18.0" />
             </font>
          </Button>
-         <Button fx:id="createQuestButton" mnemonicParsing="false" onAction="#onCreateQuestButtonClick" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: #C7F9CC; -fx-background-radius: 8; -fx-border-color: #57CC99; -fx-border-radius: 8;" text="Create Quest">
+         <Button fx:id="createQuestButton" mnemonicParsing="false" onAction="#onCreateQuestButtonClick" prefHeight="60.0" prefWidth="200.0" styleClass="side-menu-button" text="Create Quest">
             <font>
                <Font name="American Typewriter" size="18.0" />
             </font>
          </Button>
-         <Button fx:id="questListButton" mnemonicParsing="false" onAction="#onQuestListButtonClick" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: #C7F9CC; -fx-background-radius: 8; -fx-border-color: #57CC99; -fx-border-radius: 8;" text="Quest List">
+         <Button fx:id="questListButton" mnemonicParsing="false" onAction="#onQuestListButtonClick" prefHeight="60.0" prefWidth="200.0" styleClass="side-menu-button" text="Quest List">
             <font>
                <Font name="American Typewriter" size="18.0" />
             </font>
          </Button>
-         <Button fx:id="questHistoryButton" mnemonicParsing="false" onAction="#onQuestHistoryButtonClick" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: #C7F9CC; -fx-background-radius: 8; -fx-border-color: #57CC99; -fx-border-radius: 8;" text="Quest History">
+         <Button fx:id="questHistoryButton" mnemonicParsing="false" onAction="#onQuestHistoryButtonClick" prefHeight="60.0" prefWidth="200.0" styleClass="side-menu-button" text="Quest History">
             <font>
                <Font name="American Typewriter" size="18.0" />
             </font>
          </Button>
-         <Button fx:id="statisticsButton" mnemonicParsing="false" onAction="#onStatisticsButtonClick" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: #C7F9CC; -fx-background-radius: 8; -fx-border-color: #57CC99; -fx-border-radius: 8;" text="Statistics">
+         <Button fx:id="statisticsButton" mnemonicParsing="false" onAction="#onStatisticsButtonClick" prefHeight="60.0" prefWidth="200.0" styleClass="side-menu-button" text="Statistics">
             <font>
                <Font name="American Typewriter" size="18.0" />
             </font>
          </Button>
-         <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: #C7F9CC; -fx-background-radius: 8; -fx-border-color: #57CC99; -fx-border-radius: 8;" text="Settings">
+         <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="200.0" styleClass="side-menu-button" text="Settings">
             <font>
                <Font name="American Typewriter" size="18.0" />
             </font>
          </Button>
-         <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: #C7F9CC; -fx-background-radius: 8; -fx-border-color: #57CC99; -fx-border-radius: 8;" text="Help">
+         <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="200.0" styleClass="side-menu-button" text="Help">
             <font>
                <Font name="American Typewriter" size="18.0" />
             </font>
          </Button>
          <Label prefHeight="83.0" prefWidth="200.0" />
-         <Button fx:id="logOutButton" mnemonicParsing="false" onAction="#onLogOutButtonClick" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: #C7F9CC; -fx-background-radius: 8; -fx-border-color: #57CC99; -fx-border-radius: 8;" text="Log out">
+         <Button fx:id="logOutButton" mnemonicParsing="false" onAction="#onLogOutButtonClick" prefHeight="60.0" prefWidth="200.0" styleClass="side-menu-button" text="Log out">
             <font>
                <Font name="American Typewriter" size="18.0" />
             </font>
          </Button>
-         <Button fx:id="exitButton" mnemonicParsing="false" onAction="#onQuitButtonClick" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: #C7F9CC; -fx-background-radius: 8; -fx-border-color: #57CC99; -fx-border-radius: 8;" text="Quit">
+         <Button fx:id="exitButton" mnemonicParsing="false" onAction="#onQuitButtonClick" prefHeight="60.0" prefWidth="200.0" styleClass="side-menu-button" text="Quit">
             <font>
                <Font name="American Typewriter" size="18.0" />
             </font>

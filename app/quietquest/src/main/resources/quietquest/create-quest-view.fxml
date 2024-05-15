@@ -17,10 +17,10 @@
 <?import javafx.scene.text.Text?>
 
 <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="760.0" prefWidth="1210.0" style="-fx-background-color: #C7F9CC;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="quietquest.controller.CreateQuestController">
-    <ImageView fitHeight="760.0" fitWidth="1210.0" pickOnBounds="true">
+    <ImageView fitHeight="836.0" fitWidth="1325.0" layoutY="-39.0" pickOnBounds="true">
         <Image url="@../images/create_page_background.png" />
     </ImageView>
-    <AnchorPane fx:id="newQuestAnchorPane" layoutX="32.0" layoutY="25.0" prefHeight="613.0" prefWidth="435.0" style="-fx-background-color: #fff; -fx-background-radius: 10;" AnchorPane.leftAnchor="32.0" AnchorPane.topAnchor="25.0">
+    <AnchorPane fx:id="newQuestAnchorPane" layoutX="61.0" layoutY="72.0" prefHeight="613.0" prefWidth="435.0" style="-fx-background-color: #fff; -fx-background-radius: 10;" AnchorPane.leftAnchor="61.0" AnchorPane.topAnchor="72.0">
         <children>
             <TextField fx:id="titleField" layoutX="20.0" layoutY="73.0" prefHeight="53.0" prefWidth="380.0" promptText="Set your quest title" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="73.0">
                 <font>
@@ -45,10 +45,7 @@
                                         </font>
                                     </Text>
                                     <TextField fx:id="taskField" layoutX="14.0" layoutY="104.0" prefHeight="30.0" prefWidth="279.0" promptText="add a new task (optional)" AnchorPane.leftAnchor="14.0" />
-                                    <Button fx:id="addNewTaskButton" alignment="CENTER" layoutX="322.0" layoutY="97.8"
-                                            minWidth="38.0" mnemonicParsing="false" onAction="#createTask"
-                                            prefHeight="21.0" prefWidth="50.0" styleClass="general-button" text="+"
-                                            AnchorPane.topAnchor="97.8">
+                                    <Button fx:id="addNewTaskButton" alignment="CENTER" layoutX="322.0" layoutY="97.8" minWidth="38.0" mnemonicParsing="false" onAction="#createTask" prefHeight="21.0" prefWidth="50.0" styleClass="general-button" text="+" AnchorPane.topAnchor="97.8">
                                         <font>
                                             <Font size="20.0" />
                                         </font>
@@ -105,10 +102,7 @@
                                             <Font size="18.0" />
                                         </font>
                                     </Label>
-                                    <Button fx:id="addNewPomodoroButton" alignment="CENTER" layoutX="322.0"
-                                            layoutY="97.0" minWidth="38.0" mnemonicParsing="false"
-                                            onAction="#createPomodoroTimer" prefHeight="21.0" prefWidth="50.0"
-                                            styleClass="general-button" text="+">
+                                    <Button fx:id="addNewPomodoroButton" alignment="CENTER" layoutX="322.0" layoutY="97.0" minWidth="38.0" mnemonicParsing="false" onAction="#createPomodoroTimer" prefHeight="21.0" prefWidth="50.0" styleClass="general-button" text="+">
                                         <font>
                                             <Font size="20.0" />
                                         </font>
@@ -131,17 +125,15 @@
             </Label>
         </children>
     </AnchorPane>
-    <AnchorPane fx:id="tasklistAnchorPane" layoutX="492.0" layoutY="24.0" prefHeight="362.0" prefWidth="435.0" style="-fx-background-color: #fff; -fx-background-radius: 10;" AnchorPane.leftAnchor="500.0" AnchorPane.topAnchor="25.0">
+    <AnchorPane fx:id="tasklistAnchorPane" layoutX="518.0" layoutY="72.0" prefHeight="362.0" prefWidth="435.0" style="-fx-background-color: #fff; -fx-background-radius: 10;" AnchorPane.leftAnchor="518.0" AnchorPane.topAnchor="72.0">
         <children>
-            <Text fx:id="allTasksText" fill="#22577a" layoutX="28.0" layoutY="62.973046875" strokeType="OUTSIDE" strokeWidth="0.0" text="Added Activities" wrappingWidth="255.33333333333326" AnchorPane.leftAnchor="28.0" AnchorPane.topAnchor="30.6">
+            <Text fx:id="allTasksText" fill="#22577a" layoutX="28.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Added Activities" wrappingWidth="255.33333333333326" AnchorPane.leftAnchor="28.0" AnchorPane.topAnchor="40.1015625">
                 <font>
-                    <Font name="American Typewriter" size="30.0" />
+                    <Font size="24.0" />
                 </font>
             </Text>
             <ListView fx:id="activityListView" layoutX="28.0" layoutY="72.8" prefHeight="217.0" prefWidth="380.0" AnchorPane.leftAnchor="28.0" AnchorPane.topAnchor="73.0" />
-            <Button fx:id="deleteTaskButton" alignment="CENTER" layoutX="357.0" layoutY="294.0" minWidth="38.0"
-                    mnemonicParsing="false" onAction="#deleteActivity" prefHeight="30.0" prefWidth="50.0"
-                    styleClass="general-button" text="X" wrapText="true" AnchorPane.topAnchor="294.0">
+            <Button fx:id="deleteTaskButton" alignment="CENTER" layoutX="357.0" layoutY="294.0" minWidth="38.0" mnemonicParsing="false" onAction="#deleteActivity" prefHeight="30.0" prefWidth="50.0" styleClass="general-button" text="X" wrapText="true" AnchorPane.topAnchor="294.0">
                 <font>
                     <Font size="20.0" />
                 </font>
@@ -159,8 +151,7 @@
                             <Font size="16.0" />
                         </font>
                     </Text>
-                    <Button fx:id="okayButton" layoutX="226.0" layoutY="134.0" mnemonicParsing="false"
-                            onAction="#onOkayButtonClick" styleClass="general-button" text="Okay" visible="false">
+                    <Button fx:id="okayButton" layoutX="226.0" layoutY="134.0" mnemonicParsing="false" onAction="#onOkayButtonClick" styleClass="general-button" text="Okay" visible="false">
                         <font>
                             <Font size="16.0" />
                         </font>
@@ -169,23 +160,17 @@
             </Pane>
         </children>
     </AnchorPane>
-    <Button fx:id="saveQuestButton" layoutX="496.0" layoutY="427.2" mnemonicParsing="false" onAction="#createQuest"
-            prefHeight="54.0" prefWidth="146.0" styleClass="general-button" text="SAVE" wrapText="true"
-            AnchorPane.leftAnchor="496.0" AnchorPane.topAnchor="427.0">
+    <Button fx:id="saveQuestButton" layoutX="514.0" layoutY="474.0" mnemonicParsing="false" onAction="#createQuest" prefHeight="54.0" prefWidth="146.0" styleClass="general-button" text="SAVE" wrapText="true" AnchorPane.leftAnchor="514.0" AnchorPane.topAnchor="474.0">
         <font>
             <Font name="American Typewriter" size="30.0" />
         </font>
     </Button>
-    <Button fx:id="clearButton" layoutX="647.2" layoutY="426.4" mnemonicParsing="false" onAction="#clearAllFields"
-            prefHeight="54.0" prefWidth="146.0" styleClass="general-button" text="CLEAR" textAlignment="CENTER"
-            wrapText="true" AnchorPane.leftAnchor="647.0" AnchorPane.topAnchor="426.0">
+    <Button fx:id="clearButton" layoutX="666.0" layoutY="473.0" mnemonicParsing="false" onAction="#clearAllFields" prefHeight="54.0" prefWidth="146.0" styleClass="general-button" text="CLEAR" textAlignment="CENTER" wrapText="true" AnchorPane.leftAnchor="666.0" AnchorPane.topAnchor="473.0">
         <font>
             <Font name="American Typewriter" size="30.0" />
         </font>
     </Button>
-    <Button fx:id="goToQuestsButton" layoutX="798.4" layoutY="426.4" mnemonicParsing="false" onAction="#onGoToQuests"
-            prefHeight="54.0" prefWidth="146.0" styleClass="general-button" text="LIST" wrapText="true"
-            AnchorPane.leftAnchor="798.0" AnchorPane.topAnchor="426.0">
+    <Button fx:id="goToQuestsButton" layoutX="817.0" layoutY="473.0" mnemonicParsing="false" onAction="#onGoToQuests" prefHeight="54.0" prefWidth="146.0" styleClass="general-button" text="LIST" wrapText="true" AnchorPane.leftAnchor="817.0" AnchorPane.topAnchor="473.0">
         <font>
             <Font size="30.0" />
         </font>

@@ -13,47 +13,45 @@
 
 <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="760.0" prefWidth="1210.0" style="-fx-background-color: #C7F9CC;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="quietquest.controller.QuestHistoryController">
    <children>
-      <ImageView fitHeight="760.0" fitWidth="1210.0" layoutX="7.0" pickOnBounds="true">
+       <ImageView fitHeight="836.0" fitWidth="1325.0" layoutY="-39.0" pickOnBounds="true">
          <image>
             <Image url="@../images/create_page_background.png" />
          </image>
       </ImageView>
-      <AnchorPane fx:id="questlistAnchorPane" layoutX="60.0" layoutY="80.0" prefHeight="625.0" prefWidth="511.0" style="-fx-background-color: #fff; -fx-background-radius: 10;">
+       <AnchorPane fx:id="questlistAnchorPane" layoutX="61.0" layoutY="72.0" prefHeight="613.0" prefWidth="435.0" style="-fx-background-color: #fff; -fx-background-radius: 10;" AnchorPane.leftAnchor="61.0" AnchorPane.topAnchor="72.0">
          <children>
-            <Label fx:id="titleLabel" layoutX="20.0" layoutY="14.0" text="Complete Quests" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="14.0">
+             <Label fx:id="titleLabel" layoutX="20.0" layoutY="16.0" text="Complete Quests" textFill="#22577a" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="16.0">
                <font>
-                  <Font name="American Typewriter" size="40.0" />
+                   <Font size="36.0" />
                </font>
             </Label>
-            <ListView fx:id="quesHistoryListView" layoutX="20.0" layoutY="57.0" prefHeight="469.0" prefWidth="471.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="70.0" />
-             <Button fx:id="goToStatisticsButton" layoutX="325.0" layoutY="564.0" mnemonicParsing="false"
-                     onAction="#onStatisticsClick" prefHeight="47.0" prefWidth="148.0" styleClass="general-button"
-                     text="Statistics" AnchorPane.leftAnchor="325.0" AnchorPane.topAnchor="564.0">
+            <ListView fx:id="quesHistoryListView" layoutX="20.0" layoutY="71.2" prefHeight="470.0" prefWidth="398.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="17.0" AnchorPane.topAnchor="71.0" />
+             <Button fx:id="goToStatisticsButton" layoutX="264.0" layoutY="563.0" mnemonicParsing="false" onAction="#onStatisticsClick" prefHeight="47.0" prefWidth="148.0" styleClass="general-button" text="Statistics" AnchorPane.leftAnchor="264.0" AnchorPane.topAnchor="563.0">
                <font>
                   <Font size="24.0" />
                </font>
             </Button>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="viewInfoAnchorPane" layoutX="596.0" layoutY="80.0" prefHeight="625.0" prefWidth="593.0" style="-fx-background-color: #fff; -fx-background-radius: 10;">
+       <AnchorPane fx:id="viewInfoAnchorPane" layoutX="517.0" layoutY="72.0" prefHeight="571.0" prefWidth="447.0" style="-fx-background-color: #fff; -fx-background-radius: 10;" AnchorPane.leftAnchor="517.0" AnchorPane.topAnchor="72.0">
          <children>
-            <TextField fx:id="titleField" editable="false" layoutX="18.0" layoutY="20.0" prefHeight="70.0" prefWidth="536.0" AnchorPane.rightAnchor="39.0">
+             <TextField fx:id="titleField" editable="false" layoutX="28.0" layoutY="36.0" prefHeight="70.0" prefWidth="390.0" AnchorPane.rightAnchor="28.80000000000001">
                <font>
                   <Font size="30.0" />
                </font>
             </TextField>
-            <Text fx:id="descriptionHeader" fill="#22577a" layoutX="16.0" layoutY="137.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Description" wrappingWidth="334.9270782470703">
+             <Text fx:id="descriptionHeader" fill="#22577a" layoutX="28.0" layoutY="143.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Description" wrappingWidth="334.9270782470703">
                <font>
-                  <Font name="American Typewriter" size="30.0" />
+                   <Font size="24.0" />
                </font>
             </Text>
-            <TextArea fx:id="descriptionField" layoutX="15.0" layoutY="152.0" prefHeight="97.0" prefWidth="536.0" />
-            <Text fx:id="tasksHeader" fill="#22577a" layoutX="16.0" layoutY="304.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tasks" wrappingWidth="86.26045227050781">
+             <TextArea fx:id="descriptionField" layoutX="28.0" layoutY="150.0" prefHeight="98.0" prefWidth="390.0" />
+             <Text fx:id="tasksHeader" fill="#22577a" layoutX="28.0" layoutY="303.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tasks" wrappingWidth="86.26045227050781">
                <font>
-                  <Font name="American Typewriter" size="30.0" />
+                   <Font size="24.0" />
                </font>
             </Text>
-            <ListView fx:id="activityListView" layoutX="15.0" layoutY="314.0" prefHeight="271.0" prefWidth="536.0" />
+             <ListView fx:id="activityListView" layoutX="31.0" layoutY="310.0" prefHeight="222.0" prefWidth="383.0" />
          </children>
       </AnchorPane>
    </children>

@@ -31,7 +31,7 @@ public class QuestController extends BaseController implements UIUpdater, Pomodo
     @FXML
     private AnchorPane taskAnchorPane;
     @FXML
-    private AnchorPane pomodoroAnchorPane;
+    private AnchorPane pomodoroInfoAnchorPane;
     @FXML
     private AnchorPane motivationalAnchorPane;
     @FXML
@@ -166,7 +166,7 @@ public class QuestController extends BaseController implements UIUpdater, Pomodo
                 case FOCUS_TIME -> {
                     System.out.println(FOCUS_TIME);
 
-                    pomodoroAnchorPane.setVisible(true);
+                    pomodoroInfoAnchorPane.setVisible(true);
                     pomodoroStatusLabel.setText("Focus time now active");
                     pomodoroStatusLabel.setTextFill(Color.color(0.6, 0, 0));
 
@@ -188,7 +188,7 @@ public class QuestController extends BaseController implements UIUpdater, Pomodo
                 case POMODORO_END -> {
                     System.out.println(POMODORO_END);
 
-                    pomodoroAnchorPane.setVisible(false);
+                    pomodoroInfoAnchorPane.setVisible(false);
 
                     quietQuestFacade.publishMqttMessage(TOPIC_PUB_POMODORO_INTERVAL, POMODORO_END);
                     onCompletion();

@@ -22,11 +22,11 @@
          <children>
              <Label fx:id="titleLabel" layoutX="20.0" layoutY="16.0" text="Complete Quests" textFill="#22577a" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="16.0">
                <font>
-                   <Font size="36.0" />
+                   <Font name="American Typewriter" size="36.0" />
                </font>
             </Label>
             <ListView fx:id="quesHistoryListView" layoutX="20.0" layoutY="71.2" prefHeight="470.0" prefWidth="398.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="17.0" AnchorPane.topAnchor="71.0" />
-             <Button fx:id="goToStatisticsButton" layoutX="264.0" layoutY="563.0" mnemonicParsing="false" onAction="#onStatisticsClick" prefHeight="47.0" prefWidth="148.0" styleClass="general-button" text="Statistics" AnchorPane.leftAnchor="264.0" AnchorPane.topAnchor="563.0">
+             <Button fx:id="goToStatisticsButton" layoutX="270.0" layoutY="554.0" mnemonicParsing="false" onAction="#onStatisticsClick" prefHeight="47.0" prefWidth="148.0" styleClass="general-button" text="Statistics" AnchorPane.leftAnchor="270.0" AnchorPane.topAnchor="554.0">
                <font>
                   <Font size="24.0" />
                </font>
@@ -42,13 +42,13 @@
             </TextField>
              <Text fx:id="descriptionHeader" fill="#22577a" layoutX="28.0" layoutY="143.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Description" wrappingWidth="334.9270782470703">
                <font>
-                   <Font size="24.0" />
+                   <Font name="American Typewriter" size="24.0" />
                </font>
             </Text>
              <TextArea fx:id="descriptionField" layoutX="28.0" layoutY="150.0" prefHeight="98.0" prefWidth="390.0" />
              <Text fx:id="tasksHeader" fill="#22577a" layoutX="28.0" layoutY="303.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tasks" wrappingWidth="86.26045227050781">
                <font>
-                   <Font size="24.0" />
+                   <Font name="American Typewriter" size="24.0" />
                </font>
             </Text>
              <ListView fx:id="activityListView" layoutX="31.0" layoutY="310.0" prefHeight="222.0" prefWidth="383.0" />

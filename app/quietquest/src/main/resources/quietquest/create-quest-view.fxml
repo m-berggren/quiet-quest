@@ -41,7 +41,7 @@
                                 <children>
                                     <Text fx:id="addTaskLabel" fill="#22577a" layoutX="19.2" layoutY="95.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add Task" wrappingWidth="88.52706146240234" AnchorPane.leftAnchor="19.2">
                                         <font>
-                                            <Font size="18.0" />
+                                            <Font name="American Typewriter" size="18.0" />
                                         </font>
                                     </Text>
                                     <TextField fx:id="taskField" layoutX="14.0" layoutY="104.0" prefHeight="30.0" prefWidth="279.0" promptText="add a new task (optional)" AnchorPane.leftAnchor="14.0" />
@@ -115,21 +115,21 @@
             </TabPane>
             <Text fill="#22577a" layoutX="20.0" layoutY="317.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Activity">
                 <font>
-                    <Font size="24.0" />
+                    <Font name="American Typewriter" size="24.0" />
                 </font>
             </Text>
-            <Label layoutX="20.0" layoutY="14.0" text="New Quest" textFill="#22577a">
+            <Label layoutX="20.0" layoutY="14.0" text="New Quest" textFill="#22577a" AnchorPane.topAnchor="20.0">
                 <font>
-                    <Font size="36.0" />
+                    <Font name="American Typewriter" size="36.0" />
                 </font>
             </Label>
         </children>
     </AnchorPane>
     <AnchorPane fx:id="tasklistAnchorPane" layoutX="518.0" layoutY="72.0" prefHeight="362.0" prefWidth="435.0" style="-fx-background-color: #fff; -fx-background-radius: 10;" AnchorPane.leftAnchor="518.0" AnchorPane.topAnchor="72.0">
         <children>
-            <Text fx:id="allTasksText" fill="#22577a" layoutX="28.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Added Activities" wrappingWidth="255.33333333333326" AnchorPane.leftAnchor="28.0" AnchorPane.topAnchor="40.1015625">
+            <Text fx:id="allTasksText" fill="#22577a" layoutX="28.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Added Activities" wrappingWidth="255.33333333333326" AnchorPane.leftAnchor="28.0" AnchorPane.topAnchor="38.30400085449219">
                 <font>
-                    <Font size="24.0" />
+                    <Font name="American Typewriter" size="24.0" />
                 </font>
             </Text>
             <ListView fx:id="activityListView" layoutX="28.0" layoutY="72.8" prefHeight="217.0" prefWidth="380.0" AnchorPane.leftAnchor="28.0" AnchorPane.topAnchor="73.0" />

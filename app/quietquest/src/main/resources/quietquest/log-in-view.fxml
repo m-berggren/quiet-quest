@@ -15,33 +15,29 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="760.0" prefWidth="1510.0" style="-fx-background-color: #C7F9CC;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="quietquest.controller.LogInController">
     <stylesheets>
-        <URL value="@/style.css"/>
+        <URL value="@/style.css" />
     </stylesheets>
 
-    <ImageView fitHeight="1079.0" fitWidth="1517.0" layoutX="-2.0" layoutY="-232.0" pickOnBounds="true"
-               preserveRatio="true">
+    <ImageView fitHeight="1079.0" fitWidth="1517.0" layoutX="-2.0" layoutY="-232.0" pickOnBounds="true" preserveRatio="true">
       <image>
          <Image url="@../images/QuestBackground.jpg" />
       </image></ImageView>
     <Label layoutX="596.0" layoutY="81.0" text="Quiet Quest" textAlignment="CENTER" textFill="#22577a">
         <font>
-            <Font size="60.0" />
+            <Font name="American Typewriter" size="60.0" />
         </font>
     </Label>
-    <Button fx:id="logInButton" layoutX="614.0" layoutY="343.0" mnemonicParsing="false" onAction="#onLogInClick"
-            prefHeight="66.0" prefWidth="270.0" styleClass="login-button" text="Log In" textFill="#22577a">
+    <Button fx:id="logInButton" layoutX="614.0" layoutY="343.0" mnemonicParsing="false" onAction="#onLogInClick" prefHeight="66.0" prefWidth="270.0" styleClass="login-button" text="Log In" textFill="#22577a">
         <font>
-            <Font size="32.0"/>
+            <Font size="32.0" />
         </font>
     </Button>
     <Button layoutX="639.0" layoutY="415.0" mnemonicParsing="false" text="Quest archive" textAlignment="CENTER" visible="false">
         <font>
-            <Font size="32.0"/>
+            <Font size="32.0" />
         </font>
     </Button>
-    <Button fx:id="createUserButton" layoutX="614.0" layoutY="518.0" mnemonicParsing="false"
-            onAction="#onCreateUserClick" prefHeight="58.0" prefWidth="269.0" styleClass="special-button"
-            text="Create Account" textFill="#22577a">
+    <Button fx:id="createUserButton" layoutX="614.0" layoutY="518.0" mnemonicParsing="false" onAction="#onCreateUserClick" prefHeight="58.0" prefWidth="269.0" styleClass="special-button" text="Create Account" textFill="#22577a">
         <font>
             <Font size="28.0" />
         </font>
@@ -80,26 +76,21 @@
                <Font size="19.0" />
             </font>
          </Text>
-          <Button fx:id="tryAgainButton" layoutX="48.0" layoutY="130.0" mnemonicParsing="false"
-                  onAction="#onTryAgainClick" prefHeight="43.0" prefWidth="168.0" styleClass="confirmation-button"
-                  text="Try Again" textFill="#22577a" visible="false">
+          <Button fx:id="tryAgainButton" layoutX="48.0" layoutY="130.0" mnemonicParsing="false" onAction="#onTryAgainClick" prefHeight="43.0" prefWidth="168.0" styleClass="confirmation-button" text="Try Again" textFill="#22577a" visible="false">
             <font>
                <Font size="16.0" />
             </font>
          </Button>
-          <Button fx:id="popupCreateUserButton" layoutX="284.0" layoutY="130.0" mnemonicParsing="false"
-                  onAction="#onCreateUserClick" prefHeight="43.0" prefWidth="168.0" styleClass="confirmation-button"
-                  text="Create Account" textFill="#22577a" visible="false">
+          <Button fx:id="popupCreateUserButton" layoutX="284.0" layoutY="130.0" mnemonicParsing="false" onAction="#onCreateUserClick" prefHeight="43.0" prefWidth="168.0" styleClass="confirmation-button" text="Create Account" textFill="#22577a" visible="false">
             <font>
                <Font size="16.0" />
             </font>
          </Button>
       </children>
    </Pane>
-    <Button fx:id="quitButton" layoutX="614.0" layoutY="597.0" mnemonicParsing="false" onAction="#onQuitButtonClick"
-            prefHeight="58.0" prefWidth="269.0" styleClass="special-button" text="Quit" textFill="#22577a">
+    <Button fx:id="quitButton" layoutX="614.0" layoutY="597.0" mnemonicParsing="false" onAction="#onQuitButtonClick" prefHeight="58.0" prefWidth="269.0" styleClass="special-button" text="Quit" textFill="#22577a">
       <font>
-          <Font size="28.0"/>
+          <Font size="28.0" />
       </font>
    </Button>
 </AnchorPane>

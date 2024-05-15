@@ -31,7 +31,7 @@ arduino-build:
      # Install dependencies (setup) and build the project
      - cd wio/quietquest
      - ./setup.sh
-     - arduino-cli compile --fqbn Seeeduino:samd:seeed_wio_terminal --library /display
+     - arduino-cli compile --fqbn Seeeduino:samd:seeed_wio_terminal
 
 # Define the Gradle build job
 build:

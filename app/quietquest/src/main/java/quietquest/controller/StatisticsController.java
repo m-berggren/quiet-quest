@@ -165,7 +165,7 @@ public class StatisticsController extends BaseController {
 
         // Add styling
         chartContainer.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
-        chartContainer.getStyleClass().add("vbox-chart");
+        chartContainer.getStyleClass().add("scroll-pane");
 
         //ADD LABELS SHOWING SOME MAJOR STATISTICS
 		Label createdQuestsLabel = new Label("Number of All Created Quests: " + getCreatedQuestsNumber());
@@ -327,6 +327,10 @@ public class StatisticsController extends BaseController {
 			series.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
 		}
 
+        // Add styling
+        barChart.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
+        barChart.getStyleClass().add("charts");
+
 		barChart.getData().add(series);
 		return barChart;
 
@@ -421,6 +425,10 @@ public class StatisticsController extends BaseController {
 			series.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
 		}
 
+        // Add styling
+        barChart.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
+        barChart.getStyleClass().add("charts");
+
 		barChart.getData().add(series);
 		return barChart;
 	}
@@ -449,6 +457,10 @@ public class StatisticsController extends BaseController {
 		for (Map.Entry<String, Double> entry : averageOpenBoxIntervals.entrySet()) {
 			series.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
 		}
+
+        // Add styling
+        barChart.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
+        barChart.getStyleClass().add("charts");
 
 		barChart.getData().add(series);
 		return barChart;

@@ -263,6 +263,13 @@ This file defines global css styles for the application.
     -fx-background-color: linear-gradient(to bottom, #79dbb1, #57CC99 100%);
 }
 
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
 
 .background-pane {
     -fx-background-image: url("images/questPage_background.png");

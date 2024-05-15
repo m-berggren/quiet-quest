@@ -41,6 +41,8 @@ public class QuestListController extends BaseController {
 	@FXML
 	private Button editButton;
 	@FXML
+	private Button deleteButton;
+	@FXML
 	private ListView<Task> taskListView;
 	@FXML
 	private Label questTypeLabel;
@@ -57,9 +59,27 @@ public class QuestListController extends BaseController {
 	@Override
 	public void afterMainController() {
 		selectedQuest = null;
-		quests = quietQuestFacade.getAllQuests();
-		displayQuests();
-		setSelectedQuest();
+		ArrayList<Quest> allQuests = quietQuestFacade.getAllQuests();
+		quests = new ArrayList<>();
+		for (Quest quest : allQuests) {
+			if (!quest.getCompletionState()) {
+				quests.add(quest);
+			}
+		}
+		if (quests != null && !quests.isEmpty()) {
+			displayQuests();
+			setSelectedQuest();
+		} else {
+			questListView.setPlaceholder(new Label("No quests found."));
+			// Disable buttons
+			goToQuestButton.setDisable(true);
+			editButton.setDisable(true);
+			saveButton.setDisable(true);
+			deleteButton.setDisable(true);
+			deleteTask.setDisable(true);
+			addTask.setDisable(true);
+
+		}
 	}
 
 	public void onGoToQuestClick() {
@@ -71,15 +91,7 @@ public class QuestListController extends BaseController {
 	 */
 	public void displayQuests() {
 		if (quietQuestFacade != null) {
-			//only show quests that are not completed
-			ArrayList<Quest> uncompletedQuests = new ArrayList<>();
-			for (Quest quest : quests) {
-				if (!quest.getCompletionState()) {
-					uncompletedQuests.add(quest);
-				}
-			}
-
-			ObservableList<Quest> questList = FXCollections.observableArrayList(uncompletedQuests);
+			ObservableList<Quest> questList = FXCollections.observableArrayList(quests);
 			questListView.setItems(questList);
 			questListView.setCellFactory(param -> new ListCell<Quest>() {
 				@Override
@@ -89,7 +101,7 @@ public class QuestListController extends BaseController {
 						setText(null);
 					} else {
 						setText(item.getTitle());
-						if (item.getId() == quietQuestFacade.getCurrentQuestId()) {
+						if (item.getId() == quietQuestFacade.getCurrentRunningQuestId()) {
 							setText(item.getTitle() + " (In Progress)");
 							setStyle("-fx-font-weight: bold");
 						}
@@ -146,7 +158,6 @@ public class QuestListController extends BaseController {
 	 * "task" or "pomodoro".
 	 */
 	public void showSelectedQuest() {
-		taskAnchorPane.setVisible(false);
 		taskListView.getItems().clear();
 		if (selectedQuest != null) {
 			titleField.setText(selectedQuest.getTitle());
@@ -165,13 +176,11 @@ public class QuestListController extends BaseController {
 				taskListView.setItems(taskList);
 				taskAnchorPane.setDisable(true);
 			} else {
-				Activity activity = getActivitiesFromQuest(selectedQuest).getFirst();
+				Activity activity = selectedQuest.getActivities().getFirst();
 				if (activity.getType() == QuestType.TASK) {
 					questTypeLabel.setText("TASKS");
 					pomodoroAnchorPane.setVisible(false);
 					taskAnchorPane.setVisible(true);
-
-
 					// Display tasks in taskListView
 					ObservableList<Task> taskList = FXCollections.observableArrayList();
 					for (Activity act : selectedQuest.getActivities()) {
@@ -209,8 +218,6 @@ public class QuestListController extends BaseController {
 		taskAnchorPane.setVisible(true);
 		taskAnchorPane.setDisable(false);
 		taskListView.setDisable(false);
-
-
 	}
 
 	public void onSaveButtonClick() {
@@ -228,9 +235,9 @@ public class QuestListController extends BaseController {
 		descriptionField.setEditable(false);
 		questListView.setDisable(false);
 
-
 		Quest newQuest = new Quest(quietQuestFacade.getUser(), newTitle, newDescription);
 		quietQuestFacade.updateQuest(selectedQuest, newQuest);
+		newTaskText.clear();
 		showSelectedQuest();
 		questListView.refresh();
 	}
@@ -242,8 +249,7 @@ public class QuestListController extends BaseController {
 			selectedQuest.getActivities().add(newTask);
 			quietQuestFacade.createTask(selectedQuest, newTask);
 			newTaskText.clear();
-			showSelectedQuest();
-
+			taskListView.getItems().add(newTask);
 		}
 	}
 
@@ -253,7 +259,6 @@ public class QuestListController extends BaseController {
 			selectedQuest.getActivities().remove(selectedTask);
 			quietQuestFacade.deleteTask(selectedTask);
 			taskListView.getItems().remove(selectedTask);
-			showSelectedQuest();
 		}
 	}
 }

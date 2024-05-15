@@ -78,16 +78,15 @@ public class QuietQuestFacade {
 	}
 
 	/**
-	 * @param quest
-	 * @return
+	 * Method to get all the activities of a quest.
+	 *
+	 * @param quest is the quest that needs to have activities extracted.
+	 * @return an ArrayList of activities of the quest.
 	 */
 	public ArrayList<Activity> getActivitiesFromQuest(Quest quest) {
 		return quest.getActivities();
 	}
 
-	public void updateTask(Task currTask, Task updTask) {
-		database.updateTask(currTask, updTask);
-	}
 
 	public void updateQuest(Quest currQuest, Quest updQuest) {
 		database.updateQuest(currQuest, updQuest);
@@ -164,7 +163,11 @@ public class QuietQuestFacade {
 		return user;
 	}
 
-	public int getCurrentQuestId() {
+	/**
+	 * Method to get the current running quest id.
+	 * @return the id of the current running quest.
+	 */
+	public int getCurrentRunningQuestId() {
 		ArrayList<Quest> quests = getAllQuests();
 		for (Quest quest : quests) {
 			if (quest.getCompleteTime() == null && quest.getStartTime() != null && !quest.getCompletionState()) {
@@ -174,6 +177,10 @@ public class QuietQuestFacade {
 		return -1;
 	}
 
+	/**
+	 * Method to delete a task from the database.
+	 * @param task is the task to be deleted.
+	 */
 	public void deleteTask(Task task) {
 		database.deleteTask(task.getId());
 	}

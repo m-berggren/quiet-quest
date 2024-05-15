@@ -277,10 +277,10 @@ public class Database {
     public void updateQuest(Quest currQuest, Quest updQuest) {
 
         boolean isTitleUpdated = updQuest.getTitle() != null &&
-                currQuest.getTitle().equals(updQuest.getTitle());
+                !currQuest.getTitle().equals(updQuest.getTitle());
 
         boolean isDetailUpdated = updQuest.getDetail() != null &&
-                currQuest.getDetail().equals(updQuest.getDetail());
+                !currQuest.getDetail().equals(updQuest.getDetail());
 
 
         if (isTitleUpdated) {
@@ -625,9 +625,9 @@ public class Database {
     }
 
     /**
-     * Deletes pomodoro_timer records related to a quest record.
+     * Delete a task record from the database.
      *
-     * @param quest is the record in database.
+     * @param taskId is the task id.
      */
     public void deleteTask(int taskId) {
         String sql = """
@@ -924,6 +924,11 @@ public class Database {
         return pomodoroQuests;
     }
 
+    /**
+     * Saves the time a user has opened a quest box during a quest.
+     * @param username the username of the user who opened the box
+     * @param questID the quest that was running when box is opened
+     */
     public void saveBoxOpenTimes(String username, int questID) {
         String sql = "UPDATE \"quest\" SET box_open_times = box_open_times + 1 WHERE user_id = ? AND id = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {

@@ -4,6 +4,8 @@ import quietquest.model.*;
 import quietquest.utility.FxmlFile;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public abstract class BaseController {
@@ -72,26 +74,6 @@ public abstract class BaseController {
 		mainController.loadView(FxmlFile.STATISTICS);
 	}
 
-	/**
-	 * Loads the home view based on string in {@link FxmlFile}.
-	 */
-	public void showSettings() {
-		mainController.loadView(FxmlFile.SETTINGS);
-	}
-
-	/**
-	 * Loads the help view based on string in {@link FxmlFile}.
-	 */
-	public void showHelp() {
-		mainController.loadView(FxmlFile.HELP);
-	}
-
-	/**
-	 * Loads the login view based on string in {@link FxmlFile}.
-	 */
-	public void showLogIn() {
-		mainController.loadView(FxmlFile.LOG_IN);
-	}
 
 	// ==============================* GETTERS & SETTERS *==============================
 
@@ -110,7 +92,7 @@ public abstract class BaseController {
 	}
 
 	public ArrayList<Activity> getActivitiesFromQuest(Quest quest) {
-		return quietQuestFacade.getActivitiesFromQuest(quest);
+		return quest.getActivities();
 	}
 
 	public ArrayList<PomodoroTimer> getAllPomodoroQuests() throws SQLException {
@@ -121,8 +103,21 @@ public abstract class BaseController {
 		return quietQuestFacade.getUser();
 	}
 
-	public int getCurrentQuestId() {
-		return quietQuestFacade.getCurrentQuestId();
+
+	// ==============================* HELPER METHODS *====================================
+
+	/**
+	 * Formats a timestamp to a string.
+	 *
+	 * @param timestamp is the timestamp to be formatted.
+	 * @return the formatted string.
+	 */
+	String formatTime(Timestamp timestamp) {
+		if (timestamp == null) {
+			return "N/A";
+		}
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		return format.format(timestamp);
 	}
 
 

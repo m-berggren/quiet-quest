@@ -4,52 +4,34 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
-<?import javafx.scene.control.ToggleButton?>
-<BorderPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-            prefHeight="760.0" prefWidth="1510.0" xmlns="http://javafx.com/javafx/21"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="quietquest.controller.MainController">
+<BorderPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="760.0" prefWidth="1510.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="quietquest.controller.MainController">
     <stylesheets>
-        <URL value="@/style.css"/>
+        <URL value="@/style.css" />
     </stylesheets>
 
     <left>
-        <VBox fx:id="sideMenu" prefHeight="760.0" prefWidth="200.0" style="-fx-background-color: #C7F9CC;"
-              BorderPane.alignment="CENTER">
-            <ToggleButton fx:id="homeButton" mnemonicParsing="false"
-                          onAction="#onHomeButtonClick" prefHeight="60.0" prefWidth="200.0"
-                          styleClass="side-menu-button" text="Home">
+        <VBox fx:id="sideMenu" prefHeight="760.0" prefWidth="200.0" style="-fx-background-color: #C7F9CC;" BorderPane.alignment="CENTER">
+            <ToggleButton fx:id="homeButton" mnemonicParsing="false" onAction="#onHomeButtonClick" prefHeight="60.0" prefWidth="200.0" styleClass="side-menu-button" text="Home">
                 <VBox.margin>
-                    <Insets top="150.0"/>
+                    <Insets top="150.0" />
                 </VBox.margin>
             </ToggleButton>
-            <ToggleButton fx:id="createQuestButton" mnemonicParsing="false" onAction="#onCreateQuestButtonClick"
-                          prefHeight="60.0" prefWidth="200.0" styleClass="side-menu-button" text="Create Quest">
+            <ToggleButton fx:id="createQuestButton" mnemonicParsing="false" onAction="#onCreateQuestButtonClick" prefHeight="60.0" prefWidth="200.0" styleClass="side-menu-button" text="Create Quest">
             </ToggleButton>
-            <ToggleButton fx:id="questListButton" mnemonicParsing="false" onAction="#onQuestListButtonClick"
-                          prefHeight="60.0"
-                          prefWidth="200.0" styleClass="side-menu-button" text="Quest List">
+            <ToggleButton fx:id="questListButton" mnemonicParsing="false" onAction="#onQuestListButtonClick" prefHeight="60.0" prefWidth="200.0" styleClass="side-menu-button" text="Quest List">
             </ToggleButton>
-            <ToggleButton fx:id="questHistoryButton" mnemonicParsing="false" onAction="#onQuestHistoryButtonClick"
-                          prefHeight="60.0" prefWidth="200.0" styleClass="side-menu-button" text="Quest History">
+            <ToggleButton fx:id="questHistoryButton" mnemonicParsing="false" onAction="#onQuestHistoryButtonClick" prefHeight="60.0" prefWidth="200.0" styleClass="side-menu-button" text="Quest History">
             </ToggleButton>
-            <ToggleButton fx:id="statisticsButton" mnemonicParsing="false" onAction="#onStatisticsButtonClick"
-                          prefHeight="60.0" prefWidth="200.0" styleClass="side-menu-button" text="Statistics">
+            <ToggleButton fx:id="statisticsButton" mnemonicParsing="false" onAction="#onStatisticsButtonClick" prefHeight="60.0" prefWidth="200.0" styleClass="side-menu-button" text="Statistics">
             </ToggleButton>
-            <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="200.0" styleClass="settings-button"
-                    text="Settings">
+            <Label prefHeight="0.0" prefWidth="200.0" />
+            <Button fx:id="logOutButton" mnemonicParsing="false" onAction="#onLogOutButtonClick" prefHeight="60.0" prefWidth="200.0" styleClass="side-menu-button" text="Log out">
             </Button>
-            <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="200.0" styleClass="help-button" text="Help">
-            </Button>
-            <Label prefHeight="100.0" prefWidth="200.0"/>
-            <Button fx:id="logOutButton" mnemonicParsing="false" onAction="#onLogOutButtonClick" prefHeight="60.0"
-                    prefWidth="200.0" styleClass="side-menu-button" text="Log out">
-            </Button>
-            <Button fx:id="exitButton" mnemonicParsing="false" onAction="#onQuitButtonClick" prefHeight="60.0"
-                    prefWidth="200.0" styleClass="side-menu-button" text="Quit">
+            <Button fx:id="exitButton" mnemonicParsing="false" onAction="#onQuitButtonClick" prefHeight="60.0" prefWidth="200.0" styleClass="side-menu-button" text="Quit">
             </Button>
         </VBox>
     </left>

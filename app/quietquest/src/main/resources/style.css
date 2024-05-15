@@ -151,16 +151,6 @@ This file defines global css styles for the application.
 
 /*--------------------* Styling for Tabs *--------------------*/
 
-.toggle-button:selected {
-    -fx-background-color: lightgreen;
-    -fx-background-radius: 4;
-
-    -fx-border-color: gray;
-    -fx-border-radius: 5;
-    -fx-border-width: 1;
-}
-
-/* Styling for TabPane */
 .tab-pane {
     -fx-tab-min-height: 30px;
     -fx-tab-min-width: 80px;

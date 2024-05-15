@@ -7,16 +7,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import quietquest.QuietQuestMain;
 import quietquest.model.*;
-import quietquest.utility.FxmlFile;
-import quietquest.utility.MQTTHandler;
+import quietquest.utility.*;
 
 import java.sql.SQLException;
 import java.io.IOException;
@@ -28,15 +26,15 @@ public class MainController extends BaseController {
     @FXML
     private VBox sideMenu;
     @FXML
-    private Button homeButton;
+    private ToggleButton homeButton;
     @FXML
-    private Button createQuestButton;
+    private ToggleButton createQuestButton;
     @FXML
-    private Button questListButton;
+    private ToggleButton questListButton;
     @FXML
-    private Button questHistoryButton;
+    private ToggleButton questHistoryButton;
     @FXML
-    private Button statisticsButton;
+    private ToggleButton statisticsButton;
     @FXML
     private VBox menuVBox;
 
@@ -62,6 +60,7 @@ public class MainController extends BaseController {
     // ==============================* VIEW MANAGEMENT *====================================
 
     public void onHomeButtonClick() {
+        toggleOneButtonOnly(MenuButtonType.HOME);
         showHome();
     }
 
@@ -69,23 +68,51 @@ public class MainController extends BaseController {
      *
      */
     public void onCreateQuestButtonClick() {
+        toggleOneButtonOnly(MenuButtonType.CREATE_QUEST);
         showCreateQuest();
     }
 
     public void onQuestListButtonClick() {
+        toggleOneButtonOnly(MenuButtonType.QUEST_LIST);
         showQuestList();
     }
 
     public void onQuestHistoryButtonClick() {
+        toggleOneButtonOnly(MenuButtonType.QUEST_HISTORY);
         showHistory();
     }
 
     public void onStatisticsButtonClick() {
+        toggleOneButtonOnly(MenuButtonType.STATISTICS);
         showStatistics();
     }
 
     public void onLogOutButtonClick(ActionEvent event) throws IOException, SQLException {
         loadOnLogout(event);
+    }
+
+    public void toggleOneButtonOnly(MenuButtonType selectedType) {
+        homeButton.setSelected(selectedType == MenuButtonType.HOME);
+        createQuestButton.setSelected(selectedType == MenuButtonType.CREATE_QUEST);
+        questListButton.setSelected(selectedType == MenuButtonType.QUEST_LIST);
+        questHistoryButton.setSelected(selectedType == MenuButtonType.QUEST_HISTORY);
+        statisticsButton.setSelected(selectedType == MenuButtonType.STATISTICS);
+    }
+
+    private void selectHomeButton() {
+        homeButton.setSelected(true);
+        createQuestButton.setSelected(false);
+        questListButton.setSelected(false);
+        questHistoryButton.setSelected(false);
+        statisticsButton.setSelected(false);
+    }
+
+    private void toggleHomeButton() {
+        homeButton.setSelected(true);
+        createQuestButton.setSelected(false);
+        questListButton.setSelected(false);
+        questHistoryButton.setSelected(false);
+        statisticsButton.setSelected(false);
     }
 
     public void onQuitButtonClick(ActionEvent event) {

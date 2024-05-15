@@ -2,6 +2,7 @@ package quietquest.controller;
 
 import quietquest.model.*;
 import quietquest.utility.FxmlFile;
+import quietquest.utility.MenuButtonType;
 
 import java.sql.Array;
 import java.sql.SQLException;
@@ -116,6 +117,10 @@ public abstract class BaseController {
 
     public ArrayList<PomodoroTimer> getAllPomodoroQuests() throws SQLException {
         return quietQuestFacade.getAllPomodoroQuests();
+    }
+
+    public void changeSelectedMenuButton(MenuButtonType selectedType) {
+        mainController.toggleOneButtonOnly(selectedType);
     }
 
     public User getUser() {

@@ -45,7 +45,10 @@
                                         </font>
                                     </Text>
                                     <TextField fx:id="taskField" layoutX="14.0" layoutY="104.0" prefHeight="30.0" prefWidth="279.0" promptText="add a new task (optional)" AnchorPane.leftAnchor="14.0" />
-                                    <Button fx:id="addNewTaskButton" alignment="CENTER" layoutX="322.0" layoutY="97.8" minWidth="38.0" mnemonicParsing="false" onAction="#createTask" prefHeight="21.0" prefWidth="50.0" style="-fx-background-color: #38A3A5; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="+" AnchorPane.topAnchor="97.8">
+                                    <Button fx:id="addNewTaskButton" alignment="CENTER" layoutX="322.0" layoutY="97.8"
+                                            minWidth="38.0" mnemonicParsing="false" onAction="#createTask"
+                                            prefHeight="21.0" prefWidth="50.0" styleClass="general-button" text="+"
+                                            AnchorPane.topAnchor="97.8">
                                         <font>
                                             <Font size="20.0" />
                                         </font>
@@ -102,7 +105,10 @@
                                             <Font size="18.0" />
                                         </font>
                                     </Label>
-                                    <Button fx:id="addNewPomodoroButton" alignment="CENTER" layoutX="322.0" layoutY="97.0" minWidth="38.0" mnemonicParsing="false" onAction="#createPomodoroTimer" prefHeight="21.0" prefWidth="50.0" style="-fx-background-color: #38A3A5; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="+">
+                                    <Button fx:id="addNewPomodoroButton" alignment="CENTER" layoutX="322.0"
+                                            layoutY="97.0" minWidth="38.0" mnemonicParsing="false"
+                                            onAction="#createPomodoroTimer" prefHeight="21.0" prefWidth="50.0"
+                                            styleClass="general-button" text="+">
                                         <font>
                                             <Font size="20.0" />
                                         </font>
@@ -133,7 +139,9 @@
                 </font>
             </Text>
             <ListView fx:id="activityListView" layoutX="28.0" layoutY="72.8" prefHeight="217.0" prefWidth="380.0" AnchorPane.leftAnchor="28.0" AnchorPane.topAnchor="73.0" />
-            <Button fx:id="deleteTaskButton" alignment="CENTER" layoutX="357.0" layoutY="294.0" minWidth="38.0" mnemonicParsing="false" onAction="#deleteActivity" prefHeight="30.0" prefWidth="50.0" style="-fx-background-color: #38A3A5; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="X" wrapText="true" AnchorPane.topAnchor="294.0">
+            <Button fx:id="deleteTaskButton" alignment="CENTER" layoutX="357.0" layoutY="294.0" minWidth="38.0"
+                    mnemonicParsing="false" onAction="#deleteActivity" prefHeight="30.0" prefWidth="50.0"
+                    styleClass="general-button" text="X" wrapText="true" AnchorPane.topAnchor="294.0">
                 <font>
                     <Font size="20.0" />
                 </font>
@@ -151,7 +159,8 @@
                             <Font size="16.0" />
                         </font>
                     </Text>
-                    <Button fx:id="okayButton" layoutX="226.0" layoutY="134.0" mnemonicParsing="false" onAction="#onOkayButtonClick" style="-fx-font-family: Montserrat; -fx-font-size: 20; -fx-text-fill: #22577A; -fx-background-color: #38A3A5;" text="Okay" visible="false">
+                    <Button fx:id="okayButton" layoutX="226.0" layoutY="134.0" mnemonicParsing="false"
+                            onAction="#onOkayButtonClick" styleClass="general-button" text="Okay" visible="false">
                         <font>
                             <Font size="16.0" />
                         </font>
@@ -160,17 +169,23 @@
             </Pane>
         </children>
     </AnchorPane>
-    <Button fx:id="saveQuestButton" layoutX="496.0" layoutY="427.2" mnemonicParsing="false" onAction="#createQuest" prefHeight="54.0" prefWidth="146.0" style="-fx-background-color: #57CC99; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="SAVE" wrapText="true" AnchorPane.leftAnchor="496.0" AnchorPane.topAnchor="427.0">
+    <Button fx:id="saveQuestButton" layoutX="496.0" layoutY="427.2" mnemonicParsing="false" onAction="#createQuest"
+            prefHeight="54.0" prefWidth="146.0" styleClass="general-button" text="SAVE" wrapText="true"
+            AnchorPane.leftAnchor="496.0" AnchorPane.topAnchor="427.0">
         <font>
             <Font name="American Typewriter" size="30.0" />
         </font>
     </Button>
-    <Button fx:id="clearButton" layoutX="647.2" layoutY="426.4" mnemonicParsing="false" onAction="#clearAllFields" prefHeight="54.0" prefWidth="146.0" style="-fx-background-color: #57CC99; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="CLEAR" textAlignment="CENTER" wrapText="true" AnchorPane.leftAnchor="647.0" AnchorPane.topAnchor="426.0">
+    <Button fx:id="clearButton" layoutX="647.2" layoutY="426.4" mnemonicParsing="false" onAction="#clearAllFields"
+            prefHeight="54.0" prefWidth="146.0" styleClass="general-button" text="CLEAR" textAlignment="CENTER"
+            wrapText="true" AnchorPane.leftAnchor="647.0" AnchorPane.topAnchor="426.0">
         <font>
             <Font name="American Typewriter" size="30.0" />
         </font>
     </Button>
-    <Button fx:id="goToQuestsButton" layoutX="798.4" layoutY="426.4" mnemonicParsing="false" onAction="#onGoToQuests" prefHeight="54.0" prefWidth="146.0" style="-fx-background-color: #57CC99; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="LIST" wrapText="true" AnchorPane.leftAnchor="798.0" AnchorPane.topAnchor="426.0">
+    <Button fx:id="goToQuestsButton" layoutX="798.4" layoutY="426.4" mnemonicParsing="false" onAction="#onGoToQuests"
+            prefHeight="54.0" prefWidth="146.0" styleClass="general-button" text="LIST" wrapText="true"
+            AnchorPane.leftAnchor="798.0" AnchorPane.topAnchor="426.0">
         <font>
             <Font size="30.0" />
         </font>

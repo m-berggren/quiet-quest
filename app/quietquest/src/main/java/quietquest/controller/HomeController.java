@@ -9,6 +9,7 @@ import javafx.scene.image.ImageView;
 import quietquest.model.BadgeManager;
 import quietquest.model.PomodoroTimer;
 import quietquest.model.Quest;
+import quietquest.utility.MenuButtonType;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -56,12 +57,15 @@ public class HomeController extends BaseController {
         displayBadges();
     }
     public void onContinueQuestClick(ActionEvent event) {
+        changeSelectedMenuButton(MenuButtonType.QUEST_LIST);
         showQuest(currentQuest);
     }
     public void onCreateQuestClick(ActionEvent event) {
+        changeSelectedMenuButton(MenuButtonType.CREATE_QUEST);
         showCreateQuest();
     }
     public void onViewListClick(ActionEvent event) {
+        changeSelectedMenuButton(MenuButtonType.QUEST_LIST);
         showQuestList();
     }
 

@@ -14,7 +14,9 @@
    </ImageView>
    <AnchorPane fx:id="questAnchorPane" layoutX="535.0" layoutY="20.0" prefHeight="537.0" prefWidth="370.0" style="-fx-background-color: #fff; -fx-background-radius: 10;" AnchorPane.leftAnchor="55.0" AnchorPane.topAnchor="25.0">
       <children>
-         <Button fx:id="completeQuestButton" layoutX="148.0" layoutY="460.0" mnemonicParsing="false" onAction="#onCompleteQuestClick" style="-fx-text-fill: #22577A; -fx-background-color: #57CC99; -fx-background-radius: 8;" text="COMPLETE" AnchorPane.leftAnchor="148.0" AnchorPane.topAnchor="460.0">
+          <Button fx:id="completeQuestButton" layoutX="148.0" layoutY="460.0" mnemonicParsing="false"
+                  onAction="#onCompleteQuestClick" styleClass="general-button" text="COMPLETE"
+                  AnchorPane.leftAnchor="148.0" AnchorPane.topAnchor="460.0">
             <font>
                <Font name="American Typewriter" size="24.0" />
             </font>
@@ -57,7 +59,8 @@
                <Font name="American Typewriter" size="15.0" />
             </font>
          </Label>
-         <Button fx:id="startQuestButton" layoutX="20.0" layoutY="460.0" mnemonicParsing="false" onAction="#onStartQuestClick" style="-fx-text-fill: #22577A; -fx-background-color: #57CC99; -fx-background-radius: 8;" text="START" AnchorPane.topAnchor="460.0">
+          <Button fx:id="startQuestButton" layoutX="20.0" layoutY="460.0" mnemonicParsing="false"
+                  onAction="#onStartQuestClick" styleClass="general-button" text="START" AnchorPane.topAnchor="460.0">
             <font>
                <Font name="American Typewriter" size="24.0" />
             </font>

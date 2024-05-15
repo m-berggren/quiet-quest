@@ -162,7 +162,12 @@ public class StatisticsController extends BaseController {
 	private void displayStatistics() {
 		chartContainerPane.setContent(chartContainer);
 		chartContainer.getChildren().clear();
-		//ADD LABELS SHOWING SOME MAJOR STATISTICS
+
+        // Add styling
+        chartContainer.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
+        chartContainer.getStyleClass().add("vbox-chart");
+
+        //ADD LABELS SHOWING SOME MAJOR STATISTICS
 		Label createdQuestsLabel = new Label("Number of All Created Quests: " + getCreatedQuestsNumber());
 		createdQuestsLabel.setStyle("-fx-font-size: 16");
 		Label averageOpenBoxTimesLabel = new Label("Average Open Box Times on All Complete Quests: " + getAverageOpenBoxTimes());
@@ -257,6 +262,10 @@ public class StatisticsController extends BaseController {
 			series.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
 		}
 		barChart.getData().add(series);
+
+        // Add styling
+        barChart.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
+        barChart.getStyleClass().add("charts");
 		return barChart;
 	}
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.image.Image?>
@@ -9,6 +10,10 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="760.0" prefWidth="1210.0" style="-fx-background-color: #C7F9CC;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="quietquest.controller.StatisticsController">
+    <stylesheets>
+        <URL value="@/style.css"/>
+    </stylesheets>
+
     <children>
         <ImageView fitHeight="760.0" fitWidth="1210.0" pickOnBounds="true">
             <image>
@@ -17,7 +22,11 @@
         </ImageView>
       <ScrollPane fx:id="chartContainerPane" layoutX="33.0" layoutY="119.0" prefHeight="599.0" prefWidth="1133.0">
          <content>
-            <VBox fx:id="chartContainer" prefHeight="672.0" prefWidth="1123.0" />
+             <VBox fx:id="chartContainer" prefHeight="672.0" prefWidth="1123.0">
+                 <children>
+                     <VBox fx:id="statisticsLabel" prefHeight="200.0" prefWidth="100.0" styleClass="vbox-chart"/>
+                 </children>
+             </VBox>
          </content>
       </ScrollPane>
       <Label fx:id="statisticsTitle" layoutX="479.0" layoutY="23.0" prefHeight="62.0" prefWidth="422.0" text="Quest History Statistics">

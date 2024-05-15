@@ -17,7 +17,7 @@ stages:
 
 #Define the 'arduino-build' job
 #arduino-build:
-   image: ubuntu:latest
+#   image: ubuntu:latest
 #   stage: arduino-build
 #   tags:
 #     - docker

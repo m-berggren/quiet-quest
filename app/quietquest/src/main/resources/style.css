@@ -262,3 +262,10 @@ This file defines global css styles for the application.
 .charts {
     -fx-background-color: linear-gradient(to bottom, #79dbb1, #57CC99 100%);
 }
+
+/*
+.background-pane {
+    -fx-background-image: url("images/questPage_background.png");
+    -fx-background-size: cover;
+    -fx-background-position: center;
+}*/

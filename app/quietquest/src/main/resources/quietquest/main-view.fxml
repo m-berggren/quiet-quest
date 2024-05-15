@@ -14,8 +14,14 @@
       <VBox fx:id="sideMenu" prefHeight="760.0" prefWidth="200.0" style="-fx-background-color: #C7F9CC;" BorderPane.alignment="CENTER">
          <HBox prefHeight="52.0" prefWidth="200.0">
             <children>
-               <Button fx:id="playButton" mnemonicParsing="false" onAction="#onPlayButtonClick" prefHeight="48.0" prefWidth="98.0" styleClass="side-menu-button" text="Play" />
-               <Button fx:id="stopButton" mnemonicParsing="false" onAction="#onStopButtonClick" prefHeight="48.0" prefWidth="102.0" styleClass="side-menu-button" text="Stop" />
+               <Button fx:id="playButton" mnemonicParsing="false" onAction="#onPlayButtonClick" prefHeight="48.0" prefWidth="98.0" styleClass="side-menu-button" text="🔊 Play">
+                  <font>
+                     <Font size="20.0" />
+                  </font></Button>
+               <Button fx:id="stopButton" mnemonicParsing="false" onAction="#onStopButtonClick" prefHeight="48.0" prefWidth="102.0" styleClass="side-menu-button" text="🔇 Stop">
+                  <font>
+                     <Font size="20.0" />
+                  </font></Button>
             </children>
          </HBox>
          <Slider fx:id="volumeSlider" value="100.0" />

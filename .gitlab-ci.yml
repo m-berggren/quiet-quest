@@ -8,9 +8,9 @@ before_script:
   # Export the GRADLE_USER_HOME environment variable for use in all subsequent commands
   - export GRADLE_USER_HOME
   # Change permission to execute bash shell script
-  - chmod +x setup-build-env.sh
+  - chmod +x setup.sh
   # Execute bash shell script
-  - ./setup-build-env.sh
+  - ./setup.sh
 
 
 # Define the stages that make up the build process

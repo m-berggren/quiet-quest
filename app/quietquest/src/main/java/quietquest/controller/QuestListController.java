@@ -8,15 +8,24 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
-import quietquest.model.Activity;
-import quietquest.model.PomodoroTimer;
-import quietquest.model.Quest;
-import quietquest.model.QuestType;
+import quietquest.model.*;
 
 import java.util.ArrayList;
 
 
 public class QuestListController extends BaseController {
+	@FXML
+	private TextField newTaskText;
+	@FXML
+	private Button deleteTask;
+	@FXML
+	private Button addTask;
+	@FXML
+	private AnchorPane questAnchorPane;
+	@FXML
+	private Button goToQuestButton;
+	@FXML
+	private Label titleLabelRight;
 	@FXML
 	private AnchorPane taskAnchorPane;
 	@FXML
@@ -32,7 +41,7 @@ public class QuestListController extends BaseController {
 	@FXML
 	private Button editButton;
 	@FXML
-	private ListView<String> taskListView;
+	private ListView<Task> taskListView;
 	@FXML
 	private Label questTypeLabel;
 	@FXML
@@ -137,17 +146,41 @@ public class QuestListController extends BaseController {
 	 * "task" or "pomodoro".
 	 */
 	public void showSelectedQuest() {
+		taskAnchorPane.setVisible(false);
+		taskListView.getItems().clear();
 		if (selectedQuest != null) {
 			titleField.setText(selectedQuest.getTitle());
 			descriptionField.setText(selectedQuest.getDetail());
-			if (selectedQuest.getActivities().isEmpty()) {
-				return;
+			if (!selectedQuest.getActivities().isEmpty()) {
+				questTypeLabel.setText("TASKS");
+				pomodoroAnchorPane.setVisible(false);
+				taskAnchorPane.setVisible(true);
+				// Display tasks in taskListView
+				ObservableList<Task> taskList = FXCollections.observableArrayList();
+				for (Activity act : selectedQuest.getActivities()) {
+					if (act instanceof Task) {
+						taskList.add((Task) act);
+					}
+				}
+				taskListView.setItems(taskList);
+				taskAnchorPane.setDisable(true);
 			} else {
 				Activity activity = getActivitiesFromQuest(selectedQuest).getFirst();
 				if (activity.getType() == QuestType.TASK) {
 					questTypeLabel.setText("TASKS");
 					pomodoroAnchorPane.setVisible(false);
 					taskAnchorPane.setVisible(true);
+
+
+					// Display tasks in taskListView
+					ObservableList<Task> taskList = FXCollections.observableArrayList();
+					for (Activity act : selectedQuest.getActivities()) {
+						if (act instanceof Task) {
+							taskList.add((Task) act);
+						}
+					}
+					taskListView.setItems(taskList);
+					taskAnchorPane.setDisable(true);
 
 				} else if (activity.getType() == QuestType.POMODORO) {
 					questTypeLabel.setText("POMODORO");
@@ -173,6 +206,11 @@ public class QuestListController extends BaseController {
 		titleField.setEditable(true);
 		descriptionField.setEditable(true);
 		questListView.setDisable(true);
+		taskAnchorPane.setVisible(true);
+		taskAnchorPane.setDisable(false);
+		taskListView.setDisable(false);
+
+
 	}
 
 	public void onSaveButtonClick() {
@@ -189,5 +227,33 @@ public class QuestListController extends BaseController {
 		titleField.setEditable(false);
 		descriptionField.setEditable(false);
 		questListView.setDisable(false);
+
+
+		Quest newQuest = new Quest(quietQuestFacade.getUser(), newTitle, newDescription);
+		quietQuestFacade.updateQuest(selectedQuest, newQuest);
+		showSelectedQuest();
+		questListView.refresh();
+	}
+
+	public void onAddTask() {
+		String newTaskDescription = newTaskText.getText();
+		if (selectedQuest != null && !newTaskDescription.isEmpty()) {
+			Task newTask = new Task(newTaskDescription); // Generate a unique ID for the task
+			selectedQuest.getActivities().add(newTask);
+			quietQuestFacade.createTask(selectedQuest, newTask);
+			newTaskText.clear();
+			showSelectedQuest();
+
+		}
+	}
+
+	public void onDeleteTask() {
+		Task selectedTask = taskListView.getSelectionModel().getSelectedItem();
+		if (selectedTask != null && selectedQuest != null) {
+			selectedQuest.getActivities().remove(selectedTask);
+			quietQuestFacade.deleteTask(selectedTask);
+			taskListView.getItems().remove(selectedTask);
+			showSelectedQuest();
+		}
 	}
 }

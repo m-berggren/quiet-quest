@@ -629,14 +629,16 @@ public class Database {
      *
      * @param quest is the record in database.
      */
-    public void deleteTasksFromQuest(Quest quest) throws SQLException {
+    public void deleteTask(int taskId) {
         String sql = """
                 DELETE FROM "task"
-                WHERE quest_id = ?
+                WHERE id = ?
                 """;
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setInt(1, quest.getId());
+            pstmt.setInt(1, taskId);
             pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 

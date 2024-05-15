@@ -40,6 +40,10 @@ public class QuietQuestFacade {
 		database.createQuest(quest, activities);
 	}
 
+	public void createTask(Quest quest, Task task) {
+		database.createTask(quest, task);
+	}
+
 	/**
 	 * @param quest
 	 */
@@ -168,5 +172,9 @@ public class QuietQuestFacade {
 			}
 		}
 		return -1;
+	}
+
+	public void deleteTask(Task task) {
+		database.deleteTask(task.getId());
 	}
 }

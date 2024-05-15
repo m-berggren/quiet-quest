@@ -7,6 +7,10 @@ before_script:
   - GRADLE_USER_HOME="$(pwd)/.gradle"
   # Export the GRADLE_USER_HOME environment variable for use in all subsequent commands
   - export GRADLE_USER_HOME
+  # Change permission to execute bash shell script
+  - chmod +x setup-build-env.sh
+  # Execute bash shell script
+  - ./setup-build-env.sh
 
 
 # Define the stages that make up the build process
@@ -16,22 +20,25 @@ stages:
   - test          # The 'test' stage runs the application's tests
 
 #Define the 'arduino-build' job
-#arduino-build:
-#   image: ubuntu:latest
-#   stage: arduino-build
-#   tags:
-#     - docker
-#   script:
-#     # Install arduino-cli
-#     - apt-get update
-#     - export PATH=$PATH:/builds/courses/dit113/2024/group-12/quiet-quest/bin
-#     - apt-get install curl -y
-#     - curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
-#     - arduino-cli version
-#     # Install dependencies (setup) and build the project
-#     - cd wio/quietquest
-#     - ./setup.sh
-#     - arduino-cli compile --fqbn Seeeduino:samd:seeed_wio_terminal
+arduino-build:
+   image: ubuntu:latest
+   stage: arduino-build
+   tags:
+     - docker
+   script:
+     # Install arduino-cli
+     - apt-get update
+     - apt-get install curl -y
+     - curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
+     - export PATH=$PATH:/root/bin
+     - arduino-cli version
+     # Install dependencies (setup) and build the project
+     - cd wio/quietquest
+     - ./setup.sh
+     # Check that Arduino project libraries are installed
+     - arduino-cli lib list
+     # Compile Arduino code
+     - arduino-cli compile --fqbn Seeeduino:samd:seeed_wio_terminal
 
 # Define the Gradle build job
 build:

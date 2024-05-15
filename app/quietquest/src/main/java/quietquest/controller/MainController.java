@@ -15,7 +15,6 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -25,14 +24,10 @@ import quietquest.utility.FxmlFile;
 import quietquest.model.Database;
 import quietquest.model.User;
 import quietquest.model.Quest;
-
-import java.io.File;
 import java.net.URL;
 import quietquest.utility.MQTTHandler;
-
 import java.sql.SQLException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Optional;
 
 public class MainController extends BaseController {
@@ -85,13 +80,14 @@ public class MainController extends BaseController {
 
     // ==============================* VIEW MANAGEMENT *====================================
 
+    /**
+     * The methods below redirect to the various pages inside the application,
+     * using inherited methods from BaseController.
+     */
     public void onHomeButtonClick() {
         showHome();
     }
 
-    /**
-     *
-     */
     public void onCreateQuestButtonClick() {
         showCreateQuest();
     }
@@ -115,6 +111,10 @@ public class MainController extends BaseController {
         loadOnLogout(event);
     }
 
+    /**
+     * Plays the desired music file.
+     * The chosen music file is declared as fileName and links to an mp3 audio file in the project directory.
+     */
     public void onPlayButtonClick() {
         String fileName = "/music/main-sound.mp3";
         URL path = getClass().getResource(fileName);
@@ -136,7 +136,10 @@ public class MainController extends BaseController {
         }
     }
 
-    public void onQuitButtonClick(ActionEvent event) {
+    /**
+     * Exits the desktop application and disconnects from the database and MQTT handler.
+     */
+    public void onQuitButtonClick() {
         ConfirmationAlert alert = new ConfirmationAlert();
         alert.setTitle("Confirmation");
         alert.setHeaderText("This will exit the application.");
@@ -150,6 +153,10 @@ public class MainController extends BaseController {
         }
     }
 
+    /**
+     * Loads the desired view.
+     * @param view String value of the desired view
+     */
     public void loadView(String view) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(QuietQuestMain.class.getResource(view));
@@ -166,6 +173,10 @@ public class MainController extends BaseController {
         }
     }
 
+    /**
+     * Loads the create quest view based on string in {@link FxmlFile}.
+     * @param quest Quest value of the selected quest
+     */
     public void loadQuestController(Quest quest) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(QuietQuestMain.class.getResource(FxmlFile.SHOW_QUEST));
@@ -178,6 +189,10 @@ public class MainController extends BaseController {
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     * Loads the login view based on string in {@link FxmlFile}.
+     */
     public void loadOnLogout(ActionEvent event) throws IOException, SQLException {
         FXMLLoader loader = new FXMLLoader(QuietQuestMain.class.getResource(FxmlFile.LOG_IN));
         Parent root = loader.load();

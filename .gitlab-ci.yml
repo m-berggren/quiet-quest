@@ -35,9 +35,9 @@ arduino-build:
      - arduino-cli version
      # Create credentials.cpp with variables in gitlab
      - | # Indicates start of multi-line script. '>' indicates file is overwritten, '>>' that it appends to
-       echo '#include "credentials.h"' > $CREDENTIALS_PATH
-       echo "const char* SSID = \"$WIFI_SSID\";" >> $CREDENTIALS_PATH
-       echo "const char* PASSWORD = \"$WIFI_PASSWORD\";" >> $CREDENTIALS_PATH
+       echo '#include "credentials.h"' > $CREDENTIALS_CPP
+       echo "const char* SSID = \"$WIFI_SSID\";" >> $CREDENTIALS_CPP
+       echo "const char* PASSWORD = \"$WIFI_PASSWORD\";" >> $CREDENTIALS_CPP
      # Install dependencies (setup) and build the project
      - cd wio/quietquest
      - ./setup.sh

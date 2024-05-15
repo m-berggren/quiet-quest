@@ -7,158 +7,166 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class QuietQuestFacade {
-    protected final MQTTHandler mqttHandler;
-    protected final Database database;
-    protected final User user;
+	protected final MQTTHandler mqttHandler;
+	protected final Database database;
+	protected final User user;
 
-    // ==============================* CONSTRUCTOR *========================================
+	// ==============================* CONSTRUCTOR *========================================
 
-    /**
-     * Constructs a new instance of QuietQuestFacade that acts as a bridge separating controllers
-     * from the model in the application and attempts to adhere to the MVC (Model-View-Controller)
-     * architecture. It manages the MQTT handler, user session and connections to database.
-     *
-     * @param user     is the User object to store login information, used for database querying.
-     * @param database is the single Database object that handles all query operations.
-     */
-    public QuietQuestFacade(User user, Database database, MQTTHandler mqttHandler) {
-        this.mqttHandler = mqttHandler;
-        this.user = user;
-        this.database = database;
-    }
+	/**
+	 * Constructs a new instance of QuietQuestFacade that acts as a bridge separating controllers
+	 * from the model in the application and attempts to adhere to the MVC (Model-View-Controller)
+	 * architecture. It manages the MQTT handler, user session and connections to database.
+	 *
+	 * @param user     is the User object to store login information, used for database querying.
+	 * @param database is the single Database object that handles all query operations.
+	 */
+	public QuietQuestFacade(User user, Database database, MQTTHandler mqttHandler) {
+		this.mqttHandler = mqttHandler;
+		this.user = user;
+		this.database = database;
+	}
 
-    // ==============================* DATABASE MANAGER *===================================
+	// ==============================* DATABASE MANAGER *===================================
 
-    /**
-     * @return
-     */
-    public ArrayList<Quest> getAllQuests() {
-        return database.getAllQuests(user);
-    }
+	/**
+	 * @return
+	 */
+	public ArrayList<Quest> getAllQuests() {
+		return database.getAllQuests(user);
+	}
 
-    public void createQuest(Quest quest, ArrayList<Activity> activities) {
-        database.createQuest(quest, activities);
-    }
+	public void createQuest(Quest quest, ArrayList<Activity> activities) {
+		database.createQuest(quest, activities);
+	}
 
-    /**
-     * @param quest
-     */
-    public void startQuest(Quest quest) {
-        database.startQuest(quest);
+	/**
+	 * @param quest
+	 */
+	public void startQuest(Quest quest) {
+		database.startQuest(quest);
+		if (!quest.getActivities().isEmpty()) {
+			ArrayList<Activity> activities = quest.getActivities();
+			if (activities.getFirst() instanceof PomodoroTimer pomodoro) {
+				pomodoro.start();
+			}
+		}
+	}
 
-        ArrayList<Activity> activities = database.getActivitiesFromQuest(quest);
-        if (activities.getFirst() instanceof PomodoroTimer pomodoro) {
-            pomodoro.start();
-        }
-    }
+	/**
+	 * @return
+	 */
+	public ArrayList<PomodoroTimer> getAllPomodoroQuests() throws SQLException {
+		return database.getAllPomodoroQuests(user);
+	}
 
-    /**
-     * @return
-     */
-    public ArrayList<PomodoroTimer> getAllPomodoroQuests() throws SQLException {
-        return database.getAllPomodoroQuests(user);
-    }
+	/**
+	 * @param quest
+	 */
+	public void completeQuest(Quest quest) {
+		database.completeQuest(quest);
+		if (!quest.getActivities().isEmpty()) {
+			ArrayList<Activity> activities = quest.getActivities();
+			if (activities.getFirst() instanceof PomodoroTimer pomodoro) {
+				pomodoro.end();
+			}
+		}
+	}
 
-    /**
-     * @param quest
-     */
-    public void completeQuest(Quest quest) {
-        database.completeQuest(quest);
+	/**
+	 * @param quest
+	 * @return
+	 */
+	public ArrayList<Activity> getActivitiesFromQuest(Quest quest) {
+		return quest.getActivities();
+	}
 
-        ArrayList<Activity> activities = database.getActivitiesFromQuest(quest);
-        if (activities.getFirst() instanceof PomodoroTimer pomodoro) {
-            pomodoro.end();
-        }
-    }
+	public void updateTask(Task currTask, Task updTask) {
+		database.updateTask(currTask, updTask);
+	}
 
-    /**
-     * @param quest
-     * @return
-     */
-    public ArrayList<Activity> getActivitiesFromQuest(Quest quest) {
-        return database.getActivitiesFromQuest(quest);
-    }
+	public void updateQuest(Quest currQuest, Quest updQuest) {
+		database.updateQuest(currQuest, updQuest);
+	}
 
-    public void updateTask(Task currTask, Task updTask) {
-        database.updateTask(currTask, updTask);
-    }
+	public void updateTaskCompletionStateInDb(Task task) {
+		database.updateTaskCompletionState(task);
+	}
 
-    public void updateQuest(Quest currQuest, Quest updQuest) {
-        database.updateQuest(currQuest, updQuest);
-    }
+	public void updateTaskEndTimeInDb(Task task) {
+		database.updateTaskEndTime(task);
+	}
 
-    public void updateTaskCompletionStateInDb(Task task) {
-        database.updateTaskCompletionState(task);
-    }
+	public void deleteQuest(Quest quest) {
+		database.deleteQuest(quest);
+	}
 
-    public void updateTaskEndTimeInDb(Task task) {
-        database.updateTaskEndTime(task);
-    }
+	public void saveBoxOpenTimes(Quest currentQuest) {
+		database.saveBoxOpenTimes(user.getUsername(), currentQuest.getId());
+	}
 
-    public void deleteQuest(Quest quest) {
-        database.deleteQuest(quest);
-    }
+	// update task
+	// update pomodoroTimer
+	// or update activity
+	// delete activity
 
-    public void saveBoxOpenTimes(Quest currentQuest) {
-        database.saveBoxOpenTimes(user.getUsername() , currentQuest.getId());
-    }
+	// ==============================* MQTT MANAGER *=======================================
 
-    // update task
-    // update pomodoroTimer
-    // or update activity
-    // delete activity
+	/**
+	 * @param pubTopic
+	 * @param pubMessage
+	 */
+	public void connectMqtt(String pubTopic, String pubMessage) {
+		mqttHandler.connect(pubTopic, pubMessage);
+	}
 
-    // ==============================* MQTT MANAGER *=======================================
+	/**
+	 *
+	 */
+	public void subscribeMqtt() {
+		mqttHandler.subscribe();
+	}
 
-    /**
-     * @param pubTopic
-     * @param pubMessage
-     */
-    public void connectMqtt(String pubTopic, String pubMessage) {
-        mqttHandler.connect(pubTopic, pubMessage);
-    }
+	/**
+	 * @param topic
+	 * @param message
+	 */
+	public void publishMqttMessage(String topic, String message) {
+		mqttHandler.publishMessage(topic, message);
+	}
 
-    /**
-     *
-     */
-    public void subscribeMqtt() {
-        mqttHandler.subscribe();
-    }
+	/**
+	 * @param uiUpdater
+	 */
+	public void setUIUpdater(UIUpdater uiUpdater) {
+		mqttHandler.setUIUpdater(uiUpdater);
+	}
 
-    /**
-     * @param topic
-     * @param message
-     */
-    public void publishMqttMessage(String topic, String message) {
-        mqttHandler.publishMessage(topic, message);
-    }
+	/**
+	 *
+	 */
+	public void disconnectMqtt() {
+		mqttHandler.disconnect();
+	}
 
-    /**
-     * @param uiUpdater
-     */
-    public void setUIUpdater(UIUpdater uiUpdater) {
-        mqttHandler.setUIUpdater(uiUpdater);
-    }
-
-    /**
-     *
-     */
-    public void disconnectMqtt() {
-        mqttHandler.disconnect();
-    }
-
-    // create quest
-    // delete quest
-    // update quest
+	// create quest
+	// delete quest
+	// update quest
 
 
-    // ==============================* QUEST MANAGER *======================================
+	// ==============================* GETTERS & SETTERS *==================================
 
+	public User getUser() {
+		return user;
+	}
 
-    // ==============================* GETTERS & SETTERS *==================================
-
-    public User getUser() {
-        return user;
-    }
-
+	public int getCurrentQuestId() {
+		ArrayList<Quest> quests = getAllQuests();
+		for (Quest quest : quests) {
+			if (quest.getCompleteTime() == null && quest.getStartTime() != null && !quest.getCompletionState()) {
+				return quest.getId();
+			}
+		}
+		return -1;
+	}
 }

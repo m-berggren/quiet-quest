@@ -119,9 +119,9 @@ public class Database {
                 Timestamp startTime = rs.getTimestamp("start_time");
                 Timestamp completeTime = rs.getTimestamp("complete_time");
                 int boxOpenTimes = getBoxOpenTimes(id, user_id);
-
+                ArrayList<Activity> activities = getActivitiesFromQuest(id);
                 // Create new Quest object and add it to the list
-                Quest quest = new Quest(id, user_id, completionState, title, detail, startTime, completeTime, boxOpenTimes);
+                Quest quest = new Quest(id, user_id, completionState, title, detail, startTime, completeTime, boxOpenTimes, activities);
                 quests.add(quest);
             }
         } catch (SQLException e) {
@@ -168,9 +168,8 @@ public class Database {
                     title, 
                     detail, 
                     start_time, 
-                    complete_time, 
-                    box_open_times
-                ) VALUES (?, ?, ?, ?, ?, ?, ?) 
+                    complete_time
+                ) VALUES (?, ?, ?, ?, ?, ?) 
                 RETURNING id;
                 """;
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
@@ -180,7 +179,6 @@ public class Database {
             pstmt.setString(4, quest.getDetail());
             pstmt.setTimestamp(5, null); // Quest not yet started
             pstmt.setTimestamp(6, null); // Quest not yet started
-            pstmt.setInt(7, 0);
 
             ResultSet rs = pstmt.executeQuery(); // Executes query and gets a result set
             if (rs.next()) {
@@ -284,16 +282,6 @@ public class Database {
         boolean isDetailUpdated = updQuest.getDetail() != null &&
                 currQuest.getDetail().equals(updQuest.getDetail());
 
-        boolean isStartTimeUpdated = updQuest.getStartTime() != null &&
-                currQuest.getStartTime().compareTo(updQuest.getStartTime()) > 0;
-
-        boolean isCompleteTimeUpdated = updQuest.getCompleteTime() != null &&
-                currQuest.getCompleteTime().compareTo(updQuest.getCompleteTime()) > 0;
-
-        boolean isCompletionStateUpdated = updQuest.getCompletionState() &&
-                currQuest.getCompletionState() != updQuest.getCompletionState();
-
-        boolean isBoxOpenTimeUpdated = currQuest.getBoxOpenTimes() != updQuest.getBoxOpenTimes();
 
         if (isTitleUpdated) {
             updateQuestTitle(updQuest);
@@ -301,18 +289,7 @@ public class Database {
         if (isDetailUpdated) {
             updateQuestDetail(updQuest);
         }
-        if (isStartTimeUpdated) {
-            updateQuestStartTime(updQuest);
-        }
-        if (isCompleteTimeUpdated) {
-            updateQuestCompleteTime(updQuest);
-        }
-        if (isCompletionStateUpdated) {
-            updateQuestCompletionState(updQuest);
-        }
-        if (isBoxOpenTimeUpdated) {
-            updateQuestBoxOpenTimes(updQuest);
-        }
+
     }
 
     public void updateQuestCompletionState(Quest quest) {
@@ -395,21 +372,6 @@ public class Database {
         }
     }
 
-    private void updateQuestBoxOpenTimes(Quest quest) {
-        String sql = """
-                UPDATE "quest"
-                SET box_open_times = ?
-                WHERE id = ?
-                """;
-
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setInt(1, quest.getBoxOpenTimes());
-            pstmt.setInt(2, quest.getId());
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
 
     /**
      * Deletes quest with a certain id from database.
@@ -435,12 +397,11 @@ public class Database {
      * Returns a list of Tasks or PomodoroTimer in relation to the specified quest record.
      * The list does only ever retain one to several Tasks or one PomodoroTimer, they do not co-exist.
      *
-     * @param quest is the record in database where id is the needed attribute.
+     * @param questId is the record in database where id is the needed attribute.
      * @return an ArrayList of Activity, either Task(s) or PomodoroTimer.
      */
-    public ArrayList<Activity> getActivitiesFromQuest(Quest quest) {
+    public ArrayList<Activity> getActivitiesFromQuest(int questId) {
         ArrayList<Activity> activities = new ArrayList<>();
-        int questId = quest.getId(); // Needed to query against
 
         String taskSql = """
                 SELECT *

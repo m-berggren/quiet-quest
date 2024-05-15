@@ -1,5 +1,7 @@
 package quietquest.controller;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -9,17 +11,28 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Slider;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import quietquest.QuietQuestMain;
 import quietquest.model.*;
 import quietquest.utility.FxmlFile;
+import quietquest.model.Database;
+import quietquest.model.User;
+import quietquest.model.Quest;
+
+import java.io.File;
+import java.net.URL;
 import quietquest.utility.MQTTHandler;
 
 import java.sql.SQLException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Optional;
 
 public class MainController extends BaseController {
@@ -38,7 +51,14 @@ public class MainController extends BaseController {
     @FXML
     private Button statisticsButton;
     @FXML
+    private Button playButton;
+    @FXML
+    private Button stopButton;
+    @FXML
     private VBox menuVBox;
+    @FXML
+    private Slider volumeSlider;
+    private MediaPlayer mediaPlayer;
 
     private Database database;
     private MQTTHandler mqttHandler;
@@ -50,6 +70,12 @@ public class MainController extends BaseController {
         this.mqttHandler = mqttHandler;
         this.quietQuestFacade = new QuietQuestFacade(user, database, mqttHandler);
         setMainController(this);
+        volumeSlider.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                mediaPlayer.setVolume(volumeSlider.getValue() * 0.01);
+            }
+        });
     }
 
     @Override
@@ -83,7 +109,31 @@ public class MainController extends BaseController {
     }
 
     public void onLogOutButtonClick(ActionEvent event) throws IOException, SQLException {
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+        }
         loadOnLogout(event);
+    }
+
+    public void onPlayButtonClick() {
+        String fileName = "/music/main-sound.mp3";
+        URL path = getClass().getResource(fileName);
+        if (path != null) {
+            Media media = new Media(path.toString());
+            mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+            mediaPlayer.play();
+            playButton.setDisable(true);
+            stopButton.setDisable(false);
+        }
+    }
+
+    public void onStopButtonClick() {
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            playButton.setDisable(false);
+            stopButton.setDisable(true);
+        }
     }
 
     public void onQuitButtonClick(ActionEvent event) {

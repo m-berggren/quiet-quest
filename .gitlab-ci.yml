@@ -28,12 +28,8 @@ arduino-build:
      - cd wio/quietquest
      # Setup the project
      - ./setup.sh
-     # Check that Arduino project libraries are installed
-     - arduino-cli lib list
      # Compile Arduino code
      - arduino-cli compile --fqbn Seeeduino:samd:seeed_wio_terminal
-     #Upload
-     - arduino-cli board list
    except:
      - tags
 

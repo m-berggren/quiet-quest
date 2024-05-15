@@ -94,6 +94,22 @@ public class QuestController extends BaseController implements UIUpdater, Pomodo
         endTimeLabel.setText("End: " + currentQuest.getCompleteTime());
         motivationalAnchorPane.setVisible(false);
 
+        /*if(currentQuest.getType() == QuestType.TASK){
+            taskAnchorPane.setVisible(true);
+            pomodoroAnchorPane.setVisible(false);
+            questTypeLabel.setText("TASKS");
+        } else if(currentQuest.getType() == QuestType.POMODORO){
+            taskAnchorPane.setVisible(false);
+            pomodoroAnchorPane.setVisible(true);
+            questTypeLabel.setText("POMODORO");
+        }*/
+
+        if (currentQuest.getStartTime() == null) {
+            completeQuestButton.setDisable(true);
+        } else {
+            startQuestButton.setDisable(true);
+        }
+
         setSelectedTask();
     }
 
@@ -224,6 +240,7 @@ public class QuestController extends BaseController implements UIUpdater, Pomodo
         quietQuestFacade.subscribeMqtt();
 
         startQuestButton.setDisable(true);
+        completeQuestButton.setDisable(false);
     }
 
     public void onCompleteQuestClick(ActionEvent event) throws SQLException {

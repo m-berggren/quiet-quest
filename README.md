@@ -26,8 +26,9 @@ To ensure a stable and consistent build, we use **Gradle** for automated build a
 ### External download and installation:
 - [Ultrasonic Ranger Sensor](https://github.com/Seeed-Studio/Seeed_Arduino_UltrasonicRanger) - v1.0.3 by Seed Studio
 - [ChainableLED](https://github.com/pjpmarques/ChainableLED) - v1.3 by pjpmarques
-- [Seeed Arduino LCD](https://github.com/Seeed-Studio/Seeed_Arduino_LCD) - v2.2.6 by Seed Studio
+- [Seeed Arduino LCD](https://github.com/Seeed-Studio/Seeed_Arduino_LCD) - v2.2.6 by Seeed Studio
     - note: fork from TFT_eSPI
+- [Basic Color RGB Control](https://github.com/1ux/LED_RGB_Control)
 
 ### Internal installation through Ardunio IDE:
 - [Adafruit_ZeroDMA](https://github.com/adafruit/Adafruit_NeoMatrix_ZeroDMA) - v1.04 by Adafruit <br>

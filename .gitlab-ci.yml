@@ -23,9 +23,8 @@ arduino-build:
      - docker
    script:
      # Install arduino-cli
-    
      - apt-get update
-     - export PATH=$PATH:/builds/courses/dit113/2024/group-12/quiet-quest/bin
+     - export PATH=$PATH:./bin
      - apt-get install curl -y
      - curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
      - arduino-cli version

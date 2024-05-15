@@ -7,12 +7,6 @@ before_script:
   - GRADLE_USER_HOME="$(pwd)/.gradle"
   # Export the GRADLE_USER_HOME environment variable for use in all subsequent commands
   - export GRADLE_USER_HOME
-  # Run shell script for installing arduino-cli, Wio Terminal core, and project libraries
-  # Change permissions to execute bash shell script
-  - chmod +x setup-build-env.sh
-  # Execute bash shell script
-  - ./setup-build-env.sh
-
 
 # Define the stages that make up the build process
 stages:

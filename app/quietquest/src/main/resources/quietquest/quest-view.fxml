@@ -116,4 +116,28 @@
          </Label>
       </children>
    </AnchorPane>
+    <AnchorPane fx:id="pomodoroAnchorPane" layoutX="470.0" layoutY="476.0" prefHeight="115.0" prefWidth="370.0" style="-fx-background-color: #ffffff; -fx-background-radius: 10;" visible="false">
+        <children>
+            <Label layoutX="24.0" layoutY="27.0" text="Pomodoro status:">
+                <font>
+                    <Font name="System Bold" size="14.0" />
+                </font>
+            </Label>
+            <Label layoutX="53.0" layoutY="66.0" text="Intervals left:" visible="false">
+                <font>
+                    <Font name="System Bold" size="14.0" />
+                </font>
+            </Label>
+            <Label fx:id="pomodoroStatusLabel" layoutX="149.0" layoutY="28.0" text="Status">
+                <font>
+                    <Font name="System Bold Italic" size="14.0" />
+                </font>
+            </Label>
+            <Label fx:id="intervalsLeftLabel" layoutX="149.0" layoutY="66.0" text="Integer" visible="false">
+                <font>
+                    <Font name="System Italic" size="14.0" />
+                </font>
+            </Label>
+        </children>
+    </AnchorPane>
 </AnchorPane>

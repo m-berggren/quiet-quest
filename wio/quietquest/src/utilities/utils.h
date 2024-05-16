@@ -3,6 +3,7 @@
 
 #include <stdio.h>                          // Import needed for sprintf()
 #include <Arduino.h>                        // Import needed for map() and millis()
+#include <ChainableLED.h>                   // Import needed for turning off LED light
 
 
 // ==========================* CONSTANTS *===========================
@@ -31,4 +32,4 @@ extern bool isTimeToUpdate();               // Checks if it is time to update LC
 extern int mapToPercentage(int lightValue); // Maps light value from 0-1023 to percentage (0-100)
 extern char* toString(int integer);         //
 
-#endif                                      // UTILS_H
+#endif

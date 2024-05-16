@@ -10,15 +10,11 @@ import quietquest.controller.UIUpdater;
 import java.nio.ByteBuffer;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static quietquest.utility.MQTTTopics.TOPIC_SUB_ALL;
 
 public class MQTTHandler {
-
-    private static MQTTHandler instance = null;
-
     private final String HOST = "broker.hivemq.com";
-    private final String SUB_TOPICS = "/quietquest/sensor/#";
-
-    private UIUpdater uiUpdater;
+    private UIUpdater uiUpdater; // Used through observer pattern
     private final Mqtt5AsyncClient client; // Used over Mqtt5BlockingClient to make sure application is responsive
 
     // Information used from this website:
@@ -36,14 +32,15 @@ public class MQTTHandler {
         this.uiUpdater = uiUpdater;
     }
 
-    public void connect(String pubTopic, String pubMessage) {
-        client.connectWith()
-                .send()
-                .whenComplete((connAck, throwable) -> {
-                    if (throwable == null) {
-                        publishMessage(pubTopic, pubMessage);
-                    }
-                });
+    /**
+     * Method connect to MQTT client. Useful to run when user enter certain views.
+     */
+    public void connect() {
+        client.connectWith().send().whenComplete((mqtt5ConnAck, throwable) -> {
+            if (throwable == null) {
+                System.out.println("Connected to MQTT broker.");
+            }
+        });
     }
 
     /**
@@ -57,9 +54,15 @@ public class MQTTHandler {
 
     public void subscribe() {
         client.subscribeWith()
-                .topicFilter(SUB_TOPICS)
+                .topicFilter(TOPIC_SUB_ALL)
                 .callback(this::handleMessage)// Method reference
                 // Can use lambda as well, like so: m -> this.handleMessage(m)
+                .send();
+    }
+
+    public void unsubscribe() {
+        client.unsubscribeWith()
+                .topicFilter(TOPIC_SUB_ALL)
                 .send();
     }
 
@@ -68,12 +71,11 @@ public class MQTTHandler {
         String messageContent = UTF_8.decode(buffer).toString();
         String topic = subMessage.getTopic().toString();
 
-        System.out.println("Received message on topic " + subMessage.getTopic() + ": " + messageContent);
-
         String[] topicParts = topic.split("/");
         if (topicParts.length > 3) { // making sure to only handle topics with 3 parts (first '/' creates empty segment)
             String sensorType = topicParts[3]; // assume sensor type is the 4th element
 
+            // Depending on the reading it updates the UI and controller accordingly through observer pattern
             Platform.runLater(() -> {
                 switch (sensorType) {
                     case "connect" -> handleConnectionStatusData(messageContent);
@@ -83,8 +85,6 @@ public class MQTTHandler {
                     default -> System.out.println("Unknown sensor type: " + sensorType);
                 }
             });
-        } else {
-            System.out.println("Invalid topic structure: " + topic);
         }
     }
 

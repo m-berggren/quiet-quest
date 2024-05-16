@@ -3,6 +3,7 @@ package quietquest.controller;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -11,17 +12,23 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.Duration;
 import quietquest.model.*;
+import javafx.scene.control.ListView;
+import quietquest.model.PomodoroUIUpdater;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Random;
 
+import static quietquest.utility.MQTTTopics.*;
 
-public class QuestController extends BaseController implements UIUpdater, Callback<ListView<Activity>, ListCell<Activity>> {
+
+public class QuestController extends BaseController implements UIUpdater, PomodoroUIUpdater, Callback<ListView<Activity>, ListCell<Activity>> {
 	@FXML
 	private AnchorPane taskAnchorPane;
 	@FXML
@@ -55,6 +62,10 @@ public class QuestController extends BaseController implements UIUpdater, Callba
 	@FXML
 	private Label intervalsLabel;
 	@FXML
+	private Label pomodoroStatusLabel;
+	@FXML
+	private Label intervalsLeftLabel;
+	@FXML
 	private Label startTimeLabel;
 	@FXML
 	private Label endTimeLabel;
@@ -63,14 +74,49 @@ public class QuestController extends BaseController implements UIUpdater, Callba
 	private Activity currentActivity;
 	private Quest currentQuest;
 
-	private final String PUB_TOPIC_START = "/quietquest/application/start";
-	private final String PUB_TOPIC_TASK_DONE = "/quietquest/application/task_done";
-	private final String PUB_TOPIC_END = "/quietquest/application/end";
-	private String[] message;
-	private ObservableList<Activity> activities;
+    private String[] message;
+    private ObservableList<Activity> activities;
+	private static QuestController activeController;
+	private PomodoroTimer pomodoroTimer;
 
 	public void initialize(Quest quest) {
 		currentQuest = quest;
+		System.out.println(quest.hashCode());
+
+		// Retrieve the PomodoroTimer if the current quest has one
+		if (currentQuest.getActivities() != null) {
+			Activity activity = currentQuest.getActivities().getFirst();
+			if (activity instanceof PomodoroTimer) {
+				pomodoroTimer = (PomodoroTimer) activity;
+				pomodoroTimer.addObserver(this);
+			}
+		}
+		// Add listener to handle view closure
+		Platform.runLater(() -> {
+			Stage stage = (Stage) titleLabel.getScene().getWindow();
+			stage.setOnHidden(event -> onDestroy());
+		});
+		// Set this instance as the active controller
+		setActiveController(this);
+	}
+
+	private static synchronized void setActiveController(QuestController controller) {
+		if (activeController != null) {
+			System.out.println("Controller deactivated");
+			activeController.deactivate();
+		}
+		activeController = controller;
+	}
+
+	private void deactivate() {
+		
+	}
+
+	@FXML
+	public void onDestroy() {
+		if (pomodoroTimer != null) {
+			pomodoroTimer.removeObserver(this);
+		}
 	}
 
 	@Override
@@ -159,10 +205,12 @@ public class QuestController extends BaseController implements UIUpdater, Callba
 
 							task.setEndTime(Timestamp.from(Instant.now()));
 							task.setCompletionState(true);
+							//Make checkbox unable to uncheck after user check it
+							checkBox.setDisable(task.getCompletionState());
 							quietQuestFacade.updateTaskEndTimeInDb(task);
 							quietQuestFacade.updateTaskCompletionStateInDb(task);
 
-							quietQuestFacade.publishMqttMessage(PUB_TOPIC_TASK_DONE, message);
+							quietQuestFacade.publishMqttMessage(TOPIC_PUB_TASK_DONE, message);
 						}
 					});
 					setGraphic(checkBox);
@@ -176,6 +224,56 @@ public class QuestController extends BaseController implements UIUpdater, Callba
 		};
 	}
 
+	/**
+	 * Overrides the update method in {@link PomodoroUIUpdater}.
+	 * Used to update the UI through observer pattern.
+	 *
+	 * @param message the string to display.
+	 */
+	@Override
+	public void update(String message) {
+		if (this != activeController) {
+			return; // Only one QuestController will handle publishing to the Wio terminal
+		}
+
+		final String FOCUS_TIME = "Focus time started";
+		final String BREAK_TIME_START = "Break time started";
+		final String BREAK_TIME_END = "Break time ended";
+		final String POMODORO_END = "Pomodoro timer finished";
+
+		// Need Platform.runLater() as a separate thread when Timer is already running
+		Platform.runLater(() -> {
+			switch (message) {
+				case FOCUS_TIME -> {
+					System.out.println(FOCUS_TIME);
+
+					pomodoroAnchorPane.setVisible(true);
+					pomodoroStatusLabel.setText("Focus time now active");
+					pomodoroStatusLabel.setTextFill(Color.color(0.6, 0, 0));
+
+					quietQuestFacade.publishMqttMessage(TOPIC_PUB_POMODORO_INTERVAL, FOCUS_TIME);
+				}
+				case BREAK_TIME_START -> {
+					System.out.println(BREAK_TIME_START);
+
+					pomodoroStatusLabel.setText("Break time now active");
+					pomodoroStatusLabel.setTextFill(Color.color(0, 0.50, 0));
+
+					quietQuestFacade.publishMqttMessage(TOPIC_PUB_POMODORO_INTERVAL, BREAK_TIME_START);
+				}
+				case BREAK_TIME_END -> {
+					System.out.println(BREAK_TIME_END);
+				}
+				case POMODORO_END -> {
+					System.out.println(POMODORO_END);
+
+					pomodoroAnchorPane.setVisible(false);
+
+					onCompletion();
+				}
+			}
+		});
+	}
 
 	/**
 	 * Shows a motivational message for 3 seconds.
@@ -195,49 +293,64 @@ public class QuestController extends BaseController implements UIUpdater, Callba
 		timeline.play();
 	}
 
-
 	/**
 	 * Starts the quest and sets the start time.
 	 * @param event The event that triggered the method.
 	 */
-	public void onStartQuestClick(ActionEvent event) {
+    public void onStartQuestClick(ActionEvent event) {
 		currentQuest.setStartTime(Timestamp.from(Instant.now()));
-		quietQuestFacade.startQuest(currentQuest);
-		quietQuestFacade.connectMqtt(PUB_TOPIC_START, "Your quest has started.");
-		quietQuestFacade.subscribeMqtt();
-		currentQuest.setStartTime(Timestamp.from(Instant.now()));
-		startTimeLabel.setText("Start: " + formatTime(currentQuest.getStartTime()));
-		startQuestButton.setDisable(true);
-		completeQuestButton.setDisable(false);
-		activityListView.setDisable(false);
-	}
+        startTimeLabel.setText("Start: " + currentQuest.getStartTime());
 
+		// Connects to MQTT as soon as page loads
+		System.out.println("Starts quest");
+
+		quietQuestFacade.startQuest(currentQuest, this);
+		quietQuestFacade.publishMqttMessage(TOPIC_PUB_QUEST_START, "Your quest has started");
+		quietQuestFacade.subscribeMqtt();
+
+		startTimeLabel.setText("Start: " + formatTime(currentQuest.getStartTime()));
+
+        startQuestButton.setDisable(true);
+        completeQuestButton.setDisable(false);
+		activityListView.setDisable(false);
+    }
 
 	/**
 	 * Completes the quest and sets the end time.
 	 * @param event The event that triggered the method.
 	 * @throws SQLException If an SQL exception occurs.
 	 */
-	public void onCompleteQuestClick(ActionEvent event) throws SQLException {
+    public void onCompleteQuestClick(ActionEvent event) throws SQLException {
+        onCompletion();
+        showMessage();
+    }
+
+    private void onCompletion() {
 		//if not all checkbox is checked, then the quest cannot be completed
 		for (Activity activity : currentQuest.getActivities()) {
 			if (activity instanceof Task task) {
 				if (!task.getCompletionState()) {
-					showReminder("You have not completed all tasks. Please complete all tasks before ending the quest.");
+					String reminder = "You have not completed all tasks. Please complete all tasks before ending the quest.";
+					Platform.runLater(() -> {
+						showReminder(reminder);
+					});
 					return;
 				}
 			}
 		}
-		quietQuestFacade.completeQuest(currentQuest);
-		quietQuestFacade.publishMqttMessage(PUB_TOPIC_END, "Your quest has ended.");
-		quietQuestFacade.disconnectMqtt();
 		currentQuest.setCompleteTime(Timestamp.from(Instant.now()));
 		endTimeLabel.setText("End: " + formatTime(currentQuest.getCompleteTime()));
-		// Remove or change later:
+
+		quietQuestFacade.completeQuest(currentQuest);
+		quietQuestFacade.publishMqttMessage(TOPIC_PUB_QUEST_END, "Your quest has ended");
+		quietQuestFacade.unsubscribeMqtt();
+
 		mqttConnectionMessage.getStyleClass().clear();
 		mqttConnectionMessage.setText("");
+		mqttDistanceMessage.setVisible(false);
+		mqttMotionMessage.setVisible(false);
+		mqttLightMessage.setVisible(false);
 		completeQuestButton.setDisable(true);
-		showMessage();
 	}
 
 	private void showReminder(String s) {
@@ -247,7 +360,7 @@ public class QuestController extends BaseController implements UIUpdater, Callba
 		Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(3), event -> {
 			motivationalAnchorPane.setVisible(false);
 		}));
-                timeline.play();
+		timeline.play();
 	}
 
 	/**
@@ -269,7 +382,7 @@ public class QuestController extends BaseController implements UIUpdater, Callba
 
 	/**
 	 * Updates the UI with the light sensor value.
-	 * @param lightValue The light sensor value.
+	 * @param lightValue The light sensor value 0-100.
 	 */
 	@Override
 	public void updateLightSensorUI(int lightValue) {

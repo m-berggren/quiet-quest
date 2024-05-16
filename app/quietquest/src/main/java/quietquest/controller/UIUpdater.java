@@ -1,11 +1,14 @@
 package quietquest.controller;
 
+/**
+ * Interface for updating the UI components of the application where sensor data is displaying.
+ */
 public interface UIUpdater {
-    public void updateConnectionStatusUI(boolean connectionStatus);
+    void updateConnectionStatusUI(boolean connectionStatus);
 
-    public void updateLightSensorUI(int lightValue);
+    void updateLightSensorUI(int lightValue);
 
-    public void updateMotionSensorUI(boolean motionDetected);
+    void updateMotionSensorUI(boolean motionDetected);
 
-    public void updateUltrasonicSensorUI(int distanceValue);
+    void updateUltrasonicSensorUI(int distanceValue);
 }

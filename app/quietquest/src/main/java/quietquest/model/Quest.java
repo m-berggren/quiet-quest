@@ -1,13 +1,7 @@
 package quietquest.model;
 
-import quietquest.utility.MQTTHandler;
-
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.List;
-
-import static javafx.application.Application.launch;
 
 public class Quest {
     private int id;
@@ -18,7 +12,7 @@ public class Quest {
     private Timestamp startTime;
     private Timestamp completeTime;
     private int boxOpenTimes;
-    private ArrayList<Activity> activities = new ArrayList<>();
+    private final ArrayList<Activity> activityArrayList;
 
     // ==============================* CONSTRUCTOR *========================================
 
@@ -26,10 +20,11 @@ public class Quest {
      * Used for creating a container with the necessary information to pass into database. Not intended to use within
      * application otherwise.
      */
-    public Quest(User user, String title, String detail) {
+    public Quest(User user, String title, String detail, ArrayList<Activity> activities) {
         this.userId = user.getId();
         this.title = title;
         this.detail = detail;
+        this.activityArrayList = activities;
     }
 
     /**
@@ -44,39 +39,11 @@ public class Quest {
         this.startTime = startTime;
         this.completeTime = completeTime;
         this.boxOpenTimes = boxOpenTimes;
-        this.activities = activities;
+        this.activityArrayList = activities;
     }
 
     // ==============================* QUEST MANAGEMENT *===================================
 
-    /*public void startQuest(Activity activity) {
-        if (activity instanceof PomodoroTimer pomodoro) {
-            pomodoro.start(); // Mqtt publish happens inside recursive function
-        } else if (activity instanceof Task) {
-            // Update startTime for all tasks
-            for (Activity activity : activities) {
-                Task task = (Task) activity;
-                task.setStartTime(new Timestamp(System.currentTimeMillis()));
-            }
-        }
-    }
-     */
-
-    /*public void endQuest() {
-        if (activities.isEmpty()) {
-            return;
-        }
-        if (activities.getFirst() instanceof PomodoroTimer) {
-            Activity activity = activities.getFirst();
-            activity.end(); // Will end recursive PomodoroTimer calls
-        } else if (activities.getFirst() instanceof Task) {
-            // Update tasks with end time
-            for (Activity activity : activities) {
-                Task task = (Task) activity;
-                task.setEndTime(new Timestamp(System.currentTimeMillis()));
-            }
-        }
-    }*/
 
     // ==============================* GETTERS & SETTERS *==============================
 
@@ -145,14 +112,14 @@ public class Quest {
     }
 
 	public ArrayList<Activity> getActivities() {
-        return activities;
+        return activityArrayList;
 	}
 
     public void addActivity(Activity activity) {
-        activities.add(activity);
+		activityArrayList.add(activity);
     }
 
     public void removeActivity(Activity activity) {
-        activities.remove(activity);
+		activityArrayList.remove(activity);
     }
 }

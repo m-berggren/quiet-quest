@@ -15,6 +15,9 @@ import quietquest.model.Quest;
 import quietquest.model.Task;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class QuestHistoryController extends BaseController {
@@ -50,7 +53,29 @@ public class QuestHistoryController extends BaseController {
 		displayQuests();
 	}
 
+	/**
+	 * Changes the difference of two Timestamps into a string of HH:mm:ss.
+	 *
+	 * @param quest Quest object to get time data from.
+	 * @return String of HH:mm:ss.
+	 */
+	private String getTimeDiffHMS(Quest quest) {
+		Timestamp startTime = quest.getStartTime();
+		Timestamp endTime = quest.getCompleteTime();
+
+		LocalDateTime startDateTime = startTime.toLocalDateTime();
+		LocalDateTime endDateTime = endTime.toLocalDateTime();
+
+		Duration duration = Duration.between(startDateTime, endDateTime);
+		long hours = duration.toHours();
+		long minutes = duration.toMinutes() % 60;
+		long seconds = duration.toSeconds() % 60;
+
+		return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+	}
+
 	public void displayQuests() {
+
 		//Get a list of quest with quest completionStatus as true
 		ArrayList<Quest> completedQuestList = new ArrayList<>();
 		for (Quest quest : questArrayList) {
@@ -84,11 +109,13 @@ public class QuestHistoryController extends BaseController {
 					Label startTimeLabel = new Label("    Start Time: " + formatTime(quest.getStartTime()));
 					Label completionTimeLabel = new Label("    Completed Time: " + formatTime(quest.getCompleteTime()));
 					//Show time spent calculated from the difference between the timestamp start time and completion time in minutes
-					long timeSpent = (quest.getCompleteTime().getTime() - quest.getStartTime().getTime()) / 60000;
-					Label timeSpentLabel = new Label("    Time Spent: " + timeSpent + " minutes");
+
+					String timeSpent = getTimeDiffHMS(quest);
+					Label timeSpentLabel = new Label("    Time Spent: " + timeSpent);
 					Label boxOpenTimesLabel = new Label("    Box Open Times: " + quest.getBoxOpenTimes());
-					long averageBoxOpenInterval = (timeSpent / (quest.getBoxOpenTimes() + 1) / 60000);
-					Label averageBoxOpenIntervalLabel = new Label("    Average Box Open Interval: " + averageBoxOpenInterval + " minutes");
+
+					String averageBoxOpenInterval = quest.getBoxOpenTimes() == 0 ? "00:00:00" : getTimeDiffHMS(quest);
+					Label averageBoxOpenIntervalLabel = new Label("    Average Box Open Interval: " + averageBoxOpenInterval);
 
 					vBox.getChildren().addAll(titleLabel, startTimeLabel, completionTimeLabel, timeSpentLabel, boxOpenTimesLabel, averageBoxOpenIntervalLabel);
 					setGraphic(vBox);

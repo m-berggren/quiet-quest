@@ -14,6 +14,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -52,15 +53,17 @@ public class LogInController {
     private String password;
     private Database database;
     private MQTTHandler mqttHandler;
+	private MediaPlayer mediaPlayer;
 
     /**
      * Load start page upon clicking "Log In" if user credentials match what is in the database.
      * If inputted credentials are incorrect, show a popup message.
      */
 
-    public void initialize(Database database, MQTTHandler mqttHandler) {
+	public void initialize(Database database, MQTTHandler mqttHandler, MediaPlayer mediaplayer) {
         this.database = database;
         this.mqttHandler = mqttHandler;
+		this.mediaPlayer = mediaplayer;
     }
     public void onLogInClick(ActionEvent event) throws IOException, SQLException {
         username = usernameField.getText();
@@ -74,18 +77,15 @@ public class LogInController {
         }
     }
 
-    private void loadStartController(ActionEvent event, User user, Database database, MQTTHandler mqttHandler) throws IOException, SQLException {
-        FXMLLoader loader = new FXMLLoader(QuietQuestMain.class.getResource(FxmlFile.START));
-        Parent root = loader.load();
-        StartController startController = loader.getController();
-        startController.initialize(user, database, mqttHandler); // Important to pass these objects to the controller
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
-        scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
-        stage.setScene(scene);
-        stage.show();
-    }
-
+    /**
+     * Load home page upon clicking "Log In" if user credentials match what is in the database.
+     * @param event is the event triggers
+     * @param user is the user object
+     * @param database is the database object
+     * @param mqttHandler is the MQTTHandler object
+     * @throws IOException if IO exception occurs
+     * @throws SQLException if SQL exception occurs
+     */
     private void loadHomeController(ActionEvent event, User user, Database database, MQTTHandler mqttHandler) throws IOException, SQLException {
         FXMLLoader loader = new FXMLLoader(QuietQuestMain.class.getResource(FxmlFile.MAIN));
         Parent root = loader.load();
@@ -96,10 +96,15 @@ public class LogInController {
         stage.show();
 
         MainController controller = loader.getController();
-        controller.initialize(user, database, mqttHandler);
+		controller.initialize(user, database, mqttHandler, mediaPlayer);
         controller.loadView(FxmlFile.HOME);
     }
 
+    /**
+     * Allow user to press "Enter" key to log in
+     *
+     * @param event is the event triggers
+     */
     @FXML
     private void onEnterKeyPressed(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
@@ -116,7 +121,7 @@ public class LogInController {
     /**
      * Load sign-up page upon clicking "Create User Account" button
      *
-     * @param event
+     * @param event is the event triggers
      */
     public void onCreateUserClick(ActionEvent event) throws IOException {
         loadCreateUserController(event, database, mqttHandler);
@@ -125,13 +130,13 @@ public class LogInController {
     /**
      * Method used to load the page specified
      *
-     * @param event
+     * @param event the event that triggers the loading of the fxml file
      */
     private void loadCreateUserController(ActionEvent event, Database database, MQTTHandler mqttHandler) throws IOException {
         FXMLLoader loader = new FXMLLoader(QuietQuestMain.class.getResource(FxmlFile.CREATE_USER));
         Parent root = loader.load();
         CreateUserController createUserController = loader.getController();
-        createUserController.initialize(database, mqttHandler);
+		createUserController.initialize(database, mqttHandler, mediaPlayer);
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm()); // adding CSS styling option

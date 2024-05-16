@@ -9,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import quietquest.QuietQuestMain;
 import quietquest.model.Database;
@@ -23,11 +24,13 @@ public class StartController extends BaseController {
     private User user;
     private Database database;
     private MQTTHandler mqttHandler;
+	private MediaPlayer mediaPlayer;
 
     public void initialize(User user, Database database, MQTTHandler mqttHandler) {
         this.user = user;
         this.database = database;
         this.mqttHandler = mqttHandler;
+		this.mediaPlayer = quietQuestFacade.getMediaPlayer();
     }
 
     @FXML
@@ -62,7 +65,7 @@ public class StartController extends BaseController {
         stage.show();
 
         MainController controller = loader.getController();
-        controller.initialize(user, database, mqttHandler);
+		controller.initialize(user, database, mqttHandler, mediaPlayer);
         controller.loadView(fxmlFile);
     }
 }

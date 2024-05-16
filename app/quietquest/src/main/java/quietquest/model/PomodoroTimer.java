@@ -1,175 +1,224 @@
 package quietquest.model;
 
 import javafx.application.Platform;
-import javafx.scene.control.Alert;
-import quietquest.utility.MQTTHandler;
 
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class PomodoroTimer implements Activity {
-    private Timer timer;
-    private int questId;
-    private final int focusTime;
-    private final int breakTime;
-    private int interval;
-    private boolean isBreak;
-    private boolean isInterrupted;
-    private final String PUB_TOPIC = "/quietquest/application/pomodoro_done";
-    private final int milliSeconds = 1_000; // Default is 60_000
+	private final String FOCUS_TIME_START = "Focus time started";
+	private final String BREAK_TIME_START = "Break time started";
+	private final String BREAK_TIME_END = "Break time ended";
+	private final String POMODORO_FINISH = "Pomodoro timer finished";
+	private Timer timer; // Timer to schedule tasks
+	private int questId;
+	private final int focusTime;
+	private final int breakTime;
+	private final int interval;
+	private ArrayList<PomodoroUIUpdater> observers;
+	private final int MILLISECONDS = 1_000; // Used to convert minutes to milliseconds. 60_000 is the needed value.
 
-    // Ideas from https://egandunning.com/projects/timemanagement-timer.html
-    // and https://www.geeksforgeeks.org/java-util-timer-class-java/
+	// Ideas from https://egandunning.com/projects/timemanagement-timer.html
+	// and https://www.geeksforgeeks.org/java-util-timer-class-java/
 
-    public PomodoroTimer(int focusTime, int breakTime, int interval) {
-        this.timer = new Timer();
-        this.focusTime = focusTime;
-        this.breakTime = breakTime;
-        this.interval = interval;
-        this.isBreak = false;
-        this.isInterrupted = false;
-    }
+	// ==============================* CONSTRUCTORS *=======================================
 
-    public PomodoroTimer(int questId, int focusTime, int breakTime, int interval) {
-        this.timer = new Timer();
-        this.questId = questId;
-        this.focusTime = focusTime;
-        this.breakTime = breakTime;
-        this.interval = interval;
-    }
+	/**
+	 * Used for creating a container with the necessary information to pass into database. Not intended to use within
+	 * application otherwise.
+	 */
+	public PomodoroTimer(int focusTime, int breakTime, int interval) {
+		this.timer = new Timer();
+		this.focusTime = focusTime;
+		this.breakTime = breakTime;
+		this.interval = interval;
+		this.observers = new ArrayList<>();
+	}
 
-    public int getFocusTime() {
-        return focusTime;
-    }
+	/**
+	 * Used to create full pomodoro_timer object when querying database,
+	 */
+	public PomodoroTimer(int questId, int focusTime, int breakTime, int interval) {
+		this.timer = new Timer();
+		this.questId = questId;
+		this.focusTime = focusTime;
+		this.breakTime = breakTime;
+		this.interval = interval;
+		this.observers = new ArrayList<>();
+	}
 
-    public int getBreakTime() {
-        return breakTime;
-    }
+	// ==============================* GETTERS & SETTERS *==================================
 
-    public int getInterval() {
-        return interval;
-    }
+	public int getFocusTime() {
+		return focusTime;
+	}
 
-    /**
-     * Creates milliseconds from minutes
-     *
-     * @param minutes to convert
-     * @return milliseconds
-     */
-    private int toMilliseconds(int minutes) {
-        return minutes * milliSeconds;
-    }
+	public int getBreakTime() {
+		return breakTime;
+	}
 
-    @Override
-    public void start() {
-        //mqttHandler.publishMessage(PUB_TOPIC, "pomodoro_started");
-        scheduleNextTask(isInterrupted);
-    }
+	public int getInterval() {
+		return interval;
+	}
 
-    public int getQuestId() {
-        return questId;
-    }
+	public int getQuestId() {
+		return questId;
+	}
 
-    public QuestType getType() {
-        return QuestType.POMODORO;
-    }
-    /**
-     *
-     */
-    private void scheduleNextTask(boolean isInterrupted) {
-        if (interval <= 0 || isInterrupted) { // Need a stop for recursive function, isInterrupted through manual exit
-            stopPomodoro();
-            return;
-        }
+	// ==============================* OBSERVER MANAGEMENT *================================
 
-        TimerTask task;
-        int delay;
+	public void addObserver(PomodoroUIUpdater observer) {
+		synchronized (observers) {
+			if (!observers.contains(observer)) {
+				observers.add(observer);
+			}
+		}
+	}
 
-        if (isBreak) {
-            task = new BreakTime(this);
-            delay = toMilliseconds(breakTime);
-        } else {
-            task = new FocusTime(this);
-            delay = toMilliseconds(focusTime);
-        }
-        if (!isInterrupted) {
-            timer.schedule(task, delay);
-        }
-    }
+	public void removeObserver(PomodoroUIUpdater observer) {
+		synchronized (observers) {
+			observers.remove(observer);
+		}
+	}
 
-    /**
-     *
-     */
-    public void completeTask() {
-        if (isInterrupted) {
-            stopPomodoro();
-            return;
-        }
+	// ==============================* INTERFACE METHODS *==================================
 
-        String taskType = isBreak ? "Break" : "Focus";
-        alert(taskType + "interval complete!");
+	/**
+	 * Handles the start operation of the pomodoroTimer. Needs to start with 0 as the value increments on each
+	 * subsequent call.
+	 */
+	public void start() {
+		if (timer != null) {
+			runTimer(0);
+		}
+	}
 
-        if (!isBreak) {
-            interval--;
-        }
-        isBreak = !isBreak;
-        scheduleNextTask(isInterrupted);
-    }
+	/**
+	 * Ends the PomodoroTimer and notifies the observer. Used in {@link #runTimer(int)} when base case is true and then
+	 * cancels the timer.
+	 */
+	public void end() {
+		if (timer != null) {
+			notifyPomodoroObserver(POMODORO_FINISH);
+			timer.cancel();
+			timer = null;
+		}
+	}
 
-    public void end() {
-        isInterrupted = true;
-        stopPomodoro();
-    }
+	@Override
+	public QuestType getType() {
+		return QuestType.POMODORO;
+	}
 
-    public void stopPomodoro() {
-        if (timer != null) {
-            timer.cancel();
-            timer = null;
-        }
+	// ==============================* TIMER MANAGEMENT *===================================
 
-        alert("Pomodoro session complete!");
-        //mqttHandler.publishMessage(PUB_TOPIC, "pomodoro_finished");
-    }
+	/**
+	 * Notifies the observer with a specific event message.
+	 *
+	 * <p>If and observer is set the method uses {@link Platform#runLater(Runnable)} to make sure the update is done on
+	 * a JavaFX thread.</p>
+	 *
+	 * @param event the event message passed to observer.
+	 */
+	private void notifyPomodoroObserver(String event) {
+		synchronized (observers) {
+			for (PomodoroUIUpdater observer : observers) {
+				// Schedule update so that it runs on a JavaFX thread instead of the Timer
+				Platform.runLater(() -> {
+					observer.update(event);
+				});
+			}
+		}
+	}
 
-    private void alert(String message) {
-        Platform.runLater(() -> {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Pomodoro Timer");
-            alert.setHeaderText(null);
-            alert.setContentText(message);
-            alert.show();
-        });
-    }
+	/**
+	 * Recursively schedules focus and break intervals until the specified number of intervals is reached.
+	 *
+	 * <p>It starts off by notifying the controller {@link quietquest.controller.QuestController} that it should
+	 * publish to the wio terminal. It then creates a TimerTask through an anonymous class where we only care about
+	 * creating a one-time-use class with one override on run() method. It checks if currentInterval interval is smaller
+	 * than interval -1, meaning that it should not run a break after the last focusTime has run.
+	 * {@link #startBreakTime(int)} notifies to controller that break has started and after breakTime is over creates
+	 * a new focus session but now with currentInterval + 1.</p>
+	 *
+	 * <p>Once runTimer's base case is true for one of the recursive calls in {@link #startBreakTime(int)}, they will start
+	 * returning until all is ended and PomodoroTimer is finished.</p>
+	 *
+	 * @param currentInterval int that starts off at 0 and increments by 1 on each call.
+	 */
+	private void runTimer(int currentInterval) {
+		if (currentInterval >= interval) {
+			end();
+			return;
+		}
 
-    @Override
-    public String toString() {
-        return String.format("Focus Time: %d\nBreak Time: %d\nIntervals: %d\n", focusTime, breakTime, interval);
-    }
+		startFocusTime();
+		//
+		TimerTask focusTask = new TimerTask() {
+			@Override
+			public void run() {
+				if (timer != null) {
+					if (currentInterval < interval - 1) { // Skip the last break as it is unnecessary
+						startBreakTime(currentInterval);
+					} else {
+						end();
+					}
+				}
+			}
+		};
 
-    private class FocusTime extends TimerTask {
-        private final PomodoroTimer session;
+		/* Schedule method works similar to scheduleAtFixedRate in this use case as there will be no delays, each
+		 *  focusTime and breakTime are fixed and cannot change. */
+		timer.schedule(focusTask, toMilliseconds(focusTime));
+	}
 
-        private FocusTime(PomodoroTimer session) {
-            this.session = session;
-        }
+	/**
+	 * Notifies the observer at {@link quietquest.controller.QuestController} that focus time has started. Called at the
+	 * beginning of each focus period. The actual notification is handled by {@link #notifyPomodoroObserver(String)}.
+	 */
+	private void startFocusTime() {
+		notifyPomodoroObserver(FOCUS_TIME_START);
+		System.out.println("Starting another task");
+	}
 
-        @Override
-        public void run() {
-            session.completeTask();
-        }
-    }
+	/**
+	 * Starts the break time after a focus time ends.
+	 *
+	 * <p>This method notifies the observer that the break time has started, schedules a {@link TimerTask} for the
+	 * end of the break and will recursively call {@link #runTimer(int)} to start the next focus time.</p>
+	 *
+	 * @param currentInterval the current count. Increments after break time ends.
+	 */
+	private void startBreakTime(int currentInterval) {
+		notifyPomodoroObserver(BREAK_TIME_START);
+		TimerTask breakTask = new TimerTask() {
+			@Override
+			public void run() {
+				if (timer != null) {
+					notifyPomodoroObserver(BREAK_TIME_END);
+					// After break has ended starts the next focus time
+					runTimer(currentInterval + 1);
+				}
+			}
+		};
+		timer.schedule(breakTask, toMilliseconds(breakTime));
+	}
 
-    private class BreakTime extends TimerTask {
-        private final PomodoroTimer session;
+	// ==============================* UTILITY *====================================
 
-        private BreakTime(PomodoroTimer session) {
-            this.session = session;
-        }
+	/**
+	 * Converts minutes to milliseconds.
+	 *
+	 * @param minutes to convert.
+	 * @return equivalent time in milliseconds.
+	 */
+	private int toMilliseconds(int minutes) {
+		return minutes * MILLISECONDS;
+	}
 
-        @Override
-        public void run() {
-            session.completeTask();
-        }
-    }
-
+	@Override
+	public String toString() {
+		return String.format("Focus Time: %d\nBreak Time: %d\nIntervals: %d\n", focusTime, breakTime, interval);
+	}
 }

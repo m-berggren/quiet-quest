@@ -1,5 +1,6 @@
 package quietquest.model;
 
+import javafx.scene.media.MediaPlayer;
 import quietquest.controller.UIUpdater;
 import quietquest.utility.MQTTHandler;
 
@@ -10,6 +11,8 @@ public class QuietQuestFacade {
 	protected final MQTTHandler mqttHandler;
 	protected final Database database;
 	protected final User user;
+	protected final MediaPlayer mediaPlayer;
+	protected Quest pomodoroQuest;
 
 	// ==============================* CONSTRUCTOR *========================================
 
@@ -21,41 +24,52 @@ public class QuietQuestFacade {
 	 * @param user     is the User object to store login information, used for database querying.
 	 * @param database is the single Database object that handles all query operations.
 	 */
-	public QuietQuestFacade(User user, Database database, MQTTHandler mqttHandler) {
+	public QuietQuestFacade(User user, Database database, MQTTHandler mqttHandler, MediaPlayer mediaPlayer) {
 		this.mqttHandler = mqttHandler;
 		this.user = user;
 		this.database = database;
+		this.mediaPlayer = mediaPlayer;
+		this.pomodoroQuest = null;
 	}
 
 	// ==============================* DATABASE MANAGER *===================================
 
 	/**
-	 * @return
+	 * Get all quests in database belonging to logged-in user.
+	 * @return a list of Quests from database.
 	 */
 	public ArrayList<Quest> getAllQuests() {
 		return database.getAllQuests(user);
 	}
 
+	/**
+	 * Creates Quest in database.
+	 *
+	 * @param quest      Quest object to store in database.
+	 * @param activities if a list of activities belong to the quest, those are created too.
+	 */
 	public void createQuest(Quest quest, ArrayList<Activity> activities) {
 		database.createQuest(quest, activities);
 	}
 
-	public void createTask(Quest quest, Task task) {
-		database.createTask(quest, task);
-	}
-
 	/**
-	 * @param quest
-	 */
-	public void startQuest(Quest quest) {
-		database.startQuest(quest);
+	 * Starts a Quest from {@link quietquest.controller.QuestController}.
+	 * @param quest is the Quest object to start.
+	 * @param pomodoroObserver the controller which the PomodoroTimer will notify whenever a focus- or break-time
+	 *                         starts.
+     */
+    public void startQuest(Quest quest, PomodoroUIUpdater pomodoroObserver) {
+        database.startQuest(quest);
+
 		if (!quest.getActivities().isEmpty()) {
 			ArrayList<Activity> activities = quest.getActivities();
 			if (activities.getFirst() instanceof PomodoroTimer pomodoro) {
+				pomodoro.addObserver(pomodoroObserver);
 				pomodoro.start();
+				setPomodoroQuest(quest);
 			}
 		}
-	}
+    }
 
 	/**
 	 * @return
@@ -65,6 +79,7 @@ public class QuietQuestFacade {
 	}
 
 	/**
+	 *
 	 * @param quest
 	 */
 	public void completeQuest(Quest quest) {
@@ -73,6 +88,7 @@ public class QuietQuestFacade {
 			ArrayList<Activity> activities = quest.getActivities();
 			if (activities.getFirst() instanceof PomodoroTimer pomodoro) {
 				pomodoro.end();
+				pomodoroQuest = null;
 			}
 		}
 	}
@@ -108,35 +124,31 @@ public class QuietQuestFacade {
 		database.saveBoxOpenTimes(user.getUsername(), currentQuest.getId());
 	}
 
-	// update task
-	// update pomodoroTimer
-	// or update activity
-	// delete activity
-
 	// ==============================* MQTT MANAGER *=======================================
 
-	/**
-	 * @param pubTopic
-	 * @param pubMessage
-	 */
-	public void connectMqtt(String pubTopic, String pubMessage) {
-		mqttHandler.connect(pubTopic, pubMessage);
-	}
+    /**
+     * Start subscribing to all sensor data from terminal.
+     */
+    public void subscribeMqtt() {
+        mqttHandler.subscribe();
+    }
 
-	/**
-	 *
-	 */
-	public void subscribeMqtt() {
-		mqttHandler.subscribe();
-	}
+    /**
+     * Methos to stop subscribing to sensor data from terminal.Used if a Quest is completed or when pausing during a break in
+     * PomodoroTimer.
+     */
+    public void unsubscribeMqtt() {
+        mqttHandler.unsubscribe();
+    }
 
-	/**
-	 * @param topic
-	 * @param message
-	 */
-	public void publishMqttMessage(String topic, String message) {
-		mqttHandler.publishMessage(topic, message);
-	}
+    /**
+     * Publishes topic data and payload to MQTT Broker for terminal to subscribe to.
+     * @param topic a string of the topic
+     * @param message a string of the payload message
+     */
+    public void publishMqttMessage(String topic, String message) {
+        mqttHandler.publishMessage(topic, message);
+    }
 
 	/**
 	 * @param uiUpdater
@@ -152,12 +164,10 @@ public class QuietQuestFacade {
 		mqttHandler.disconnect();
 	}
 
-	// create quest
-	// delete quest
-	// update quest
+    // ==============================* QUEST MANAGER *======================================
 
 
-	// ==============================* GETTERS & SETTERS *==================================
+    // ==============================* GETTERS & SETTERS *==================================
 
 	public User getUser() {
 		return user;
@@ -175,6 +185,24 @@ public class QuietQuestFacade {
 			}
 		}
 		return -1;
+	}
+
+	/**
+	 * There can only be one running PomodoroTimer at each possible moment, so the object is stored as a singleton in a
+	 * global fashion.
+	 *
+	 * @return PomodoroTimer object.
+	 */
+	public Quest getPomodoroQuest() {
+		return pomodoroQuest;
+	}
+
+	public void setPomodoroQuest(Quest pomodoroQuest) {
+		this.pomodoroQuest = pomodoroQuest;
+	}
+
+	public MediaPlayer getMediaPlayer() {
+		return mediaPlayer;
 	}
 
 	/**

@@ -312,56 +312,6 @@ public class Database {
 
     }
 
-    public void updateQuestCompletionState(Quest quest) {
-        String sql = """
-                UPDATE "quest"
-                SET completion_state = ?
-                WHERE id = ?
-                """;
-
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setBoolean(1, quest.getCompletionState());
-            pstmt.setInt(2, quest.getId());
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-
-    public void updateQuestStartTime(Quest quest) {
-        String sql = """
-                UPDATE "quest"
-                SET start_time = ?
-                WHERE id = ?
-                """;
-
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setTimestamp(1, quest.getStartTime());
-            pstmt.setInt(2, quest.getId());
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    public void updateQuestCompleteTime(Quest quest) {
-        String sql = """
-                UPDATE "quest"
-                SET complete_time = ?
-                WHERE id = ?
-                """;
-
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setTimestamp(1, quest.getCompleteTime());
-            pstmt.setInt(2, quest.getId());
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-
     /**
      * Deletes quest with a certain id from database.
      *
@@ -501,83 +451,6 @@ public class Database {
     }
 
     /**
-     * Primary use case when Task object is edited and should update the attributes that are changed
-     * in the database.
-     *
-     * @param currTask is the current task record in database.
-     * @param updTask  is the updated Task object from application.
-     */
-    public void updateTask(Task currTask, Task updTask) {
-
-        boolean isDescriptionUpdated = updTask.getDescription() != null &&
-                currTask.getDescription().equals(updTask.getDescription());
-
-        boolean isStartTimeUpdated = updTask.getStartTime() != null &&
-                currTask.getStartTime().compareTo(updTask.getStartTime()) > 0;
-
-        boolean isEndTimeUpdated = updTask.getEndTime() != null &&
-                currTask.getEndTime().compareTo(updTask.getEndTime()) > 0;
-
-        boolean isCompletionStateUpdated = updTask.getCompletionState() &&
-                currTask.getCompletionState() != updTask.getCompletionState();
-
-        if (isDescriptionUpdated) {
-            updateTaskDescription(updTask);
-        }
-        if (isStartTimeUpdated) {
-            updateTaskStartTime(updTask);
-        }
-        if (isEndTimeUpdated) {
-            updateTaskEndTime(updTask);
-        }
-        if (isCompletionStateUpdated) {
-            updateTaskCompletionState(updTask);
-        }
-    }
-
-    /**
-     * Updates the decription value in the specified task record.
-     *
-     * @param task is the record in database.
-     */
-    private void updateTaskDescription(Task task) {
-        String sql = """
-                UPDATE "task"
-                SET description = ?
-                WHERE id = ?
-                """;
-
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setString(1, task.getDescription());
-            pstmt.setInt(2, task.getId());
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    /**
-     * Updates the start_time value in the specified task record.
-     *
-     * @param task is the record in database.
-     */
-    public void updateTaskStartTime(Task task) {
-        String sql = """
-                UPDATE "task"
-                SET start_time = ?
-                WHERE id = ?
-                """;
-
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setTimestamp(1, task.getStartTime());
-            pstmt.setInt(2, task.getId());
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    /**
      * Updates the end_time value in the specified task record.
      * Public method so task end_time can be updated directly.
      *
@@ -667,113 +540,31 @@ public class Database {
         }
     }
 
-    /**
-     * Method checks if attributes are updated compared to current values in database.
-     *
-     * @param currPomodoro is the pomodoro_timer record in database.
-     * @param updPomodoro  the updated PomodoroTimer object from application.
-     */
-    public void updatePomodoroTimer(PomodoroTimer currPomodoro, PomodoroTimer updPomodoro) {
-        boolean isFocusTimeUpdated = updPomodoro.getFocusTime() != 0 &&
-                currPomodoro.getFocusTime() != updPomodoro.getFocusTime();
+	public ArrayList<PomodoroTimer> getAllPomodoroQuests(User user) throws SQLException {
+		ArrayList<PomodoroTimer> pomodoroQuests = new ArrayList<>();
 
-        boolean isBreakTimeUpdated = updPomodoro.getBreakTime() != 0 &&
-                currPomodoro.getBreakTime() != updPomodoro.getBreakTime();
+		String questSql = "SELECT * FROM pomodoro_timer WHERE quest_id = ?";
 
-        boolean isIntervalUpdated = updPomodoro.getInterval() != 0 &&
-                currPomodoro.getInterval() != updPomodoro.getInterval();
+		try (PreparedStatement pomodoroStmt = connection.prepareStatement(questSql)) {
+			pomodoroStmt.setInt(1, user.getId());
+			ResultSet rs = pomodoroStmt.executeQuery();
+			while (rs.next()) {
+				int focusTime = rs.getInt("focus_time");
+				int breakTime = rs.getInt("break_time");
+				int interval = rs.getInt("interval");
+				int questId = rs.getInt("quest_id");
 
-        if (isFocusTimeUpdated) {
-            updatePomodoroTimerFocusTime(updPomodoro);
-        }
-        if (isBreakTimeUpdated) {
-            updatePomodoroTimerBreakTime(updPomodoro);
-        }
-        if (isIntervalUpdated) {
-            updatePomodoroTimerInterval(updPomodoro);
-        }
-    }
+				PomodoroTimer pomodoro = new PomodoroTimer(questId, focusTime, breakTime, interval);
+				pomodoroQuests.add(pomodoro);
+			}
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+		return pomodoroQuests;
+	}
 
-    /**
-     * Updates the focus_time value in the specified pomodoro_timer record.
-     *
-     * @param pomodoro is the pomodoro_timer record in database.
-     */
-    private void updatePomodoroTimerFocusTime(PomodoroTimer pomodoro) {
-        String sql = """
-                UPDATE "pomodoro_timer"
-                SET focus_time = ?
-                WHERE quest_id = ?
-                """;
 
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setInt(1, pomodoro.getFocusTime());
-            pstmt.setInt(2, pomodoro.getQuestId());
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    /**
-     * Updates the break_time value in the specified pomodoro_timer record.
-     *
-     * @param pomodoro is the pomodoro_timer record in database.
-     */
-    private void updatePomodoroTimerBreakTime(PomodoroTimer pomodoro) {
-        String sql = """
-                UPDATE "pomodoro_timer"
-                SET break_time = ?
-                WHERE quest_id = ?
-                """;
-
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setInt(1, pomodoro.getBreakTime());
-            pstmt.setInt(2, pomodoro.getQuestId());
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    /**
-     * Updates the interval value in the specified pomodoro_timer record.
-     *
-     * @param pomodoro is the pomodoro_timer record in database.
-     */
-    private void updatePomodoroTimerInterval(PomodoroTimer pomodoro) {
-        String sql = """
-                UPDATE "pomodoro_timer"
-                SET interval = ?
-                WHERE quest_id = ?
-                """;
-
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setInt(1, pomodoro.getInterval());
-            pstmt.setInt(2, pomodoro.getQuestId());
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    /**
-     * Deletes pomodoro_timer records related to a quest record.
-     *
-     * @param quest is the record in database.
-     */
-    public void deletePomodoroTimerFromQuest(Quest quest) throws SQLException {
-        String sql = """
-                DELETE FROM "pomodoro_timer"
-                WHERE quest_id = ?
-                """;
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setInt(1, quest.getId());
-            pstmt.executeUpdate();
-        }
-    }
-
-    // ==============================* USER MANAGEMENT *====================================
+	// ==============================* USER MANAGEMENT *====================================
 
     /**
      * Check if the provided username exists in the database.
@@ -896,28 +687,6 @@ public class Database {
             // Handle the exception if the hashing algorithm is not supported
             throw new RuntimeException("SHA-256 is not supported", e);
         }
-    }
-
-    public ArrayList<PomodoroTimer> getAllPomodoroQuests(User user) throws SQLException {
-        ArrayList<PomodoroTimer> pomodoroQuests = new ArrayList<>();
-
-        String questSql = "SELECT * FROM pomodoro_timer WHERE quest_id = ?";
-
-        try (PreparedStatement pomodoroStmt = connection.prepareStatement(questSql)) {
-            pomodoroStmt.setInt(1, user.getId());
-            ResultSet rs = pomodoroStmt.executeQuery();
-            while (rs.next()) {
-                int focusTime = rs.getInt("focus_time");
-                int breakTime = rs.getInt("break_time");
-                int interval = rs.getInt("interval");
-
-                PomodoroTimer pomodoro = new PomodoroTimer(focusTime, breakTime, interval);
-                pomodoroQuests.add(pomodoro);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return pomodoroQuests;
     }
 
     /**

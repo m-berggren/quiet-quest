@@ -89,6 +89,10 @@ public class CreateQuestController extends BaseController implements Initializab
         super.afterMainController();
     }
 
+
+    /**
+     * Configures the slider listener to update the text field with the slider's value for pomodoro time setting.
+     */
     private void configureSliderListener() {
         // Add a listener to the Slider's value property
         focusSlider.valueProperty().addListener(new ChangeListener<Number>() {
@@ -211,7 +215,7 @@ public class CreateQuestController extends BaseController implements Initializab
             String title = titleField.getText();
             String description = descriptionField.getText();
             ArrayList<Activity> activities = new ArrayList<>(activityListView.getItems());
-            Quest quest = new Quest(user, title, description);
+            Quest quest = new Quest(user, title, description, activities);
             quietQuestFacade.createQuest(quest, activities);
             showCreateQuest();
         }

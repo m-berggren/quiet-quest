@@ -2,10 +2,10 @@
 #include <Ultrasonic.h>
 #include <string.h>
 #include <ChainableLED.h>
-#include "utilities/utils.h"
-#include "mqtt/mqtt_config.h"
-#include "utilities/pins.h"
-#include "display/display_config.h"
+#include "src/utilities/utils.h"
+#include "src/mqtt/mqtt_config.h"
+#include "src/utilities/pins.h"
+#include "src/display/display_config.h"
 
 // Initializations
 Ultrasonic ultrasonic(PIN_WIRE_SCL);
@@ -20,12 +20,12 @@ long distanceValue;
 String boxStatus;
 
 void setup() {
-    pinMode(LIGHT_PIN, INPUT);                                                //
-    pinMode(MOTION_PIN, INPUT);                                               //
-    pinMode(DISTANCE_PIN, INPUT);                                             //
-    pinMode(WIO_BUZZER, OUTPUT);
+    pinMode(LIGHT_PIN, INPUT);                                                // The light sensor takes input
+    pinMode(MOTION_PIN, INPUT);                                               // Motion pin takes takes input
+    pinMode(DISTANCE_PIN, INPUT);                                             // Distance pin takes input
+    pinMode(WIO_BUZZER, OUTPUT);                                              // Built-in audio emitter outputs
 
-    Serial.begin(BAUD_RATE);                                                  //
+    Serial.begin(BAUD_RATE);                                                  // Sets baud rate
 
     led.init();                                                               // Initialize LED
 
@@ -37,13 +37,22 @@ void setup() {
 }
 
 void loop() {
+
+    // Used in both if statements
+    wifiStatus = wifiConnected() ? "Yes" : "No";
+    mqttStatus = mqttConnected() ? "Yes" : "No";
+
+    if (POMODORO_BREAK) {
+        QUEST_RUNS = false;
+    }
+
     if (QUEST_RUNS) {                                                         // If Quest has been started this is true
         // ==========================* SENSORS *=========================
         // Reading and interpreting sensor data
 
         int motionReading = digitalRead(MOTION_PIN);                          // Motion sensor gives 0 or 1
         int lightReading = mapToPercentage(analogRead(LIGHT_PIN));            // Maps 0-1023 light value to 0-100
-        long distanceReading = ultrasonic.MeasureInCentimeters();             //
+        long distanceReading = ultrasonic.MeasureInCentimeters();             // Distance reading can be 0-525cm
 
         // Buzzer: Audio alert depending on proximity
         if (distanceReading < 16){
@@ -70,20 +79,18 @@ void loop() {
         // Prints to serial monitor and LCD screen if interval has passed
 
         if (isTimeToUpdate()) {
-            wifiStatus = wifiConnected() ? "Yes" : "No";
-            mqttStatus = mqttConnected() ? "Yes" : "No";
             motionStatus = motionReading ? "Yes" : "No";
             lightValue = lightReading;
             distanceValue = distanceReading;
             boxStatus = isBoxClosed ? "Yes" : "No";
 
-
-            Serial.printf("    Wifi connected: %s\n", wifiStatus.c_str());      //
-            Serial.printf("    MQTT connected: %s\n", mqttStatus.c_str());      //
-            Serial.printf("   Motion detected: %s\n", motionStatus.c_str());    //
-            Serial.printf("    Light measured: %d\n", lightValue);              //
-            Serial.printf("Distance to object: %ld\n", distanceValue);          //
-            Serial.printf("     Is box closed: %s\n", boxStatus.c_str());       //
+            // This prints to the serial monitor only
+            Serial.printf("    Wifi connected: %s\n", wifiStatus.c_str());
+            Serial.printf("    MQTT connected: %s\n", mqttStatus.c_str());
+            Serial.printf("   Motion detected: %s\n", motionStatus.c_str());
+            Serial.printf("    Light measured: %d\n", lightValue);
+            Serial.printf("Distance to object: %ld\n", distanceValue);
+            Serial.printf("     Is box closed: %s\n", boxStatus.c_str());
             Serial.println("================================");
 
             drawOnScreen(wifiStatus, mqttStatus, motionStatus, lightValue, distanceValue, boxStatus);
@@ -95,6 +102,14 @@ void loop() {
                 client.publish(TOPIC_PUB_LIGHT, toString(lightReading));        // Publishes int value as String
                 client.publish(TOPIC_PUB_DISTANCE, toString(distanceReading));  // Publishes int value as String
             }
+        }
+    } else if (!QUEST_RUNS){
+        if (!POMODORO_BREAK) {
+            // This is when quest is not active and there is no pomodoro break
+        }
+
+        if (isTimeToUpdate()) {
+            drawOnScreen(wifiStatus, mqttStatus);
         }
     }
 

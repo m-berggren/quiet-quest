@@ -35,23 +35,28 @@
       </AnchorPane>
       <AnchorPane fx:id="viewInfoAnchorPane" layoutX="596.0" layoutY="80.0" prefHeight="625.0" prefWidth="593.0" style="-fx-background-color: #fff; -fx-background-radius: 10;">
          <children>
-            <TextField fx:id="titleField" editable="false" layoutX="18.0" layoutY="20.0" prefHeight="70.0" prefWidth="536.0" AnchorPane.rightAnchor="39.0">
+            <TextField fx:id="titleField" editable="false" layoutX="18.0" layoutY="56.0" prefHeight="70.0" prefWidth="536.0" AnchorPane.rightAnchor="39.0">
                <font>
                   <Font size="30.0" />
                </font>
             </TextField>
-            <Text fx:id="descriptionHeader" fill="#22577a" layoutX="16.0" layoutY="137.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Description" wrappingWidth="334.9270782470703">
+            <Text fx:id="descriptionHeader" fill="#22577a" layoutX="16.0" layoutY="173.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Description" wrappingWidth="334.9270782470703">
                <font>
                   <Font name="American Typewriter" size="30.0" />
                </font>
             </Text>
-            <TextArea fx:id="descriptionField" layoutX="15.0" layoutY="152.0" prefHeight="97.0" prefWidth="536.0" />
-            <Text fx:id="tasksHeader" fill="#22577a" layoutX="16.0" layoutY="304.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tasks" wrappingWidth="86.26045227050781">
+            <TextArea fx:id="descriptionField" layoutX="15.0" layoutY="196.0" prefHeight="97.0" prefWidth="536.0" />
+            <Text fx:id="tasksHeader" fill="#22577a" layoutX="16.0" layoutY="340.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tasks" wrappingWidth="86.26045227050781">
                <font>
                   <Font name="American Typewriter" size="30.0" />
                </font>
             </Text>
-            <ListView fx:id="activityListView" layoutX="15.0" layoutY="314.0" prefHeight="271.0" prefWidth="536.0" />
+            <ListView fx:id="activityListView" layoutX="15.0" layoutY="357.0" prefHeight="228.0" prefWidth="536.0" />
+            <Text fx:id="titleHeader" fill="#22577a" layoutX="18.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Title" wrappingWidth="334.9270782470703">
+               <font>
+                  <Font name="American Typewriter" size="30.0" />
+               </font>
+            </Text>
          </children>
       </AnchorPane>
    </children>

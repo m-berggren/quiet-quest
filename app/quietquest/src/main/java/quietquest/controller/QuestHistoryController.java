@@ -21,6 +21,8 @@ public class QuestHistoryController extends BaseController {
 	@FXML
 	public ListView<Quest> quesHistoryListView;
 	@FXML
+	public Text titleHeader;
+	@FXML
 	private AnchorPane questlistAnchorPane;
 	@FXML
 	private Label titleLabel;
@@ -48,7 +50,7 @@ public class QuestHistoryController extends BaseController {
 		displayQuests();
 	}
 
-	public void displayQuests() throws SQLException {
+	public void displayQuests() {
 		//Get a list of quest with quest completionStatus as true
 		ArrayList<Quest> completedQuestList = new ArrayList<>();
 		for (Quest quest : questArrayList) {

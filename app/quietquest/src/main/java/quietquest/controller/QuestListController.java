@@ -243,8 +243,7 @@ public class QuestListController extends BaseController {
 		descriptionField.setEditable(false);
 		questListView.setDisable(false);
 
-		Quest newQuest = new Quest(quietQuestFacade.getUser(), newTitle, newDescription);
-		quietQuestFacade.updateQuest(selectedQuest, newQuest);
+		quietQuestFacade.updateQuest(selectedQuest);
 		newTaskText.clear();
 		showSelectedQuest();
 		questListView.refresh();

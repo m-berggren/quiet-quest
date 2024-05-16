@@ -269,25 +269,24 @@ public class Database {
     }
 
     /**
-     * Updates quest record in database based on the attributes in the quest object.
+     * Updates quest record in database based on the attributes in the quest object
      *
-     * @param currQuest is the current quest record in database.
-     * @param updQuest  is the updated Quest object from application.
+     * @param currQuest is the quest with new title and detail record
      */
-    public void updateQuest(Quest currQuest, Quest updQuest) {
+    public void updateQuest(Quest currQuest) {
+        String sql = """
+                UPDATE "quest"
+                SET title = ?, detail = ?
+                WHERE id = ?
+                """;
 
-        boolean isTitleUpdated = updQuest.getTitle() != null &&
-                !currQuest.getTitle().equals(updQuest.getTitle());
-
-        boolean isDetailUpdated = updQuest.getDetail() != null &&
-                !currQuest.getDetail().equals(updQuest.getDetail());
-
-
-        if (isTitleUpdated) {
-            updateQuestTitle(updQuest);
-        }
-        if (isDetailUpdated) {
-            updateQuestDetail(updQuest);
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setString(1, currQuest.getTitle());
+            pstmt.setString(2, currQuest.getDetail());
+            pstmt.setInt(3, currQuest.getId());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
 
     }
@@ -308,37 +307,6 @@ public class Database {
         }
     }
 
-    private void updateQuestTitle(Quest quest) {
-        String sql = """
-                UPDATE "quest"
-                SET title = ?
-                WHERE id = ?
-                """;
-
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setString(1, quest.getTitle());
-            pstmt.setInt(2, quest.getId());
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    private void updateQuestDetail(Quest quest) {
-        String sql = """
-                UPDATE "quest"
-                SET detail = ?
-                WHERE id = ?
-                """;
-
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setString(1, quest.getDetail());
-            pstmt.setInt(2, quest.getId());
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
 
     public void updateQuestStartTime(Quest quest) {
         String sql = """

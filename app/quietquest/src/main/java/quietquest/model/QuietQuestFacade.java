@@ -88,8 +88,8 @@ public class QuietQuestFacade {
 	}
 
 
-	public void updateQuest(Quest currQuest, Quest updQuest) {
-		database.updateQuest(currQuest, updQuest);
+	public void updateQuest(Quest currQuest) {
+		database.updateQuest(currQuest);
 	}
 
 	public void updateTaskCompletionStateInDb(Task task) {

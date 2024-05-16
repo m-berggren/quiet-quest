@@ -6,7 +6,6 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import quietquest.controller.LogInController;
@@ -28,8 +27,6 @@ public class QuietQuestMain extends Application {
         logInController.initialize(database, mqttHandler); // Passes database & mqttHandler object until MainController is reached
         Scene scene = new Scene(root);
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
-        ((AnchorPane)root).getStyleClass().clear();
-        ((AnchorPane)root).getStyleClass().add("backgroundmain");
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent event) {

@@ -140,14 +140,6 @@ public class MainController extends BaseController {
             node.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
 
             mainPane.setCenter(node);
-
-            if(view.equals("quest-view.fxml")){
-                mainPane.getStyleClass().clear();
-                mainPane.getStyleClass().add("backgroundquest");
-            }else{
-              mainPane.getStyleClass().clear();
-              mainPane.getStyleClass().add("backgroundmain");
-            }
         } catch (IOException | SQLException e) {
             throw new RuntimeException(e);
         }

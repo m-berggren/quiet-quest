@@ -271,16 +271,8 @@ This file defines global css styles for the application.
     -fx-background-color: transparent;
 }
 
-.backgroundquest {
-    -fx-background-image: url("images/quest_background.png");
-    -fx-background-repeat: no-repeat;
-    -fx-background-size: cover;
-    -fx-background-position: center;
-}
-
-.backgroundmain {
-    -fx-background-image: url("images/main_background.png");
-    -fx-background-repeat: no-repeat;
+.background-pane {
+    -fx-background-image: url("images/questPage_background.png");
     -fx-background-size: cover;
     -fx-background-position: center;
 }

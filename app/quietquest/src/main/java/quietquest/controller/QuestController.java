@@ -289,7 +289,10 @@ public class QuestController extends BaseController implements UIUpdater, Pomodo
 		for (Activity activity : currentQuest.getActivities()) {
 			if (activity instanceof Task task) {
 				if (!task.getCompletionState()) {
-					showReminder("You have not completed all tasks. Please complete all tasks before ending the quest.");
+					String reminder = "You have not completed all tasks. Please complete all tasks before ending the quest.";
+					Platform.runLater(() -> {
+						showReminder(reminder);
+					});
 					return;
 				}
 			}
@@ -316,7 +319,7 @@ public class QuestController extends BaseController implements UIUpdater, Pomodo
 		Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(3), event -> {
 			motivationalAnchorPane.setVisible(false);
 		}));
-                timeline.play();
+		timeline.play();
 	}
 
 	/**

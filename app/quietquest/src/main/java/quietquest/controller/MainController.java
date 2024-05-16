@@ -53,17 +53,18 @@ public class MainController extends BaseController {
     private VBox menuVBox;
     @FXML
     private Slider volumeSlider;
-    private MediaPlayer mediaPlayer;
 
+	private MediaPlayer mediaPlayer;
     private Database database;
     private MQTTHandler mqttHandler;
 
     // ==============================* INITIALIZATION METHODS *=======================
 
-    public void initialize(User user, Database database, MQTTHandler mqttHandler) throws SQLException {
+	public void initialize(User user, Database database, MQTTHandler mqttHandler, MediaPlayer mediaPlayer) throws SQLException {
         this.database = database;
         this.mqttHandler = mqttHandler;
-        this.quietQuestFacade = new QuietQuestFacade(user, database, mqttHandler);
+		this.mediaPlayer = mediaPlayer;
+		this.quietQuestFacade = new QuietQuestFacade(user, database, mqttHandler, mediaPlayer);
         setMainController(this);
         mqttHandler.connect();
 
@@ -106,10 +107,8 @@ public class MainController extends BaseController {
         showStatistics();
     }
 
-    public void onLogOutButtonClick(ActionEvent event) throws IOException, SQLException {
-        if (mediaPlayer != null) {
-            mediaPlayer.stop();
-        }
+	public void onLogOutButtonClick(ActionEvent event) throws IOException {
+		closeMediaPlayer();
         loadOnLogout(event);
     }
 
@@ -129,6 +128,18 @@ public class MainController extends BaseController {
             stopButton.setDisable(false);
         }
     }
+
+	private void closeMediaPlayer() {
+		if (mediaPlayer != null) {
+			mediaPlayer.stop();
+			mediaPlayer.setOnEndOfMedia(new Runnable() {
+				@Override
+				public void run() {
+					mediaPlayer.dispose();
+				}
+			});
+		}
+	}
 
 
     /**
@@ -155,6 +166,7 @@ public class MainController extends BaseController {
         if (result.isPresent() && result.get().getText().equals("Yes")) {
             mqttHandler.disconnect();
             database.closeConnection();
+			closeMediaPlayer();
             Platform.exit();
         }
     }
@@ -199,11 +211,11 @@ public class MainController extends BaseController {
     /**
      * Loads the login view based on string in {@link FxmlFile}.
      */
-    public void loadOnLogout(ActionEvent event) throws IOException, SQLException {
+	public void loadOnLogout(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(QuietQuestMain.class.getResource(FxmlFile.LOG_IN));
         Parent root = loader.load();
         LogInController logInController = loader.getController();
-        logInController.initialize(database, mqttHandler);
+		logInController.initialize(database, mqttHandler, mediaPlayer);
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm()); // adding CSS styling option

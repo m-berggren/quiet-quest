@@ -10,6 +10,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import org.w3c.dom.Text;
 import quietquest.QuietQuestMain;
@@ -35,10 +37,12 @@ public class CreateUserController {
 
     private Database database;
     private MQTTHandler mqttHandler;
+	private MediaPlayer mediaPlayer;
 
-    public void initialize(Database database, MQTTHandler mqttHandler) {
+	public void initialize(Database database, MQTTHandler mqttHandler, MediaPlayer mediaPlayer) {
         this.database = database;
         this.mqttHandler = mqttHandler;
+		this.mediaPlayer = mediaPlayer;
     }
 
     /**
@@ -120,7 +124,7 @@ public class CreateUserController {
         FXMLLoader loader = new FXMLLoader(QuietQuestMain.class.getResource(fxmlFile));
         Parent root = loader.load();
         LogInController logInController = loader.getController();
-        logInController.initialize(database, mqttHandler);
+		logInController.initialize(database, mqttHandler, mediaPlayer);
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm()); // adding CSS styling option

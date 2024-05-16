@@ -1,5 +1,6 @@
 package quietquest.model;
 
+import javafx.scene.media.MediaPlayer;
 import quietquest.controller.UIUpdater;
 import quietquest.utility.MQTTHandler;
 
@@ -10,6 +11,7 @@ public class QuietQuestFacade {
 	protected final MQTTHandler mqttHandler;
 	protected final Database database;
 	protected final User user;
+	protected final MediaPlayer mediaPlayer;
 
 	// ==============================* CONSTRUCTOR *========================================
 
@@ -21,10 +23,11 @@ public class QuietQuestFacade {
 	 * @param user     is the User object to store login information, used for database querying.
 	 * @param database is the single Database object that handles all query operations.
 	 */
-	public QuietQuestFacade(User user, Database database, MQTTHandler mqttHandler) {
+	public QuietQuestFacade(User user, Database database, MQTTHandler mqttHandler, MediaPlayer mediaPlayer) {
 		this.mqttHandler = mqttHandler;
 		this.user = user;
 		this.database = database;
+		this.mediaPlayer = mediaPlayer;
 	}
 
 	// ==============================* DATABASE MANAGER *===================================
@@ -177,6 +180,10 @@ public class QuietQuestFacade {
 			}
 		}
 		return -1;
+	}
+
+	public MediaPlayer getMediaPlayer() {
+		return mediaPlayer;
 	}
 
 	/**

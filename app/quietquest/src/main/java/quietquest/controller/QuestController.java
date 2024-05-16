@@ -166,6 +166,8 @@ public class QuestController extends BaseController implements UIUpdater, Pomodo
 
 							task.setEndTime(Timestamp.from(Instant.now()));
 							task.setCompletionState(true);
+							//Make checkbox unable to uncheck after user check it
+							checkBox.setDisable(task.getCompletionState());
 							quietQuestFacade.updateTaskEndTimeInDb(task);
 							quietQuestFacade.updateTaskCompletionStateInDb(task);
 

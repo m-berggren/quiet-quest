@@ -86,6 +86,15 @@ public class LogInController {
         stage.show();
     }
 
+    /**
+     * Load home page upon clicking "Log In" if user credentials match what is in the database.
+     * @param event is the event triggers
+     * @param user is the user object
+     * @param database is the database object
+     * @param mqttHandler is the MQTTHandler object
+     * @throws IOException if IO exception occurs
+     * @throws SQLException if SQL exception occurs
+     */
     private void loadHomeController(ActionEvent event, User user, Database database, MQTTHandler mqttHandler) throws IOException, SQLException {
         FXMLLoader loader = new FXMLLoader(QuietQuestMain.class.getResource(FxmlFile.MAIN));
         Parent root = loader.load();
@@ -100,6 +109,11 @@ public class LogInController {
         controller.loadView(FxmlFile.HOME);
     }
 
+    /**
+     * Allow user to press "Enter" key to log in
+     *
+     * @param event is the event triggers
+     */
     @FXML
     private void onEnterKeyPressed(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
@@ -116,7 +130,7 @@ public class LogInController {
     /**
      * Load sign-up page upon clicking "Create User Account" button
      *
-     * @param event
+     * @param event is the event triggers
      */
     public void onCreateUserClick(ActionEvent event) throws IOException {
         loadCreateUserController(event, database, mqttHandler);
@@ -125,7 +139,7 @@ public class LogInController {
     /**
      * Method used to load the page specified
      *
-     * @param event
+     * @param event the event that triggers the loading of the fxml file
      */
     private void loadCreateUserController(ActionEvent event, Database database, MQTTHandler mqttHandler) throws IOException {
         FXMLLoader loader = new FXMLLoader(QuietQuestMain.class.getResource(FxmlFile.CREATE_USER));

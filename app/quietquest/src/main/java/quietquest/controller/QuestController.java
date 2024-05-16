@@ -28,50 +28,50 @@ import static quietquest.utility.MQTTTopics.*;
 
 
 public class QuestController extends BaseController implements UIUpdater, PomodoroUIUpdater, Callback<ListView<Activity>, ListCell<Activity>> {
-    @FXML
-    private AnchorPane taskAnchorPane;
-    @FXML
-    private AnchorPane pomodoroAnchorPane;
-    @FXML
-    private AnchorPane motivationalAnchorPane;
-    @FXML
-    private Button startQuestButton;
-    @FXML
-    private Button completeQuestButton;
-    @FXML
-    private ListView<Activity> activityListView;
-    @FXML
-    private Label titleLabel;
-    @FXML
-    private Label descriptionLabel;
-    @FXML
-    private Label mqttMotionMessage;
-    @FXML
-    private Label mqttDistanceMessage;
-    @FXML
-    private Label mqttConnectionMessage;
-    @FXML
-    private Label mqttLightMessage;
-    @FXML
-    private Label motivationalMessage;
-    @FXML
-    private Label focusLabel;
-    @FXML
-    private Label breakLabel;
-    @FXML
-    private Label intervalsLabel;
-    @FXML
-    private Label pomodoroStatusLabel;
-    @FXML
-    private Label intervalsLeftLabel;
-    @FXML
-    private Label startTimeLabel;
-    @FXML
-    private Label endTimeLabel;
-    @FXML
-    private Label questTypeLabel;
-    private Activity currentActivity;
-    private Quest currentQuest;
+	@FXML
+	private AnchorPane taskAnchorPane;
+	@FXML
+	private AnchorPane pomodoroAnchorPane;
+	@FXML
+	private AnchorPane motivationalAnchorPane;
+	@FXML
+	private Button startQuestButton;
+	@FXML
+	private Button completeQuestButton;
+	@FXML
+	private ListView<Activity> activityListView;
+	@FXML
+	private Label titleLabel;
+	@FXML
+	private Label descriptionLabel;
+	@FXML
+	private Label mqttMotionMessage;
+	@FXML
+	private Label mqttDistanceMessage;
+	@FXML
+	private Label mqttConnectionMessage;
+	@FXML
+	private Label mqttLightMessage;
+	@FXML
+	private Label motivationalMessage;
+	@FXML
+	private Label focusLabel;
+	@FXML
+	private Label breakLabel;
+	@FXML
+	private Label intervalsLabel;
+	@FXML
+	private Label pomodoroStatusLabel;
+	@FXML
+	private Label intervalsLeftLabel;
+	@FXML
+	private Label startTimeLabel;
+	@FXML
+	private Label endTimeLabel;
+	@FXML
+	private Label questTypeLabel;
+	private Activity currentActivity;
+	private Quest currentQuest;
 
     private String[] message;
     private ObservableList<Activity> activities;
@@ -169,70 +169,70 @@ public class QuestController extends BaseController implements UIUpdater, Pomodo
 							quietQuestFacade.updateTaskEndTimeInDb(task);
 							quietQuestFacade.updateTaskCompletionStateInDb(task);
 
-                            quietQuestFacade.publishMqttMessage(TOPIC_PUB_TASK_DONE, message);
-                        }
-                    });
-                    setGraphic(checkBox);
-                    motivationalAnchorPane.setVisible(false);
-                } else if (activity instanceof PomodoroTimer) {
-                    PomodoroTimer timer = (PomodoroTimer) activity;
-                    setText(timer.toString());
-                    setGraphic(null);
-                }
-            }
-        };
-    }
+							quietQuestFacade.publishMqttMessage(TOPIC_PUB_TASK_DONE, message);
+						}
+					});
+					setGraphic(checkBox);
+					motivationalAnchorPane.setVisible(false);
+				} else if (activity instanceof PomodoroTimer) {
+					PomodoroTimer timer = (PomodoroTimer) activity;
+					setText(timer.toString());
+					setGraphic(null);
+				}
+			}
+		};
+	}
 
-    /**
-     * Overrides the update method in {@link PomodoroUIUpdater}.
-     * Used to update the UI through observer pattern.
-     *
-     * @param message the string to display.
-     */
-    @Override
-    public void update(String message) {
+	/**
+	 * Overrides the update method in {@link PomodoroUIUpdater}.
+	 * Used to update the UI through observer pattern.
+	 *
+	 * @param message the string to display.
+	 */
+	@Override
+	public void update(String message) {
 
-        final String FOCUS_TIME = "Focus time started";
-        final String BREAK_TIME_START = "Break time started";
-        final String BREAK_TIME_END = "Break time ended";
-        final String POMODORO_END = "Pomodoro timer finished";
+		final String FOCUS_TIME = "Focus time started";
+		final String BREAK_TIME_START = "Break time started";
+		final String BREAK_TIME_END = "Break time ended";
+		final String POMODORO_END = "Pomodoro timer finished";
 
-        // Need Platform.runLater() as a separate thread with Timer is already running
-        Platform.runLater(() -> {
-            switch (message) {
-                case FOCUS_TIME -> {
-                    System.out.println(FOCUS_TIME);
+		// Need Platform.runLater() as a separate thread with Timer is already running
+		Platform.runLater(() -> {
+			switch (message) {
+				case FOCUS_TIME -> {
+					System.out.println(FOCUS_TIME);
 
-                    pomodoroAnchorPane.setVisible(true);
-                    pomodoroStatusLabel.setText("Focus time now active");
-                    pomodoroStatusLabel.setTextFill(Color.color(0.6, 0, 0));
+					pomodoroAnchorPane.setVisible(true);
+					pomodoroStatusLabel.setText("Focus time now active");
+					pomodoroStatusLabel.setTextFill(Color.color(0.6, 0, 0));
 
-                    quietQuestFacade.publishMqttMessage(TOPIC_PUB_POMODORO_INTERVAL, FOCUS_TIME);
-                }
-                case BREAK_TIME_START -> {
-                    System.out.println(BREAK_TIME_START);
+					quietQuestFacade.publishMqttMessage(TOPIC_PUB_POMODORO_INTERVAL, FOCUS_TIME);
+				}
+				case BREAK_TIME_START -> {
+					System.out.println(BREAK_TIME_START);
 
-                    pomodoroStatusLabel.setText("Break time now active");
-                    pomodoroStatusLabel.setTextFill(Color.color(0, 0.50, 0));
+					pomodoroStatusLabel.setText("Break time now active");
+					pomodoroStatusLabel.setTextFill(Color.color(0, 0.50, 0));
 
-                    quietQuestFacade.publishMqttMessage(TOPIC_PUB_POMODORO_INTERVAL, BREAK_TIME_START);
-                }
-                case BREAK_TIME_END -> {
-                    System.out.println(BREAK_TIME_END);
+					quietQuestFacade.publishMqttMessage(TOPIC_PUB_POMODORO_INTERVAL, BREAK_TIME_START);
+				}
+				case BREAK_TIME_END -> {
+					System.out.println(BREAK_TIME_END);
 
-                    quietQuestFacade.publishMqttMessage(TOPIC_PUB_POMODORO_INTERVAL, BREAK_TIME_END);
-                }
-                case POMODORO_END -> {
-                    System.out.println(POMODORO_END);
+					quietQuestFacade.publishMqttMessage(TOPIC_PUB_POMODORO_INTERVAL, BREAK_TIME_END);
+				}
+				case POMODORO_END -> {
+					System.out.println(POMODORO_END);
 
-                    pomodoroAnchorPane.setVisible(false);
+					pomodoroAnchorPane.setVisible(false);
 
-                    quietQuestFacade.publishMqttMessage(TOPIC_PUB_POMODORO_INTERVAL, POMODORO_END);
-                    onCompletion();
-                }
-            }
-        });
-    }
+					quietQuestFacade.publishMqttMessage(TOPIC_PUB_POMODORO_INTERVAL, POMODORO_END);
+					onCompletion();
+				}
+			}
+		});
+	}
 
 	/**
 	 * Shows a motivational message for 3 seconds.
@@ -260,12 +260,12 @@ public class QuestController extends BaseController implements UIUpdater, Pomodo
 		currentQuest.setStartTime(Timestamp.from(Instant.now()));
         startTimeLabel.setText("Start: " + currentQuest.getStartTime());
 
-        // Connects to MQTT as soon as page loads
-        System.out.println("Starts quest");
+		// Connects to MQTT as soon as page loads
+		System.out.println("Starts quest");
 
-        quietQuestFacade.startQuest(currentQuest, this);
-        quietQuestFacade.publishMqttMessage(TOPIC_PUB_QUEST_START, "Your quest has started");
-        quietQuestFacade.subscribeMqtt();
+		quietQuestFacade.startQuest(currentQuest, this);
+		quietQuestFacade.publishMqttMessage(TOPIC_PUB_QUEST_START, "Your quest has started");
+		quietQuestFacade.subscribeMqtt();
 
 		startTimeLabel.setText("Start: " + formatTime(currentQuest.getStartTime()));
 
@@ -297,17 +297,17 @@ public class QuestController extends BaseController implements UIUpdater, Pomodo
 		endTimeLabel.setText("End: " + formatTime(currentQuest.getCompleteTime()));
 		currentQuest.setCompleteTime(Timestamp.from(Instant.now()));
 
-        quietQuestFacade.completeQuest(currentQuest);
-        quietQuestFacade.publishMqttMessage(TOPIC_PUB_QUEST_END, "Your quest has ended");
-        quietQuestFacade.unsubscribeMqtt();
+		quietQuestFacade.completeQuest(currentQuest);
+		quietQuestFacade.publishMqttMessage(TOPIC_PUB_QUEST_END, "Your quest has ended");
+		quietQuestFacade.unsubscribeMqtt();
 
-        mqttConnectionMessage.getStyleClass().clear();
-        mqttConnectionMessage.setText("");
-        mqttDistanceMessage.setVisible(false);
-        mqttMotionMessage.setVisible(false);
-        mqttLightMessage.setVisible(false);
-        completeQuestButton.setDisable(true);
-    }
+		mqttConnectionMessage.getStyleClass().clear();
+		mqttConnectionMessage.setText("");
+		mqttDistanceMessage.setVisible(false);
+		mqttMotionMessage.setVisible(false);
+		mqttLightMessage.setVisible(false);
+		completeQuestButton.setDisable(true);
+	}
 
 	private void showReminder(String s) {
 		//use a timeline to show the reminder for 3 seconds

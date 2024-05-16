@@ -227,7 +227,6 @@ public class QuestController extends BaseController implements UIUpdater, Pomodo
 
 					pomodoroAnchorPane.setVisible(false);
 
-					quietQuestFacade.publishMqttMessage(TOPIC_PUB_POMODORO_INTERVAL, POMODORO_END);
 					onCompletion();
 				}
 			}

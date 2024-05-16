@@ -113,3 +113,4 @@ To restart the Wio Terminal, flick the power switch quickly towards the right. T
 <!---
 To be added: "Profile pictures" in the same style as the badges + links to team members' gitlab profiles + description of contributions.
 -->
+![Julia](https://git.chalmers.se/courses/dit113/2024/group-12/quiet-quest/-/wikis/uploads/d1d7dc1a2d40aab2a0f404f12d61a51c/julia-colored.png) ![Tanya](https://git.chalmers.se/courses/dit113/2024/group-12/quiet-quest/-/wikis/uploads/d704828e4d7e3731a14fdad1eab3705c/tanya-colored.png)

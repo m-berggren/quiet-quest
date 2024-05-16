@@ -34,7 +34,7 @@ arduino-build:
      - curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
      - arduino-cli version
      # Create credentials.cpp with variables in gitlab
-     - | # Indicates start of multi-line script. '>' indicates file is overwritten, '>>' that it appends to
+     - | # Indicates start of multi-line script. '>' indicates file is overwritten if existing, '>>' that it appends to existing file
        echo '#include "credentials.h"' > $CREDENTIALS_CPP
        echo "const char* SSID = \"$WIFI_SSID\";" >> $CREDENTIALS_CPP
        echo "const char* PASSWORD = \"$WIFI_PASSWORD\";" >> $CREDENTIALS_CPP

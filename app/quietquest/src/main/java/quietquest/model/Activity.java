@@ -1,13 +1,12 @@
 package quietquest.model;
 
 public interface Activity {
-    public void completeTask();
 
-    public void start();
+	void start();
 
-    public void end();
+	void end();
 
-    public QuestType getType();
+	QuestType getType();
 }
 
 

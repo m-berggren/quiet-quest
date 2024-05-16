@@ -45,6 +45,8 @@ public class PomodoroTimer implements Activity {
         this.pomodoroObserver = null;
     }
 
+	// ==============================* GETTERS & SETTERS *==================================
+
     public int getFocusTime() {
         return focusTime;
     }
@@ -61,15 +63,36 @@ public class PomodoroTimer implements Activity {
         this.pomodoroObserver = pomodoroObserver;
     }
 
-    /**
-	 * Converts minutes to milliseconds.
-     *
-	 * @param minutes to convert.
-	 * @return equivalent time in milliseconds.
-     */
-    private int toMilliseconds(int minutes) {
-        return minutes * milliSeconds;
-    }
+	public int getQuestId() {
+		return questId;
+	}
+
+	public QuestType getType() {
+		return QuestType.POMODORO;
+	}
+
+	// ==============================* INTERFACE METHODS *====================================
+
+	/**
+	 * Handles the start operation of the pomodoroTimer. Needs to start with 0 as the value increments on each
+	 * subsequent call.
+	 */
+	@Override
+	public void start() {
+		runTimer(0);
+	}
+
+	/**
+	 * Ends the PomodoroTimer and notifies the observer. Used in {@link #runTimer(int)} when base case is true and then
+	 * cancels the timer.
+	 */
+	@Override
+	public void end() {
+		notifyPomodoroObserver(POMODORO_FINISH);
+		timer.cancel();
+	}
+
+	// ==============================* TIMER MANAGEMENT *===================================
 
 	/**
 	 * Notifies the observer with a specific event message.
@@ -86,15 +109,6 @@ public class PomodoroTimer implements Activity {
                 pomodoroObserver.update(event);
 			});
 		}
-	}
-
-	/**
-	 * Handles the start operation of the pomodoroTimer. Needs to start with 0 as the value increments on each
-	 * subsequent call.
-     */
-    @Override
-    public void start() {
-		runTimer(0);
 	}
 
 	/**
@@ -121,9 +135,10 @@ public class PomodoroTimer implements Activity {
         if (currentInterval >= interval) {
             end();
             return;
-        }
+		}
 
-        startFocusTime();
+		startFocusTime();
+		//
         TimerTask focusTask = new TimerTask() {
             @Override
             public void run() {
@@ -168,29 +183,19 @@ public class PomodoroTimer implements Activity {
         };
 
         timer.schedule(breakTask, toMilliseconds(breakTime));
-    }
-
-    public int getQuestId() {
-        return questId;
-    }
-
-    public QuestType getType() {
-        return QuestType.POMODORO;
 	}
 
+	// ==============================* UTILITY *====================================
+
 	/**
-	 * Ends the PomodoroTimer and notifies the observer. Used in {@link #runTimer(int)} when base case is true and then
-	 * cancels the timer.
+	 * Converts minutes to milliseconds.
+	 *
+	 * @param minutes to convert.
+	 * @return equivalent time in milliseconds.
 	 */
-    @Override
-    public void end() {
-        notifyPomodoroObserver(POMODORO_FINISH);
-        timer.cancel();
-    }
-
-    public void completeTask() {
-    }
-
+	private int toMilliseconds(int minutes) {
+		return minutes * milliSeconds;
+	}
 
     @Override
     public String toString() {

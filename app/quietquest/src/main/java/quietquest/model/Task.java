@@ -82,12 +82,6 @@ public class Task implements Activity {
         return description;
     }
 
-
-    @Override
-    public void completeTask() {
-
-    }
-
     @Override
     public void start() {
     }

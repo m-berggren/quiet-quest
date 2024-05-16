@@ -84,10 +84,10 @@ public class QuestHistoryController extends BaseController {
 					Label startTimeLabel = new Label("    Start Time: " + formatTime(quest.getStartTime()));
 					Label completionTimeLabel = new Label("    Completed Time: " + formatTime(quest.getCompleteTime()));
 					//Show time spent calculated from the difference between the timestamp start time and completion time in minutes
-					long timeSpent = (quest.getCompleteTime().getTime() - quest.getStartTime().getTime()) / 60000;
+					long timeSpent = (quest.getCompleteTime().getTime() - quest.getStartTime().getTime());
 					Label timeSpentLabel = new Label("    Time Spent: " + timeSpent + " minutes");
 					Label boxOpenTimesLabel = new Label("    Box Open Times: " + quest.getBoxOpenTimes());
-					long averageBoxOpenInterval = (timeSpent / (quest.getBoxOpenTimes() + 1) / 60000);
+					long averageBoxOpenInterval = (timeSpent / (quest.getBoxOpenTimes() + 1));
 					Label averageBoxOpenIntervalLabel = new Label("    Average Box Open Interval: " + averageBoxOpenInterval + " minutes");
 
 					vBox.getChildren().addAll(titleLabel, startTimeLabel, completionTimeLabel, timeSpentLabel, boxOpenTimesLabel, averageBoxOpenIntervalLabel);

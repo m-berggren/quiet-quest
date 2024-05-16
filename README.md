@@ -13,13 +13,22 @@ To be able to save user data we have set up a database with **PostgreSQL**, usin
 To ensure a stable and consistent build, we use **Gradle** for automated build and have incorporated a **CI Pipeline**. 
 
 # Getting Started
-## Install
+## Installation
 - [Arduino IDE](https://www.arduino.cc/en/software)
 - Your IDE of choice for Java projects (we use [intelliJ](https://www.jetbrains.com/idea/) and [VSCode](https://code.visualstudio.com/))
 - JavaFX SDK | [How to install and setup for intelliJ](https://www.youtube.com/watch?v=Ope4icw6bVk) (Bro Code, YouTube)
 - SceneBuilder | [How to install SceneBuilder](https://www.youtube.com/watch?v=-Obxf6NjnbQ&t=239s) (Bro Code, YouTube)
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/)
-- [Gradle](https://gradle.org/install/)
+    - Open Docker Desktop
+    - In the terminal: cd into _app/docker/_
+    - Enter 'docker-compose up'
+- [Gradle](https://gradle.org/install/) (do this _after_ installing and setting up Docker)
+    - After installing Gradle, find _quietquest/app/quietquest/build.gradle_ in your project files in the IDE
+    - Right-click ‘build.gradle’ and choose ‘link gradle project’
+    - Run Quiet Quest from the terminal:
+        - cd into _quietquest/app/quietquest/_
+        - Enter ‘./gradlew run’ (MacOS)  or ‘gradlew run’ (Windows)
+
 
 ## Libraries
 

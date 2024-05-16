@@ -243,29 +243,52 @@ public class QuestListController extends BaseController {
 		descriptionField.setEditable(false);
 		questListView.setDisable(false);
 
+		//When saving, collect all the tasks from the task list view and update the quest
+		Task[] tasksArray = getAllTasksFromListView();
+		selectedQuest.getActivities().clear();
+		for (Task task : tasksArray) {
+			selectedQuest.getActivities().add(task);
+		}
+
 		quietQuestFacade.updateQuest(selectedQuest);
 		newTaskText.clear();
 		showSelectedQuest();
 		questListView.refresh();
 	}
 
+	/**
+	 * Method to add a new task to the selected quest while editing
+	 */
 	public void onAddTask() {
 		String newTaskDescription = newTaskText.getText();
 		if (selectedQuest != null && !newTaskDescription.isEmpty()) {
 			Task newTask = new Task(newTaskDescription); // Generate a unique ID for the task
 			selectedQuest.getActivities().add(newTask);
-			quietQuestFacade.createTask(selectedQuest, newTask);
 			newTaskText.clear();
 			taskListView.getItems().add(newTask);
 		}
 	}
 
+	/**
+	 * Method to delete a task from the selected quest while editing
+	 */
 	public void onDeleteTask() {
 		Task selectedTask = taskListView.getSelectionModel().getSelectedItem();
 		if (selectedTask != null && selectedQuest != null) {
 			selectedQuest.getActivities().remove(selectedTask);
-			quietQuestFacade.deleteTask(selectedTask);
 			taskListView.getItems().remove(selectedTask);
 		}
 	}
+
+	public Task[] getAllTasksFromListView() {
+		ObservableList<Task> tasks = taskListView.getItems();
+		Task[] taskArray = new Task[tasks.size()];
+
+		for (int i = 0; i < tasks.size(); i++) {
+			taskArray[i] = tasks.get(i);
+		}
+
+		return taskArray;
+	}
+
 }

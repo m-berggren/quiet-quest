@@ -163,7 +163,7 @@ public class Database {
         // Inserts new quest and returning the id, needed to create activities later
         String sql = """
                 INSERT INTO "quest" (
-                    user_id, 
+                    user_id,
                     completion_state, 
                     title, 
                     detail, 
@@ -288,6 +288,27 @@ public class Database {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+
+        //delete all current tasks of this quest and add a list of tasks of the quest with only descriptions
+        String deleteTasksSql = """
+                DELETE FROM "task"
+                WHERE quest_id = ?
+                """;
+        try (PreparedStatement pstmt = connection.prepareStatement(deleteTasksSql)) {
+            pstmt.setInt(1, currQuest.getId());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        ArrayList<Activity> activities = currQuest.getActivities();
+        for (Activity activity : activities) {
+            if (activity instanceof Task task) {
+                createTask(currQuest, task);
+            }
+        }
+
+
 
     }
 
@@ -458,6 +479,7 @@ public class Database {
                 completion_state
                 )
                 VALUES (?, ?, ?, ?, ?)
+                RETURNING id
                 """;
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
@@ -467,6 +489,12 @@ public class Database {
             pstmt.setTimestamp(4, task.getEndTime());
             pstmt.setBoolean(5, task.getCompletionState());
             pstmt.executeUpdate();
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                int taskId = rs.getInt("id"); // Gets the id of the inserted task
+                task.setId(taskId); // Sets the id in the task object
+            }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

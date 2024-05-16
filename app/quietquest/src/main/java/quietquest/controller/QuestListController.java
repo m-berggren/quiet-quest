@@ -93,6 +93,10 @@ public class QuestListController extends BaseController {
 		if (quietQuestFacade != null) {
 			ObservableList<Quest> questList = FXCollections.observableArrayList(quests);
 			questListView.setItems(questList);
+			goToQuestButton.setDisable(true);
+			editButton.setDisable(true);
+			deleteButton.setDisable(true);
+			saveButton.setDisable(true);
 			questListView.setCellFactory(param -> new ListCell<Quest>() {
 				@Override
 				protected void updateItem(Quest item, boolean empty) {
@@ -123,6 +127,19 @@ public class QuestListController extends BaseController {
 				if (newValue != null) {
 					selectedQuest = newValue;
 					showSelectedQuest();
+					// Enable buttons since a quest is selected
+					goToQuestButton.setDisable(false);
+					editButton.setDisable(false);
+					deleteButton.setDisable(false);
+					saveButton.setDisable(true);
+				} else {
+					selectedQuest = null;
+					clearQuestDetails();
+					// Disable buttons since no quest is selected
+					goToQuestButton.setDisable(true);
+					editButton.setDisable(true);
+					deleteButton.setDisable(true);
+					saveButton.setDisable(true);
 				}
 			}
 		});

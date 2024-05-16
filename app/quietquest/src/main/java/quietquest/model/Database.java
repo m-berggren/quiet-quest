@@ -119,9 +119,9 @@ public class Database {
                 Timestamp startTime = rs.getTimestamp("start_time");
                 Timestamp completeTime = rs.getTimestamp("complete_time");
                 int boxOpenTimes = getBoxOpenTimes(id, user_id);
-
+                ArrayList<Activity> activities = getActivitiesFromQuest(id);
                 // Create new Quest object and add it to the list
-                Quest quest = new Quest(id, user_id, completionState, title, detail, startTime, completeTime, boxOpenTimes);
+                Quest quest = new Quest(id, user_id, completionState, title, detail, startTime, completeTime, boxOpenTimes, activities);
                 quests.add(quest);
             }
         } catch (SQLException e) {
@@ -163,14 +163,13 @@ public class Database {
         // Inserts new quest and returning the id, needed to create activities later
         String sql = """
                 INSERT INTO "quest" (
-                    user_id, 
+                    user_id,
                     completion_state, 
                     title, 
                     detail, 
                     start_time, 
-                    complete_time, 
-                    box_open_times
-                ) VALUES (?, ?, ?, ?, ?, ?, ?) 
+                    complete_time
+                ) VALUES (?, ?, ?, ?, ?, ?) 
                 RETURNING id;
                 """;
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
@@ -180,7 +179,6 @@ public class Database {
             pstmt.setString(4, quest.getDetail());
             pstmt.setTimestamp(5, null); // Quest not yet started
             pstmt.setTimestamp(6, null); // Quest not yet started
-            pstmt.setInt(7, 0);
 
             ResultSet rs = pstmt.executeQuery(); // Executes query and gets a result set
             if (rs.next()) {
@@ -271,48 +269,47 @@ public class Database {
     }
 
     /**
-     * Updates quest record in database based on the attributes in the quest object.
+     * Updates quest record in database based on the attributes in the quest object
      *
-     * @param currQuest is the current quest record in database.
-     * @param updQuest  is the updated Quest object from application.
+     * @param currQuest is the quest with new title and detail record
      */
-    public void updateQuest(Quest currQuest, Quest updQuest) {
+    public void updateQuest(Quest currQuest) {
+        String sql = """
+                UPDATE "quest"
+                SET title = ?, detail = ?
+                WHERE id = ?
+                """;
 
-        boolean isTitleUpdated = updQuest.getTitle() != null &&
-                currQuest.getTitle().equals(updQuest.getTitle());
-
-        boolean isDetailUpdated = updQuest.getDetail() != null &&
-                currQuest.getDetail().equals(updQuest.getDetail());
-
-        boolean isStartTimeUpdated = updQuest.getStartTime() != null &&
-                currQuest.getStartTime().compareTo(updQuest.getStartTime()) > 0;
-
-        boolean isCompleteTimeUpdated = updQuest.getCompleteTime() != null &&
-                currQuest.getCompleteTime().compareTo(updQuest.getCompleteTime()) > 0;
-
-        boolean isCompletionStateUpdated = updQuest.getCompletionState() &&
-                currQuest.getCompletionState() != updQuest.getCompletionState();
-
-        boolean isBoxOpenTimeUpdated = currQuest.getBoxOpenTimes() != updQuest.getBoxOpenTimes();
-
-        if (isTitleUpdated) {
-            updateQuestTitle(updQuest);
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setString(1, currQuest.getTitle());
+            pstmt.setString(2, currQuest.getDetail());
+            pstmt.setInt(3, currQuest.getId());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
-        if (isDetailUpdated) {
-            updateQuestDetail(updQuest);
+
+        //delete all current tasks of this quest and add a list of tasks of the quest with only descriptions
+        String deleteTasksSql = """
+                DELETE FROM "task"
+                WHERE quest_id = ?
+                """;
+        try (PreparedStatement pstmt = connection.prepareStatement(deleteTasksSql)) {
+            pstmt.setInt(1, currQuest.getId());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
-        if (isStartTimeUpdated) {
-            updateQuestStartTime(updQuest);
+
+        ArrayList<Activity> activities = currQuest.getActivities();
+        for (Activity activity : activities) {
+            if (activity instanceof Task task) {
+                createTask(currQuest, task);
+            }
         }
-        if (isCompleteTimeUpdated) {
-            updateQuestCompleteTime(updQuest);
-        }
-        if (isCompletionStateUpdated) {
-            updateQuestCompletionState(updQuest);
-        }
-        if (isBoxOpenTimeUpdated) {
-            updateQuestBoxOpenTimes(updQuest);
-        }
+
+
+
     }
 
     public void updateQuestCompletionState(Quest quest) {
@@ -331,37 +328,6 @@ public class Database {
         }
     }
 
-    private void updateQuestTitle(Quest quest) {
-        String sql = """
-                UPDATE "quest"
-                SET title = ?
-                WHERE id = ?
-                """;
-
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setString(1, quest.getTitle());
-            pstmt.setInt(2, quest.getId());
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    private void updateQuestDetail(Quest quest) {
-        String sql = """
-                UPDATE "quest"
-                SET detail = ?
-                WHERE id = ?
-                """;
-
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setString(1, quest.getDetail());
-            pstmt.setInt(2, quest.getId());
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
 
     public void updateQuestStartTime(Quest quest) {
         String sql = """
@@ -395,21 +361,6 @@ public class Database {
         }
     }
 
-    private void updateQuestBoxOpenTimes(Quest quest) {
-        String sql = """
-                UPDATE "quest"
-                SET box_open_times = ?
-                WHERE id = ?
-                """;
-
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setInt(1, quest.getBoxOpenTimes());
-            pstmt.setInt(2, quest.getId());
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
 
     /**
      * Deletes quest with a certain id from database.
@@ -435,12 +386,11 @@ public class Database {
      * Returns a list of Tasks or PomodoroTimer in relation to the specified quest record.
      * The list does only ever retain one to several Tasks or one PomodoroTimer, they do not co-exist.
      *
-     * @param quest is the record in database where id is the needed attribute.
+     * @param questId is the record in database where id is the needed attribute.
      * @return an ArrayList of Activity, either Task(s) or PomodoroTimer.
      */
-    public ArrayList<Activity> getActivitiesFromQuest(Quest quest) {
+    public ArrayList<Activity> getActivitiesFromQuest(int questId) {
         ArrayList<Activity> activities = new ArrayList<>();
-        int questId = quest.getId(); // Needed to query against
 
         String taskSql = """
                 SELECT *
@@ -529,6 +479,7 @@ public class Database {
                 completion_state
                 )
                 VALUES (?, ?, ?, ?, ?)
+                RETURNING id
                 """;
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
@@ -538,6 +489,12 @@ public class Database {
             pstmt.setTimestamp(4, task.getEndTime());
             pstmt.setBoolean(5, task.getCompletionState());
             pstmt.executeUpdate();
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                int taskId = rs.getInt("id"); // Gets the id of the inserted task
+                task.setId(taskId); // Sets the id in the task object
+            }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -664,18 +621,20 @@ public class Database {
     }
 
     /**
-     * Deletes pomodoro_timer records related to a quest record.
+     * Delete a task record from the database.
      *
-     * @param quest is the record in database.
+     * @param taskId is the task id.
      */
-    public void deleteTasksFromQuest(Quest quest) throws SQLException {
+    public void deleteTask(int taskId) {
         String sql = """
                 DELETE FROM "task"
-                WHERE quest_id = ?
+                WHERE id = ?
                 """;
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setInt(1, quest.getId());
+            pstmt.setInt(1, taskId);
             pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -961,6 +920,11 @@ public class Database {
         return pomodoroQuests;
     }
 
+    /**
+     * Saves the time a user has opened a quest box during a quest.
+     * @param username the username of the user who opened the box
+     * @param questID the quest that was running when box is opened
+     */
     public void saveBoxOpenTimes(String username, int questID) {
         String sql = "UPDATE \"quest\" SET box_open_times = box_open_times + 1 WHERE user_id = ? AND id = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {

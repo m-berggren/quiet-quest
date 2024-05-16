@@ -35,6 +35,10 @@ public class Task implements Activity {
         this.completionState = completionState;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public int getId() {
         return id;
     }

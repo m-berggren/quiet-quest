@@ -1,12 +1,7 @@
 package quietquest.model;
 
-import quietquest.utility.MQTTHandler;
-
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-
-import static javafx.application.Application.launch;
 
 public class Quest {
     private int id;
@@ -17,7 +12,7 @@ public class Quest {
     private Timestamp startTime;
     private Timestamp completeTime;
     private int boxOpenTimes;
-    private ArrayList<Activity> activityArrayList;
+    private final ArrayList<Activity> activityArrayList;
 
     // ==============================* CONSTRUCTOR *========================================
 
@@ -35,7 +30,7 @@ public class Quest {
     /**
      * Used to create full Quest object when querying database.
      */
-    public Quest(int id, int userId, boolean completionState, String title, String detail, Timestamp startTime, Timestamp completeTime, int boxOpenTimes) {
+    public Quest(int id, int userId, boolean completionState, String title, String detail, Timestamp startTime, Timestamp completeTime, int boxOpenTimes, ArrayList<Activity> activities) {
         this.id = id;
         this.userId = userId;
         this.completionState = completionState;
@@ -44,7 +39,7 @@ public class Quest {
         this.startTime = startTime;
         this.completeTime = completeTime;
         this.boxOpenTimes = boxOpenTimes;
-        this.activityArrayList = new ArrayList<>();
+        this.activityArrayList = activities;
     }
 
     // ==============================* QUEST MANAGEMENT *===================================
@@ -109,27 +104,22 @@ public class Quest {
         this.boxOpenTimes = boxOpenTimes;
     }
 
-    public ArrayList<Activity> getActivities() {
-        return this.activityArrayList;
-    }
-
-    /**
-     * Method is used to easily get the first object or null of ArrayList of Activity.
-     *
-     * @return either null or first Activity object in ArrayList
-     */
-    public Activity getFirstActivity() {
-        if (activityArrayList.isEmpty()) {
-            return null;
-        }
-
-        return activityArrayList.getFirst();
-    }
-
     // ==============================* UTILITY METHODS *====================================
 
     @Override
     public String toString() {
         return title;
+    }
+
+	public ArrayList<Activity> getActivities() {
+        return activityArrayList;
+	}
+
+    public void addActivity(Activity activity) {
+		activityArrayList.add(activity);
+    }
+
+    public void removeActivity(Activity activity) {
+		activityArrayList.remove(activity);
     }
 }

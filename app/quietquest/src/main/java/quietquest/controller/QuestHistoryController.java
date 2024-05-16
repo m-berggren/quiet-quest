@@ -59,6 +59,8 @@ public class QuestHistoryController extends BaseController {
 		if (completedQuestList.isEmpty()) {
 			titleLabel.setText("No completed quests found.");
 		}
+		//sort completedQuestList by completion time most recent first
+		completedQuestList.sort((q1, q2) -> q2.getCompleteTime().compareTo(q1.getCompleteTime()));
 		ObservableList<Quest> questItems = FXCollections.observableArrayList(completedQuestList);
 
 		// Set the items on the questHistoryListView

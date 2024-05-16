@@ -112,7 +112,7 @@ public abstract class BaseController {
 	 * @param timestamp is the timestamp to be formatted.
 	 * @return the formatted string.
 	 */
-	String formatTime(Timestamp timestamp) {
+	public String formatTime(Timestamp timestamp) {
 		if (timestamp == null) {
 			return "N/A";
 		}

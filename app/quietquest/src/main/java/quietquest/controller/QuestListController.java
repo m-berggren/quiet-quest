@@ -162,19 +162,10 @@ public class QuestListController extends BaseController {
 		if (selectedQuest != null) {
 			titleField.setText(selectedQuest.getTitle());
 			descriptionField.setText(selectedQuest.getDetail());
-			if (!selectedQuest.getActivities().isEmpty()) {
-				questTypeLabel.setText("TASKS");
+			if (selectedQuest.getActivities().isEmpty()) {
+				questTypeLabel.setText("No Activities");
 				pomodoroAnchorPane.setVisible(false);
-				taskAnchorPane.setVisible(true);
-				// Display tasks in taskListView
-				ObservableList<Task> taskList = FXCollections.observableArrayList();
-				for (Activity act : selectedQuest.getActivities()) {
-					if (act instanceof Task) {
-						taskList.add((Task) act);
-					}
-				}
-				taskListView.setItems(taskList);
-				taskAnchorPane.setDisable(true);
+				taskAnchorPane.setVisible(false);
 			} else {
 				Activity activity = selectedQuest.getActivities().getFirst();
 				if (activity.getType() == QuestType.TASK) {

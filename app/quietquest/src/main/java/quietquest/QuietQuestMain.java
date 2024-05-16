@@ -39,7 +39,7 @@ public class QuietQuestMain extends Application {
             }
         });
         stage.setScene(scene);
-        stage.setTitle("Quiet Quest");
+        stage.setTitle("Quest App");
         stage.show();
     }
 

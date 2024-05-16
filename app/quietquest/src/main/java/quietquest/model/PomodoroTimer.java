@@ -10,17 +10,18 @@ public class PomodoroTimer implements Activity {
     private final String BREAK_TIME_START = "Break time started";
     private final String BREAK_TIME_END = "Break time ended";
     private final String POMODORO_FINISH = "Pomodoro timer finished";
-    private Timer timer; // Timer to schedule tasks
+	private final Timer timer; // Timer to schedule tasks
     private int questId;
     private final int focusTime;
     private final int breakTime;
 	private final int interval;
     private PomodoroUIUpdater pomodoroObserver;
-    private final int milliSeconds = 1_000; // Default is 60_000
+	private final int MILLISECONDS = 1_000; // Used to convert minutes to milliseconds. 60_000 is the needed value.
 
     // Ideas from https://egandunning.com/projects/timemanagement-timer.html
     // and https://www.geeksforgeeks.org/java-util-timer-class-java/
 
+	// ==============================* CONSTRUCTORS *=======================================
     /**
      * Used for creating a container with the necessary information to pass into database. Not intended to use within
      * application otherwise.
@@ -67,11 +68,7 @@ public class PomodoroTimer implements Activity {
 		return questId;
 	}
 
-	public QuestType getType() {
-		return QuestType.POMODORO;
-	}
-
-	// ==============================* INTERFACE METHODS *====================================
+	// ==============================* INTERFACE METHODS *==================================
 
 	/**
 	 * Handles the start operation of the pomodoroTimer. Needs to start with 0 as the value increments on each
@@ -90,6 +87,11 @@ public class PomodoroTimer implements Activity {
 	public void end() {
 		notifyPomodoroObserver(POMODORO_FINISH);
 		timer.cancel();
+	}
+
+	@Override
+	public QuestType getType() {
+		return QuestType.POMODORO;
 	}
 
 	// ==============================* TIMER MANAGEMENT *===================================
@@ -124,7 +126,7 @@ public class PomodoroTimer implements Activity {
 	 * <p>The lambda expression could be specified as an anonymous class of Runnable that the Platform.runLater expects as
 	 * parameter. Platform.runLater(Runnable) means that the runnable is posted to an event queue. While documentation
 	 * states the application "should avoid flooding JavaFX with too many pending Runnables", but in the scope of this
-	 * project this has not been issue.</p>
+	 * project this has not been an issue.</p>
 	 *
 	 * <p>Once runTimer's base case is true for one of the recursive calls in {@link #startBreakTime(int)}, they will start
 	 * returning until all is ended and PomodoroTimer is finished.</p>
@@ -194,7 +196,7 @@ public class PomodoroTimer implements Activity {
 	 * @return equivalent time in milliseconds.
 	 */
 	private int toMilliseconds(int minutes) {
-		return minutes * milliSeconds;
+		return minutes * MILLISECONDS;
 	}
 
     @Override

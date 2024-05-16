@@ -30,22 +30,28 @@ public class QuietQuestFacade {
 	// ==============================* DATABASE MANAGER *===================================
 
 	/**
-	 * @return
+	 * Get all quests in database belonging to logged-in user.
+	 * @return a list of Quests from database.
 	 */
 	public ArrayList<Quest> getAllQuests() {
 		return database.getAllQuests(user);
 	}
 
+	/**
+	 * Creates Quest in database.
+	 *
+	 * @param quest      Quest object to store in database.
+	 * @param activities if a list of activities belong to the quest, those are created too.
+	 */
 	public void createQuest(Quest quest, ArrayList<Activity> activities) {
 		database.createQuest(quest, activities);
 	}
 
-	public void createTask(Quest quest, Task task) {
-		database.createTask(quest, task);
-	}
-
-    /**
-     * @param quest
+	/**
+	 * Starts a Quest from {@link quietquest.controller.QuestController}.
+	 * @param quest is the Quest object to start.
+	 * @param pomodoroObserver the controller which the PomodoroTimer will notify whenever a focus- or break-time
+	 *                         starts.
      */
     public void startQuest(Quest quest, PomodoroUIUpdater pomodoroObserver) {
         database.startQuest(quest);

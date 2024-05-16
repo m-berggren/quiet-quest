@@ -8,4 +8,5 @@ arduino-cli lib install 'PubSubClient@2.8.0'
 arduino-cli lib install --git-url 'https://github.com/Seeed-Studio/Seeed_Arduino_LCD#2.2.6'
 arduino-cli lib install --git-url 'https://github.com/pjpmarques/ChainableLED#v1.3'
 arduino-cli lib install --git-url 'https://github.com/Seeed-Studio/Seeed_Arduino_UltrasonicRanger#v1.0.3'
+arduino-cli lib install --git-url 'https://github.com/1ux/LED_RGB_Control'
 arduino-cli lib list

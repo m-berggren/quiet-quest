@@ -39,8 +39,8 @@ public class QuietQuestMain extends Application {
                 database.closeConnection();
                 mqttHandler.disconnect();
 				closeMediaPlayer(mediaPlayer);
-
                 Platform.exit(); // Specific to JavaFX, terminates the runtime
+				System.exit(0);
             }
         });
         stage.setScene(scene);

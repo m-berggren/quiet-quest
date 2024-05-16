@@ -83,13 +83,6 @@ public class Task implements Activity {
     }
 
 	// ==============================* INTERFACE METHODS *==================================
-	@Override
-    public void start() {
-    }
-
-    @Override
-    public void end() {
-    }
 
 	@Override
 	public QuestType getType() {

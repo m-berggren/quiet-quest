@@ -129,6 +129,9 @@ public class MainController extends BaseController {
         }
     }
 
+	/**
+	 * Method to ensure that the running MediaPlayer is closed correctly.
+	 */
 	private void closeMediaPlayer() {
 		if (mediaPlayer != null) {
 			mediaPlayer.stop();
@@ -168,6 +171,7 @@ public class MainController extends BaseController {
             database.closeConnection();
 			closeMediaPlayer();
             Platform.exit();
+			System.exit(0);
         }
     }
 

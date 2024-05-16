@@ -199,7 +199,7 @@ public class QuestController extends BaseController implements UIUpdater, Pomodo
 		final String BREAK_TIME_END = "Break time ended";
 		final String POMODORO_END = "Pomodoro timer finished";
 
-		// Need Platform.runLater() as a separate thread with Timer is already running
+		// Need Platform.runLater() as a separate thread when Timer is already running
 		Platform.runLater(() -> {
 			switch (message) {
 				case FOCUS_TIME -> {
@@ -221,8 +221,6 @@ public class QuestController extends BaseController implements UIUpdater, Pomodo
 				}
 				case BREAK_TIME_END -> {
 					System.out.println(BREAK_TIME_END);
-
-					quietQuestFacade.publishMqttMessage(TOPIC_PUB_POMODORO_INTERVAL, BREAK_TIME_END);
 				}
 				case POMODORO_END -> {
 					System.out.println(POMODORO_END);

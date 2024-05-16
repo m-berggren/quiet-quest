@@ -297,8 +297,8 @@ public class QuestController extends BaseController implements UIUpdater, Pomodo
 				}
 			}
 		}
-		endTimeLabel.setText("End: " + formatTime(currentQuest.getCompleteTime()));
 		currentQuest.setCompleteTime(Timestamp.from(Instant.now()));
+		endTimeLabel.setText("End: " + formatTime(currentQuest.getCompleteTime()));
 
 		quietQuestFacade.completeQuest(currentQuest);
 		quietQuestFacade.publishMqttMessage(TOPIC_PUB_QUEST_END, "Your quest has ended");

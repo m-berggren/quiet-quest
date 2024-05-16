@@ -5,19 +5,12 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="760.0" prefWidth="1210.0" style="-fx-background-color: #C7F9CC;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="quietquest.controller.QuestHistoryController">
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="760.0" prefWidth="1210.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="quietquest.controller.QuestHistoryController">
    <children>
-       <ImageView fitHeight="836.0" fitWidth="1325.0" layoutY="-39.0" pickOnBounds="true">
-         <image>
-            <Image url="@../images/create_page_background.png" />
-         </image>
-      </ImageView>
        <AnchorPane fx:id="questlistAnchorPane" layoutX="61.0" layoutY="72.0" prefHeight="613.0" prefWidth="435.0" style="-fx-background-color: #fff; -fx-background-radius: 10;" AnchorPane.leftAnchor="61.0" AnchorPane.topAnchor="72.0">
          <children>
              <Label fx:id="titleLabel" layoutX="20.0" layoutY="16.0" text="Complete Quests" textFill="#22577a" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="16.0">

@@ -14,7 +14,7 @@
     </stylesheets>
 
     <left>
-        <VBox fx:id="sideMenu" prefHeight="760.0" prefWidth="200.0" style="-fx-background-color: #C7F9CC;" BorderPane.alignment="CENTER">
+        <VBox fx:id="sideMenu" prefHeight="760.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <ToggleButton fx:id="homeButton" mnemonicParsing="false" onAction="#onHomeButtonClick" prefHeight="60.0" prefWidth="200.0" styleClass="side-menu-button" text="Home">
                 <VBox.margin>
                     <Insets top="150.0" />

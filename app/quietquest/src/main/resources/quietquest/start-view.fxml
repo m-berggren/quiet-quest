@@ -2,17 +2,10 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="760.0" prefWidth="1510.0" style="-fx-background-color: #C7F9CC;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="quietquest.controller.StartController">
-   <ImageView fitHeight="1223.0" fitWidth="1728.0" layoutX="-212.0" layoutY="-265.0" pickOnBounds="true" preserveRatio="true">
-      <image>
-         <Image url="@../images/QuestBackground.jpg" />
-      </image>
-   </ImageView>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="760.0" prefWidth="1510.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="quietquest.controller.StartController">
    <Label fx:id="titleLabel" alignment="CENTER" layoutX="-2.0" layoutY="100.0" prefHeight="88.0" prefWidth="1518.0" text="Quiet Quest" textAlignment="CENTER" textFill="#22577a">
       <font>
          <Font size="60.0" />

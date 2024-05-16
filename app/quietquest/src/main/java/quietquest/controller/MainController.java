@@ -130,6 +130,10 @@ public class MainController extends BaseController {
         }
     }
 
+
+    /**
+     * Stops the music file from playing.
+     */
     public void onStopButtonClick() {
         if (mediaPlayer != null) {
             mediaPlayer.stop();

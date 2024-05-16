@@ -54,9 +54,9 @@ public class CreateUserController {
     /**
      * Saves a new user to the database if a unique username and valid password are provided.
      *
-     * @param event
-     * @throws SQLException
-     * @throws IOException
+     * @param event ActionEvent
+     * @throws SQLException is the SQL exception thrown by the database
+     * @throws IOException is the IO exception thrown by the FXMLLoader
      */
     public void onSaveClick(ActionEvent event) throws SQLException, IOException {
         String username = usernameTextField.getText();
@@ -107,6 +107,15 @@ public class CreateUserController {
         return length && containsNumber;
     }
 
+
+    /**
+     * Loads the fxml file and sets the controller for the log in page.
+     * @param fxmlFile the fxml file to be loaded
+     * @param event the event that triggers the loading of the fxml file
+     * @param database the database
+     * @param mqttHandler the mqtt handler
+     * @throws IOException if IO exception occurs
+     */
     private void loadFxml(String fxmlFile, ActionEvent event, Database database, MQTTHandler mqttHandler) throws IOException {
         FXMLLoader loader = new FXMLLoader(QuietQuestMain.class.getResource(fxmlFile));
         Parent root = loader.load();

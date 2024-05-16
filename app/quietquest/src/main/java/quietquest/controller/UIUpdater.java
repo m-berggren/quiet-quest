@@ -1,5 +1,8 @@
 package quietquest.controller;
 
+/**
+ * Interface for updating the UI components of the application where sensor data is displaying.
+ */
 public interface UIUpdater {
     void updateConnectionStatusUI(boolean connectionStatus);
 

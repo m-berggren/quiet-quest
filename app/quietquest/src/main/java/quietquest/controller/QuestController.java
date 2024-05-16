@@ -16,11 +16,9 @@ import javafx.scene.paint.Color;
 import javafx.util.Callback;
 import javafx.util.Duration;
 import quietquest.model.*;
-import javafx.scene.control.ListView;
-import quietquest.model.PomodoroUIUpdater;
 
-import java.sql.Timestamp;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Random;
 
@@ -28,71 +26,71 @@ import static quietquest.utility.MQTTTopics.*;
 
 
 public class QuestController extends BaseController implements UIUpdater, PomodoroUIUpdater, Callback<ListView<Activity>, ListCell<Activity>> {
-    @FXML
-    private AnchorPane taskAnchorPane;
-    @FXML
-    private AnchorPane pomodoroAnchorPane;
-    @FXML
-    private AnchorPane motivationalAnchorPane;
-    @FXML
-    private Button startQuestButton;
-    @FXML
-    private Button completeQuestButton;
-    @FXML
-    private ListView<Activity> activityListView;
-    @FXML
-    private Label titleLabel;
-    @FXML
-    private Label descriptionLabel;
-    @FXML
-    private Label mqttMotionMessage;
-    @FXML
-    private Label mqttDistanceMessage;
-    @FXML
-    private Label mqttConnectionMessage;
-    @FXML
-    private Label mqttLightMessage;
-    @FXML
-    private Label motivationalMessage;
-    @FXML
-    private Label focusLabel;
-    @FXML
-    private Label breakLabel;
-    @FXML
-    private Label intervalsLabel;
-    @FXML
-    private Label pomodoroStatusLabel;
-    @FXML
-    private Label intervalsLeftLabel;
-    @FXML
-    private Label startTimeLabel;
-    @FXML
-    private Label endTimeLabel;
-    @FXML
-    private Label questTypeLabel;
-    private Activity currentActivity;
-    private Quest currentQuest;
+	@FXML
+	private AnchorPane taskAnchorPane;
+	@FXML
+	private AnchorPane pomodoroAnchorPane;
+	@FXML
+	private AnchorPane motivationalAnchorPane;
+	@FXML
+	private Button startQuestButton;
+	@FXML
+	private Button completeQuestButton;
+	@FXML
+	private ListView<Activity> activityListView;
+	@FXML
+	private Label titleLabel;
+	@FXML
+	private Label descriptionLabel;
+	@FXML
+	private Label mqttMotionMessage;
+	@FXML
+	private Label mqttDistanceMessage;
+	@FXML
+	private Label mqttConnectionMessage;
+	@FXML
+	private Label mqttLightMessage;
+	@FXML
+	private Label motivationalMessage;
+	@FXML
+	private Label focusLabel;
+	@FXML
+	private Label breakLabel;
+	@FXML
+	private Label intervalsLabel;
+	@FXML
+	private Label pomodoroStatusLabel;
+	@FXML
+	private Label intervalsLeftLabel;
+	@FXML
+	private Label startTimeLabel;
+	@FXML
+	private Label endTimeLabel;
+	@FXML
+	private Label questTypeLabel;
+	private Activity currentActivity;
+	private Quest currentQuest;
 
-    private String[] message;
-    private boolean isQuestRunning = false;
-    private ObservableList<Activity> activities;
+	private String[] message;
+	private boolean isQuestRunning = false;
+	private ObservableList<Activity> activities;
 
-    public void initialize(Quest quest) {
-        currentQuest = quest;
-    }
+	public void initialize(Quest quest) {
+		currentQuest = quest;
+	}
 
-    @Override
-    protected void afterMainController() {
-        activityListView.setCellFactory(this);
-        activities = FXCollections.observableArrayList(getActivitiesFromQuest(currentQuest));
-        activityListView.setItems(activities);
+	@Override
+	protected void afterMainController() {
+		activityListView.setCellFactory(this);
+		activities = FXCollections.observableArrayList(getActivitiesFromQuest(currentQuest));
+		activityListView.setItems(activities);
 
-        quietQuestFacade.setUIUpdater(this);
-        titleLabel.setText(currentQuest.getTitle());
-        descriptionLabel.setText(currentQuest.getDetail());
-        startTimeLabel.setText("Start: " + currentQuest.getStartTime());
-        endTimeLabel.setText("End: " + currentQuest.getCompleteTime());
-        motivationalAnchorPane.setVisible(false);
+		quietQuestFacade.setUIUpdater(this);
+		titleLabel.setText(currentQuest.getTitle());
+		descriptionLabel.setText(currentQuest.getDetail());
+		startTimeLabel.setText("Start: " + currentQuest.getStartTime());
+		endTimeLabel.setText("End: " + currentQuest.getCompleteTime());
+		motivationalAnchorPane.setVisible(false);
 
         /*if(currentQuest.getType() == QuestType.TASK){
             taskAnchorPane.setVisible(true);
@@ -104,225 +102,249 @@ public class QuestController extends BaseController implements UIUpdater, Pomodo
             questTypeLabel.setText("POMODORO");
         }*/
 
-        if (currentQuest.getStartTime() == null) {
-            completeQuestButton.setDisable(true);
-        } else {
-            startQuestButton.setDisable(true);
-        }
+		if (currentQuest.getStartTime() == null) {
+			completeQuestButton.setDisable(true);
+		} else {
+			startQuestButton.setDisable(true);
+		}
 
-        setSelectedTask();
-    }
+		setSelectedTask();
+	}
 
-    private void setSelectedTask() {
-        activityListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Activity>() {
-            @Override
-            public void changed(ObservableValue<? extends Activity> observableValue, Activity oldValue, Activity newValue) {
-                if (newValue != null) {
-                    currentActivity = newValue;
-                    System.out.println(currentActivity);
-                }
-            }
-        });
-    }
+	private void setSelectedTask() {
+		activityListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Activity>() {
+			@Override
+			public void changed(ObservableValue<? extends Activity> observableValue, Activity oldValue, Activity newValue) {
+				if (newValue != null) {
+					currentActivity = newValue;
+					System.out.println(currentActivity);
+				}
+			}
+		});
+	}
 
-    @Override
-    public ListCell<Activity> call(ListView<Activity> param) {
-        return new ListCell<>() {
-            @Override
-            public void updateItem(Activity activity, boolean empty) {
-                super.updateItem(activity, empty);
-                if (empty || activity == null) {
-                    setText(null);
-                    setGraphic(null);
-                    motivationalAnchorPane.setVisible(false);
-                } else if (activity instanceof Task task) {
-                    CheckBox checkBox = new CheckBox(task.getDescription());
-                    checkBox.setSelected(task.getCompletionState());
-                    checkBox.setOnAction(event -> {
-                        if (checkBox.isSelected() && isQuestRunning) {
-                            showMessage();
-                            String message = "You have completed a task!";
 
-                            task.setEndTime(Timestamp.from(Instant.now()));
-                            task.setCompletionState(true);
-                            quietQuestFacade.updateTaskEndTimeInDb(task);
-                            quietQuestFacade.updateTaskCompletionStateInDb(task);
+	@Override
+	public ListCell<Activity> call(ListView<Activity> param) {
+		return new ListCell<>() {
+			@Override
+			public void updateItem(Activity activity, boolean empty) {
+				super.updateItem(activity, empty);
+				if (empty || activity == null) {
+					setText(null);
+					setGraphic(null);
+					motivationalAnchorPane.setVisible(false);
+				} else if (activity instanceof Task task) {
+					CheckBox checkBox = new CheckBox(task.getDescription());
+					checkBox.setSelected(task.getCompletionState());
+					checkBox.setOnAction(event -> {
+						if (checkBox.isSelected() && isQuestRunning) {
+							showMessage();
+							String message = "You have completed a task!";
 
-                            quietQuestFacade.publishMqttMessage(TOPIC_PUB_TASK_DONE, message);
-                        }
-                    });
-                    setGraphic(checkBox);
-                    motivationalAnchorPane.setVisible(false);
-                } else if (activity instanceof PomodoroTimer) {
-                    PomodoroTimer timer = (PomodoroTimer) activity;
-                    setText(timer.toString());
-                    setGraphic(null);
-                }
-            }
-        };
-    }
+							task.setEndTime(Timestamp.from(Instant.now()));
+							task.setCompletionState(true);
+							quietQuestFacade.updateTaskEndTimeInDb(task);
+							quietQuestFacade.updateTaskCompletionStateInDb(task);
 
-    /**
-     * Overrides the update method in {@link PomodoroUIUpdater}.
-     * Used to update the UI through observer pattern.
-     *
-     * @param message the string to display.
-     */
-    @Override
-    public void update(String message) {
+							quietQuestFacade.publishMqttMessage(TOPIC_PUB_TASK_DONE, message);
+						}
+					});
+					setGraphic(checkBox);
+					motivationalAnchorPane.setVisible(false);
+				} else if (activity instanceof PomodoroTimer) {
+					PomodoroTimer timer = (PomodoroTimer) activity;
+					setText(timer.toString());
+					setGraphic(null);
+				}
+			}
+		};
+	}
 
-        final String FOCUS_TIME = "Focus time started";
-        final String BREAK_TIME_START = "Break time started";
-        final String BREAK_TIME_END = "Break time ended";
-        final String POMODORO_END = "Pomodoro timer finished";
+	/**
+	 * Overrides the update method in {@link PomodoroUIUpdater}.
+	 * Used to update the UI through observer pattern.
+	 *
+	 * @param message the string to display.
+	 */
+	@Override
+	public void update(String message) {
 
-        // Need Platform.runLater() as a separate thread with Timer is already running
-        Platform.runLater(() -> {
-            switch (message) {
-                case FOCUS_TIME -> {
-                    System.out.println(FOCUS_TIME);
+		final String FOCUS_TIME = "Focus time started";
+		final String BREAK_TIME_START = "Break time started";
+		final String BREAK_TIME_END = "Break time ended";
+		final String POMODORO_END = "Pomodoro timer finished";
 
-                    pomodoroAnchorPane.setVisible(true);
-                    pomodoroStatusLabel.setText("Focus time now active");
-                    pomodoroStatusLabel.setTextFill(Color.color(0.6, 0, 0));
+		// Need Platform.runLater() as a separate thread with Timer is already running
+		Platform.runLater(() -> {
+			switch (message) {
+				case FOCUS_TIME -> {
+					System.out.println(FOCUS_TIME);
 
-                    quietQuestFacade.publishMqttMessage(TOPIC_PUB_POMODORO_INTERVAL, FOCUS_TIME);
-                }
-                case BREAK_TIME_START -> {
-                    System.out.println(BREAK_TIME_START);
+					pomodoroAnchorPane.setVisible(true);
+					pomodoroStatusLabel.setText("Focus time now active");
+					pomodoroStatusLabel.setTextFill(Color.color(0.6, 0, 0));
 
-                    pomodoroStatusLabel.setText("Break time now active");
-                    pomodoroStatusLabel.setTextFill(Color.color(0, 0.50, 0));
+					quietQuestFacade.publishMqttMessage(TOPIC_PUB_POMODORO_INTERVAL, FOCUS_TIME);
+				}
+				case BREAK_TIME_START -> {
+					System.out.println(BREAK_TIME_START);
 
-                    quietQuestFacade.publishMqttMessage(TOPIC_PUB_POMODORO_INTERVAL, BREAK_TIME_START);
-                }
-                case BREAK_TIME_END -> {
-                    System.out.println(BREAK_TIME_END);
+					pomodoroStatusLabel.setText("Break time now active");
+					pomodoroStatusLabel.setTextFill(Color.color(0, 0.50, 0));
 
-                    quietQuestFacade.publishMqttMessage(TOPIC_PUB_POMODORO_INTERVAL, BREAK_TIME_END);
-                }
-                case POMODORO_END -> {
-                    System.out.println(POMODORO_END);
+					quietQuestFacade.publishMqttMessage(TOPIC_PUB_POMODORO_INTERVAL, BREAK_TIME_START);
+				}
+				case BREAK_TIME_END -> {
+					System.out.println(BREAK_TIME_END);
 
-                    pomodoroAnchorPane.setVisible(false);
+					quietQuestFacade.publishMqttMessage(TOPIC_PUB_POMODORO_INTERVAL, BREAK_TIME_END);
+				}
+				case POMODORO_END -> {
+					System.out.println(POMODORO_END);
 
-                    quietQuestFacade.publishMqttMessage(TOPIC_PUB_POMODORO_INTERVAL, POMODORO_END);
-                    onCompletion();
-                }
-            }
-        });
-    }
+					pomodoroAnchorPane.setVisible(false);
 
-    public void showMessage() {
-        message = new String[]{"Good Job!", "Amazing!", "One step closer to a nap", "You can do it!",
-                "Wow! Is there anything you can´t do?"};
-        Random random = new Random();
-        int index = random.nextInt(message.length);
-        String setMessage = message[index];
-        motivationalMessage.setText(setMessage);
-        motivationalAnchorPane.setVisible(true);
+					quietQuestFacade.publishMqttMessage(TOPIC_PUB_POMODORO_INTERVAL, POMODORO_END);
+					onCompletion();
+				}
+			}
+		});
+	}
 
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(3), event -> {
-            motivationalAnchorPane.setVisible(false);
-        }));
-        timeline.play();
-    }
+	/**
+	 * Shows a motivational message to the user.
+	 */
+	public void showMessage() {
+		message = new String[]{"Good Job!", "Amazing!", "One step closer to a nap", "You can do it!",
+				"Wow! Is there anything you can´t do?"};
+		Random random = new Random();
+		int index = random.nextInt(message.length);
+		String setMessage = message[index];
+		motivationalMessage.setText(setMessage);
+		motivationalAnchorPane.setVisible(true);
 
-    public void onStartQuestClick(ActionEvent event) {
-        isQuestRunning = true;
-        startTimeLabel.setText("Start: " + currentQuest.getStartTime());
+		Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(3), event -> {
+			motivationalAnchorPane.setVisible(false);
+		}));
+		timeline.play();
+	}
 
-        // Connects to MQTT as soon as page loads
-        System.out.println("Starts quest");
+	public void onStartQuestClick(ActionEvent event) {
+		isQuestRunning = true;
+		startTimeLabel.setText("Start: " + currentQuest.getStartTime());
 
-        quietQuestFacade.startQuest(currentQuest, this);
-        quietQuestFacade.publishMqttMessage(TOPIC_PUB_QUEST_START, "Your quest has started");
-        quietQuestFacade.subscribeMqtt();
+		// Connects to MQTT as soon as page loads
+		System.out.println("Starts quest");
 
-        startQuestButton.setDisable(true);
-        completeQuestButton.setDisable(false);
-    }
+		quietQuestFacade.startQuest(currentQuest, this);
+		quietQuestFacade.publishMqttMessage(TOPIC_PUB_QUEST_START, "Your quest has started");
+		quietQuestFacade.subscribeMqtt();
 
-    public void onCompleteQuestClick(ActionEvent event) throws SQLException {
-        onCompletion();
-        showMessage();
-    }
+		startQuestButton.setDisable(true);
+		completeQuestButton.setDisable(false);
+	}
 
-    private void onCompletion() {
-        isQuestRunning = false;
-        endTimeLabel.setText("End: " + currentQuest.getCompleteTime());
+	public void onCompleteQuestClick(ActionEvent event) throws SQLException {
+		onCompletion();
+		showMessage();
+	}
 
-        quietQuestFacade.completeQuest(currentQuest);
-        quietQuestFacade.publishMqttMessage(TOPIC_PUB_QUEST_END, "Your quest has ended");
-        quietQuestFacade.unsubscribeMqtt();
+	/**
+	 * Method for handling the completion of a quest.
+	 */
+	private void onCompletion() {
+		isQuestRunning = false;
+		endTimeLabel.setText("End: " + currentQuest.getCompleteTime());
 
-        mqttConnectionMessage.getStyleClass().clear();
-        mqttConnectionMessage.setText("");
-        mqttDistanceMessage.setVisible(false);
-        mqttMotionMessage.setVisible(false);
-        mqttLightMessage.setVisible(false);
-        completeQuestButton.setDisable(true);
-    }
+		quietQuestFacade.completeQuest(currentQuest);
+		quietQuestFacade.publishMqttMessage(TOPIC_PUB_QUEST_END, "Your quest has ended");
+		quietQuestFacade.unsubscribeMqtt();
 
-    @Override
-    public void updateConnectionStatusUI(boolean connectionStatus) {
-        if (connectionStatus) {
-            mqttConnectionMessage.setText("Connected.");
-            mqttConnectionMessage.getStyleClass().clear();
-            mqttConnectionMessage.getStyleClass().add("label-all-green");
-        } else {
-            mqttConnectionMessage.setText("Not connected.");
-            mqttConnectionMessage.getStyleClass().clear();
-            mqttConnectionMessage.getStyleClass().add("label-all-red");
-        }
-    }
+		mqttConnectionMessage.getStyleClass().clear();
+		mqttConnectionMessage.setText("");
+		mqttDistanceMessage.setVisible(false);
+		mqttMotionMessage.setVisible(false);
+		mqttLightMessage.setVisible(false);
+		completeQuestButton.setDisable(true);
+	}
 
-    /**
-     * Method for updating UI and database depending on the light values read from the terminal box.
-     *
-     * @param lightValue integer value 0-100.
-     */
-    @Override
-    public void updateLightSensorUI(int lightValue) {
-        mqttLightMessage.setText("Light value: " + lightValue);
-        mqttLightMessage.getStyleClass().clear();
 
-        if (lightValue >5) {
-            quietQuestFacade.saveBoxOpenTimes(currentQuest);
-        }
-        if (lightValue > 50) {
-            mqttLightMessage.getStyleClass().add("label-all-red");
-        } else if (lightValue > 30) {
-            mqttLightMessage.getStyleClass().add("label-all-yellow");
-        } else {
-            mqttLightMessage.getStyleClass().add("label-all-green");
-        }
-    }
+	/**
+	 * Method for updating UI and database depending on the connection status of the terminal box.
+	 *
+	 * @param connectionStatus boolean value of connection status.
+	 */
+	@Override
+	public void updateConnectionStatusUI(boolean connectionStatus) {
+		if (connectionStatus) {
+			mqttConnectionMessage.setText("Connected.");
+			mqttConnectionMessage.getStyleClass().clear();
+			mqttConnectionMessage.getStyleClass().add("label-all-green");
+		} else {
+			mqttConnectionMessage.setText("Not connected.");
+			mqttConnectionMessage.getStyleClass().clear();
+			mqttConnectionMessage.getStyleClass().add("label-all-red");
+		}
+	}
 
-    @Override
-    public void updateMotionSensorUI(boolean motionDetected) {
-        if (motionDetected) {
-            mqttMotionMessage.setText("Motion detected.");
-            mqttMotionMessage.getStyleClass().clear();
-            mqttMotionMessage.getStyleClass().add("label-all-red");
-        } else {
-            mqttMotionMessage.setText("Motion not detected.");
-            mqttMotionMessage.getStyleClass().clear();
-            mqttMotionMessage.getStyleClass().add("label-all-green");
-        }
-    }
+	/**
+	 * Method for updating UI and database depending on the light values read from the terminal box.
+	 *
+	 * @param lightValue integer value 0-100.
+	 */
+	@Override
+	public void updateLightSensorUI(int lightValue) {
+		mqttLightMessage.setText("Light value: " + lightValue);
+		mqttLightMessage.getStyleClass().clear();
 
-    @Override
-    public void updateUltrasonicSensorUI(int distanceValue) {
-        mqttDistanceMessage.setText("Distance to obstacle: " + distanceValue + " cm.");
-        mqttDistanceMessage.getStyleClass().clear();
-        if (distanceValue > 100) {
-            mqttDistanceMessage.getStyleClass().add("label-all-green");
-        } else if (distanceValue > 50) {
-            mqttDistanceMessage.getStyleClass().add("label-all-yellow");
-        } else {
-            mqttDistanceMessage.getStyleClass().add("label-all-red");
-        }
-    }
+		if (lightValue > 5) {
+			quietQuestFacade.saveBoxOpenTimes(currentQuest);
+		}
+		if (lightValue > 50) {
+			mqttLightMessage.getStyleClass().add("label-all-red");
+		} else if (lightValue > 30) {
+			mqttLightMessage.getStyleClass().add("label-all-yellow");
+		} else {
+			mqttLightMessage.getStyleClass().add("label-all-green");
+		}
+	}
+
+	/**
+	 * Method for updating UI and database depending on the motion values read from the terminal box.
+	 *
+	 * @param motionDetected boolean value.
+	 */
+	@Override
+	public void updateMotionSensorUI(boolean motionDetected) {
+		if (motionDetected) {
+			mqttMotionMessage.setText("Motion detected.");
+			mqttMotionMessage.getStyleClass().clear();
+			mqttMotionMessage.getStyleClass().add("label-all-red");
+		} else {
+			mqttMotionMessage.setText("Motion not detected.");
+			mqttMotionMessage.getStyleClass().clear();
+			mqttMotionMessage.getStyleClass().add("label-all-green");
+		}
+	}
+
+
+	/**
+	 * Method for updating UI and database depending on the distance values read from the terminal box.
+	 *
+	 * @param distanceValue integer value from ultrasonic sensor.
+	 */
+	@Override
+	public void updateUltrasonicSensorUI(int distanceValue) {
+		mqttDistanceMessage.setText("Distance to obstacle: " + distanceValue + " cm.");
+		mqttDistanceMessage.getStyleClass().clear();
+		if (distanceValue > 100) {
+			mqttDistanceMessage.getStyleClass().add("label-all-green");
+		} else if (distanceValue > 50) {
+			mqttDistanceMessage.getStyleClass().add("label-all-yellow");
+		} else {
+			mqttDistanceMessage.getStyleClass().add("label-all-red");
+		}
+	}
 
 }

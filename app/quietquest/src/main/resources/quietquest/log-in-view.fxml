@@ -18,9 +18,9 @@
         <URL value="@/style.css" />
     </stylesheets>
 
-    <ImageView fitHeight="1079.0" fitWidth="1517.0" layoutX="-2.0" layoutY="-232.0" pickOnBounds="true" preserveRatio="true">
+    <ImageView fitHeight="1113.0" fitWidth="1520.0" layoutX="-6.0" layoutY="-231.0" pickOnBounds="true" preserveRatio="true">
       <image>
-         <Image url="@../images/QuestBackground.jpg" />
+         <Image url="@../images/main_background.png" />
       </image></ImageView>
     <Label layoutX="596.0" layoutY="81.0" text="Quiet Quest" textAlignment="CENTER" textFill="#22577a">
         <font>
@@ -42,12 +42,12 @@
             <Font size="28.0" />
         </font>
     </Button>
-   <Text fill="#22577a" layoutX="532.0" layoutY="505.0" strokeType="OUTSIDE" strokeWidth="0.0" text="No account? Start your journey with Quiet Quest!" textAlignment="CENTER" wrappingWidth="431.99996337890633">
+   <Text fill="#80ed99" layoutX="532.0" layoutY="505.0" strokeType="OUTSIDE" strokeWidth="0.0" text="No account? Start your journey with Quiet Quest!" textAlignment="CENTER" wrappingWidth="431.99996337890633">
       <font>
          <Font size="18.0" />
       </font>
    </Text>
-   <Text fill="#22577a" layoutX="614.0" layoutY="207.0" strokeType="OUTSIDE" strokeWidth="0.0" text="USERNAME" wrappingWidth="270.4">
+   <Text fill="#c7f9cc" layoutX="614.0" layoutY="207.0" strokeType="OUTSIDE" strokeWidth="0.0" text="USERNAME" wrappingWidth="270.4">
       <font>
          <Font size="18.0" />
       </font>
@@ -57,7 +57,7 @@
          <Font size="18.0" />
       </font>
    </TextField>
-   <Text fill="#22577a" layoutX="614.0" layoutY="284.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PASSWORD" wrappingWidth="270.4">
+   <Text fill="#c7f9cc" layoutX="614.0" layoutY="284.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PASSWORD" wrappingWidth="270.4">
       <font>
          <Font size="18.0" />
       </font>

@@ -2,7 +2,6 @@ package quietquest.model;
 
 import javafx.scene.image.Image;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class BadgeManager {
@@ -26,23 +25,23 @@ public class BadgeManager {
 
     public BadgeManager() {
         // Badge images in black-and-white
-        theJourneyBeginsBW = loadImage("/images/theJourneyBeginsBW.png");
-        apprenticeBW = loadImage("/images/apprenticeBW.png");
-        speedyWitchBW = loadImage("/images/speedyWitchBW.png");
-        questConquerorBW = loadImage("/images/questConquerorBW.png");
-        timeWizardBW = loadImage("/images/timeWizardBW.png");
-        focusWarriorBW = loadImage("/images/focusWarriorBW.png");
-        questWarriorBW = loadImage("/images/questWarriorBW.png");
-        ultimateQuestMasterBW = loadImage("/images/ultimateQuestMasterBW.png");
+        theJourneyBeginsBW = loadImage("/images/badges/theJourneyBeginsBW.png");
+        apprenticeBW = loadImage("/images/badges/apprenticeBW.png");
+        speedyWitchBW = loadImage("/images/badges/speedyWitchBW.png");
+        questConquerorBW = loadImage("/images/badges/questConquerorBW.png");
+        timeWizardBW = loadImage("/images/badges/timeWizardBW.png");
+        focusWarriorBW = loadImage("/images/badges/focusWarriorBW.png");
+        questWarriorBW = loadImage("/images/badges/questWarriorBW.png");
+        ultimateQuestMasterBW = loadImage("/images/badges/ultimateQuestMasterBW.png");
         // Badge images in color
-        theJourneyBegins = loadImage("/images/theJourneyBegins.png");
-        apprentice = loadImage("/images/apprentice.png");
-        speedyWitch = loadImage("/images/speedyWitch.png");
-        questConqueror = loadImage("/images/questConqueror.png");
-        timeWizard = loadImage("/images/timeWizard.png");
-        focusWarrior = loadImage("/images/focusWarrior.png");
-        questWarrior = loadImage("/images/questWarrior.png");
-        ultimateQuestMaster = loadImage("/images/ultimateQuestMaster.png");
+        theJourneyBegins = loadImage("/images/badges/theJourneyBegins.png");
+        apprentice = loadImage("/images/badges/apprentice.png");
+        speedyWitch = loadImage("/images/badges/speedyWitch.png");
+        questConqueror = loadImage("/images/badges/questConqueror.png");
+        timeWizard = loadImage("/images/badges/timeWizard.png");
+        focusWarrior = loadImage("/images/badges/focusWarrior.png");
+        questWarrior = loadImage("/images/badges/questWarrior.png");
+        ultimateQuestMaster = loadImage("/images/badges/ultimateQuestMaster.png");
     }
 
     private Image loadImage(String path) {

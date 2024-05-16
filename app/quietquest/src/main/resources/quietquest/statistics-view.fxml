@@ -15,9 +15,9 @@
     </stylesheets>
 
     <children>
-        <ImageView fitHeight="836.0" fitWidth="1325.0" layoutY="-39.0" pickOnBounds="true">
+        <ImageView fitHeight="836.0" fitWidth="1325.0" layoutY="-44.0" pickOnBounds="true">
             <image>
-                <Image url="@../images/create_page_background.png" />
+                <Image url="@../images/quest_background.png" />
             </image>
         </ImageView>
         <ScrollPane fx:id="chartContainerPane" layoutX="61.0" layoutY="72.0" prefHeight="642.0" prefWidth="1140.0">

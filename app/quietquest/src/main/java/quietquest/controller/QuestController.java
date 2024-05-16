@@ -247,8 +247,8 @@ public class QuestController extends BaseController implements UIUpdater, Callba
 		Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(3), event -> {
 			motivationalAnchorPane.setVisible(false);
 		}));
+                timeline.play();
 	}
-
 
 	/**
 	 * Updates the UI with the connection status.

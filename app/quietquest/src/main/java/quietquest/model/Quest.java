@@ -5,6 +5,7 @@ import quietquest.utility.MQTTHandler;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.List;
 
 import static javafx.application.Application.launch;
 
@@ -17,6 +18,7 @@ public class Quest {
     private Timestamp startTime;
     private Timestamp completeTime;
     private int boxOpenTimes;
+    private ArrayList<Activity> activities = new ArrayList<>();
 
     // ==============================* CONSTRUCTOR *========================================
 
@@ -33,7 +35,7 @@ public class Quest {
     /**
      * Used to create full Quest object when querying database.
      */
-    public Quest(int id, int userId, boolean completionState, String title, String detail, Timestamp startTime, Timestamp completeTime, int boxOpenTimes) {
+    public Quest(int id, int userId, boolean completionState, String title, String detail, Timestamp startTime, Timestamp completeTime, int boxOpenTimes, ArrayList<Activity> activities) {
         this.id = id;
         this.userId = userId;
         this.completionState = completionState;
@@ -42,6 +44,7 @@ public class Quest {
         this.startTime = startTime;
         this.completeTime = completeTime;
         this.boxOpenTimes = boxOpenTimes;
+        this.activities = activities;
     }
 
     // ==============================* QUEST MANAGEMENT *===================================
@@ -139,5 +142,17 @@ public class Quest {
     @Override
     public String toString() {
         return title;
+    }
+
+	public ArrayList<Activity> getActivities() {
+        return activities;
+	}
+
+    public void addActivity(Activity activity) {
+        activities.add(activity);
+    }
+
+    public void removeActivity(Activity activity) {
+        activities.remove(activity);
     }
 }

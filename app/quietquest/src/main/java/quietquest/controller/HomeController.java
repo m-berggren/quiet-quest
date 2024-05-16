@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.image.ImageView;
+import quietquest.model.Activity;
 import quietquest.model.BadgeManager;
 import quietquest.model.PomodoroTimer;
 import quietquest.model.Quest;
@@ -56,8 +57,20 @@ public class HomeController extends BaseController {
         displayBadges();
     }
     public void onContinueQuestClick(ActionEvent event) {
-        showQuest(currentQuest);
-    }
+		if (currentQuest == null) {
+			return;
+		}
+		Activity activity = currentQuest.getActivities().getFirst();
+		if (activity instanceof PomodoroTimer) {
+			Quest pomodoroQuest = quietQuestFacade.getPomodoroQuest();
+			if (pomodoroQuest != null) {
+				showQuest(pomodoroQuest);
+			}
+		} else {
+			showQuest(currentQuest);
+		}
+	}
+
     public void onCreateQuestClick(ActionEvent event) {
         showCreateQuest();
     }

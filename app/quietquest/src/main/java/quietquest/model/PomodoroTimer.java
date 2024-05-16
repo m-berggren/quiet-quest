@@ -2,6 +2,7 @@ package quietquest.model;
 
 import javafx.application.Platform;
 
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -15,7 +16,7 @@ public class PomodoroTimer implements Activity {
 	private final int focusTime;
 	private final int breakTime;
 	private final int interval;
-	private PomodoroUIUpdater pomodoroObserver;
+	private ArrayList<PomodoroUIUpdater> observers;
 	private final int MILLISECONDS = 1_000; // Used to convert minutes to milliseconds. 60_000 is the needed value.
 
 	// Ideas from https://egandunning.com/projects/timemanagement-timer.html
@@ -32,7 +33,7 @@ public class PomodoroTimer implements Activity {
 		this.focusTime = focusTime;
 		this.breakTime = breakTime;
 		this.interval = interval;
-		this.pomodoroObserver = null;
+		this.observers = new ArrayList<>();
 	}
 
 	/**
@@ -44,7 +45,7 @@ public class PomodoroTimer implements Activity {
 		this.focusTime = focusTime;
 		this.breakTime = breakTime;
 		this.interval = interval;
-		this.pomodoroObserver = null;
+		this.observers = new ArrayList<>();
 	}
 
 	// ==============================* GETTERS & SETTERS *==================================
@@ -61,12 +62,24 @@ public class PomodoroTimer implements Activity {
 		return interval;
 	}
 
-	public void setPomodoroObserver(PomodoroUIUpdater pomodoroObserver) {
-		this.pomodoroObserver = pomodoroObserver;
-	}
-
 	public int getQuestId() {
 		return questId;
+	}
+
+	// ==============================* OBSERVER MANAGEMENT *================================
+
+	public void addObserver(PomodoroUIUpdater observer) {
+		synchronized (observers) {
+			if (!observers.contains(observer)) {
+				observers.add(observer);
+			}
+		}
+	}
+
+	public void removeObserver(PomodoroUIUpdater observer) {
+		synchronized (observers) {
+			observers.remove(observer);
+		}
 	}
 
 	// ==============================* INTERFACE METHODS *==================================
@@ -109,11 +122,13 @@ public class PomodoroTimer implements Activity {
 	 * @param event the event message passed to observer.
 	 */
 	private void notifyPomodoroObserver(String event) {
-		if (pomodoroObserver != null) {
-			// Schedule update so that it runs on a JavaFX thread instead of the Timer
-			Platform.runLater(() -> {
-				pomodoroObserver.update(event);
-			});
+		synchronized (observers) {
+			for (PomodoroUIUpdater observer : observers) {
+				// Schedule update so that it runs on a JavaFX thread instead of the Timer
+				Platform.runLater(() -> {
+					observer.update(event);
+				});
+			}
 		}
 	}
 
@@ -164,6 +179,7 @@ public class PomodoroTimer implements Activity {
 	 */
 	private void startFocusTime() {
 		notifyPomodoroObserver(FOCUS_TIME_START);
+		System.out.println("Starting another task");
 	}
 
 	/**

@@ -12,6 +12,7 @@ public class QuietQuestFacade {
 	protected final Database database;
 	protected final User user;
 	protected final MediaPlayer mediaPlayer;
+	protected Quest pomodoroQuest;
 
 	// ==============================* CONSTRUCTOR *========================================
 
@@ -28,6 +29,7 @@ public class QuietQuestFacade {
 		this.user = user;
 		this.database = database;
 		this.mediaPlayer = mediaPlayer;
+		this.pomodoroQuest = null;
 	}
 
 	// ==============================* DATABASE MANAGER *===================================
@@ -62,8 +64,9 @@ public class QuietQuestFacade {
 		if (!quest.getActivities().isEmpty()) {
 			ArrayList<Activity> activities = quest.getActivities();
 			if (activities.getFirst() instanceof PomodoroTimer pomodoro) {
-				pomodoro.setPomodoroObserver(pomodoroObserver);
+				pomodoro.addObserver(pomodoroObserver);
 				pomodoro.start();
+				setPomodoroQuest(quest);
 			}
 		}
     }
@@ -76,6 +79,7 @@ public class QuietQuestFacade {
 	}
 
 	/**
+	 *
 	 * @param quest
 	 */
 	public void completeQuest(Quest quest) {
@@ -84,6 +88,7 @@ public class QuietQuestFacade {
 			ArrayList<Activity> activities = quest.getActivities();
 			if (activities.getFirst() instanceof PomodoroTimer pomodoro) {
 				pomodoro.end();
+				pomodoroQuest = null;
 			}
 		}
 	}
@@ -180,6 +185,20 @@ public class QuietQuestFacade {
 			}
 		}
 		return -1;
+	}
+
+	/**
+	 * There can only be one running PomodoroTimer at each possible moment, so the object is stored as a singleton in a
+	 * global fashion.
+	 *
+	 * @return PomodoroTimer object.
+	 */
+	public Quest getPomodoroQuest() {
+		return pomodoroQuest;
+	}
+
+	public void setPomodoroQuest(Quest pomodoroQuest) {
+		this.pomodoroQuest = pomodoroQuest;
 	}
 
 	public MediaPlayer getMediaPlayer() {

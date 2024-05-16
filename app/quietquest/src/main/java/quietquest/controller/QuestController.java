@@ -13,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.Duration;
 import quietquest.model.*;
@@ -75,9 +76,47 @@ public class QuestController extends BaseController implements UIUpdater, Pomodo
 
     private String[] message;
     private ObservableList<Activity> activities;
+	private static QuestController activeController;
+	private PomodoroTimer pomodoroTimer;
 
 	public void initialize(Quest quest) {
 		currentQuest = quest;
+		System.out.println(quest.hashCode());
+
+		// Retrieve the PomodoroTimer if the current quest has one
+		if (currentQuest.getActivities() != null) {
+			Activity activity = currentQuest.getActivities().getFirst();
+			if (activity instanceof PomodoroTimer) {
+				pomodoroTimer = (PomodoroTimer) activity;
+				pomodoroTimer.addObserver(this);
+			}
+		}
+		// Add listener to handle view closure
+		Platform.runLater(() -> {
+			Stage stage = (Stage) titleLabel.getScene().getWindow();
+			stage.setOnHidden(event -> onDestroy());
+		});
+		// Set this instance as the active controller
+		setActiveController(this);
+	}
+
+	private static synchronized void setActiveController(QuestController controller) {
+		if (activeController != null) {
+			System.out.println("Controller deactivated");
+			activeController.deactivate();
+		}
+		activeController = controller;
+	}
+
+	private void deactivate() {
+		
+	}
+
+	@FXML
+	public void onDestroy() {
+		if (pomodoroTimer != null) {
+			pomodoroTimer.removeObserver(this);
+		}
 	}
 
 	@Override
@@ -193,6 +232,9 @@ public class QuestController extends BaseController implements UIUpdater, Pomodo
 	 */
 	@Override
 	public void update(String message) {
+		if (this != activeController) {
+			return; // Only one QuestController will handle publishing to the Wio terminal
+		}
 
 		final String FOCUS_TIME = "Focus time started";
 		final String BREAK_TIME_START = "Break time started";

@@ -83,7 +83,21 @@ public class QuestListController extends BaseController {
 	}
 
 	public void onGoToQuestClick() {
-		showQuest(selectedQuest);
+		if (selectedQuest.getActivities().isEmpty()) {
+			showQuest(selectedQuest);
+		}
+
+		Activity activity = selectedQuest.getActivities().getFirst();
+		if (activity instanceof PomodoroTimer) {
+			Quest pomodoroQuest = quietQuestFacade.getPomodoroQuest();
+			if (pomodoroQuest != null) {
+				showQuest(quietQuestFacade.getPomodoroQuest());
+			} else {
+				showQuest(selectedQuest);
+			}
+		} else {
+			showQuest(selectedQuest);
+		}
 	}
 
 	/**

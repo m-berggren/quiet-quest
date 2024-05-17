@@ -33,6 +33,7 @@ public class QuietQuestMain extends Application {
         LogInController logInController = loader.getController();
 		logInController.initialize(database, mqttHandler, mediaPlayer); // Passes database & mqttHandler object until MainController is reached
         Scene scene = new Scene(root);
+        scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent event) {

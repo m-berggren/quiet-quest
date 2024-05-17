@@ -114,10 +114,7 @@ public class QuestHistoryController extends BaseController {
 					Label timeSpentLabel = new Label("    Time Spent: " + timeSpent);
 					Label boxOpenTimesLabel = new Label("    Box Open Times: " + quest.getBoxOpenTimes());
 
-					String averageBoxOpenInterval = quest.getBoxOpenTimes() == 0 ? "00:00:00" : getTimeDiffHMS(quest);
-					Label averageBoxOpenIntervalLabel = new Label("    Average Box Open Interval: " + averageBoxOpenInterval);
-
-					vBox.getChildren().addAll(titleLabel, startTimeLabel, completionTimeLabel, timeSpentLabel, boxOpenTimesLabel, averageBoxOpenIntervalLabel);
+					vBox.getChildren().addAll(titleLabel, startTimeLabel, completionTimeLabel, timeSpentLabel, boxOpenTimesLabel);
 					setGraphic(vBox);
 				}
 			}

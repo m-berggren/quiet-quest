@@ -9,22 +9,23 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="760.0" prefWidth="1210.0" style="-fx-background-color: #C7F9CC;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="quietquest.controller.QuestController">
-   <ImageView fitHeight="760.0" fitWidth="1210.0" pickOnBounds="true">
-      <Image url="@../images/create_page_background.png" />
-   </ImageView>
-   <AnchorPane fx:id="questAnchorPane" layoutX="535.0" layoutY="20.0" prefHeight="537.0" prefWidth="370.0" style="-fx-background-color: #fff; -fx-background-radius: 10;" AnchorPane.leftAnchor="55.0" AnchorPane.topAnchor="25.0">
+    <ImageView fitHeight="843.0" fitWidth="1307.0" layoutY="-47.0" pickOnBounds="true">
+        <Image url="@../images/quest_background.png" />
+    </ImageView>
+
+    <AnchorPane fx:id="questAnchorPane" layoutX="61.0" layoutY="72.0" prefHeight="613.0" prefWidth="435.0" style="-fx-background-color: #fff; -fx-background-radius: 10;" AnchorPane.leftAnchor="61.0" AnchorPane.topAnchor="72.0">
       <children>
-         <Button fx:id="completeQuestButton" layoutX="148.0" layoutY="460.0" mnemonicParsing="false" onAction="#onCompleteQuestClick" style="-fx-text-fill: #22577A; -fx-background-color: #57CC99; -fx-background-radius: 8;" text="COMPLETE" AnchorPane.leftAnchor="148.0" AnchorPane.topAnchor="460.0">
+          <Button fx:id="completeQuestButton" layoutX="148.0" layoutY="460.0" mnemonicParsing="false" onAction="#onCompleteQuestClick" styleClass="general-button" text="COMPLETE" AnchorPane.leftAnchor="148.0" AnchorPane.topAnchor="460.0">
             <font>
                <Font name="American Typewriter" size="24.0" />
             </font>
          </Button>
-         <Label fx:id="titleLabel" prefHeight="32.0" prefWidth="333.0" text="TITLE" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
+          <Label fx:id="titleLabel" prefHeight="32.0" prefWidth="333.0" text="Title" textFill="#22577a" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
             <font>
                <Font name="American Typewriter" size="26.0" />
             </font>
          </Label>
-         <Label fx:id="questTypeLabel" layoutX="20.0" layoutY="276.0" prefHeight="26.0" prefWidth="330.0" text="ACTIVITIES" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="225.0">
+          <Label fx:id="questTypeLabel" layoutX="20.0" layoutY="276.0" prefHeight="26.0" prefWidth="330.0" text="Activities" textFill="#22577a" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="225.0">
             <font>
                <Font name="American Typewriter" size="21.0" />
             </font>
@@ -57,68 +58,68 @@
                <Font name="American Typewriter" size="15.0" />
             </font>
          </Label>
-         <Button fx:id="startQuestButton" layoutX="20.0" layoutY="460.0" mnemonicParsing="false" onAction="#onStartQuestClick" style="-fx-text-fill: #22577A; -fx-background-color: #57CC99; -fx-background-radius: 8;" text="START" AnchorPane.topAnchor="460.0">
+          <Button fx:id="startQuestButton" layoutX="20.0" layoutY="460.0" mnemonicParsing="false" onAction="#onStartQuestClick" styleClass="general-button" text="START" AnchorPane.topAnchor="460.0">
             <font>
                <Font name="American Typewriter" size="24.0" />
             </font>
          </Button>
-         <Label fx:id="startTimeLabel" layoutX="20.0" layoutY="160.0" prefHeight="18.0" prefWidth="330.0" text="Start: " AnchorPane.topAnchor="160.0">
+          <Label fx:id="startTimeLabel" layoutX="20.0" layoutY="160.0" prefHeight="18.0" prefWidth="330.0" text="Start: " textFill="#22577a" AnchorPane.topAnchor="160.0">
             <font>
                <Font name="American Typewriter" size="15.0" />
             </font>
          </Label>
-         <Label fx:id="endTimeLabel" layoutX="20.0" layoutY="190.0" prefHeight="18.0" prefWidth="330.0" text="End:" AnchorPane.topAnchor="190.0">
+          <Label fx:id="endTimeLabel" layoutX="20.0" layoutY="190.0" prefHeight="18.0" prefWidth="330.0" text="End:" textFill="#22577a" AnchorPane.topAnchor="190.0">
             <font>
                <Font name="American Typewriter" size="15.0" />
             </font>
          </Label>
       </children>
    </AnchorPane>
-   <AnchorPane fx:id="mqttAnchorPane" layoutX="914.0" layoutY="21.0" prefHeight="278.0" prefWidth="370.0" style="-fx-background-color: #fff; -fx-background-radius: 10;" AnchorPane.leftAnchor="470.0" AnchorPane.topAnchor="25.0">
+    <AnchorPane fx:id="mqttAnchorPane" layoutX="518.0" layoutY="72.0" prefHeight="278.0" prefWidth="435.0" style="-fx-background-color: #fff; -fx-background-radius: 10;" AnchorPane.leftAnchor="518.0" AnchorPane.topAnchor="72.0">
       <children>
          <Label fx:id="mqttConnectionMessage" layoutX="24.0" layoutY="78.0" prefHeight="17.0" prefWidth="242.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="80.0" />
          <Label fx:id="mqttDistanceMessage" layoutX="24.0" layoutY="141.0" prefHeight="17.0" prefWidth="242.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="135.0" />
          <Label fx:id="mqttMotionMessage" layoutX="24.0" layoutY="219.0" prefHeight="17.0" prefWidth="242.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="190.0" />
          <Label fx:id="mqttLightMessage" layoutX="24.0" layoutY="263.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="245.0" />
-         <Label fx:id="mqttTitleLabel" layoutX="24.0" layoutY="21.0" text="MQTT DATA" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">
+          <Label fx:id="mqttTitleLabel" layoutX="24.0" layoutY="21.0" text="MQTT Data" textFill="#22577a" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">
             <font>
                <Font name="American Typewriter" size="21.0" />
             </font>
          </Label>
-         <Label layoutX="24.0" layoutY="56.0" text="Connection Msg" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="55.0">
+          <Label layoutX="24.0" layoutY="56.0" text="Connection Msg" textFill="#22577a" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="55.0">
             <font>
                <Font name="American Typewriter" size="15.0" />
             </font>
          </Label>
-         <Label layoutX="24.0" layoutY="115.0" text="Distance" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="110.0">
+          <Label layoutX="24.0" layoutY="115.0" text="Distance" textFill="#22577a" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="110.0">
             <font>
                <Font name="American Typewriter" size="15.0" />
             </font>
          </Label>
-         <Label layoutX="24.0" layoutY="162.0" text="Motion" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="165.0">
+          <Label layoutX="24.0" layoutY="162.0" text="Motion" textFill="#22577a" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="165.0">
             <font>
                <Font name="American Typewriter" size="15.0" />
             </font>
          </Label>
-         <Label layoutX="24.0" layoutY="226.0" text="Light" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="220.0">
+          <Label layoutX="24.0" layoutY="226.0" text="Light" textFill="#22577a" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="220.0">
             <font>
                <Font name="American Typewriter" size="15.0" />
             </font>
          </Label>
       </children>
    </AnchorPane>
-   <AnchorPane fx:id="motivationalAnchorPane" layoutX="470.0" layoutY="333.0" prefHeight="115.0" prefWidth="370.0" style="-fx-background-color: #ffffff; -fx-background-radius: 10;">
+   <AnchorPane fx:id="motivationalAnchorPane" layoutX="518.0" layoutY="367.0" prefHeight="115.0" prefWidth="435.0" style="-fx-background-color: #ffffff; -fx-background-radius: 10;">
       <children>
-         <Label fx:id="motivationalMessage" alignment="CENTER" prefHeight="113.0" prefWidth="350.0" text="MotivationalMessage" wrapText="true" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+          <Label fx:id="motivationalMessage" alignment="CENTER" prefHeight="114.0" prefWidth="435.0" text="MotivationalMessage" textFill="#22577a" wrapText="true" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <font>
                <Font name="System Bold Italic" size="19.0" />
             </font>
          </Label>
       </children>
    </AnchorPane>
-    <AnchorPane fx:id="pomodoroAnchorPane" layoutX="470.0" layoutY="476.0" prefHeight="115.0" prefWidth="370.0" style="-fx-background-color: #ffffff; -fx-background-radius: 10;" visible="false">
+    <AnchorPane fx:id="pomodoroInfoAnchorPane" layoutX="518.0" layoutY="502.0" prefHeight="115.0" prefWidth="435.0" style="-fx-background-color: #ffffff; -fx-background-radius: 10;">
         <children>
-            <Label layoutX="24.0" layoutY="27.0" text="Pomodoro status:">
+            <Label layoutX="24.0" layoutY="27.0" text="Pomodoro status:" textFill="#22577a">
                 <font>
                     <Font name="System Bold" size="14.0" />
                 </font>

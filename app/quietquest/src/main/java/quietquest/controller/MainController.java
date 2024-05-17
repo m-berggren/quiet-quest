@@ -13,6 +13,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -20,6 +21,8 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import quietquest.QuietQuestMain;
 import quietquest.model.*;
+import quietquest.utility.*;
+
 import quietquest.utility.FxmlFile;
 import quietquest.model.Database;
 import quietquest.model.User;
@@ -36,23 +39,21 @@ public class MainController extends BaseController {
     @FXML
     private VBox sideMenu;
     @FXML
-    private Button homeButton;
+    private ToggleButton homeButton;
     @FXML
-    private Button createQuestButton;
+    private ToggleButton createQuestButton;
     @FXML
-    private Button questListButton;
+    private ToggleButton questListButton;
     @FXML
-    private Button questHistoryButton;
+    private ToggleButton questHistoryButton;
     @FXML
-    private Button statisticsButton;
+    private ToggleButton statisticsButton;
     @FXML
     private Button playButton;
     @FXML
     private Button stopButton;
     @FXML
     private VBox menuVBox;
-    @FXML
-    private Slider volumeSlider;
 
 	private MediaPlayer mediaPlayer;
     private Database database;
@@ -68,12 +69,6 @@ public class MainController extends BaseController {
         setMainController(this);
         mqttHandler.connect();
 
-        volumeSlider.valueProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                mediaPlayer.setVolume(volumeSlider.getValue() * 0.01);
-            }
-        });
     }
 
     @Override
@@ -88,22 +83,27 @@ public class MainController extends BaseController {
      * using inherited methods from BaseController.
      */
     public void onHomeButtonClick() {
+        toggleOneButtonOnly(MenuButtonType.HOME);
         showHome();
     }
 
     public void onCreateQuestButtonClick() {
+        toggleOneButtonOnly(MenuButtonType.CREATE_QUEST);
         showCreateQuest();
     }
 
     public void onQuestListButtonClick() {
+        toggleOneButtonOnly(MenuButtonType.QUEST_LIST);
         showQuestList();
     }
 
     public void onQuestHistoryButtonClick() {
+        toggleOneButtonOnly(MenuButtonType.QUEST_HISTORY);
         showHistory();
     }
 
     public void onStatisticsButtonClick() {
+        toggleOneButtonOnly(MenuButtonType.STATISTICS);
         showStatistics();
     }
 
@@ -144,7 +144,6 @@ public class MainController extends BaseController {
 		}
 	}
 
-
     /**
      * Stops the music file from playing.
      */
@@ -174,6 +173,30 @@ public class MainController extends BaseController {
 			System.exit(0);
         }
     }
+
+	public void toggleOneButtonOnly(MenuButtonType selectedType) {
+		homeButton.setSelected(selectedType == MenuButtonType.HOME);
+		createQuestButton.setSelected(selectedType == MenuButtonType.CREATE_QUEST);
+		questListButton.setSelected(selectedType == MenuButtonType.QUEST_LIST);
+		questHistoryButton.setSelected(selectedType == MenuButtonType.QUEST_HISTORY);
+		statisticsButton.setSelected(selectedType == MenuButtonType.STATISTICS);
+	}
+
+	private void selectHomeButton() {
+		homeButton.setSelected(true);
+		createQuestButton.setSelected(false);
+		questListButton.setSelected(false);
+		questHistoryButton.setSelected(false);
+		statisticsButton.setSelected(false);
+	}
+
+	private void toggleHomeButton() {
+		homeButton.setSelected(true);
+		createQuestButton.setSelected(false);
+		questListButton.setSelected(false);
+		questHistoryButton.setSelected(false);
+		statisticsButton.setSelected(false);
+	}
 
     /**
      * Loads the desired view.

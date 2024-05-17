@@ -10,6 +10,7 @@ import quietquest.model.Activity;
 import quietquest.model.BadgeManager;
 import quietquest.model.PomodoroTimer;
 import quietquest.model.Quest;
+import quietquest.utility.MenuButtonType;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -64,17 +65,24 @@ public class HomeController extends BaseController {
 		if (activity instanceof PomodoroTimer) {
 			Quest pomodoroQuest = quietQuestFacade.getPomodoroQuest();
 			if (pomodoroQuest != null) {
+				changeSelectedMenuButton(MenuButtonType.QUEST_LIST);
 				showQuest(pomodoroQuest);
+			} else {
+				changeSelectedMenuButton(MenuButtonType.QUEST_LIST);
+				showQuest(currentQuest);
 			}
 		} else {
+			changeSelectedMenuButton(MenuButtonType.QUEST_LIST);
 			showQuest(currentQuest);
 		}
 	}
 
     public void onCreateQuestClick(ActionEvent event) {
+        changeSelectedMenuButton(MenuButtonType.CREATE_QUEST);
         showCreateQuest();
     }
     public void onViewListClick(ActionEvent event) {
+        changeSelectedMenuButton(MenuButtonType.QUEST_LIST);
         showQuestList();
     }
 

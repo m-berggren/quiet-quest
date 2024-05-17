@@ -32,7 +32,7 @@ public class QuestController extends BaseController implements UIUpdater, Pomodo
 	@FXML
 	private AnchorPane taskAnchorPane;
 	@FXML
-	private AnchorPane pomodoroAnchorPane;
+	private AnchorPane pomodoroInfoAnchorPane;
 	@FXML
 	private AnchorPane motivationalAnchorPane;
 	@FXML
@@ -84,7 +84,7 @@ public class QuestController extends BaseController implements UIUpdater, Pomodo
 		System.out.println(quest.hashCode());
 
 		// Retrieve the PomodoroTimer if the current quest has one
-		if (currentQuest.getActivities() != null) {
+		if (currentQuest.getActivities() != null && !currentQuest.getActivities().isEmpty()) {
 			Activity activity = currentQuest.getActivities().getFirst();
 			if (activity instanceof PomodoroTimer) {
 				pomodoroTimer = (PomodoroTimer) activity;
@@ -109,7 +109,7 @@ public class QuestController extends BaseController implements UIUpdater, Pomodo
 	}
 
 	private void deactivate() {
-		
+
 	}
 
 	@FXML
@@ -133,16 +133,16 @@ public class QuestController extends BaseController implements UIUpdater, Pomodo
 		motivationalAnchorPane.setVisible(false);
 		if (currentQuest.getActivities().isEmpty()) {
 			taskAnchorPane.setVisible(true);
-			pomodoroAnchorPane.setVisible(false);
+			pomodoroInfoAnchorPane.setVisible(false);
 			questTypeLabel.setText("TASKS");
 		} else {
 			if (currentQuest.getActivities().getFirst().getType() == QuestType.TASK) {
 				taskAnchorPane.setVisible(true);
-				pomodoroAnchorPane.setVisible(false);
+				pomodoroInfoAnchorPane.setVisible(false);
 				questTypeLabel.setText("TASKS");
 			} else if (currentQuest.getActivities().getFirst().getType() == QuestType.POMODORO) {
 				taskAnchorPane.setVisible(false);
-				pomodoroAnchorPane.setVisible(true);
+				pomodoroInfoAnchorPane.setVisible(true);
 				questTypeLabel.setText("POMODORO");
 			}
 		}
@@ -247,9 +247,9 @@ public class QuestController extends BaseController implements UIUpdater, Pomodo
 				case FOCUS_TIME -> {
 					System.out.println(FOCUS_TIME);
 
-					pomodoroAnchorPane.setVisible(true);
-					pomodoroStatusLabel.setText("Focus time now active");
-					pomodoroStatusLabel.setTextFill(Color.color(0.6, 0, 0));
+                    pomodoroInfoAnchorPane.setVisible(true);
+                    pomodoroStatusLabel.setText("Focus time now active");
+                    pomodoroStatusLabel.setTextFill(Color.color(0.6, 0, 0));
 
 					quietQuestFacade.publishMqttMessage(TOPIC_PUB_POMODORO_INTERVAL, FOCUS_TIME);
 				}
@@ -267,7 +267,7 @@ public class QuestController extends BaseController implements UIUpdater, Pomodo
 				case POMODORO_END -> {
 					System.out.println(POMODORO_END);
 
-					pomodoroAnchorPane.setVisible(false);
+                    pomodoroInfoAnchorPane.setVisible(false);
 
 					onCompletion();
 				}

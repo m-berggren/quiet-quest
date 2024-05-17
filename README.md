@@ -79,6 +79,42 @@ Follow the pinout diagrams below when connecting the sensors to the mictrocontro
         - Black cable into pin 6, GND
         - Red cable into pin 4, 5V
 
+## How To Use
+### WIO Terminal
+1. Connect to a power source via a USB-C cable.
+2. Switch power on (flick button on the left side).
+
+The Wio Terminal's screen lights up and displays labels for WiFi and MQTT connection, and sensors. Once Wifi and MQTT connection is established, confirmation of this will be displayed as well as data from the sensors. This real-time information is also displayed on the Quest Page of the desktop application.
+
+### Box Device
+The box device measures the distance to objects directly in front of it using the **Grove Ultrasonic Ranger**. This is used to determine if attempts are made to collect the phone during an ongoing quest. If an object (or person) is detected within certain ranges (0-15 cm, 16-30 cm or 31-50 cm) the box device will emit various audio and light signals to alert the user that it is not time to open the box yet.
+
+If the box is opened during an ongoing quest, the **Grove Light Sensor v1.2** will read a light value over 15 and report this to the system, and the interruption will be noted in the ongoing quest's information.
+
+### Establish WiFi Connection
+1. Open wio/quietquest/src/credentials/credentials.cpp
+2. Enter your WiFi SSID within the quotation marks
+3. Enter your WiFi password within the quotation marks
+4. Open Arduino IDE
+    - Go to File/Open...
+    - Open quiet-quest/wio/quietquest/quietquest.ino
+    - Connect the WIO terminal to your computer with a USB-C cable
+    - Verify
+    - Upload
+5. Now you can switch off the WIO terminal and disconnect it from your computer if you wish to place it further away. If you do, make sure to connect it to another power source.
+
+Repeat these steps if you want to change the WiFi credentials later on.
+![Add WiFi credentials](https://git.chalmers.se/courses/dit113/2024/group-12/quiet-quest/-/wikis/uploads/d6231aba511e43e4265f4494114de34d/Screenshot_2024-05-16_at_13.08.07.png)
+
+### Restarting & Turning Off the WIO Terminal
+Restarting or turning off the WIO Terminal disconnects it from WiFi and the MQTT Broker. To reconnect, go to the Quest page in the application and start a quest.
+
+**Restart:** Flick the power switch towards the right.
+
+**Turn off:** Fully flick the power switch towards the left.
+
+### Desktop Application
+Make sure Docker Desktop is running in the background when you open and run the Quiet Quest application. For a walkthrough of how to use the application, please watch the video summary in the Wiki.
 
 ## System Design
 A PostgreSQL database, set up with Docker, is used for storing user and quest data. See the tables and relationships below.     

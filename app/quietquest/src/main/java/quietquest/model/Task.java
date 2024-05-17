@@ -10,7 +10,7 @@ public class Task implements Activity {
     private Timestamp endTime;
     private boolean completionState;
 
-    // ==============================* CONSTRUCTOR *========================================
+	// ==============================* CONSTRUCTORS *=======================================
 
     /**
      * Used for creating a container with the necessary information to pass into database. Not intended to use within
@@ -33,6 +33,12 @@ public class Task implements Activity {
         this.startTime = startTime;
         this.endTime = endTime;
         this.completionState = completionState;
+    }
+
+	// ==============================* GETTERS & SETTERS *==================================
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getId() {
@@ -63,37 +69,28 @@ public class Task implements Activity {
         return endTime;
     }
 
-    public QuestType getType() {
-        return QuestType.TASK;
-    }
+	public void setEndTime(Timestamp endTime) {
+		this.endTime = endTime;
+	}
 
-    public void setEndTime(Timestamp endTime) {
-        this.endTime = endTime;
-    }
 
-    public boolean getCompletionState() {
+	public boolean getCompletionState() {
         return completionState;
     }
 
     public void setCompletionState(boolean completionState) {
         this.completionState = completionState;
     }
-    public String toString() {
-        return description;
-    }
 
+	// ==============================* INTERFACE METHODS *==================================
 
-    @Override
-    public void completeTask() {
+	@Override
+	public QuestType getType() {
+		return QuestType.TASK;
+	}
 
-    }
-
-    @Override
-    public void start() {
-    }
-
-    @Override
-    public void end() {
-    }
-
+	// ==============================* UTILITY *============================================
+	public String toString() {
+		return description;
+	}
 }

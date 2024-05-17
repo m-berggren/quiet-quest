@@ -89,6 +89,10 @@ public class CreateQuestController extends BaseController implements Initializab
         super.afterMainController();
     }
 
+
+    /**
+     * Configures the slider listener to update the text field with the slider's value for pomodoro time setting.
+     */
     private void configureSliderListener() {
         // Add a listener to the Slider's value property
         focusSlider.valueProperty().addListener(new ChangeListener<Number>() {
@@ -207,13 +211,6 @@ public class CreateQuestController extends BaseController implements Initializab
         if (titleField.getText().isEmpty()) {
             showMessage("Don't forget to name your quest!",
                     "Quests must have a title. Do not leave this field empty.");
-        /* You can now save quests with the same title
-            //if quest title is already taken:
-        } else if (quietQuestFacade.getQuests().containsKey(titleField.getText())) {
-            showMessage("Give your quest a unique title",
-                    "Each quest must have a unique title.");
-            //if everything good with title, create quest:
-         */
         } else {
             String title = titleField.getText();
             String description = descriptionField.getText();

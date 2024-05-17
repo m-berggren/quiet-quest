@@ -1,5 +1,7 @@
 package quietquest.controller;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -7,15 +9,26 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.Slider;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import quietquest.QuietQuestMain;
 import quietquest.model.*;
 import quietquest.utility.*;
 
+import quietquest.utility.FxmlFile;
+import quietquest.model.Database;
+import quietquest.model.User;
+import quietquest.model.Quest;
+import java.net.URL;
+import quietquest.utility.MQTTHandler;
 import java.sql.SQLException;
 import java.io.IOException;
 import java.util.Optional;
@@ -36,20 +49,34 @@ public class MainController extends BaseController {
     @FXML
     private ToggleButton statisticsButton;
     @FXML
+    private Button playButton;
+    @FXML
+    private Button stopButton;
+    @FXML
     private VBox menuVBox;
+    @FXML
+    private Slider volumeSlider;
 
+	private MediaPlayer mediaPlayer;
     private Database database;
     private MQTTHandler mqttHandler;
 
     // ==============================* INITIALIZATION METHODS *=======================
 
-    public void initialize(User user, Database database, MQTTHandler mqttHandler) throws SQLException {
+	public void initialize(User user, Database database, MQTTHandler mqttHandler, MediaPlayer mediaPlayer) throws SQLException {
         this.database = database;
         this.mqttHandler = mqttHandler;
-        this.quietQuestFacade = new QuietQuestFacade(user, database, mqttHandler);
+		this.mediaPlayer = mediaPlayer;
+		this.quietQuestFacade = new QuietQuestFacade(user, database, mqttHandler, mediaPlayer);
         setMainController(this);
         mqttHandler.connect();
 
+        volumeSlider.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                mediaPlayer.setVolume(volumeSlider.getValue() * 0.01);
+            }
+        });
     }
 
     @Override
@@ -59,14 +86,15 @@ public class MainController extends BaseController {
 
     // ==============================* VIEW MANAGEMENT *====================================
 
+    /**
+     * The methods below redirect to the various pages inside the application,
+     * using inherited methods from BaseController.
+     */
     public void onHomeButtonClick() {
         toggleOneButtonOnly(MenuButtonType.HOME);
         showHome();
     }
 
-    /**
-     *
-     */
     public void onCreateQuestButtonClick() {
         toggleOneButtonOnly(MenuButtonType.CREATE_QUEST);
         showCreateQuest();
@@ -87,35 +115,58 @@ public class MainController extends BaseController {
         showStatistics();
     }
 
-    public void onLogOutButtonClick(ActionEvent event) throws IOException, SQLException {
+	public void onLogOutButtonClick(ActionEvent event) throws IOException {
+		closeMediaPlayer();
         loadOnLogout(event);
     }
 
-    public void toggleOneButtonOnly(MenuButtonType selectedType) {
-        homeButton.setSelected(selectedType == MenuButtonType.HOME);
-        createQuestButton.setSelected(selectedType == MenuButtonType.CREATE_QUEST);
-        questListButton.setSelected(selectedType == MenuButtonType.QUEST_LIST);
-        questHistoryButton.setSelected(selectedType == MenuButtonType.QUEST_HISTORY);
-        statisticsButton.setSelected(selectedType == MenuButtonType.STATISTICS);
+    /**
+     * Plays the desired music file.
+     * The chosen music file is declared as fileName and links to an mp3 audio file in the project directory.
+     */
+    public void onPlayButtonClick() {
+        String fileName = "/music/main-sound.mp3";
+        URL path = getClass().getResource(fileName);
+        if (path != null) {
+            Media media = new Media(path.toString());
+            mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+            mediaPlayer.play();
+            playButton.setDisable(true);
+            stopButton.setDisable(false);
+        }
     }
 
-    private void selectHomeButton() {
-        homeButton.setSelected(true);
-        createQuestButton.setSelected(false);
-        questListButton.setSelected(false);
-        questHistoryButton.setSelected(false);
-        statisticsButton.setSelected(false);
+	/**
+	 * Method to ensure that the running MediaPlayer is closed correctly.
+	 */
+	private void closeMediaPlayer() {
+		if (mediaPlayer != null) {
+			mediaPlayer.stop();
+			mediaPlayer.setOnEndOfMedia(new Runnable() {
+				@Override
+				public void run() {
+					mediaPlayer.dispose();
+				}
+			});
+		}
+	}
+
+    /**
+     * Stops the music file from playing.
+     */
+    public void onStopButtonClick() {
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            playButton.setDisable(false);
+            stopButton.setDisable(true);
+        }
     }
 
-    private void toggleHomeButton() {
-        homeButton.setSelected(true);
-        createQuestButton.setSelected(false);
-        questListButton.setSelected(false);
-        questHistoryButton.setSelected(false);
-        statisticsButton.setSelected(false);
-    }
-
-    public void onQuitButtonClick(ActionEvent event) {
+    /**
+     * Exits the desktop application and disconnects from the database and MQTT handler.
+     */
+    public void onQuitButtonClick() {
         ConfirmationAlert alert = new ConfirmationAlert();
         alert.setTitle("Confirmation");
         alert.setHeaderText("This will exit the application.");
@@ -125,10 +176,40 @@ public class MainController extends BaseController {
         if (result.isPresent() && result.get().getText().equals("Yes")) {
             mqttHandler.disconnect();
             database.closeConnection();
+			closeMediaPlayer();
             Platform.exit();
+			System.exit(0);
         }
     }
 
+	public void toggleOneButtonOnly(MenuButtonType selectedType) {
+		homeButton.setSelected(selectedType == MenuButtonType.HOME);
+		createQuestButton.setSelected(selectedType == MenuButtonType.CREATE_QUEST);
+		questListButton.setSelected(selectedType == MenuButtonType.QUEST_LIST);
+		questHistoryButton.setSelected(selectedType == MenuButtonType.QUEST_HISTORY);
+		statisticsButton.setSelected(selectedType == MenuButtonType.STATISTICS);
+	}
+
+	private void selectHomeButton() {
+		homeButton.setSelected(true);
+		createQuestButton.setSelected(false);
+		questListButton.setSelected(false);
+		questHistoryButton.setSelected(false);
+		statisticsButton.setSelected(false);
+	}
+
+	private void toggleHomeButton() {
+		homeButton.setSelected(true);
+		createQuestButton.setSelected(false);
+		questListButton.setSelected(false);
+		questHistoryButton.setSelected(false);
+		statisticsButton.setSelected(false);
+	}
+
+    /**
+     * Loads the desired view.
+     * @param view String value of the desired view
+     */
     public void loadView(String view) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(QuietQuestMain.class.getResource(view));
@@ -145,6 +226,10 @@ public class MainController extends BaseController {
         }
     }
 
+    /**
+     * Loads the create quest view based on string in {@link FxmlFile}.
+     * @param quest Quest value of the selected quest
+     */
     public void loadQuestController(Quest quest) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(QuietQuestMain.class.getResource(FxmlFile.SHOW_QUEST));
@@ -157,11 +242,15 @@ public class MainController extends BaseController {
             throw new RuntimeException(e);
         }
     }
-    public void loadOnLogout(ActionEvent event) throws IOException, SQLException {
+
+    /**
+     * Loads the login view based on string in {@link FxmlFile}.
+     */
+	public void loadOnLogout(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(QuietQuestMain.class.getResource(FxmlFile.LOG_IN));
         Parent root = loader.load();
         LogInController logInController = loader.getController();
-        logInController.initialize(database, mqttHandler);
+		logInController.initialize(database, mqttHandler, mediaPlayer);
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm()); // adding CSS styling option

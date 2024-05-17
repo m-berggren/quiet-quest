@@ -16,7 +16,7 @@
     </ImageView>
     <AnchorPane fx:id="questlistAnchorPane" layoutX="54.0" layoutY="25.0" prefHeight="550.0" prefWidth="370.0" style="-fx-background-color: #fff; -fx-background-radius: 8;" AnchorPane.leftAnchor="54.0" AnchorPane.topAnchor="25.0">
         <children>
-            <Button fx:id="deleteButton" layoutX="204.0" layoutY="324.0" mnemonicParsing="false" onAction="#onDeleteQuest" prefHeight="80.0" prefWidth="145.0" style="-fx-background-color: #57CC99; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="DELETE" AnchorPane.leftAnchor="204.0" AnchorPane.topAnchor="324.0">
+            <Button fx:id="deleteButton" layoutX="204.0" layoutY="324.0" mnemonicParsing="false" onAction="#onDeleteQuest" prefHeight="80.0" prefWidth="145.0" styleClass="general-button" text="DELETE" AnchorPane.leftAnchor="204.0" AnchorPane.topAnchor="324.0">
                 <font>
                     <Font name="American Typewriter" size="24.0" />
                 </font>
@@ -27,17 +27,17 @@
                 </font>
             </Label>
             <ListView fx:id="questListView" layoutX="20.0" layoutY="57.0" onEditStart="#showSelectedQuest" prefHeight="236.0" prefWidth="329.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="70.0" />
-            <Button fx:id="goToQuestButton" layoutX="20.0" layoutY="324.0" mnemonicParsing="false" onAction="#onGoToQuestClick" prefHeight="80.0" prefWidth="145.0" style="-fx-background-color: #57CC99; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="GO" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="324.0">
+            <Button fx:id="goToQuestButton" layoutX="20.0" layoutY="324.0" mnemonicParsing="false" onAction="#onGoToQuestClick" prefHeight="80.0" prefWidth="145.0" styleClass="general-button" text="GO" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="324.0">
                 <font>
                     <Font size="24.0" />
                 </font>
             </Button>
-            <Button fx:id="editButton" layoutX="20.0" layoutY="431.0" mnemonicParsing="false" onAction="#onEditClick" prefHeight="80.0" prefWidth="145.0" style="-fx-background-color: #57CC99; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="EDIT">
+            <Button fx:id="editButton" layoutX="20.0" layoutY="431.0" mnemonicParsing="false" onAction="#onEditClick" prefHeight="80.0" prefWidth="145.0" styleClass="general-button" text="EDIT">
                 <font>
                     <Font name="American Typewriter" size="24.0" />
                 </font>
             </Button>
-            <Button fx:id="saveButton" disable="true" layoutX="204.0" layoutY="431.0" mnemonicParsing="false" onAction="#onSaveButtonClick" prefHeight="80.0" prefWidth="145.0" style="-fx-background-color: #57CC99; -fx-background-radius: 8; -fx-text-fill: #22577A;" text="SAVE">
+            <Button fx:id="saveButton" disable="true" layoutX="204.0" layoutY="431.0" mnemonicParsing="false" onAction="#onSaveButtonClick" prefHeight="80.0" prefWidth="145.0" styleClass="general-button" text="SAVE">
                 <font>
                     <Font name="American Typewriter" size="24.0" />
                 </font>
@@ -67,12 +67,15 @@
                 </font>
             </TextField>
             <TextArea fx:id="descriptionField" editable="false" layoutX="20.0" layoutY="163.0" prefHeight="100.0" promptText="Add description (optional)" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" />
-            <AnchorPane fx:id="taskAnchorPane" layoutY="303.0" prefHeight="210.0" prefWidth="370.0" style="-fx-background-color: #ffffff;" visible="false" AnchorPane.bottomAnchor="11.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="305.0">
+            <AnchorPane fx:id="taskAnchorPane" layoutY="303.0" prefHeight="210.0" prefWidth="370.0" style="-fx-background-color: #ffffff;" AnchorPane.bottomAnchor="11.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="305.0">
                 <children>
-                    <Button fx:id="deleteTask" layoutX="413.0" layoutY="10.0" mnemonicParsing="false" onAction="#onDeleteTask" text="Delete" />
-                    <TextField fx:id="newTaskText" layoutX="20.0" layoutY="184.0" prefHeight="26.0" prefWidth="378.0" />
-                    <Button fx:id="addTask" layoutX="419.0" layoutY="184.0" mnemonicParsing="false" onAction="#onAddTask" text="Add" />
-                    <ListView fx:id="taskListView" layoutX="20.0" layoutY="58.0" prefHeight="152.0" prefWidth="378.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="81.0" AnchorPane.topAnchor="10.0" />
+                    <Button fx:id="deleteTask" layoutX="382.0" layoutY="10.0" mnemonicParsing="false" onAction="#onDeleteTask" prefHeight="26.0" prefWidth="85.0" styleClass="general-button" text="Delete">
+                  <font>
+                     <Font size="10.0" />
+                  </font></Button>
+                    <TextField fx:id="newTaskText" layoutX="20.0" layoutY="184.0" prefHeight="26.0" prefWidth="359.0" />
+                    <Button fx:id="addTask" layoutX="382.0" layoutY="184.0" mnemonicParsing="false" onAction="#onAddTask" prefHeight="26.0" prefWidth="85.0" styleClass="general-button" text="Add" />
+                    <ListView fx:id="taskListView" layoutX="20.0" layoutY="58.0" prefHeight="152.0" prefWidth="359.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="10.0" />
                 </children>
             </AnchorPane>
             <AnchorPane fx:id="pomodoroAnchorPane" layoutY="312.0" prefHeight="120.0" prefWidth="370.0" visible="false" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="305.0">
@@ -97,4 +100,3 @@
         </children>
     </AnchorPane>
 </AnchorPane>
-

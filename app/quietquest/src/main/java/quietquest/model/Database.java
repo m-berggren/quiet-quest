@@ -65,15 +65,16 @@ public class Database {
      */
     public void initialize() throws SQLException {
         connect();
-        readSqlFile();
+        readSqlFile("/quietquest.sql");
+        readSqlFile("/demodata.sql");
     }
 
     /**
      * Reads SQL statements from a file and executes them. The file, 'quietquest.sql', is located in the resources
      * directory. All commands are combined into a single string and executed os one batch.
      */
-    private void readSqlFile() throws SQLException {
-        InputStream inputStream = getClass().getResourceAsStream("/quietquest.sql");
+    private void readSqlFile(String filePath) throws SQLException {
+        InputStream inputStream = getClass().getResourceAsStream(filePath);
         if (inputStream == null) {
             throw new RuntimeException("Failed to load SQL file.");
         }
@@ -168,9 +169,8 @@ public class Database {
                     title, 
                     detail, 
                     start_time, 
-                    complete_time, 
-                    box_open_times
-                ) VALUES (?, ?, ?, ?, ?, ?, ?) 
+                    complete_time
+                ) VALUES (?, ?, ?, ?, ?, ?) 
                 RETURNING id;
                 """;
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {

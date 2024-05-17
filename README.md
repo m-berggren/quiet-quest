@@ -117,7 +117,7 @@ Restarting or turning off the WIO Terminal disconnects it from WiFi and the MQTT
 1. Open Docker Desktop
 2. Run the Quiet Quest application via the terminal:
     - cd into the _app/quietquest_ directory
-    - Enter _/gradlew fatJar_
+    - Enter _./gradlew fatJar_
     - Enter _java -jar build/libs/quietquest-1.0-SNAPSHOT-fat.jar_
 
 For a walkthrough of how to use the application, please watch the video summary in the Wiki.

@@ -87,28 +87,6 @@ _EER model of database_
 ![System Design](https://git.chalmers.se/courses/dit113/2024/group-12/quiet-quest/-/wikis/uploads/891eb6c9b146f735768f63d7cc882bcc/System_Architecture-Quiet_Quest_1.0.drawio.png)
 _System Architecture_
 
-# How To Use
-## Wio Terminal Usage
-To power on the Wio Terminal, first ensure that it is conneced to a power source via a USB-C cable, then flick the power switch found on the left side of the terminal. Once powered on, the Wio Terminal screen will light up and show text about WiFi connectivity, MQTT connectivity, and sensor information. There is no actual information displayed until both WiFi and MQTT broker connection have been established. Once both WiFi and MQTT connection are established, all sensor input information will appear on the LCD screen of the Wio Terminal. Real-time MQTT connection and sensor information is displayed on the Quest page in the QuietQuest application as well.
-
-## Sensor Ranges
-While all connectivity is established and a quest is running, the following ranges are used to determine phone-collection attempts. The Wio Terminal alerts the user via various sounds and LED light outputs if any of the sensor ranges are entered.
-
-### Grove Ultrasonic Ranger
-The sensor is located at the front of the box, therefore is measures objects' distance that are placed in front of the box. The user is said to be too close to the box if an object is detected within 15 cm of the sensor. The user is considered to be slightly close if there is an object detected within 50 cm of the sensor. If the measured distance is more than 50 cm, the user is considered to be far enough from the box.
-
-### Grove Light Sensor v1.2
-The box is considered to be open once the light value inside the box exceeds 15 cm.
-
-## Establish Wifi Connection
-Connection to WiFi is necessary for using the Wio Terminal. To establish WiFi connectivity, the correct WiFi credentials (SSID and password) must be updated in the credentials.cpp file.
-
-## Establish MQTT Connectivity
-MQTT connection is crucial for bidirectionally transmitting data between the Wio Terminal and the QuietQuest application. To establish connectivity, the Wio Terminal must be powered on and the QuietQuest application must be running. On the Quest page inside the application, once the START button is clicked, the Wio Terminal automatically connects to the MQTT broker. Once the COMPLETE button is clicked (indicating quest completion), the Wio Terminal automatically disconnects from the MQTT broker.
-
-## Restarting and Powering Off the Wio Terminal
-To restart the Wio Terminal, flick the power switch quickly towards the right. To power off the Wio Terminal, fully flick the power switch towards the left. Both restarting and powering off disconnects from WiFi and the MQTT broker.
-
 # Team
 | ![Julia](https://git.chalmers.se/courses/dit113/2024/group-12/quiet-quest/-/wikis/uploads/d1d7dc1a2d40aab2a0f404f12d61a51c/julia-colored.png) | ![Lian](https://git.chalmers.se/courses/dit113/2024/group-12/quiet-quest/-/wikis/uploads/7a9d076e4b6ae470d153f80fe05b2e78/lian-colored.png) | ![Marcus](https://git.chalmers.se/courses/dit113/2024/group-12/quiet-quest/-/wikis/uploads/c1480a771c01b8b9eb96ec278b2069dc/marcus-colored.png) | ![Tanya](https://git.chalmers.se/courses/dit113/2024/group-12/quiet-quest/-/wikis/uploads/d704828e4d7e3731a14fdad1eab3705c/tanya-colored.png) | ![Emma](https://git.chalmers.se/courses/dit113/2024/group-12/quiet-quest/-/wikis/uploads/34c3469451982ba86e6c2c0ff698caec/emma-colored_.png) |
 | ------ | ------ | ------ | ------ | ------ |

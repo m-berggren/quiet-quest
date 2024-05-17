@@ -12,8 +12,8 @@ To be able to save user data we have set up a database with **PostgreSQL**, usin
 
 To ensure a stable and consistent build, we use **Gradle** for automated build and have incorporated a **CI Pipeline**. 
 
-# Getting Started
-## Installation
+## Getting Started
+### Installation
 - [Arduino IDE](https://www.arduino.cc/en/software)
 - Your IDE of choice for Java projects (we use [intelliJ](https://www.jetbrains.com/idea/) and [VSCode](https://code.visualstudio.com/))
 - JavaFX SDK | [How to install and setup for intelliJ](https://www.youtube.com/watch?v=Ope4icw6bVk) (Bro Code, YouTube)
@@ -30,16 +30,16 @@ To ensure a stable and consistent build, we use **Gradle** for automated build a
         - Enter ‘./gradlew run’ (MacOS)  or ‘gradlew run’ (Windows)
 
 
-## Libraries
+### Libraries
 
-### External download and installation:
+**External download and installation:**
 - [Ultrasonic Ranger Sensor](https://github.com/Seeed-Studio/Seeed_Arduino_UltrasonicRanger) - v1.0.3 by Seed Studio
 - [ChainableLED](https://github.com/pjpmarques/ChainableLED) - v1.3 by pjpmarques
 - [Seeed Arduino LCD](https://github.com/Seeed-Studio/Seeed_Arduino_LCD) - v2.2.6 by Seeed Studio
     - note: fork from TFT_eSPI
 - [Basic Color RGB Control](https://github.com/1ux/LED_RGB_Control)
 
-### Internal installation through Ardunio IDE:
+**Internal installation through Ardunio IDE:**
 - [Adafruit_ZeroDMA](https://github.com/adafruit/Adafruit_NeoMatrix_ZeroDMA) - v1.04 by Adafruit <br>
     **Dependencies:** installed by IDE
     | Library                      | Version | 
@@ -61,7 +61,7 @@ To ensure a stable and consistent build, we use **Gradle** for automated build a
     
 - [PubSubClient](https://github.com/knolleary/pubsubclient) - v2.8 by Nick O'Leary
 
-## Wio Terminal
+### Wio Terminal
 Follow the pinout diagrams below when connecting the sensors to the mictrocontroller. 
 
 ![Wio Terminal Pinout Diagrams](https://git.chalmers.se/courses/dit113/2024/group-12/quiet-quest/-/raw/main/docs/wio_terminal_pinout.png?ref_type=heads)
@@ -80,14 +80,14 @@ Follow the pinout diagrams below when connecting the sensors to the mictrocontro
         - Red cable into pin 4, 5V
 
 
-# System Design
-![EER Model](docs/db_entity_relations_diagram.png)
-_EER model of database_
+## System Design
+A PostgreSQL database, set up with Docker, is used for storing user and quest data. See the tables and relationships below.     
+![EER Model](docs/db_tables.png)
 
+The Quiet Quest system is divided in two main subsystems: Wio Terminal together with Grove sensors, and a desktop application. These subsystems are connected via an MQTT broker, using HiveMQ. Communication between the subsystems and the MQTT broker is implemented by using the Publish-Subscribe architectural pattern. 
 ![System Design](https://git.chalmers.se/courses/dit113/2024/group-12/quiet-quest/-/wikis/uploads/891eb6c9b146f735768f63d7cc882bcc/System_Architecture-Quiet_Quest_1.0.drawio.png)
-_System Architecture_
 
-# Team
+## Team
 | ![Julia](https://git.chalmers.se/courses/dit113/2024/group-12/quiet-quest/-/wikis/uploads/d1d7dc1a2d40aab2a0f404f12d61a51c/julia-colored.png) | ![Lian](https://git.chalmers.se/courses/dit113/2024/group-12/quiet-quest/-/wikis/uploads/7a9d076e4b6ae470d153f80fe05b2e78/lian-colored.png) | ![Marcus](https://git.chalmers.se/courses/dit113/2024/group-12/quiet-quest/-/wikis/uploads/c1480a771c01b8b9eb96ec278b2069dc/marcus-colored.png) | ![Tanya](https://git.chalmers.se/courses/dit113/2024/group-12/quiet-quest/-/wikis/uploads/d704828e4d7e3731a14fdad1eab3705c/tanya-colored.png) | ![Emma](https://git.chalmers.se/courses/dit113/2024/group-12/quiet-quest/-/wikis/uploads/34c3469451982ba86e6c2c0ff698caec/emma-colored_.png) |
 | ------ | ------ | ------ | ------ | ------ |
 | Julia McCall | Lian Shi | Marcus Berggren | Tanya Nordh | Emma Camén |

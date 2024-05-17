@@ -6,13 +6,11 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Slider?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-
 <?import javafx.scene.text.Font?>
+
 <BorderPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="760.0" prefWidth="1510.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="quietquest.controller.MainController">
     <stylesheets>
         <URL value="@/style.css" />
@@ -39,7 +37,6 @@
                             </font></Button>
                     </children>
                 </HBox>
-                <Slider fx:id="volumeSlider" value="100.0" />
                   <ToggleButton fx:id="homeButton" layoutY="140.0" mnemonicParsing="false" onAction="#onHomeButtonClick" prefHeight="60.0" prefWidth="200.0" styleClass="side-menu-button" text="Home" />
                   <ToggleButton fx:id="createQuestButton" layoutY="200.0" mnemonicParsing="false" onAction="#onCreateQuestButtonClick" prefHeight="60.0" prefWidth="200.0" styleClass="side-menu-button" text="Create Quest">
             </ToggleButton>

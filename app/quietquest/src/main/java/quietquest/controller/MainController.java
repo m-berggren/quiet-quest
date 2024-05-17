@@ -54,8 +54,6 @@ public class MainController extends BaseController {
     private Button stopButton;
     @FXML
     private VBox menuVBox;
-    @FXML
-    private Slider volumeSlider;
 
 	private MediaPlayer mediaPlayer;
     private Database database;
@@ -71,12 +69,6 @@ public class MainController extends BaseController {
         setMainController(this);
         mqttHandler.connect();
 
-        volumeSlider.valueProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                mediaPlayer.setVolume(volumeSlider.getValue() * 0.01);
-            }
-        });
     }
 
     @Override

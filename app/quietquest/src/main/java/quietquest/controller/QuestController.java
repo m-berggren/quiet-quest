@@ -84,7 +84,7 @@ public class QuestController extends BaseController implements UIUpdater, Pomodo
 		System.out.println(quest.hashCode());
 
 		// Retrieve the PomodoroTimer if the current quest has one
-		if (currentQuest.getActivities() != null) {
+		if (currentQuest.getActivities() != null && !currentQuest.getActivities().isEmpty()) {
 			Activity activity = currentQuest.getActivities().getFirst();
 			if (activity instanceof PomodoroTimer) {
 				pomodoroTimer = (PomodoroTimer) activity;

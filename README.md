@@ -87,11 +87,17 @@ A PostgreSQL database, set up with Docker, is used for storing user and quest da
 The Quiet Quest system is divided in two main subsystems: Wio Terminal together with Grove sensors, and a desktop application. These subsystems are connected via an MQTT broker, using HiveMQ. Communication between the subsystems and the MQTT broker is implemented by using the Publish-Subscribe architectural pattern. 
 ![System Design](https://git.chalmers.se/courses/dit113/2024/group-12/quiet-quest/-/wikis/uploads/891eb6c9b146f735768f63d7cc882bcc/System_Architecture-Quiet_Quest_1.0.drawio.png)
 
+## Acknowledgements
+The Quiet Quest system is our project for the course 'DIT113 Mini Project: System Development' at the University of Gothenburg during the spring semester 2024. Thank you to the department of Computer Science and Engineering for providing hardware and theory.
+
+Thank you to the teaching assistants Omid Khodaparast and Michael König for their invaluable feedback and guidance throughout the project. 
+
 ## Team
 | ![Julia](https://git.chalmers.se/courses/dit113/2024/group-12/quiet-quest/-/wikis/uploads/d1d7dc1a2d40aab2a0f404f12d61a51c/julia-colored.png) | ![Lian](https://git.chalmers.se/courses/dit113/2024/group-12/quiet-quest/-/wikis/uploads/7a9d076e4b6ae470d153f80fe05b2e78/lian-colored.png) | ![Marcus](https://git.chalmers.se/courses/dit113/2024/group-12/quiet-quest/-/wikis/uploads/c1480a771c01b8b9eb96ec278b2069dc/marcus-colored.png) | ![Tanya](https://git.chalmers.se/courses/dit113/2024/group-12/quiet-quest/-/wikis/uploads/d704828e4d7e3731a14fdad1eab3705c/tanya-colored.png) | ![Emma](https://git.chalmers.se/courses/dit113/2024/group-12/quiet-quest/-/wikis/uploads/34c3469451982ba86e6c2c0ff698caec/emma-colored_.png) |
 | ------ | ------ | ------ | ------ | ------ |
 | Julia McCall | Lian Shi | Marcus Berggren | Tanya Nordh | Emma Camén |
 | Made significant contributions to the backend, UI development and gamification elements. | Made significant contributions to backend logic related to CI pipeline, MQTT broker and database. | Made significant contributions to code structure, especially relating to Arduino. | Made significant contributions to backend, UI development and audio. | Made significant contributions to the background music and visual artwork. |
 
+_These profile pictures were generated using the GoArt AI tool, with images of the team members as prompts._
 
 

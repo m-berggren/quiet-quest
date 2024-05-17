@@ -21,13 +21,13 @@ To ensure a stable and consistent build, we use **Gradle** for automated build a
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/)
     - Open Docker Desktop
     - In the terminal: cd into _app/docker/_
-    - Enter 'docker-compose up'
+    - Enter _docker-compose up_
 - [Gradle](https://gradle.org/install/) (do this _after_ installing and setting up Docker)
     - After installing Gradle, find _quietquest/app/quietquest/build.gradle_ in your project files in the IDE
-    - Right-click ‘build.gradle’ and choose ‘link gradle project’
+    - Right-click _build.gradle_ and choose _link gradle project_
     - Run Quiet Quest from the terminal:
         - cd into _quietquest/app/quietquest/_
-        - Enter ‘./gradlew run’ (MacOS)  or ‘gradlew run’ (Windows)
+        - Enter _./gradlew run_ (MacOS)  or _gradlew run_ (Windows)
 
 
 ### Libraries
@@ -92,12 +92,12 @@ The box device measures the distance to objects directly in front of it using th
 If the box is opened during an ongoing quest, the **Grove Light Sensor v1.2** will read a light value over 15 and report this to the system, and the interruption will be noted in the ongoing quest's information.
 
 ### Establish WiFi Connection
-1. Open wio/quietquest/src/credentials/credentials.cpp
+1. Open _wio/quietquest/src/credentials/credentials.cpp_
 2. Enter your WiFi SSID within the quotation marks
 3. Enter your WiFi password within the quotation marks
 4. Open Arduino IDE
     - Go to File/Open...
-    - Open quiet-quest/wio/quietquest/quietquest.ino
+    - Open _quiet-quest/wio/quietquest/quietquest.ino_
     - Connect the WIO terminal to your computer with a USB-C cable
     - Verify
     - Upload
@@ -114,7 +114,13 @@ Restarting or turning off the WIO Terminal disconnects it from WiFi and the MQTT
 **Turn off:** Fully flick the power switch towards the left.
 
 ### Desktop Application
-Make sure Docker Desktop is running in the background when you open and run the Quiet Quest application. For a walkthrough of how to use the application, please watch the video summary in the Wiki.
+1. Open Docker Desktop
+2. Run the Quiet Quest application via the terminal:
+    - cd into the _app/quietquest_ directory
+    - Enter _/gradlew fatJar_
+    - Enter _java -jar build/libs/quietquest-1.0-SNAPSHOT-fat.jar_
+
+For a walkthrough of how to use the application, please watch the video summary in the Wiki.
 
 ## System Design
 A PostgreSQL database, set up with Docker, is used for storing user and quest data. See the tables and relationships below.     

@@ -109,12 +109,11 @@ MQTT connection is crucial for bidirectionally transmitting data between the Wio
 ## Restarting and Powering Off the Wio Terminal
 To restart the Wio Terminal, flick the power switch quickly towards the right. To power off the Wio Terminal, fully flick the power switch towards the left. Both restarting and powering off disconnects from WiFi and the MQTT broker.
 
-# Contributions
-<!---
-To be added: "Profile pictures" in the same style as the badges + links to team members' gitlab profiles + description of contributions.
--->
+# Team
 | ![Julia](https://git.chalmers.se/courses/dit113/2024/group-12/quiet-quest/-/wikis/uploads/d1d7dc1a2d40aab2a0f404f12d61a51c/julia-colored.png) | ![Lian](https://git.chalmers.se/courses/dit113/2024/group-12/quiet-quest/-/wikis/uploads/7a9d076e4b6ae470d153f80fe05b2e78/lian-colored.png) | ![Marcus](https://git.chalmers.se/courses/dit113/2024/group-12/quiet-quest/-/wikis/uploads/c1480a771c01b8b9eb96ec278b2069dc/marcus-colored.png) | ![Tanya](https://git.chalmers.se/courses/dit113/2024/group-12/quiet-quest/-/wikis/uploads/d704828e4d7e3731a14fdad1eab3705c/tanya-colored.png) | ![Emma](https://git.chalmers.se/courses/dit113/2024/group-12/quiet-quest/-/wikis/uploads/34c3469451982ba86e6c2c0ff698caec/emma-colored_.png) |
 | ------ | ------ | ------ | ------ | ------ |
 | Julia McCall | Lian Shi | Marcus Berggren | Tanya Nordh | Emma Camén |
+| Made significant contributions to the backend, UI development and gamification elements. | Made significant contributions to backend logic related to CI pipeline, MQTT broker and database. | Made significant contributions to code structure, especially relating to Arduino. | Made significant contributions to backend, UI development and audio. | Made significant contributions to the background music and visual artwork. |
+
 
 

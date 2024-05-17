@@ -30,8 +30,6 @@ public class CreateQuestController extends BaseController implements Initializab
     @FXML
     private Button clearButton;
     @FXML
-    private Button goToQuestsButton;
-    @FXML
     private TextField titleField;
     @FXML
     private TextArea descriptionField;
@@ -236,7 +234,6 @@ public class CreateQuestController extends BaseController implements Initializab
         // Disable other fields and buttons
         saveQuestButton.setDisable(true);
         clearButton.setDisable(true);
-        goToQuestsButton.setDisable(true);
         titleField.setDisable(true);
         descriptionField.setDisable(true);
         taskField.setDisable(true);
@@ -262,7 +259,6 @@ public class CreateQuestController extends BaseController implements Initializab
         // enable other fields and buttons
         saveQuestButton.setDisable(false);
         clearButton.setDisable(false);
-        goToQuestsButton.setDisable(false);
         titleField.setDisable(false);
         descriptionField.setDisable(false);
         taskField.setDisable(false);
@@ -283,12 +279,4 @@ public class CreateQuestController extends BaseController implements Initializab
         activityObservableList.clear();
     }
 
-    /**
-     * Go to "Quest List" by clicking "List" button.
-     */
-    public void onGoToQuests() {
-        activityObservableList.clear();
-        //quietQuestFacade.clearActivities();
-        showQuestList();
-    }
 }

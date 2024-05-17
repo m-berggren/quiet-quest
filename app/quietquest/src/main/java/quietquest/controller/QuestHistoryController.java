@@ -29,9 +29,6 @@ public class QuestHistoryController extends BaseController {
 	private AnchorPane questlistAnchorPane;
 	@FXML
 	private Label titleLabel;
-
-	@FXML
-	private Button goToStatisticsButton;
 	@FXML
 	private AnchorPane viewInfoAnchorPane;
 	@FXML
@@ -129,15 +126,6 @@ public class QuestHistoryController extends BaseController {
 					updateQuestDetails(newValue);
 				}
 			}
-		});
-	}
-
-	/**
-	 * Handles the event when the statistics button is clicked.
-	 */
-	public void onStatisticsClick() {
-		goToStatisticsButton.setOnAction(event -> {
-			showStatistics();
 		});
 	}
 

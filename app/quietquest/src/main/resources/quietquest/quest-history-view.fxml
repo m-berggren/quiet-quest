@@ -26,11 +26,6 @@
                </font>
             </Label>
             <ListView fx:id="quesHistoryListView" layoutX="20.0" layoutY="71.2" prefHeight="470.0" prefWidth="398.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="17.0" AnchorPane.topAnchor="71.0" />
-             <Button fx:id="goToStatisticsButton" layoutX="270.0" layoutY="554.0" mnemonicParsing="false" onAction="#onStatisticsClick" prefHeight="47.0" prefWidth="148.0" styleClass="general-button" text="Statistics" AnchorPane.leftAnchor="270.0" AnchorPane.topAnchor="554.0">
-               <font>
-                  <Font size="24.0" />
-               </font>
-            </Button>
          </children>
       </AnchorPane>
        <AnchorPane fx:id="viewInfoAnchorPane" layoutX="517.0" layoutY="72.0" prefHeight="571.0" prefWidth="447.0" style="-fx-background-color: #fff; -fx-background-radius: 10;" AnchorPane.leftAnchor="517.0" AnchorPane.topAnchor="72.0">

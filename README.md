@@ -1,6 +1,6 @@
 # QUIET QUEST
 
-The Quiet Quest system is a productivity tool consisting of two main components: a box device fitted with a microcontroller and sensors, and a desktop application for task management. The box device is used to store the user’s mobile phone while they perform “quests” that they have specified in the application. On approaching or opening the box during an ongoing quest, it will alert the user with audio and light signals as a reminder that they are on a Quiet Quest. 
+The Quiet Quest system is a productivity tool consisting of two main components: a box device fitted with a microcontroller and sensors, and a desktop application for task management. The box device is used to store the user’s mobile phone while they focus on their tasks, which we call Quests, that they have specified in the application. On approaching or opening the box during an ongoing quest, it will alert the user with audio and light signals as a reminder that they are on a Quiet Quest. 
 
 This is the perfect project to try out for anyone who wants to learn about using microcontrollers, sensors and connectivity between hardware components and a software application. The project also makes use of a number of tools and concepts worth getting familiar with.
 
@@ -87,9 +87,9 @@ Follow the pinout diagrams below when connecting the sensors to the mictrocontro
 The Wio Terminal's screen lights up and displays labels for WiFi and MQTT connection, and sensors. Once Wifi and MQTT connection is established, confirmation of this will be displayed as well as data from the sensors. This real-time information is also displayed on the Quest Page of the desktop application.
 
 ### Box Device
-The box device measures the distance to objects directly in front of it using the **Grove Ultrasonic Ranger**. This is used to determine if attempts are made to collect the phone during an ongoing quest. If an object (or person) is detected within certain ranges (0-15 cm, 16-30 cm or 31-50 cm) the box device will emit various audio and light signals to alert the user that it is not time to open the box yet.
+The box device measures the distance to objects directly in front of it using the **Grove Ultrasonic Ranger**. This is used to determine if attempts are made to collect the phone during an ongoing quest. If an object or person is detected within a certain range, the box device will emit various audio and light signals to alert the user that it is not time to open the box yet. Different signals are emitted depending on which of three distances an object is detected at: 0-15 cm, 16-30 cm or 31-50 cm. 
 
-If the box is opened during an ongoing quest, the **Grove Light Sensor v1.2** will read a light value over 15 and report this to the system, and the interruption will be noted in the ongoing quest's information.
+If the box is opened during an ongoing quest, the **Grove Light Sensor v1.2** will read a light value over 15 and report this to the system. The interruption will be noted in the ongoing quest's information and the **Grove - Chainable RGB Led v2.0** will shine red.
 
 ### Establish WiFi Connection
 1. Open _wio/quietquest/src/credentials/credentials.cpp_
@@ -138,7 +138,7 @@ Thank you to the teaching assistants Omid Khodaparast and Michael König for the
 | ![Julia](https://git.chalmers.se/courses/dit113/2024/group-12/quiet-quest/-/wikis/uploads/d1d7dc1a2d40aab2a0f404f12d61a51c/julia-colored.png) | ![Lian](https://git.chalmers.se/courses/dit113/2024/group-12/quiet-quest/-/wikis/uploads/7a9d076e4b6ae470d153f80fe05b2e78/lian-colored.png) | ![Marcus](https://git.chalmers.se/courses/dit113/2024/group-12/quiet-quest/-/wikis/uploads/c1480a771c01b8b9eb96ec278b2069dc/marcus-colored.png) | ![Tanya](https://git.chalmers.se/courses/dit113/2024/group-12/quiet-quest/-/wikis/uploads/d704828e4d7e3731a14fdad1eab3705c/tanya-colored.png) | ![Emma](https://git.chalmers.se/courses/dit113/2024/group-12/quiet-quest/-/wikis/uploads/34c3469451982ba86e6c2c0ff698caec/emma-colored_.png) |
 | ------ | ------ | ------ | ------ | ------ |
 | Julia McCall | Lian Shi | Marcus Berggren | Tanya Nordh | Emma Camén |
-| Made significant contributions to the backend, UI development and gamification elements. | Made significant contributions to backend logic related to CI pipeline, MQTT broker and database. | Made significant contributions to code structure, especially relating to Arduino. | Made significant contributions to backend, UI development and audio. | Made significant contributions to the background music and visual artwork. |
+| Made significant contributions to the backend, UI development and gamification elements. | Made significant contributions to backend logic related to CI pipeline, MQTT broker and database. | Made significant contributions to code structure, especially relating to Arduino. | Made significant contributions to backend, UI development and audio. | Made significant contributions to the UI development, background music and visual artwork. |
 
 _These profile pictures were generated using the GoArt AI tool, with images of the team members as prompts._
 

@@ -6,16 +6,32 @@ plugins {
   id 'org.beryx.jlink' version '3.0.1'
 }
 
-jar {
-  manifest {
-    attributes 'Main-Class': 'quietquest.QuietQuestMain'
+java {
+  toolchain {
+    languageVersion.set(JavaLanguageVersion.of(21))
   }
 }
 
-java {
-  toolchain{
-    languageVersion.set(JavaLanguageVersion.of(21))
+jar {
+  manifest {
+    attributes(
+            'Main-Class': 'quietquest.Launcher'
+    )
   }
+}
+
+task fatJar(type: Jar) {
+  archiveClassifier.set('fat')
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+  manifest {
+    attributes(
+            'Main-Class': 'quietquest.Launcher'
+    )
+  }
+  from {
+    configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+  }
+  with jar
 }
 
 group 'quiet-quest'
@@ -53,7 +69,8 @@ dependencies {
 }
 
 test {
-useJUnitPlatform()}
+  useJUnitPlatform()
+}
 
 jlink {
   imageZip = project.file("${buildDir}/distributions/app-${javafx.platform.classifier}.zip")

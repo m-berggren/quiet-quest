@@ -1,4 +1,4 @@
-# QUIET QUEST
+![Quiet Quest header image](https://git.chalmers.se/courses/dit113/2024/group-12/quiet-quest/-/wikis/uploads/4e0d18132c66093e58555dc0ece7c501/header.png)
 
 The Quiet Quest system is a productivity tool consisting of two main components: a box device fitted with a microcontroller and sensors, and a desktop application for task management. The box device is used to store the user’s mobile phone while they focus on their tasks, which we call Quests, that they have specified in the application. On approaching or opening the box during an ongoing quest, it will alert the user with audio and light signals as a reminder that they are on a Quiet Quest. 
 

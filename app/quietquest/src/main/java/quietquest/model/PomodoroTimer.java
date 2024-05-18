@@ -17,7 +17,7 @@ public class PomodoroTimer implements Activity {
 	private final int breakTime;
 	private final int interval;
 	private ArrayList<PomodoroUIUpdater> observers;
-	private final int MILLISECONDS = 1_000; // Used to convert minutes to milliseconds. 60_000 is the needed value.
+	private final int MILLISECONDS = 60_000; // Used to convert minutes to milliseconds. 60_000 is the needed value.
 
 	// Ideas from https://egandunning.com/projects/timemanagement-timer.html
 	// and https://www.geeksforgeeks.org/java-util-timer-class-java/
@@ -27,6 +27,10 @@ public class PomodoroTimer implements Activity {
 	/**
 	 * Used for creating a container with the necessary information to pass into database. Not intended to use within
 	 * application otherwise.
+	 *
+	 * @param focusTime the focus time in minutes.
+	 * @param breakTime the break time in minutes.
+	 * @param interval the number of intervals.
 	 */
 	public PomodoroTimer(int focusTime, int breakTime, int interval) {
 		this.timer = new Timer();
@@ -37,7 +41,12 @@ public class PomodoroTimer implements Activity {
 	}
 
 	/**
-	 * Used to create full pomodoro_timer object when querying database,
+	 * Used to create full pomodoro_timer object when querying database.
+	 *
+	 * @param questId the quest ID.
+	 * @param focusTime the focus time in minutes.
+	 * @param breakTime the break time in minutes.
+	 * @param interval the number of intervals.
 	 */
 	public PomodoroTimer(int questId, int focusTime, int breakTime, int interval) {
 		this.timer = new Timer();
@@ -67,26 +76,37 @@ public class PomodoroTimer implements Activity {
 	}
 
 	// ==============================* OBSERVER MANAGEMENT *================================
+	/* The idea is that since each new entry to another view in the application will create a new stage (the
+	 * PomodoroTimer cares about the QuestController and its update method), it should store an observer with every new
+	 * creation and add it to the list of controllers. Similar with removal of observer, when the stage is hidden it
+	 * gets removed from the list of observers, so it no longer notifies the update method in that specific controller.
+	 */
 
+	/**
+	 * Adds an observer to the list of observers.
+	 *
+	 * @param observer being the PomodoroUIUpdater implemented in QuestController.
+	 */
 	public void addObserver(PomodoroUIUpdater observer) {
-		synchronized (observers) {
-			if (!observers.contains(observer)) {
-				observers.add(observer);
-			}
+		if (!observers.contains(observer)) {
+			observers.add(observer);
 		}
 	}
 
+	/**
+	 * Removes an observer from the list of observers.
+	 *
+	 * @param observer the observer to remove.
+	 */
 	public void removeObserver(PomodoroUIUpdater observer) {
-		synchronized (observers) {
-			observers.remove(observer);
-		}
+		observers.remove(observer);
 	}
 
 	// ==============================* INTERFACE METHODS *==================================
 
 	/**
 	 * Handles the start operation of the pomodoroTimer. Needs to start with 0 as the value increments on each
-	 * subsequent call.
+	 * subsequent call. Additional information of how the PomodoroTimer runs at {@link #runTimer(int)}.
 	 */
 	public void start() {
 		if (timer != null) {
@@ -116,34 +136,34 @@ public class PomodoroTimer implements Activity {
 	/**
 	 * Notifies the observer with a specific event message.
 	 *
-	 * <p>If and observer is set the method uses {@link Platform#runLater(Runnable)} to make sure the update is done on
-	 * a JavaFX thread.</p>
+	 * If and observer is set the method uses {@link Platform#runLater(Runnable)} to make sure the update is done on
+	 * a JavaFX thread.
 	 *
 	 * @param event the event message passed to observer.
 	 */
 	private void notifyPomodoroObserver(String event) {
-		synchronized (observers) {
-			for (PomodoroUIUpdater observer : observers) {
-				// Schedule update so that it runs on a JavaFX thread instead of the Timer
-				Platform.runLater(() -> {
-					observer.update(event);
-				});
-			}
+		for (PomodoroUIUpdater observer : observers) {
+			// Schedule update so that it runs on a JavaFX thread instead of the Timer
+			Platform.runLater(() -> {
+				observer.update(event);
+			});
 		}
 	}
 
 	/**
 	 * Recursively schedules focus and break intervals until the specified number of intervals is reached.
+	 * The method operates like this:
 	 *
-	 * <p>It starts off by notifying the controller {@link quietquest.controller.QuestController} that it should
-	 * publish to the wio terminal. It then creates a TimerTask through an anonymous class where we only care about
-	 * creating a one-time-use class with one override on run() method. It checks if currentInterval interval is smaller
-	 * than interval -1, meaning that it should not run a break after the last focusTime has run.
-	 * {@link #startBreakTime(int)} notifies to controller that break has started and after breakTime is over creates
-	 * a new focus session but now with currentInterval + 1.</p>
+	 * - First, it checks if the current interval has reached the total number of intervals. If true, it
+	 *   calls {@link #end()} to stop the timer and return.
+	 * - Next, it calls {@link #startFocusTime()} to notify observers that the focus time has started.
+	 * - A {@link TimerTask} is then scheduled for the focus period. When the focus period ends, the task checks
+	 *   if more intervals remain. If more intervals remain, it calls {@link #startBreakTime(int)} to begin the break
+	 *   period.
+	 * - If the current interval is the last one, it skips the break and calls {@link #end()} to finish the timer.
 	 *
-	 * <p>Once runTimer's base case is true for one of the recursive calls in {@link #startBreakTime(int)}, they will start
-	 * returning until all is ended and PomodoroTimer is finished.</p>
+	 * Once runTimer's base case is true for one of the recursive calls in {@link #startBreakTime(int)}, they will start
+	 * returning until all is ended and PomodoroTimer is finished.
 	 *
 	 * @param currentInterval int that starts off at 0 and increments by 1 on each call.
 	 */
@@ -153,8 +173,10 @@ public class PomodoroTimer implements Activity {
 			return;
 		}
 
+		// Notifies the observer, meaning update() method in QuestController runs on all stored observers
 		startFocusTime();
-		//
+
+		// Use of anonymous class for a one-time-use to override run() method
 		TimerTask focusTask = new TimerTask() {
 			@Override
 			public void run() {
@@ -179,14 +201,13 @@ public class PomodoroTimer implements Activity {
 	 */
 	private void startFocusTime() {
 		notifyPomodoroObserver(FOCUS_TIME_START);
-		System.out.println("Starting another task");
 	}
 
 	/**
 	 * Starts the break time after a focus time ends.
 	 *
-	 * <p>This method notifies the observer that the break time has started, schedules a {@link TimerTask} for the
-	 * end of the break and will recursively call {@link #runTimer(int)} to start the next focus time.</p>
+	 * This method notifies the observer that the break time has started, schedules a {@link TimerTask} for the
+	 * end of the break and will recursively call {@link #runTimer(int)} to start the next focus time.
 	 *
 	 * @param currentInterval the current count. Increments after break time ends.
 	 */

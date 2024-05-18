@@ -38,7 +38,7 @@ public class MQTTHandler {
     public void connect() {
         client.connectWith().send().whenComplete((mqtt5ConnAck, throwable) -> {
             if (throwable == null) {
-                System.out.println("Connected to MQTT broker.");
+				System.out.println("Connected to MQTT broker."); // Not necessary but useful when tracing MQTT messages
             }
         });
     }
@@ -82,7 +82,8 @@ public class MQTTHandler {
                     case "light" -> handleLightSensorData(messageContent);
                     case "motion" -> handleMotionSensorData(messageContent);
                     case "distance" -> handleUltrasonicSensorData(messageContent);
-                    default -> System.out.println("Unknown sensor type: " + sensorType);
+					default ->
+							System.out.println("Unknown sensor type: " + sensorType); // Not necessary but useful if wrongfully set up
                 }
             });
         }
@@ -117,7 +118,7 @@ public class MQTTHandler {
                     if (throwable != null) {
                         System.err.println("Error Publishing: " + throwable.getMessage());
                     } else {
-                        System.out.println("Message Published Successfully");
+						System.out.println("Message Published Successfully"); // Not necessary but useful for tracing MQTT messages
                     }
                 });
     }

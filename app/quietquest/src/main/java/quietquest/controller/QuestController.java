@@ -56,15 +56,7 @@ public class QuestController extends BaseController implements UIUpdater, Pomodo
 	@FXML
 	private Label motivationalMessage;
 	@FXML
-	private Label focusLabel;
-	@FXML
-	private Label breakLabel;
-	@FXML
-	private Label intervalsLabel;
-	@FXML
 	private Label pomodoroStatusLabel;
-	@FXML
-	private Label intervalsLeftLabel;
 	@FXML
 	private Label startTimeLabel;
 	@FXML
@@ -81,9 +73,10 @@ public class QuestController extends BaseController implements UIUpdater, Pomodo
 
 	public void initialize(Quest quest) {
 		currentQuest = quest;
-		System.out.println(quest.hashCode());
 
-		// Retrieve the PomodoroTimer if the current quest has one
+		/* This section retrieves the PomodoroTimer from the selected Quest, if it has one, and adds the implementation
+		 * of Update to a list in that class. Every time the pomodoro then changes state it will update every observer
+		 * present in that list. */
 		if (currentQuest.getActivities() != null && !currentQuest.getActivities().isEmpty()) {
 			Activity activity = currentQuest.getActivities().getFirst();
 			if (activity instanceof PomodoroTimer) {
@@ -91,27 +84,35 @@ public class QuestController extends BaseController implements UIUpdater, Pomodo
 				pomodoroTimer.addObserver(this);
 			}
 		}
-		// Add listener to handle view closure
+		// Add listener to handle view closure properly on a JavaFX thread
 		Platform.runLater(() -> {
-			Stage stage = (Stage) titleLabel.getScene().getWindow();
+			Stage stage = (Stage) titleLabel.getScene().getWindow(); // Could be any FXML object defined here
 			stage.setOnHidden(event -> onDestroy());
 		});
-		// Set this instance as the active controller
+
+		/* Sets this instance as THE controller. It is a static object so there only exists one. Every time it updates
+		 * to be the latest QuestController opened. */
 		setActiveController(this);
 	}
 
-	private static synchronized void setActiveController(QuestController controller) {
-		if (activeController != null) {
-			System.out.println("Controller deactivated");
-			activeController.deactivate();
-		}
+	/**
+	 * Method to set the activeController. The param object will be the next updated static object. This
+	 * if important because the {@link #update(String) } checks the activeController and only allow that controller to
+	 * publish and update any data. Without this solution all observers would publish and update information.
+	 * <p>
+	 * A synchronized method was used before to battle an issue with QuestControllers all sending publish messages on an
+	 * update. With the addition of setting an activeController and after extra testing the synchronization initiated
+	 * in PomodoroTimer is not needed.
+	 *
+	 * @param controller is this QuestController.
+	 */
+	private static void setActiveController(QuestController controller) {
 		activeController = controller;
 	}
 
-	private void deactivate() {
-
-	}
-
+	/**
+	 * Called when the view is destroyed. Removes this controller as an observer from the PomodoroTimer.
+	 */
 	@FXML
 	public void onDestroy() {
 		if (pomodoroTimer != null) {
@@ -131,6 +132,8 @@ public class QuestController extends BaseController implements UIUpdater, Pomodo
 		startTimeLabel.setText("Start: " + formatTime(currentQuest.getStartTime()));
 		endTimeLabel.setText("End: " + formatTime(currentQuest.getCompleteTime()));
 		motivationalAnchorPane.setVisible(false);
+
+		// Set visibility and type labels based on the first activity type in the list
 		if (currentQuest.getActivities().isEmpty()) {
 			taskAnchorPane.setVisible(true);
 			pomodoroInfoAnchorPane.setVisible(false);
@@ -146,6 +149,7 @@ public class QuestController extends BaseController implements UIUpdater, Pomodo
 				questTypeLabel.setText("POMODORO");
 			}
 		}
+		// Handle button states based on the current quest's state
 		if (currentQuest.getId() != quietQuestFacade.getCurrentRunningQuestId() && quietQuestFacade.getCurrentRunningQuestId() != -1) {
 			startQuestButton.setDisable(true);
 			completeQuestButton.setDisable(true);
@@ -171,7 +175,6 @@ public class QuestController extends BaseController implements UIUpdater, Pomodo
 			public void changed(ObservableValue<? extends Activity> observableValue, Activity oldValue, Activity newValue) {
 				if (newValue != null) {
 					currentActivity = newValue;
-					System.out.println(currentActivity);
 				}
 			}
 		});
@@ -245,8 +248,6 @@ public class QuestController extends BaseController implements UIUpdater, Pomodo
 		Platform.runLater(() -> {
 			switch (message) {
 				case FOCUS_TIME -> {
-					System.out.println(FOCUS_TIME);
-
                     pomodoroInfoAnchorPane.setVisible(true);
                     pomodoroStatusLabel.setText("Focus time now active");
                     pomodoroStatusLabel.setTextFill(Color.color(0.6, 0, 0));
@@ -254,7 +255,6 @@ public class QuestController extends BaseController implements UIUpdater, Pomodo
 					quietQuestFacade.publishMqttMessage(TOPIC_PUB_POMODORO_INTERVAL, FOCUS_TIME);
 				}
 				case BREAK_TIME_START -> {
-					System.out.println(BREAK_TIME_START);
 
 					pomodoroStatusLabel.setText("Break time now active");
 					pomodoroStatusLabel.setTextFill(Color.color(0, 0.50, 0));
@@ -262,10 +262,8 @@ public class QuestController extends BaseController implements UIUpdater, Pomodo
 					quietQuestFacade.publishMqttMessage(TOPIC_PUB_POMODORO_INTERVAL, BREAK_TIME_START);
 				}
 				case BREAK_TIME_END -> {
-					System.out.println(BREAK_TIME_END);
 				}
 				case POMODORO_END -> {
-					System.out.println(POMODORO_END);
 
                     pomodoroInfoAnchorPane.setVisible(false);
 
@@ -300,9 +298,6 @@ public class QuestController extends BaseController implements UIUpdater, Pomodo
     public void onStartQuestClick(ActionEvent event) {
 		currentQuest.setStartTime(Timestamp.from(Instant.now()));
         startTimeLabel.setText("Start: " + currentQuest.getStartTime());
-
-		// Connects to MQTT as soon as page loads
-		System.out.println("Starts quest");
 
 		quietQuestFacade.startQuest(currentQuest, this);
 		quietQuestFacade.publishMqttMessage(TOPIC_PUB_QUEST_START, "Your quest has started");

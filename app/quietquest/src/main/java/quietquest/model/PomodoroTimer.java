@@ -106,7 +106,7 @@ public class PomodoroTimer implements Activity {
 
 	/**
 	 * Handles the start operation of the pomodoroTimer. Needs to start with 0 as the value increments on each
-	 * subsequent call.
+	 * subsequent call. Additional information of how the PomodoroTimer runs at {@link #runTimer(int)}.
 	 */
 	public void start() {
 		if (timer != null) {
@@ -135,9 +135,9 @@ public class PomodoroTimer implements Activity {
 
 	/**
 	 * Notifies the observer with a specific event message.
-	 * <p>
+	 *
 	 * If and observer is set the method uses {@link Platform#runLater(Runnable)} to make sure the update is done on
-	 * a JavaFX thread. </p>
+	 * a JavaFX thread.
 	 *
 	 * @param event the event message passed to observer.
 	 */
@@ -152,19 +152,18 @@ public class PomodoroTimer implements Activity {
 
 	/**
 	 * Recursively schedules focus and break intervals until the specified number of intervals is reached.
-	 * <p>The method operates like this:</p>
-	 * <ul>
-	 *   <li>First, it checks if the current interval has reached the total number of intervals. If true, it
-	 *   calls {@link #end()} to stop the timer and return.</li>
-	 *   <li>Next, it calls {@link #startFocusTime()} to notify observers that the focus time has started.</li>
-	 *   <li>A {@link TimerTask} is then scheduled for the focus period. When the focus period ends, the task checks
-	 *   if more intervals remain. If more intervals remain, it calls {@link #startBreakTime(int)} to begin the break
-	 *   period.</li>
-	 *   <li>If the current interval is the last one, it skips the break and calls {@link #end()} to finish the timer.</li>
-	 * </ul>
+	 * The method operates like this:
 	 *
-	 * <p>Once runTimer's base case is true for one of the recursive calls in {@link #startBreakTime(int)}, they will start
-	 * returning until all is ended and PomodoroTimer is finished.</p>
+	 * - First, it checks if the current interval has reached the total number of intervals. If true, it
+	 *   calls {@link #end()} to stop the timer and return.
+	 * - Next, it calls {@link #startFocusTime()} to notify observers that the focus time has started.
+	 * - A {@link TimerTask} is then scheduled for the focus period. When the focus period ends, the task checks
+	 *   if more intervals remain. If more intervals remain, it calls {@link #startBreakTime(int)} to begin the break
+	 *   period.
+	 * - If the current interval is the last one, it skips the break and calls {@link #end()} to finish the timer.
+	 *
+	 * Once runTimer's base case is true for one of the recursive calls in {@link #startBreakTime(int)}, they will start
+	 * returning until all is ended and PomodoroTimer is finished.
 	 *
 	 * @param currentInterval int that starts off at 0 and increments by 1 on each call.
 	 */
@@ -207,8 +206,8 @@ public class PomodoroTimer implements Activity {
 	/**
 	 * Starts the break time after a focus time ends.
 	 *
-	 * <p>This method notifies the observer that the break time has started, schedules a {@link TimerTask} for the
-	 * end of the break and will recursively call {@link #runTimer(int)} to start the next focus time.</p>
+	 * This method notifies the observer that the break time has started, schedules a {@link TimerTask} for the
+	 * end of the break and will recursively call {@link #runTimer(int)} to start the next focus time.
 	 *
 	 * @param currentInterval the current count. Increments after break time ends.
 	 */

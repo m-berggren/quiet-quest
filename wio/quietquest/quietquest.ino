@@ -38,78 +38,72 @@ void setup() {
 
 void loop() {
 
-    // Used in both if statements
-    wifiStatus = wifiConnected() ? "Yes" : "No";
-    mqttStatus = mqttConnected() ? "Yes" : "No";
-
-    if (POMODORO_BREAK) {
-        QUEST_RUNS = false;
-    }
-
     if (QUEST_RUNS) {                                                         // If Quest has been started this is true
         // ==========================* SENSORS *=========================
-        // Reading and interpreting sensor data
 
-        int motionReading = digitalRead(MOTION_PIN);                          // Motion sensor gives 0 or 1
-        int lightReading = mapToPercentage(analogRead(LIGHT_PIN));            // Maps 0-1023 light value to 0-100
-        long distanceReading = ultrasonic.MeasureInCentimeters();             // Distance reading can be 0-525cm
+        // Used in both if statements
+        wifiStatus = wifiConnected() ? "Yes" : "No";
+        mqttStatus = mqttConnected() ? "Yes" : "No";
 
-        // Buzzer: Audio alert depending on proximity
-        if (distanceReading < 16){
-            int beats[] = {1, 1};
-            shortRange.playTune(2, "X ", beats, 100);
-        } else if (distanceReading < 31) {
-            int beats[] = {1, 4};
-            midRange.playTune(2, "a ", beats, 100);
-        } else if (distanceReading < 51) {
-            int beats[] = {2, 20};
-            longRange.playTune(2, "a ", beats, 100);
-        }
-
-        // LED light
-        if (lightReading > LIGHT_VALUE_THRESHOLD) {
-            isBoxClosed = false;
-            led.setColorHSL(0, 1, 0.95, 0.1);                                     // (Red) box opened
-        } else {
-            isBoxClosed = true;
-            led.setColorHSL(0, 0.37, 1, 0.01);                                    // (Blue-green) box unopened
-        }
-
-        // ==========================* MQTT & LCD *======================
-        // Prints to serial monitor and LCD screen if interval has passed
-
-        if (isTimeToUpdate()) {
-            motionStatus = motionReading ? "Yes" : "No";
-            lightValue = lightReading;
-            distanceValue = distanceReading;
-            boxStatus = isBoxClosed ? "Yes" : "No";
-
-            // This prints to the serial monitor only
-            Serial.printf("    Wifi connected: %s\n", wifiStatus.c_str());
-            Serial.printf("    MQTT connected: %s\n", mqttStatus.c_str());
-            Serial.printf("   Motion detected: %s\n", motionStatus.c_str());
-            Serial.printf("    Light measured: %d\n", lightValue);
-            Serial.printf("Distance to object: %ld\n", distanceValue);
-            Serial.printf("     Is box closed: %s\n", boxStatus.c_str());
-            Serial.println("================================");
-
-            drawOnScreen(wifiStatus, mqttStatus, motionStatus, lightValue, distanceValue, boxStatus);
-
-            // Publishes if connection to broker exists
-            if (mqttConnected()) {
-                client.publish(TOPIC_PUB_QUEST, "1");                           // Publishes '1' if mqttConnected
-                client.publish(TOPIC_PUB_MOTION, toString(motionReading));      // Publishes '1' or '0'
-                client.publish(TOPIC_PUB_LIGHT, toString(lightReading));        // Publishes int value as String
-                client.publish(TOPIC_PUB_DISTANCE, toString(distanceReading));  // Publishes int value as String
+        if (POMODORO_BREAK) {
+            if (isTimeToUpdate()) {
+                drawOnScreen(wifiStatus, mqttStatus);
             }
-        }
-    } else if (!QUEST_RUNS){
-        if (!POMODORO_BREAK) {
-            // This is when quest is not active and there is no pomodoro break
-        }
+        } else if (!POMODORO_BREAK) {
+            // Reading and interpreting sensor data
+            int motionReading = digitalRead(MOTION_PIN);                          // Motion sensor gives 0 or 1
+            int lightReading = mapToPercentage(analogRead(LIGHT_PIN));            // Maps 0-1023 light value to 0-100
+            long distanceReading = ultrasonic.MeasureInCentimeters();             // Distance reading can be 0-525cm
 
-        if (isTimeToUpdate()) {
-            drawOnScreen(wifiStatus, mqttStatus);
+            // Buzzer: Audio alert depending on proximity
+            if (distanceReading < 16){
+                int beats[] = {1, 1};
+                shortRange.playTune(2, "X ", beats, 100);
+            } else if (distanceReading < 31) {
+                int beats[] = {1, 4};
+                midRange.playTune(2, "a ", beats, 100);
+            } else if (distanceReading < 51) {
+                int beats[] = {2, 20};
+                longRange.playTune(2, "a ", beats, 100);
+            }
+
+            // LED light
+            if (lightReading > LIGHT_VALUE_THRESHOLD) {
+                isBoxClosed = false;
+                led.setColorHSL(0, 1, 0.95, 0.1);                                     // (Red) box opened
+            } else {
+                isBoxClosed = true;
+                led.setColorHSL(0, 0.37, 1, 0.01);                                    // (Blue-green) box unopened
+            }
+
+            // ==========================* MQTT & LCD *======================
+            // Prints to serial monitor and LCD screen if interval has passed
+
+            if (isTimeToUpdate()) {
+                motionStatus = motionReading ? "Yes" : "No";
+                lightValue = lightReading;
+                distanceValue = distanceReading;
+                boxStatus = isBoxClosed ? "Yes" : "No";
+
+                // This prints to the serial monitor only
+                Serial.printf("    Wifi connected: %s\n", wifiStatus.c_str());
+                Serial.printf("    MQTT connected: %s\n", mqttStatus.c_str());
+                Serial.printf("   Motion detected: %s\n", motionStatus.c_str());
+                Serial.printf("    Light measured: %d\n", lightValue);
+                Serial.printf("Distance to object: %ld\n", distanceValue);
+                Serial.printf("     Is box closed: %s\n", boxStatus.c_str());
+                Serial.println("================================");
+
+                drawOnScreen(wifiStatus, mqttStatus, motionStatus, lightValue, distanceValue, boxStatus);
+
+                // Publishes if connection to broker exists
+                if (mqttConnected()) {
+                    client.publish(TOPIC_PUB_QUEST, "1");                           // Publishes '1' if mqttConnected
+                    client.publish(TOPIC_PUB_MOTION, toString(motionReading));      // Publishes '1' or '0'
+                    client.publish(TOPIC_PUB_LIGHT, toString(lightReading));        // Publishes int value as String
+                    client.publish(TOPIC_PUB_DISTANCE, toString(distanceReading));  // Publishes int value as String
+                }
+            }
         }
     }
 

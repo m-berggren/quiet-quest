@@ -17,7 +17,7 @@ public class PomodoroTimer implements Activity {
 	private final int breakTime;
 	private final int interval;
 	private ArrayList<PomodoroUIUpdater> observers;
-	private final int MILLISECONDS = 60_000; // Used to convert minutes to milliseconds. 60_000 is the needed value.
+	private final int MILLISECONDS = 1_000; // Used to convert minutes to milliseconds. 60_000 is the needed value.
 
 	// Ideas from https://egandunning.com/projects/timemanagement-timer.html
 	// and https://www.geeksforgeeks.org/java-util-timer-class-java/

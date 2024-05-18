@@ -15,13 +15,11 @@ boolean POMODORO_BREAK = false;
  */
 void callback(char* topic, byte* payload, unsigned int length) {
     // Combining topic of type char* and the string of const char[] with aid of String()
-    Serial.print(String("Message arrived [") + topic + "]:");
+    Serial.print(String("Message arrived [") + topic + "]:");               // Not necessary but useful for tracing
 
     char *txt = (char *)malloc(length + 1);
     memcpy(txt, payload, length);
     txt[length] = '\0';
-
-    Serial.println(txt);
     free(txt);
 
     if (strcmp(topic, TOPIC_SUB_QUEST_START) == 0) {
@@ -80,14 +78,14 @@ void setupNetwork() {
 */
 void setupWifi() {
     // Combining SSID of type char* and the string of const char[] with aid of String()
-    Serial.println(String("Attempting to connect to SSID: ") + SSID);
+    Serial.println(String("Attempting to connect to SSID: ") + SSID);       // Not necessary but useful for tracing
     while (!wifiConnected()) {
         delay(500);
-        Serial.print(". . . connecting to Wifi");
+        Serial.print(". . . connecting to Wifi");                           // Not necessary but useful information
         WiFi.begin(SSID, PASSWORD);
     }
 
-    Serial.print("WiFi connected with IP address: ");
+    Serial.print("WiFi connected with IP address: ");                       // Not necessary but useful information
     Serial.println(WiFi.localIP());
 }
 
@@ -97,7 +95,7 @@ void setupWifi() {
  * Method that sets up MQTT broker connection and subscribes to all topics.
 */
 void setupMqtt() {
-    Serial.print("Attempting MQTT connection...");
+    Serial.print("Attempting MQTT connection...");                          // While not necessary it is useful for user
 
     //Create a random client ID
     String clientID = "QuietQuest-terminal-";
@@ -106,7 +104,7 @@ void setupMqtt() {
 
     while (!client.connected() && iter_count <= LOOP_LIMIT) {               // Restrict maximum amount of retries
         //try to connect
-        Serial.println(String("Failed, returned: ") + client.state());
+        Serial.println(String("Failed, returned: ") + client.state());      // Not necessary but useful for tracing
         Serial.println("Trying again ...");
         client.connect(clientID.c_str());                                   // Attempts to connect client to MQTT broker
         iter_count++;

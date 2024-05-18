@@ -73,7 +73,6 @@ public class QuestController extends BaseController implements UIUpdater, Pomodo
 
 	public void initialize(Quest quest) {
 		currentQuest = quest;
-		System.out.println(quest.hashCode());
 
 		/* This section retrieves the PomodoroTimer from the selected Quest, if it has one, and adds the implementation
 		 * of Update to a list in that class. Every time the pomodoro then changes state it will update every observer
@@ -176,7 +175,6 @@ public class QuestController extends BaseController implements UIUpdater, Pomodo
 			public void changed(ObservableValue<? extends Activity> observableValue, Activity oldValue, Activity newValue) {
 				if (newValue != null) {
 					currentActivity = newValue;
-					System.out.println(currentActivity);
 				}
 			}
 		});
@@ -250,8 +248,6 @@ public class QuestController extends BaseController implements UIUpdater, Pomodo
 		Platform.runLater(() -> {
 			switch (message) {
 				case FOCUS_TIME -> {
-					System.out.println(FOCUS_TIME);
-
                     pomodoroInfoAnchorPane.setVisible(true);
                     pomodoroStatusLabel.setText("Focus time now active");
                     pomodoroStatusLabel.setTextFill(Color.color(0.6, 0, 0));
@@ -259,7 +255,6 @@ public class QuestController extends BaseController implements UIUpdater, Pomodo
 					quietQuestFacade.publishMqttMessage(TOPIC_PUB_POMODORO_INTERVAL, FOCUS_TIME);
 				}
 				case BREAK_TIME_START -> {
-					System.out.println(BREAK_TIME_START);
 
 					pomodoroStatusLabel.setText("Break time now active");
 					pomodoroStatusLabel.setTextFill(Color.color(0, 0.50, 0));
@@ -267,10 +262,8 @@ public class QuestController extends BaseController implements UIUpdater, Pomodo
 					quietQuestFacade.publishMqttMessage(TOPIC_PUB_POMODORO_INTERVAL, BREAK_TIME_START);
 				}
 				case BREAK_TIME_END -> {
-					System.out.println(BREAK_TIME_END);
 				}
 				case POMODORO_END -> {
-					System.out.println(POMODORO_END);
 
                     pomodoroInfoAnchorPane.setVisible(false);
 
@@ -305,9 +298,6 @@ public class QuestController extends BaseController implements UIUpdater, Pomodo
     public void onStartQuestClick(ActionEvent event) {
 		currentQuest.setStartTime(Timestamp.from(Instant.now()));
         startTimeLabel.setText("Start: " + currentQuest.getStartTime());
-
-		// Connects to MQTT as soon as page loads
-		System.out.println("Starts quest");
 
 		quietQuestFacade.startQuest(currentQuest, this);
 		quietQuestFacade.publishMqttMessage(TOPIC_PUB_QUEST_START, "Your quest has started");

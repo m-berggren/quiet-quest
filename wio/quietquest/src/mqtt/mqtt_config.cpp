@@ -30,15 +30,18 @@ void callback(char* topic, byte* payload, unsigned int length) {
             int beats[] = { 1, 1, 1, 4, 10 };
             questStart.playTune(5, "cegC ", beats, 100);
         }
-        if (strcmp(txt, "You have completed a task!") == 0) {
-            int beats[] = { 1, 8, 10 };
-            taskStop.playTune(3, "cc ", beats, 100);
-        }
     } else if (strcmp(topic, TOPIC_SUB_QUEST_END) == 0) {
         QUEST_RUNS = false;
         int beats[] = {3, 3, 3, 7, 10};
         questStop.playTune(5, "bgec ", beats, 100);
         drawStaticElements();
+    }
+
+    if (strcmp(topic, TOPIC_SUB_TASK_END) == 0) {
+        if (strcmp(txt, "You have completed a task!") == 0) {
+            int beats[] = { 1, 8, 10 };
+            taskStop.playTune(3, "cc ", beats, 100);
+        }
     }
 
     if (strcmp(topic, TOPIC_SUB_POMODORO_INTERVAL) == 0) {
@@ -59,7 +62,6 @@ void callback(char* topic, byte* payload, unsigned int length) {
             POMODORO_BREAK = false;
             QUEST_RUNS = false;
         }
-
     }
 }
 

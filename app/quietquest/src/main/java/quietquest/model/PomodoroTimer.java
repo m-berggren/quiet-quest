@@ -88,10 +88,8 @@ public class PomodoroTimer implements Activity {
 	 * @param observer being the PomodoroUIUpdater implemented in QuestController.
 	 */
 	public void addObserver(PomodoroUIUpdater observer) {
-		synchronized (observers) {
-			if (!observers.contains(observer)) {
-				observers.add(observer);
-			}
+		if (!observers.contains(observer)) {
+			observers.add(observer);
 		}
 	}
 
@@ -101,9 +99,7 @@ public class PomodoroTimer implements Activity {
 	 * @param observer the observer to remove.
 	 */
 	public void removeObserver(PomodoroUIUpdater observer) {
-		synchronized (observers) {
-			observers.remove(observer);
-		}
+		observers.remove(observer);
 	}
 
 	// ==============================* INTERFACE METHODS *==================================
@@ -146,13 +142,11 @@ public class PomodoroTimer implements Activity {
 	 * @param event the event message passed to observer.
 	 */
 	private void notifyPomodoroObserver(String event) {
-		synchronized (observers) {
-			for (PomodoroUIUpdater observer : observers) {
-				// Schedule update so that it runs on a JavaFX thread instead of the Timer
-				Platform.runLater(() -> {
-					observer.update(event);
-				});
-			}
+		for (PomodoroUIUpdater observer : observers) {
+			// Schedule update so that it runs on a JavaFX thread instead of the Timer
+			Platform.runLater(() -> {
+				observer.update(event);
+			});
 		}
 	}
 

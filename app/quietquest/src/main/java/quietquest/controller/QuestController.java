@@ -97,17 +97,17 @@ public class QuestController extends BaseController implements UIUpdater, Pomodo
 	}
 
 	/**
-	 * Synchronized method to set the activeController. The param object will be the next updated static object. This
+	 * Method to set the activeController. The param object will be the next updated static object. This
 	 * if important because the {@link #update(String) } checks the activeController and only allow that controller to
 	 * publish and update any data. Without this solution all observers would publish and update information.
 	 * <p>
-	 * Synchronized in the method means that only one thread at a time can execute this block of code. This addition
-	 * was added to handle errors with multiple observers that may use concurrent calls in the QuestController to
-	 * prevent thread interference and consistency problems.
+	 * A synchronized method was used before to battle an issue with QuestControllers all sending publish messages on an
+	 * update. With the addition of setting an activeController and after extra testing the synchronization initiated
+	 * in PomodoroTimer is not needed.
 	 *
 	 * @param controller is this QuestController.
 	 */
-	private static synchronized void setActiveController(QuestController controller) {
+	private static void setActiveController(QuestController controller) {
 		activeController = controller;
 	}
 

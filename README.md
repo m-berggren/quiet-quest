@@ -44,8 +44,12 @@ To ensure a stable and consistent build, we use **Gradle** for automated build a
     ```
 - Run the Quiet Quest application from the terminal:
     - cd into the app/quietquest directory
+    - Enter _./gradlew run_
+
+    OR run through a fatJar file
     - Enter _./gradlew fatJar_
     - Enter _java -jar build/libs/quietquest-1.0-SNAPSHOT-fat.jar_
+
 
 ### Libraries
 **External download and installation:**

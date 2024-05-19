@@ -1,10 +1,10 @@
 ![Quiet Quest header image](https://git.chalmers.se/courses/dit113/2024/group-12/quiet-quest/-/wikis/uploads/4e0d18132c66093e58555dc0ece7c501/header.png)
 
-The Quiet Quest system is a productivity tool consisting of two main components: a box device fitted with a microcontroller and sensors, and a desktop application for task management. The box device is used to store the user’s mobile phone while they focus on their tasks, which we call Quests, that they have specified in the application. On approaching or opening the box during an ongoing quest, it will alert the user with audio and light signals as a reminder that they are on a Quiet Quest. 
+The **Quiet Quest** system is a productivity tool consisting of two main components: a **box device** fitted with a microcontroller and sensors, and a **desktop application** for task management. The box device is used to store the user’s mobile phone while they focus on their tasks, which we call Quests, that they have specified in the application. On approaching or opening the box during an ongoing quest, it will alert the user with audio and light signals as a reminder that they are on a Quiet Quest. 
 
-Here is a **video summary** that showcases the the project's motivation and features, and demonstrates how to use the desktop application:  https://www.youtube.com/watch?v=V8HVKiQ-VQs
+Go ahead and watch this **[video summary](https://www.youtube.com/watch?v=V8HVKiQ-VQs)** that showcases the the project's motivation and features for a demonstration on how to use the desktop application.
 
-Quiet Quest is the perfect project to try out for anyone who wants to learn about using microcontrollers, sensors and connectivity between hardware components and a software application. The project also makes use of a number of tools and concepts worth getting familiar with.
+Quiet Quest is the perfect project to try out for anyone who wants to learn about using **microcontrollers, sensors** and **connectivity** between hardware components and a software application. The project also makes use of a number of tools and concepts worth getting familiar with.
 
 The GUI is created with **JavaFX** and **Scenebuilder**. For anyone already somewhat familiar with object-oriented programming using Java, this is a nice addition to your tool kit. 
 
@@ -27,13 +27,27 @@ To ensure a stable and consistent build, we use **Gradle** for automated build a
 - [Gradle](https://gradle.org/install/) (do this _after_ installing and setting up Docker)
     - After installing Gradle, find _quietquest/app/quietquest/build.gradle_ in your project files in the IDE
     - Right-click _build.gradle_ and choose _link gradle project_
-    - Run Quiet Quest from the terminal:
-        - cd into _quietquest/app/quietquest/_
-        - Enter _./gradlew run_ (MacOS)  or _gradlew run_ (Windows)
+- Create a new file in the directory app/docker: _**.env**_
+    ```
+        DB=quietquest     
+        DB_USER=quietquest
+        DB_PASSWORD=quietquest
+    ```
+- Create a new file in the directory wio/quietquest/src/credentials: _**credentials.cpp**_
+    
+    ```
+    #include "credentials.h"
 
+    // Wifi credentials - fill these in with your actual Wifi credentials
+    const char* SSID        = "...";
+    const char* PASSWORD    = "...";
+    ```
+- Run the Quiet Quest application from the terminal:
+    - cd into the app/quietquest directory
+    - Enter _./gradlew fatJar_
+    - Enter _java -jar build/libs/quietquest-1.0-SNAPSHOT-fat.jar_
 
 ### Libraries
-
 **External download and installation:**
 - [Ultrasonic Ranger Sensor](https://github.com/Seeed-Studio/Seeed_Arduino_UltrasonicRanger) - v1.0.3 by Seed Studio
 - [ChainableLED](https://github.com/pjpmarques/ChainableLED) - v1.3 by pjpmarques
@@ -64,14 +78,14 @@ To ensure a stable and consistent build, we use **Gradle** for automated build a
 - [PubSubClient](https://github.com/knolleary/pubsubclient) - v2.8 by Nick O'Leary
 
 ### Wio Terminal & Sensors
-Follow the pinout diagrams below when connecting the sensors to the mictrocontroller. 
+Follow the pinout diagrams below when connecting the sensors to the microcontroller. 
 
 ![Wio Terminal Pinout Diagrams](https://git.chalmers.se/courses/dit113/2024/group-12/quiet-quest/-/raw/main/docs/wio_terminal_pinout.png?ref_type=heads)
 
 1. I2C port:
     - [Grove - I2C Hub](https://wiki.seeedstudio.com/Grove-I2C_Hub/)
-    - [Grove - Mini PIR Motion Sensor](https://www.seeedstudio.com/Grove-mini-PIR-motion-sensor-p-2930.html)
-    - [Grove - Ultrasonic Ranger](https://wiki.seeedstudio.com/Grove-Ultrasonic_Ranger/)
+        - [Grove - Mini PIR Motion Sensor](https://www.seeedstudio.com/Grove-mini-PIR-motion-sensor-p-2930.html)
+        - [Grove - Ultrasonic Ranger](https://wiki.seeedstudio.com/Grove-Ultrasonic_Ranger/)
 2. Digital port (D0):
     - [Grove - Light Sensor v1.2](https://wiki.seeedstudio.com/Grove-Light_Sensor/)
 3. & 4:

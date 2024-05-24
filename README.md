@@ -1,4 +1,4 @@
-![Quiet Quest header image](https://git.chalmers.se/courses/dit113/2024/group-12/quiet-quest/-/wikis/uploads/4e0d18132c66093e58555dc0ece7c501/header.png)
+![Quiet Quest header image](docs/quiet_quest_header.png)
 
 The **Quiet Quest** system is a productivity tool consisting of two main components: a **box device** fitted with a microcontroller and sensors, and a **desktop application** for task management. The box device is used to store the user’s mobile phone while they focus on their tasks, which we call Quests, that they have specified in the application. On approaching or opening the box during an ongoing quest, it will alert the user with audio and light signals as a reminder that they are on a Quiet Quest. 
 
@@ -84,7 +84,7 @@ To ensure a stable and consistent build, we use **Gradle** for automated build a
 ### Wio Terminal & Sensors
 Follow the pinout diagrams below when connecting the sensors to the microcontroller. 
 
-![Wio Terminal Pinout Diagrams](https://git.chalmers.se/courses/dit113/2024/group-12/quiet-quest/-/raw/main/docs/wio_terminal_pinout.png?ref_type=heads)
+![Wio Terminal Pinout Diagrams](docs/wio_terminal_pinout.png)
 
 1. I2C port:
     - [Grove - I2C Hub](https://wiki.seeedstudio.com/Grove-I2C_Hub/)
@@ -104,7 +104,7 @@ A PostgreSQL database, set up with Docker, is used for storing user and quest da
 ![Database tables](docs/db_tables.png)
 
 The Quiet Quest system is divided in two main subsystems: Wio Terminal together with Grove sensors, and a desktop application. These subsystems are connected via an MQTT broker, using HiveMQ. Communication between the subsystems and the MQTT broker is implemented by using the Publish-Subscribe architectural pattern. 
-![System Architecture](https://git.chalmers.se/courses/dit113/2024/group-12/quiet-quest/-/raw/main/docs/system_architecture_quietquest_2.0.png)
+![System Architecture](docs/system_architecture_quietquest_2.0.png)
 
 ## Acknowledgements
 The Quiet Quest system is our project for the course 'DIT113 Mini Project: System Development' at the University of Gothenburg during the spring semester 2024. Thank you to the department of Computer Science and Engineering for providing hardware and theory.
@@ -114,9 +114,9 @@ Thank you to the teaching assistants Omid Khodaparast and Michael König for the
 We also want to give credit to the [Terminarium](https://github.com/michalspano/terminarium) project group from last year's iteration of the same course. Their documentation has provided us with valuable inspiration.
 
 ## Team
-| ![Julia](https://git.chalmers.se/courses/dit113/2024/group-12/quiet-quest/-/wikis/uploads/d1d7dc1a2d40aab2a0f404f12d61a51c/julia-colored.png) | ![Lian](https://git.chalmers.se/courses/dit113/2024/group-12/quiet-quest/-/wikis/uploads/7a9d076e4b6ae470d153f80fe05b2e78/lian-colored.png) | ![Marcus](https://git.chalmers.se/courses/dit113/2024/group-12/quiet-quest/-/wikis/uploads/c1480a771c01b8b9eb96ec278b2069dc/marcus-colored.png) | ![Tanya](https://git.chalmers.se/courses/dit113/2024/group-12/quiet-quest/-/wikis/uploads/d704828e4d7e3731a14fdad1eab3705c/tanya-colored.png) | ![Emma](https://git.chalmers.se/courses/dit113/2024/group-12/quiet-quest/-/wikis/uploads/34c3469451982ba86e6c2c0ff698caec/emma-colored_.png) |
-| ------ | ------ | ------ | ------ | ------ |
-| Julia McCall | Lian Shi | Marcus Berggren | Tanya Nordh | Emma Camén |
+| ![Julia](docs/profiles/julia-colored.png)                                                | ![Lian](docs/profiles/lian-colored.png)                                                          | ![Marcus](docs/profiles/marcus-colored.png)                                       | ![Tanya](docs/profiles/tanya-colored.png)                            | ![Emma](docs/profiles/emma-colored.png)                                                    |
+|------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------|----------------------------------------------------------------------|--------------------------------------------------------------------------------------------|
+| Julia McCall                                                                             | Lian Shi                                                                                         | Marcus Berggren                                                                   | Tanya Nordh                                                          | Emma Camén                                                                                 |
 | Made significant contributions to the backend, UI development and gamification elements. | Made significant contributions to backend logic related to CI pipeline, MQTT broker and database. | Made significant contributions to code structure, especially relating to Arduino. | Made significant contributions to backend, UI development and audio. | Made significant contributions to the UI development, background music and visual artwork. |
 
 _These profile pictures were generated using the GoArt AI tool, with images of the team members as prompts._

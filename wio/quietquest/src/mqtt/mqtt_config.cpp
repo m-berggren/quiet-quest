@@ -20,14 +20,12 @@ void callback(char* topic, byte* payload, unsigned int length) {
     char *txt = (char *)malloc(length + 1);
     memcpy(txt, payload, length);
     txt[length] = '\0';
-    free(txt);
 
     if (strcmp(topic, TOPIC_SUB_QUEST_START) == 0) {
         QUEST_RUNS = true;
-        if(strcmp(txt, "Your quest has started") == 0) {
-            int beats[] = { 1, 1, 1, 4, 10 };
-            questStart.playTune(5, "cegC ", beats, 100);
-        }
+        int beats[] = { 1, 1, 1, 4, 10 };
+        questStart.playTune(5, "cegC ", beats, 100);
+
     } else if (strcmp(topic, TOPIC_SUB_QUEST_END) == 0) {
         QUEST_RUNS = false;
         int beats[] = {3, 3, 3, 7, 10};
@@ -36,31 +34,30 @@ void callback(char* topic, byte* payload, unsigned int length) {
     }
 
     if (strcmp(topic, TOPIC_SUB_TASK_END) == 0) {
-        if (strcmp(txt, "You have completed a task!") == 0) {
-            int beats[] = { 1, 8, 10 };
-            taskStop.playTune(3, "cc ", beats, 100);
-        }
+        int beats[] = { 1, 8, 10 };
+        taskStop.playTune(3, "cc ", beats, 100);
     }
 
     if (strcmp(topic, TOPIC_SUB_POMODORO_INTERVAL) == 0) {
-        if (strcmp(txt, "Break time started")) {
+        if (strcmp(txt, "Break time started") == 0) {
             POMODORO_BREAK = true;
             int beats[] = { 1, 7, 10 };
             pomodoroInterval.playTune(3, "cd ", beats, 100);
 
-        } else if(strcmp(txt, "Focus time started")) {
+        } else if(strcmp(txt, "Focus time started") == 0) {
             POMODORO_BREAK = false;
             int beats[] = { 1, 6, 10 };
             pomodoroInterval.playTune(3, "ce ", beats, 100);
-        } else if(strcmp(txt, "Break time ended")) {
+        } else if(strcmp(txt, "Break time ended") == 0) {
             POMODORO_BREAK = false;
             int beats[] = { 1, 4, 10 };
             pomodoroInterval.playTune(3, "cg ", beats, 100);
-        } else if (strcmp(txt, "Pomodoro timer finished")) {
+        } else if (strcmp(txt, "Pomodoro timer finished") == 0) {
             POMODORO_BREAK = false;
             QUEST_RUNS = false;
         }
     }
+    free(txt);
 }
 
 // ==========================* NETWORK *=============================

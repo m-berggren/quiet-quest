@@ -38,18 +38,17 @@ void setup() {
 
 void loop() {
 
-    if (QUEST_RUNS) {                                                         // If Quest has been started this is true
-        // ==========================* SENSORS *=========================
-
         // Used in both if statements
         wifiStatus = wifiConnected() ? "Yes" : "No";
         mqttStatus = mqttConnected() ? "Yes" : "No";
 
+    if (QUEST_RUNS) {                                                         // If Quest has been started this is true
         if (POMODORO_BREAK) {
             if (isTimeToUpdate()) {
                 drawOnScreen(wifiStatus, mqttStatus);
             }
         } else if (!POMODORO_BREAK) {
+            // ==========================* SENSORS *=========================
             // Reading and interpreting sensor data
             int motionReading = digitalRead(MOTION_PIN);                          // Motion sensor gives 0 or 1
             int lightReading = mapToPercentage(analogRead(LIGHT_PIN));            // Maps 0-1023 light value to 0-100
@@ -103,6 +102,10 @@ void loop() {
                     client.publish(TOPIC_PUB_LIGHT, toString(lightReading));        // Publishes int value as String
                     client.publish(TOPIC_PUB_DISTANCE, toString(distanceReading));  // Publishes int value as String
                 }
+            }
+        } else if (!QUEST_RUNS) {
+            if (isTimeToUpdate()) {
+                drawOnScreen(wifiStatus, mqttStatus);
             }
         }
     }

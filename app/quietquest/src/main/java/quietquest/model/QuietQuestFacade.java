@@ -72,15 +72,20 @@ public class QuietQuestFacade {
     }
 
 	/**
-	 * @return
+	 * Gets all PomodoroTimers from database.
+	 *
+	 * @return a list of all PomodoroTimers in database.
 	 */
 	public ArrayList<PomodoroTimer> getAllPomodoroQuests() throws SQLException {
 		return database.getAllPomodoroQuests(user);
 	}
 
 	/**
+	 * Completes a quest in database. If the quest is of PomodoroTimer type then it needs to be ended. It is possible
+	 * a pomodoro timer is running at the time, so by completing the quest you override the pomodoro and finishes it
+	 * early.
 	 *
-	 * @param quest
+	 * @param quest is the actual Quest object to work with.
 	 */
 	public void completeQuest(Quest quest) {
 		database.completeQuest(quest);
@@ -151,7 +156,11 @@ public class QuietQuestFacade {
     }
 
 	/**
-	 * @param uiUpdater
+	 * Method that sets the UIUpdater in the MQTTHandler object, and specifies that this is the object to observe and
+	 * inform when there are information coming from broker. Will update methods in
+	 * {@link quietquest.controller.QuestController}.
+	 *
+	 * @param uiUpdater the observable object, in this case {@link quietquest.controller.QuestController}.
 	 */
 	public void setUIUpdater(UIUpdater uiUpdater) {
 		mqttHandler.setUIUpdater(uiUpdater);
